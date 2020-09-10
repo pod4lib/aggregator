@@ -31,6 +31,24 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 
   gem 'rspec-rails'
+  gem 'rails-controller-testing'
+
+  # Capybara for feature/integration tests
+  gem 'capybara'
+  gem 'selenium-webdriver'
+
+  gem 'webdrivers'
+
+  # Rubocop is a static code analyzer to enforce style.
+  gem 'rubocop', require: false
+  gem 'rubocop-performance', require: false
+  gem 'rubocop-rails', require: false
+  gem 'rubocop-rspec', require: false
+
+  gem 'scss-lint'
+
+  gem 'simplecov'
+  gem 'webmock'
 end
 
 group :development do
@@ -44,3 +62,10 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+
+gem 'bootstrap'
+gem 'cancancan'
+gem 'config'
+gem 'honeybadger'
+gem 'http'
+gem 'okcomputer'

@@ -1,0 +1,24 @@
+inherit_from: .rubocop_todo.yml
+
+require:
+  - rubocop-rails
+  - rubocop-rspec
+  - rubocop-performance
+
+AllCops:
+  TargetRubyVersion: 2.7
+  DisplayCopNames: true
+  NewCops: enable
+  Exclude:
+    - 'Gemfile'
+    - 'bin/**/*'
+    - 'db/**/*'
+    - 'config/**/*'
+    - 'node_modules/**/*'
+    - 'spec/spec_helper.rb'
+    - 'spec/teaspoon_env.rb'
+    - 'vendor/**/*'
+    - 'app/controllers/concerns/action_controller/**/*'
+
+Rails:
+  Enabled: true
