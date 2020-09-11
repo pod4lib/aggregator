@@ -1,4 +1,4 @@
-module.exports = function (api) {
+module.exports = (api) => {
   const validEnv = ['development', 'test', 'production'];
   const currentEnv = api.env();
   const isDevelopmentEnv = api.env('development');
@@ -16,26 +16,6 @@ module.exports = function (api) {
   }
 
   return {
-    presets: [
-      isTestEnv && [
-        '@babel/preset-env',
-        {
-          targets: {
-            node: 'current',
-          },
-        },
-      ],
-      (isProductionEnv || isDevelopmentEnv) && [
-        '@babel/preset-env',
-        {
-          forceAllTransforms: true,
-          useBuiltIns: 'entry',
-          corejs: 3,
-          modules: false,
-          exclude: ['transform-typeof-symbol'],
-        },
-      ],
-    ].filter(Boolean),
     plugins: [
       'babel-plugin-macros',
       '@babel/plugin-syntax-dynamic-import',
@@ -56,15 +36,35 @@ module.exports = function (api) {
       [
         '@babel/plugin-transform-runtime',
         {
+          corejs: false,
           helpers: false,
           regenerator: true,
-          corejs: false,
         },
       ],
       [
         '@babel/plugin-transform-regenerator',
         {
           async: false,
+        },
+      ],
+    ].filter(Boolean),
+    presets: [
+      isTestEnv && [
+        '@babel/preset-env',
+        {
+          targets: {
+            node: 'current',
+          },
+        },
+      ],
+      (isProductionEnv || isDevelopmentEnv) && [
+        '@babel/preset-env',
+        {
+          corejs: 3,
+          exclude: ['transform-typeof-symbol'],
+          forceAllTransforms: true,
+          modules: false,
+          useBuiltIns: 'entry',
         },
       ],
     ].filter(Boolean),
