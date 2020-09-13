@@ -2,6 +2,7 @@
 
 # :nodoc:
 class ApplicationController < ActionController::Base
+  before_action :set_paper_trail_whodunnit
   check_authorization
 
   rescue_from CanCan::AccessDenied do |exception|

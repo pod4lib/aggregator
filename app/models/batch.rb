@@ -2,6 +2,7 @@
 
 # :nodoc:
 class Batch < ApplicationRecord
+  has_paper_trail
   belongs_to :stream
   has_one :organization, through: :stream
 
