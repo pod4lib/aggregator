@@ -9,6 +9,12 @@ class Ability
 
     can :manage, :all if user.has_role?(:admin)
     can :read, Organization if user
-    can :manage, Organization, id: Organization.with_role(:owner, user).pluck(:id)
+
+    owned_orgs = Organization.with_role(:owner, user).pluck(:id)
+    can :manage, Organization, id: owned_orgs
+    can :manage, [Stream, Upload, Batch], organization: { id: owned_orgs }
+
+    member_orgs = Organization.with_role(:member, user).pluck(:id)
+    can :manage, [Stream, Upload, Batch], organization: { id: member_orgs }
   end
 end
