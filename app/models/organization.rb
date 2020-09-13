@@ -3,4 +3,5 @@
 # :nodoc:
 class Organization < ApplicationRecord
   resourcify
+  friendly_id :name, use: :slugged
 end

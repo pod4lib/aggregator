@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_13_152711) do
+ActiveRecord::Schema.define(version: 2020_09_13_162657) do
 
   create_table "allowlisted_jwts", force: :cascade do |t|
     t.string "jti", null: false
@@ -21,10 +21,31 @@ ActiveRecord::Schema.define(version: 2020_09_13_152711) do
     t.index ["users_id"], name: "index_allowlisted_jwts_on_users_id"
   end
 
+  create_table "batches", force: :cascade do |t|
+    t.integer "stream_id"
+    t.bigint "order"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["stream_id"], name: "index_batches_on_stream_id"
+  end
+
+  create_table "friendly_id_slugs", force: :cascade do |t|
+    t.string "slug", null: false
+    t.integer "sluggable_id", null: false
+    t.string "sluggable_type", limit: 50
+    t.string "scope"
+    t.datetime "created_at"
+    t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true
+    t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type"
+    t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
+  end
+
   create_table "organizations", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "slug"
+    t.index ["slug"], name: "index_organizations_on_slug", unique: true
   end
 
   create_table "roles", force: :cascade do |t|
@@ -36,6 +57,25 @@ ActiveRecord::Schema.define(version: 2020_09_13_152711) do
     t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
     t.index ["name"], name: "index_roles_on_name"
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource_type_and_resource_id"
+  end
+
+  create_table "streams", force: :cascade do |t|
+    t.string "name"
+    t.integer "organization_id"
+    t.boolean "default"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "slug"
+    t.index ["organization_id"], name: "index_streams_on_organization_id"
+    t.index ["slug"], name: "index_streams_on_slug", unique: true
+  end
+
+  create_table "uploads", force: :cascade do |t|
+    t.string "name"
+    t.integer "organization_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["organization_id"], name: "index_uploads_on_organization_id"
   end
 
   create_table "users", force: :cascade do |t|
