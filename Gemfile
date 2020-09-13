@@ -35,6 +35,7 @@ group :development, :test do
 
   # Capybara for feature/integration tests
   gem 'capybara'
+  gem 'factory_bot_rails'
   gem 'selenium-webdriver'
 
   gem 'webdrivers'

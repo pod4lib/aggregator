@@ -145,6 +145,11 @@ GEM
       dry-schema (~> 1.5, >= 1.5.2)
     erubi (1.9.0)
     execjs (2.7.0)
+    factory_bot (6.1.0)
+      activesupport (>= 5.0.0)
+    factory_bot_rails (6.1.0)
+      factory_bot (~> 6.1.0)
+      railties (>= 5.0.0)
     ffi (1.13.1)
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
@@ -371,6 +376,7 @@ DEPENDENCIES
   config
   devise
   devise-jwt
+  factory_bot_rails
   friendly_id
   honeybadger
   http
