@@ -12,12 +12,9 @@ $ ruby --version
 $ git clone https://github.com/ivplus/aggregator.git
 $ cd aggregator
 
-$ gem install bundler
-$ bundle install
+$ bin/setup
 
-$ bundle exec rails db:migrate
-
-$ bundle exec rails console
+$ bin/rails console
 # Running via Spring preloader in process 96719
 # Loading development environment (Rails 6.0.3.3)
 # irb(main):001:0>
