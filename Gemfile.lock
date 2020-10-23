@@ -58,6 +58,8 @@ GEM
       zeitwerk (~> 2.2, >= 2.2.2)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
+    airbrussh (1.4.0)
+      sshkit (>= 1.6.1, != 1.7.0)
     ast (2.4.1)
     autoprefixer-rails (9.8.6.3)
       execjs
@@ -70,8 +72,30 @@ GEM
       popper_js (>= 1.14.3, < 2)
       sassc-rails (>= 2.0.0)
     builder (3.2.4)
+    bundler-audit (0.7.0.1)
+      bundler (>= 1.2.0, < 3)
+      thor (>= 0.18, < 2)
     byebug (11.1.3)
     cancancan (3.1.0)
+    capistrano (3.14.1)
+      airbrussh (>= 1.0.0)
+      i18n
+      rake (>= 10.0.0)
+      sshkit (>= 1.9.0)
+    capistrano-bundle_audit (0.3.0)
+      bundler-audit (~> 0.5)
+      capistrano (~> 3.0)
+      capistrano-bundler (~> 1.4)
+    capistrano-bundler (1.6.0)
+      capistrano (~> 3.1)
+    capistrano-one_time_key (0.1.0)
+      capistrano (~> 3.0)
+    capistrano-passenger (0.2.0)
+      capistrano (~> 3.0)
+    capistrano-rails (1.6.1)
+      capistrano (~> 3.1)
+      capistrano-bundler (>= 1.1, < 3)
+    capistrano-shared_configs (0.2.2)
     capybara (3.33.0)
       addressable
       mini_mime (>= 0.1.3)
@@ -101,6 +125,11 @@ GEM
       devise (~> 4.0)
       warden-jwt_auth (~> 0.5)
     diff-lcs (1.4.4)
+    dlss-capistrano (3.9.0)
+      capistrano (~> 3.0)
+      capistrano-bundle_audit (>= 0.3.0)
+      capistrano-one_time_key
+      capistrano-shared_configs
     docile (1.3.2)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
@@ -192,6 +221,9 @@ GEM
     mini_portile2 (2.4.0)
     minitest (5.14.2)
     msgpack (1.3.3)
+    net-scp (3.0.0)
+      net-ssh (>= 2.6.5, < 7.0.0)
+    net-ssh (6.1.0)
     nio4r (2.5.3)
     nokogiri (1.10.10)
       mini_portile2 (~> 2.4.0)
@@ -333,6 +365,9 @@ GEM
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
     sqlite3 (1.4.2)
+    sshkit (1.21.0)
+      net-scp (>= 1.1.2)
+      net-ssh (>= 2.8.0)
     thor (1.0.1)
     thread_safe (0.3.6)
     tilt (2.0.10)
@@ -384,10 +419,16 @@ DEPENDENCIES
   bootstrap
   byebug
   cancancan
+  capistrano (~> 3.0)
+  capistrano-bundler
+  capistrano-passenger
+  capistrano-rails
+  capistrano-shared_configs
   capybara
   config
   devise
   devise-jwt
+  dlss-capistrano
   factory_bot_rails
   friendly_id
   honeybadger
@@ -422,4 +463,4 @@ DEPENDENCIES
   webpacker (~> 4.0)
 
 BUNDLED WITH
-   2.1.2
+   2.1.4

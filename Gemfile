@@ -77,3 +77,12 @@ gem 'okcomputer'
 gem 'paper_trail'
 gem 'rolify'
 gem 'sidekiq'
+
+group :deployment do
+  gem 'capistrano', '~> 3.0'
+  gem 'capistrano-bundler'
+  gem 'capistrano-rails'
+  gem 'capistrano-passenger'
+  gem 'capistrano-shared_configs'
+  gem 'dlss-capistrano'
+end
