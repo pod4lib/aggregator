@@ -1,24 +1,27 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Pre-requisites
+Ruby 2.7.x, [yarn](https://yarnpkg.com/)
 
-Things you may want to cover:
 
-* Ruby version
+## Getting started
+```
+$ ruby --version
+# ruby 2.7.x
 
-* System dependencies
+$ git clone https://github.com/ivplus/aggregator.git
+$ cd aggregator
 
-* Configuration
+$ bin/setup
 
-* Database creation
+$ bin/rails console
+# Running via Spring preloader in process 96719
+# Loading development environment (Rails 6.0.3.3)
+# irb(main):001:0>
+```
 
-* Database initialization
 
+## Misc
 * How to run the test suite
-
 * Services (job queues, cache servers, search engines, etc.)
-
 * Deployment instructions
-
-* ...
