@@ -2,8 +2,9 @@
 
 # :nodoc:
 class ApplicationController < ActionController::Base
+  before_action :authenticate_user!
+  check_authorization unless: :devise_controller?
   before_action :set_paper_trail_whodunnit
-  check_authorization
 
   rescue_from CanCan::AccessDenied do |exception|
     respond_to do |format|
