@@ -5,4 +5,5 @@ Rails.application.routes.draw do
   root to: 'pages#home'
 
   resources :organizations
+  get '/api', to: 'pages#api'
 end
