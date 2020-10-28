@@ -1,8 +1,10 @@
-<nav class="navbar navbar-dark bg-dark">
+<nav class="navbar navbar-dark bg-dark" role="navigation">
   <div class="container">
-    <%= link_to 'POD Aggregator', root_url, class: 'navbar-brand' %>
+    <%= link_to root_url, class: 'navbar-brand' do %>
+      <%= inline_svg 'pod_logo', height: 30, width: 80 %> Aggregator
+    <% end %>
     <ul class="navbar-nav">
-      <li class="nav-item">
+      <li class='nav-item'>
         <%= link_to 'Organizations', organizations_url, class: 'nav-link' %>
       </li>
     </ul>

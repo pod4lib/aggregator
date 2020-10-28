@@ -78,6 +78,7 @@ gem 'okcomputer'
 gem 'paper_trail'
 gem 'rolify'
 gem 'sidekiq'
+gem 'inline_svg'
 
 group :deployment do
   gem 'capistrano', '~> 3.0'
