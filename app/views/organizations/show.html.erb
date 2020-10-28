@@ -7,6 +7,7 @@
   <%= @organization.name %>
 </p>
 
+<%= link_to 'Upload file', new_organization_upload_path(@organization) %>
 <p>Files:</p>
 <% @organization.default_stream.uploads.each_with_index do |upload, ix| %>
   <ul>
