@@ -13,8 +13,9 @@
  *= require_tree .
  *= require_self
  */
-
+ 
 @import 'bootstrap-overrides';
 @import 'bootstrap';
 @import 'variables';
 @import 'logo';
+@import 'rails_bootstrap_forms';

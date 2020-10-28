@@ -1,4 +1,4 @@
-<%= form_with(model: organization, local: true) do |form| %>
+<%= bootstrap_form_with(model: organization, local: true) do |form| %>
   <% if organization.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(organization.errors.count, "error") %> prohibited this organization from being saved:</h2>
@@ -11,17 +11,10 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :name %>
-    <%= form.text_field :name %>
-  </div>
-
-  <div class="field">
-    <%= form.label :slug %>
-    <%= form.text_field :slug %>
-  </div>
+  <%= form.text_field :name %>
+  <%= form.text_field :slug %>
 
   <div class="actions">
-    <%= form.submit %>
+    <%= form.primary %>
   </div>
 <% end %>

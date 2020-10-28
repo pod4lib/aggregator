@@ -6,7 +6,6 @@
   <thead>
     <tr>
       <th>Name</th>
-      <th>Slug</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -14,11 +13,9 @@
   <tbody>
     <% @organizations.each do |organization| %>
       <tr>
-        <td><%= organization.name %></td>
-        <td><%= organization.slug %></td>
-        <td><%= link_to 'Show', organization %></td>
-        <td><%= link_to 'Edit', edit_organization_path(organization) if can? :edit, organization %></td>
-        <td><%= link_to 'Destroy', organization, method: :delete, data: { confirm: 'Are you sure?' } if can? :delete, organization %></td>
+        <td><%= link_to organization.name, organization %></td>
+        <td><%= link_to 'Edit', edit_organization_path(organization), class: 'btn btn-secondary' if can? :edit, organization %></td>
+        <td><%= link_to 'Destroy', organization, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' if can? :delete, organization %></td>
       </tr>
     <% end %>
   </tbody>
@@ -26,4 +23,4 @@
 
 <br>
 
-<%= link_to 'New Organization', new_organization_path if can? :create, Organization %>
+<%= link_to 'New Organization', new_organization_path, class: 'btn btn-primary' if can? :create, Organization %>
