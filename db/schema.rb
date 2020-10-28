@@ -10,15 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_13_164225) do
+ActiveRecord::Schema.define(version: 2020_10_28_070809) do
 
   create_table "allowlisted_jwts", force: :cascade do |t|
     t.string "jti", null: false
-    t.string "aud", null: false
+    t.string "aud"
     t.datetime "exp", null: false
-    t.integer "users_id", null: false
+    t.integer "user_id", null: false
     t.index ["jti"], name: "index_allowlisted_jwts_on_jti", unique: true
-    t.index ["users_id"], name: "index_allowlisted_jwts_on_users_id"
+    t.index ["user_id"], name: "index_allowlisted_jwts_on_user_id"
   end
 
   create_table "batches", force: :cascade do |t|
@@ -72,10 +72,10 @@ ActiveRecord::Schema.define(version: 2020_09_13_164225) do
 
   create_table "uploads", force: :cascade do |t|
     t.string "name"
-    t.integer "organization_id"
+    t.integer "stream_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["organization_id"], name: "index_uploads_on_organization_id"
+    t.index ["stream_id"], name: "index_uploads_on_stream_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -109,5 +109,5 @@ ActiveRecord::Schema.define(version: 2020_09_13_164225) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
-  add_foreign_key "allowlisted_jwts", "users", column: "users_id", on_delete: :cascade
+  add_foreign_key "allowlisted_jwts", "users", on_delete: :cascade
 end
