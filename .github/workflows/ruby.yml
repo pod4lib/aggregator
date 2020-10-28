@@ -22,7 +22,7 @@ jobs:
       with:
         ruby-version: 2.7
     - name: Install dependencies
-      run: bundle install
+      run: bin/setup
     - name: Compile webpack assets
       run: bundle exec rake webpacker:compile
       env:
