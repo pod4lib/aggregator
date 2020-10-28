@@ -7,4 +7,13 @@
   <%= @organization.name %>
 </p>
 
+<p>Files:</p>
+<% @organization.default_stream.uploads.each_with_index do |upload, ix| %>
+  <ul>
+    <% upload.files.each do |file| %>
+      <li><%= link_to file.filename, url_for(file) %>
+    <% end %>
+  </ul>
+<% end %>
+
 <%= link_to 'Edit', edit_organization_path(@organization), class: 'btn btn-primary' if can? :edit, @organization %>
