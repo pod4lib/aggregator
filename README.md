@@ -20,6 +20,11 @@ $ bin/rails console
 # irb(main):001:0>
 ```
 
+### Creating a local admin user
+
+```sh
+$ bin/rails agg:create_admin
+```
 
 ## Misc
 * How to run the test suite
