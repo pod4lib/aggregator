@@ -14,4 +14,7 @@
  *= require_self
  */
 
- @import 'bootstrap';
+@import 'bootstrap-overrides';
+@import 'bootstrap';
+@import 'variables';
+@import 'logo';
