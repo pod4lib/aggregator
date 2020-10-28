@@ -4,6 +4,6 @@
 class Organization < ApplicationRecord
   resourcify
   extend FriendlyId
-  friendly_id :name, use: :slugged
+  friendly_id :name, use: %i[finders slugged]
   has_paper_trail
 end
