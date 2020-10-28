@@ -10,6 +10,11 @@
   </head>
 
   <body>
-    <%= yield %>
+    <%= render 'shared/nav' %>
+    <div class="container">
+      <%= content_for?(:content) ? yield(:content) : yield %>
+    </div>
+
+    <%= render 'shared/footer' %>
   </body>
 </html>
