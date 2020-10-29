@@ -7,6 +7,7 @@ class Organization < ApplicationRecord
   friendly_id :name, use: %i[finders slugged]
   has_paper_trail
   has_many :streams, dependent: :destroy
+  has_many :allowlisted_jwts, as: :resource, dependent: :delete_all
 
   def default_stream
     @default_stream ||= streams.find_or_create_by(default: true)
