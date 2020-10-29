@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @upload.name %>
+</p>
+
+<p>
+  <strong>Files:</strong>
+  <%= @upload.files %>
+</p>
+
+<%= link_to 'Edit', edit_organization_upload_path(@organization, @upload) %> | 
+<%= link_to 'Organization', organization_path(@organization) %>

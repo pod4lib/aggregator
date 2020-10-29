@@ -8,6 +8,7 @@ RSpec.describe 'organizations/show', type: :view do
                                             name: 'Name',
                                             slug: 'Slug'
                                           ))
+    sign_in FactoryBot.create(:admin)
   end
 
   it 'renders attributes in <p>' do

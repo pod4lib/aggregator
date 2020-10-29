@@ -1,0 +1,8 @@
+<%= bootstrap_form_with(model: [@organization, upload], local: true, multipart: true) do |form| %>
+  <%= form.text_field :name %>
+  <%= form.url_field :files, type: :file, multiple: true %>
+
+  <div class="actions">
+    <%= form.primary %>
+  </div>
+<% end %>

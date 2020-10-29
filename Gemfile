@@ -66,6 +66,7 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'bootstrap'
+gem 'bootstrap_form'
 gem 'cancancan'
 gem 'config'
 gem 'devise'

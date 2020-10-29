@@ -3,7 +3,9 @@ Rails.application.routes.draw do
   devise_for :users
 
   root to: 'pages#home'
-
-  resources :organizations
   get '/api', to: 'pages#api'
+
+  resources :organizations do
+    resources :uploads
+  end
 end
