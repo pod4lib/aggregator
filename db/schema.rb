@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_28_201454) do
+ActiveRecord::Schema.define(version: 2020_10_29_180511) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -36,10 +36,13 @@ ActiveRecord::Schema.define(version: 2020_10_28_201454) do
   create_table "allowlisted_jwts", force: :cascade do |t|
     t.string "jti", null: false
     t.string "aud"
-    t.datetime "exp", null: false
-    t.integer "user_id", null: false
+    t.datetime "exp"
+    t.string "resource_type"
+    t.integer "resource_id"
+    t.datetime "created_at", precision: 6
+    t.datetime "updated_at", precision: 6
     t.index ["jti"], name: "index_allowlisted_jwts_on_jti", unique: true
-    t.index ["user_id"], name: "index_allowlisted_jwts_on_user_id"
+    t.index ["resource_type", "resource_id"], name: "index_allowlisted_jwts_on_resource_type_and_resource_id"
   end
 
   create_table "batches", force: :cascade do |t|
@@ -131,5 +134,4 @@ ActiveRecord::Schema.define(version: 2020_10_28_201454) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "allowlisted_jwts", "users", on_delete: :cascade
 end

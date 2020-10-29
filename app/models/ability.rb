@@ -4,8 +4,26 @@
 class Ability
   include CanCan::Ability
 
-  def initialize(user)
-    return unless user
+  def initialize(user, token = nil)
+    return unless user || token
+
+    if token
+      token_payload = if token
+                        JWT.decode(
+                          token,
+                          Settings.jwt.secret,
+                          Settings.jwt.algorithm
+                        )[0]
+                      else
+                        {}
+                      end
+
+      can :read, Organization, allowlisted_jwts: { jti: token_payload['jti'] }
+
+      can %i[create read update], [Stream, Upload, Batch], organization: { allowlisted_jwts: { jti: token_payload['jti'] } }
+
+      return
+    end
 
     can :manage, :all if user.has_role?(:admin)
     can :read, Organization if user

@@ -123,9 +123,6 @@ GEM
       responders
       warden (~> 1.2.3)
     devise-bootstrap-views (1.1.0)
-    devise-jwt (0.8.0)
-      devise (~> 4.0)
-      warden-jwt_auth (~> 0.5)
     diff-lcs (1.4.4)
     dlss-capistrano (3.10.1)
       capistrano (~> 3.0)
@@ -135,8 +132,6 @@ GEM
     docile (1.3.2)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
-    dry-auto_inject (0.7.0)
-      dry-container (>= 0.3.4)
     dry-configurable (0.11.6)
       concurrent-ruby (~> 1.0)
       dry-core (~> 0.4, >= 0.4.7)
@@ -389,11 +384,6 @@ GEM
     unicode-display_width (1.7.0)
     warden (1.2.9)
       rack (>= 2.0.9)
-    warden-jwt_auth (0.5.0)
-      dry-auto_inject (~> 0.6)
-      dry-configurable (~> 0.9)
-      jwt (~> 2.1)
-      warden (~> 1.2)
     web-console (4.0.4)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -436,7 +426,6 @@ DEPENDENCIES
   config
   devise
   devise-bootstrap-views (~> 1.0)
-  devise-jwt
   dlss-capistrano
   factory_bot_rails
   friendly_id
@@ -444,6 +433,7 @@ DEPENDENCIES
   http
   inline_svg
   jbuilder (~> 2.7)
+  jwt
   listen (~> 3.2)
   okcomputer
   paper_trail

@@ -21,6 +21,9 @@ gem 'jbuilder', '~> 2.7'
 # Use Active Model has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
+# jwt for token based auth
+gem 'jwt'
+
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 
@@ -71,7 +74,6 @@ gem 'cancancan'
 gem 'config'
 gem 'devise'
 gem 'devise-bootstrap-views', '~> 1.0'
-gem 'devise-jwt'
 gem 'friendly_id'
 gem 'honeybadger'
 gem 'http'
