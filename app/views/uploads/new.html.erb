@@ -1,3 +1,15 @@
 <h1>New Upload</h1>
 
+<div class="alert alert-info" role="alert">
+  <p>
+  You can also upload by submitting a POST with an http client (e.g. curl command)
+  </p>
+  <pre class="mb-0">
+curl -F 'upload[name]=[NAME_OF_YOUR_FILE]' \
+     -F 'upload[files][]=@[LOCATION_TO_YOUR_FILE]' \
+     -H 'Authorization: Bearer <%= @organization.jwt_token %>' \
+     <%= organization_uploads_url(@organization) %>
+  </pre>
+</div>
+
 <%= render 'form', upload: @upload %>
