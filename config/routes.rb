@@ -7,5 +7,6 @@ Rails.application.routes.draw do
 
   resources :organizations do
     resources :uploads
+    resources :allowlisted_jwts, only: [:index, :create, :destroy]
   end
 end

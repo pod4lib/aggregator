@@ -3,4 +3,16 @@
 # AR model to store the JTI of active JWTs for resource access
 class AllowlistedJwt < ApplicationRecord
   belongs_to :resource, polymorphic: true
+
+  before_create :set_default_token_values
+
+  def encoded_token
+    @encoded_token ||= JWT.encode({ jti: jti }, Settings.jwt.secret, Settings.jwt.algorithm)
+  end
+
+  private
+
+  def set_default_token_values
+    self.jti ||= Digest::MD5.hexdigest([resource.to_global_id, Time.now.to_f].join(':'))
+  end
 end
