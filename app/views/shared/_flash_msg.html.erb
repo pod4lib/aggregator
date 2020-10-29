@@ -1,0 +1,20 @@
+<div class="flash_messages">
+  <% [:success, :notice, :error, :alert].each do |type| %>
+    <%- alert_class = case type
+      when :success then "alert-success"
+      when :notice  then "alert-info"
+      when :alert   then "alert-warning"
+      when :error   then "alert-danger"
+      else "alert-#{type}"
+      end
+    -%>
+    <% if flash[type] %>
+      <% Array(flash[type]).each do |message| %>
+        <div class="alert <%=alert_class %> mt-3">
+          <a class="close float-right" data-dismiss="alert" href="#">&times;</a>
+          <%= message.html_safe %>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>
