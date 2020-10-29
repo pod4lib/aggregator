@@ -3,6 +3,7 @@ class UploadsController < ApplicationController
   before_action :load_stream
   authorize_resource :stream
   load_and_authorize_resource through: :stream
+  protect_from_forgery with: :null_session, if: :jwt_token
 
   # GET /uploads
   # GET /uploads.json
