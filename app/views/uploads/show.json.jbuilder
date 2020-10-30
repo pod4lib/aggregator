@@ -1,1 +1,1 @@
-json.partial! "uploads/upload", upload: @upload
+json.partial! 'uploads/upload', upload: @upload

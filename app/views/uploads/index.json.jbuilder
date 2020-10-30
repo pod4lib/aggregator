@@ -1,1 +1,1 @@
-json.array! @uploads, partial: "uploads/upload", as: :upload
+json.array! @uploads, partial: 'uploads/upload', as: :upload
