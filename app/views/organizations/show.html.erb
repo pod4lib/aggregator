@@ -10,13 +10,16 @@
       </h1>
       <%= link_to 'Edit', edit_organization_path(@organization), class: 'align-self-center btn btn-primary' if can? :edit, @organization %>
     </div>
+    <p class="lead">
+      Last updated: <%= @organization.default_stream.uploads.last&.updated_at %>
+    </p>
   </div>
 </div>
 
 <div class="container">
   <div class="card">
     <div class="card-header d-flex justify-content-between">
-      <h2 class="h5 align-self-center mb-0">Files</h2>
+      <h2 class="h5 align-self-center mb-0">Files (<%= @organization.default_stream.files.size %> | <%= number_to_human_size @organization.default_stream.files.sum(:byte_size) %>)</h2>
       <%= link_to 'Upload file', new_organization_upload_path(@organization), class: 'btn btn-primary' %>
     </div>
 
