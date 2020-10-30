@@ -1,12 +1,16 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
-  devise_for :users
+  devise_for :users, controllers: { invitations: 'organization_invitations' }
 
   root to: 'pages#home'
   get '/api', to: 'pages#api'
 
   resources :organizations do
     resources :uploads
+    resources :organization_users, as: 'users', only: :destroy
+
+    get 'invite/new', to: 'organization_invitations#new'
+    post 'invite', to: 'organization_invitations#create'
     resources :allowlisted_jwts, only: [:index, :create, :destroy]
   end
 

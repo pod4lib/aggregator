@@ -123,6 +123,9 @@ GEM
       responders
       warden (~> 1.2.3)
     devise-bootstrap-views (1.1.0)
+    devise_invitable (2.0.2)
+      actionmailer (>= 5.0)
+      devise (>= 4.6)
     diff-lcs (1.4.4)
     dlss-capistrano (3.10.1)
       capistrano (~> 3.0)
@@ -426,6 +429,7 @@ DEPENDENCIES
   config
   devise
   devise-bootstrap-views (~> 1.0)
+  devise_invitable (~> 2.0.0)
   dlss-capistrano
   factory_bot_rails
   friendly_id

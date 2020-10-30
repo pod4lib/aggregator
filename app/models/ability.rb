@@ -33,6 +33,7 @@ class Ability
     can :manage, [Stream, Upload, Batch], organization: { id: owned_orgs }
 
     member_orgs = Organization.with_role(:member, user).pluck(:id)
+    can :invite, Organization, id: member_orgs
     can :manage, [Stream, Upload, Batch], organization: { id: member_orgs }
   end
 end
