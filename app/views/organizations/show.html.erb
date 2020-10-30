@@ -17,7 +17,7 @@
     <% @organization.default_stream.uploads.each_with_index do |upload, ix| %>
       <ul class="list-group list-group-flush">
         <% upload.files.each do |file| %>
-          <li class="list-group-item"><%= link_to file.filename, url_for(file) %> (<%= number_to_human_size file.byte_size %> / <%= file.content_type %>)</li>
+          <li class="list-group-item"><%= link_to file.filename, download_url(file) %> (<%= number_to_human_size file.byte_size %> / <%= file.content_type %>)</li>
         <% end %>
       </ul>
     <% end %>

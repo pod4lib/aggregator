@@ -8,4 +8,10 @@ Rails.application.routes.draw do
   resources :organizations do
     resources :uploads
   end
+
+  get "/file/:id/:filename" => 'proxy#show', as: :proxy_download
+
+  direct :download do |blob, options|
+    route_for(:proxy_download, blob.id, blob.filename, options)
+  end
 end
