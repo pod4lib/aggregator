@@ -1,1 +1,3 @@
-json.partial! "uploads/upload", upload: @upload
+# frozen_string_literal: true
+
+json.partial! 'uploads/upload', upload: @upload
