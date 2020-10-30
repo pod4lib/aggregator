@@ -30,3 +30,11 @@ Metrics/BlockLength:
 
 Layout/LineLength:
   Max: 130
+
+Metrics/MethodLength:
+  Exclude:
+    - 'app/models/ability.rb'
+
+Metrics/AbcSize:
+  Exclude:
+    - 'app/models/ability.rb'

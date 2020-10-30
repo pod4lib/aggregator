@@ -23,7 +23,7 @@
     <% end %>
   </div>
 
-  <div class="card mt-3">
+  <div class="card mt-5">
     <div class="card-header d-flex justify-content-between">
       <h2 class="h5 align-self-center mb-0">Access Tokens</h2>
     </div>
@@ -32,4 +32,23 @@
       <%= link_to 'Manage tokens', organization_allowlisted_jwts_path(@organization), class: 'btn btn-primary' if can? :create, @organization.allowlisted_jwts.build %>
     </div>
   </div>
+
+  <div class="card my-5">
+    <div class="card-header d-flex justify-content-between">
+      <h2 class="h5 align-self-center mb-0">Users</h2>
+      <%= link_to 'Invite', organization_invite_new_path(@organization), class: 'btn btn-primary' if can? :invite, @organization %>
+    </div>
+
+    <ul class="list-group list-group-flush">
+      <% @organization.roles.each do |role| %>
+        <% role.users.each do |user| %>
+          <li class="list-group-item">
+            <%= content_tag :span, user.email.truncate(50), title: user.email %>
+            <%= link_to 'Remove', [@organization, user], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' if can? :manage, @organization %>
+          </li>
+        <% end %>
+      <% end %>
+    </ul>
+  </div>
+
 </div>
