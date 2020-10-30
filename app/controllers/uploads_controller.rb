@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Controller to handle uploading files to orgs and managing those files
 class UploadsController < ApplicationController
   load_and_authorize_resource :organization
   before_action :load_stream
