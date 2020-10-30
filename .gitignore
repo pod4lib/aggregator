@@ -77,3 +77,7 @@ yarn-debug.log*
 .yarn-integrity
 
 /spec/examples.txt
+
+config/settings.local.yml
+config/settings/*.local.yml
+config/environments/*.local.yml
