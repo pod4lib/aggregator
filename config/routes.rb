@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   resources :organizations do
     resources :uploads
+    resources :allowlisted_jwts, only: [:index, :create, :destroy]
   end
 
   get "/file/:id/:filename" => 'proxy#show', as: :proxy_download

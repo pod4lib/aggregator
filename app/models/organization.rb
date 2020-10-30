@@ -14,13 +14,6 @@ class Organization < ApplicationRecord
   end
 
   def jwt_token
-    @jwt_token ||= begin
-      jwt = allowlisted_jwts.first_or_create do |allow_listed|
-        jti = Digest::MD5.hexdigest([id, Time.zone.now.to_i].join(':'))
-        allow_listed.jti = jti
-      end
-
-      JWT.encode({ jti: jwt.jti }, Settings.jwt.secret, Settings.jwt.algorithm)
-    end
+    @jwt_token ||= allowlisted_jwts.first_or_create.encoded_token
   end
 end
