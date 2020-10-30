@@ -7,4 +7,8 @@ class Upload < ApplicationRecord
   has_one :organization, through: :stream
 
   has_many_attached :files
+
+  def name
+    super.presence || created_at&.iso8601
+  end
 end

@@ -1,8 +1,15 @@
 <%= bootstrap_form_with(model: [@organization, upload], local: true, multipart: true) do |form| %>
   <%= form.text_field :name %>
-  <%= form.url_field :files, type: :file, multiple: true %>
 
-  <div class="actions">
+  <div class="custom-file">
+    <%= form.file_field_without_bootstrap :files, type: :file, multiple: true, direct_upload: true, id: 'customFile', class: 'custom-file-input' %>
+    <label class="custom-file-label" for="customFile">Choose file</label>
+  </div>
+
+  <div class="direct-upload-area"></div>
+
+
+  <div class="actions mt-3">
     <%= form.primary %>
   </div>
 <% end %>
