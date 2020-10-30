@@ -1,18 +1,25 @@
-<h1><%= @organization.name %></h1>
+<div class="position-relative overflow-hidden mb-3 bg-light">
+  <div class="container">
+    <div class="d-flex justify-content-between">
+      <h1 class="display-4 font-weight-normal"><%= @organization.name %></h1>
+      <%= link_to 'Edit', edit_organization_path(@organization), class: 'align-self-center btn btn-primary' if can? :edit, @organization %>
+    </div>
+  </div>
+</div>
 
-<p>
-  <strong>Name:</strong>
-  <%= @organization.name %>
-</p>
+<div class="container">
+  <div class="card">
+    <div class="card-header d-flex justify-content-between">
+      <h2 class="h5 align-self-center mb-0">Files</h2>
+      <%= link_to 'Upload file', new_organization_upload_path(@organization), class: 'btn btn-primary' %>
+    </div>
 
-<%= link_to 'Upload file', new_organization_upload_path(@organization) %>
-<p>Files:</p>
-<% @organization.default_stream.uploads.each_with_index do |upload, ix| %>
-  <ul>
-    <% upload.files.each do |file| %>
-      <li><%= link_to file.filename, url_for(file) %></li>
+    <% @organization.default_stream.uploads.each_with_index do |upload, ix| %>
+      <ul class="list-group list-group-flush">
+        <% upload.files.each do |file| %>
+          <li class="list-group-item"><%= link_to file.filename, url_for(file) %> (<%= number_to_human_size file.byte_size %> / <%= file.content_type %>)</li>
+        <% end %>
+      </ul>
     <% end %>
-  </ul>
-<% end %>
-
-<%= link_to 'Edit', edit_organization_path(@organization), class: 'btn btn-primary' if can? :edit, @organization %>
+  </div>
+</div>

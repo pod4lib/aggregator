@@ -13,8 +13,9 @@
     <%= render 'shared/nav' %>
     <div class="container">
       <%= render partial: '/shared/flash_msg', layout: nil %>
-      <%= content_for?(:content) ? yield(:content) : yield %>
     </div>
+
+    <%= content_for?(:content) ? yield(:content) : yield %>
 
     <%= render 'shared/footer' %>
   </body>
