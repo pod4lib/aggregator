@@ -17,6 +17,7 @@ AllCops:
     - 'node_modules/**/*'
     - 'spec/spec_helper.rb'
     - 'spec/teaspoon_env.rb'
+    - 'storage/**/*'
     - 'vendor/**/*'
     - 'app/controllers/concerns/action_controller/**/*'
 
