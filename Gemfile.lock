@@ -216,6 +216,9 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.7.1)
       mini_mime (>= 0.1.1)
+    marc (1.0.4)
+      scrub_rb (>= 1.0.1, < 2)
+      unf
     marcel (0.3.3)
       mimemagic (~> 0.3.2)
     method_source (1.0.0)
@@ -344,6 +347,7 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
+    scrub_rb (1.0.1)
     scss-lint (0.38.0)
       rainbow (~> 2.0)
       sass (~> 3.4.1)
@@ -439,6 +443,7 @@ DEPENDENCIES
   jbuilder (~> 2.7)
   jwt
   listen (~> 3.2)
+  marc
   okcomputer
   paper_trail
   pg

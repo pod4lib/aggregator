@@ -8,7 +8,7 @@ RSpec.describe '/files', type: :request do
   end
 
   describe 'GET /files/' do
-    let(:upload) { FactoryBot.create(:upload) }
+    let(:upload) { FactoryBot.create(:upload, :binary_marc) }
 
     context 'when non-range requests' do
       let(:expected_headers) do
