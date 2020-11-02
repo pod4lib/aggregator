@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_29_232323) do
+ActiveRecord::Schema.define(version: 2020_11_02_131211) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -43,14 +43,6 @@ ActiveRecord::Schema.define(version: 2020_10_29_232323) do
     t.datetime "updated_at", precision: 6
     t.index ["jti"], name: "index_allowlisted_jwts_on_jti", unique: true
     t.index ["resource_type", "resource_id"], name: "index_allowlisted_jwts_on_resource_type_and_resource_id"
-  end
-
-  create_table "batches", force: :cascade do |t|
-    t.integer "stream_id"
-    t.bigint "order"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["stream_id"], name: "index_batches_on_stream_id"
   end
 
   create_table "friendly_id_slugs", force: :cascade do |t|

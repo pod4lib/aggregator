@@ -37,7 +37,6 @@ RSpec.describe Ability do
 
       it { is_expected.to be_able_to(:read, FactoryBot.create(:organization)) }
       it { is_expected.not_to be_able_to(:read, Upload.new) }
-      it { is_expected.not_to be_able_to(:read, Batch.new) }
       it { is_expected.not_to be_able_to(:read, Stream.new) }
     end
   end
