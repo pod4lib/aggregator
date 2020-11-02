@@ -6,6 +6,10 @@
 class ProxyController < ActiveStorage::BaseController
   before_action :authenticate_user!
 
+  rescue_from ActiveStorage::FileNotFoundError do |exception|
+    render json: { error: exception.message }, status: :not_found
+  end
+
   # rubocop:disable Metrics/AbcSize
   def show
     attachment = ActiveStorage::Attachment.find(params[:id])
