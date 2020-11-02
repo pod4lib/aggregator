@@ -10,6 +10,13 @@ class AllowlistedJwt < ApplicationRecord
     @encoded_token ||= JWT.encode({ jti: jti }, Settings.jwt.secret, Settings.jwt.algorithm)
   end
 
+  def last_used
+    return unless updated_at
+    return if created_at == updated_at
+
+    updated_at
+  end
+
   private
 
   def set_default_token_values

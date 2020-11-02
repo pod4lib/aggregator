@@ -26,4 +26,17 @@ RSpec.describe AllowlistedJwt do
   it 'cannot be successfully created if not assocated with a resource' do
     expect(described_class.create(jti: 'abc123')).not_to be_persisted
   end
+
+  describe '#last_used' do
+    it 'is nil if the updated and created at times are the same' do
+      expect(described_class.create(resource: organization).last_used).to be_nil
+    end
+
+    it 'is the updated at timestamp if it differs from the created at' do
+      token = described_class.create(resource: organization)
+      token.update(updated_at: Time.zone.now)
+      token.reload
+      expect(token.last_used).to eq token.updated_at
+    end
+  end
 end

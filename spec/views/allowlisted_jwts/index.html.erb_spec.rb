@@ -19,4 +19,13 @@ RSpec.describe 'allowlisted_jwts/index', type: :view do
     assert_select 'input[value=?]', organization.allowlisted_jwts[0].encoded_token
     assert_select 'input[value=?]', organization.allowlisted_jwts[1].encoded_token
   end
+
+  it 'renders if the token has been used or not' do
+    organization.allowlisted_jwts.last.update(updated_at: Time.zone.now)
+
+    render
+
+    assert_select 'i.text-muted', /Last used:\s+never/
+    assert_select 'i.text-muted', /Last used:\s+less than a minute ago/
+  end
 end
