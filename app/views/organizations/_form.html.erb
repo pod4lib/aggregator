@@ -2,6 +2,17 @@
   <%= form.text_field :name %>
   <%= form.text_field :slug %>
 
+  <div class="custom-file mb-3">
+    <%= form.file_field_without_bootstrap :icon, type: :file, direct_upload: true, id: 'customFile', class: 'custom-file-input', accept: '.svg' %>
+    <label class="custom-file-label" for="customFile">
+      <% if organization&.icon&.attached? %>
+        Replace icon file
+      <% else %>
+        Choose icon file
+      <% end %>
+    </label>
+  </div>
+
   <div class="actions">
     <%= form.primary %>
   </div>

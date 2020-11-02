@@ -1,7 +1,13 @@
-<div class="position-relative overflow-hidden mb-3 bg-light">
+<div class="position-relative overflow-hidden mb-3 bg-light organization">
   <div class="container">
     <div class="d-flex justify-content-between">
-      <h1 class="display-4 font-weight-normal"><%= @organization.name %></h1>
+      <h1 class="display-4 font-weight-normal">
+        <% if @organization.icon.attached? %>
+          <%= image_tag(@organization.icon, class: 'organization-icon') %>
+        <% end %>
+
+        <%= @organization.name %>
+      </h1>
       <%= link_to 'Edit', edit_organization_path(@organization), class: 'align-self-center btn btn-primary' if can? :edit, @organization %>
     </div>
   </div>
