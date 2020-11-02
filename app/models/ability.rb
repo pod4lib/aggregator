@@ -21,7 +21,7 @@ class Ability
 
       can :read, Organization, allowlisted_jwts: { jti: token_payload['jti'] }
 
-      can %i[create read update], [Stream, Upload, Batch], organization: { allowlisted_jwts: { jti: token_payload['jti'] } }
+      can %i[create read update], [Stream, Upload], organization: { allowlisted_jwts: { jti: token_payload['jti'] } }
 
       AllowlistedJwt.find_by(jti: token_payload['jti'])&.update(updated_at: Time.zone.now)
       return
@@ -32,11 +32,11 @@ class Ability
 
     owned_orgs = Organization.with_role(:owner, user).pluck(:id)
     can :manage, Organization, id: owned_orgs
-    can :manage, [Stream, Upload, Batch], organization: { id: owned_orgs }
+    can :manage, [Stream, Upload], organization: { id: owned_orgs }
 
     member_orgs = Organization.with_role(:member, user).pluck(:id)
     can :invite, Organization, id: member_orgs
-    can :manage, [Stream, Upload, Batch], organization: { id: member_orgs }
+    can :manage, [Stream, Upload], organization: { id: member_orgs }
   end
   # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 end
