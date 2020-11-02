@@ -22,5 +22,5 @@
 
   <br>
 
-  <%= link_to 'New Organization', new_organization_path, class: 'btn btn-primary' if can? :create, Organization %>
+  <%= link_to 'New Organization', new_organization_path, class: 'btn btn-primary' if can? :create, Organization.new %>
 </div>
