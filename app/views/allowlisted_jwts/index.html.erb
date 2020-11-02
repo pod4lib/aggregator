@@ -14,6 +14,14 @@
         <tr>
           <td>
             <%= text_field_tag 'token', token.encoded_token, class: 'text-monospace w-100' %>
+            <i class="small text-muted">
+              Last used:
+              <% if token.last_used %>
+                <b><%= time_ago_in_words(token.last_used) %> ago</b>
+              <% else %>
+                never
+              <% end %>
+            </i>
           </td>
           <td><%= link_to 'Revoke', [@organization, token], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' if can? :delete, token %></td>
         </tr>

@@ -4,6 +4,7 @@
 class Ability
   include CanCan::Ability
 
+  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def initialize(user, token = nil)
     return unless user || token
 
@@ -22,6 +23,7 @@ class Ability
 
       can %i[create read update], [Stream, Upload, Batch], organization: { allowlisted_jwts: { jti: token_payload['jti'] } }
 
+      AllowlistedJwt.find_by(jti: token_payload['jti'])&.update(updated_at: Time.zone.now)
       return
     end
 
@@ -36,4 +38,5 @@ class Ability
     can :invite, Organization, id: member_orgs
     can :manage, [Stream, Upload, Batch], organization: { id: member_orgs }
   end
+  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 end
