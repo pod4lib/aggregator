@@ -83,6 +83,7 @@ gem 'paper_trail'
 gem 'rolify'
 gem 'sidekiq'
 gem 'inline_svg'
+gem 'marc'
 
 group :deployment do
   gem 'capistrano', '~> 3.0'
