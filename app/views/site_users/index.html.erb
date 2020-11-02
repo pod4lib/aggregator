@@ -1,0 +1,27 @@
+<div class="container">
+  <h1>Site users</h1>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th colspan="3"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @users.each do |user| %>
+        <tr>
+          <td><%= user.email %></td>
+          <td>
+            <% if user.has_role? :admin %>
+              <%= link_to 'Remove from admin role', site_user_url(user, remove_role: 'admin'), method: :patch, class: 'btn btn-danger' %>
+            <% else %>
+              <%= link_to 'Add admin role', site_user_url(user, add_role: 'admin'), method: :patch, class: 'btn btn-secondary' %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

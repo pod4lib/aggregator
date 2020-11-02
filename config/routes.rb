@@ -19,4 +19,6 @@ Rails.application.routes.draw do
   direct :download do |blob, options|
     route_for(:proxy_download, blob.id, blob.filename, options)
   end
+
+  resources :site_users, only: [:index, :update]
 end
