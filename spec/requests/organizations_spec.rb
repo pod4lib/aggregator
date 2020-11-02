@@ -22,7 +22,7 @@ RSpec.describe '/organizations', type: :request do
   # Organization. As you add validations to Organization, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) do
-    skip('Add a hash of attributes valid for your model')
+    { name: 'Test Org', slug: 'test-org' }
   end
 
   let(:invalid_attributes) do
@@ -91,7 +91,7 @@ RSpec.describe '/organizations', type: :request do
   describe 'PATCH /update' do
     context 'with valid parameters' do
       let(:new_attributes) do
-        skip('Add a hash of attributes valid for your model')
+        { name: 'Updated org name' }
       end
 
       it 'updates the requested organization' do
@@ -99,6 +99,15 @@ RSpec.describe '/organizations', type: :request do
         patch organization_url(organization), params: { organization: new_attributes }
         organization.reload
         skip('Add assertions for updated state')
+      end
+
+      it 'accepts an icon upload' do
+        organization = Organization.create! valid_attributes
+        icon = fixture_file_upload(Rails.root.join('spec/fixtures/pod_logo.svg'), 'image/svg+xml')
+
+        expect(organization.icon.attached?).to be false
+        patch organization_url(organization), params: { organization: new_attributes.merge(icon: icon) }
+        expect(organization.reload.icon.attached?).to be true
       end
 
       it 'redirects to the organization' do

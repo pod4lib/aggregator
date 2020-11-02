@@ -1,7 +1,7 @@
 <div class="container">
   <h1>Organizations</h1>
 
-  <table class="table table-striped">
+  <table class="table table-striped organizations">
     <thead>
       <tr>
         <th>Name</th>
@@ -12,7 +12,12 @@
     <tbody>
       <% @organizations.each do |organization| %>
         <tr>
-          <td><%= link_to organization.name, organization %></td>
+          <td>
+            <% if organization.icon.attached? %>
+              <%= image_tag(organization.icon, class: 'organization-icon') %>
+            <% end %>
+            <%= link_to organization.name, organization %>
+          </td>
           <td><%= link_to 'Edit', edit_organization_path(organization), class: 'btn btn-secondary' if can? :edit, organization %></td>
           <td><%= link_to 'Destroy', organization, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' if can? :delete, organization %></td>
         </tr>
