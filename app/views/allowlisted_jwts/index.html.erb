@@ -1,25 +1,27 @@
-<h1>Manage tokens</h1>
+<div class="container">
+  <h1>Manage tokens</h1>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>Token</th>
-      <th colspan="1"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @allowlisted_jwts.each do |token| %>
+  <table class="table">
+    <thead>
       <tr>
-        <td>
-          <%= text_field_tag 'token', token.encoded_token, class: 'text-monospace w-100' %>
-        </td>
-        <td><%= link_to 'Revoke', [@organization, token], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' if can? :delete, token %></td>
+        <th>Token</th>
+        <th colspan="1"></th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
 
-<br>
+    <tbody>
+      <% @allowlisted_jwts.each do |token| %>
+        <tr>
+          <td>
+            <%= text_field_tag 'token', token.encoded_token, class: 'text-monospace w-100' %>
+          </td>
+          <td><%= link_to 'Revoke', [@organization, token], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' if can? :delete, token %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 
-<%= link_to 'Create token', organization_allowlisted_jwts_path(@organization), method: :post, class: 'btn btn-primary' if can? :create, @organization.allowlisted_jwts.build %>
+  <br>
+
+  <%= link_to 'Create token', organization_allowlisted_jwts_path(@organization), method: :post, class: 'btn btn-primary' if can? :create, @organization.allowlisted_jwts.build %>
+</div>
