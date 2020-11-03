@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_02_131211) do
+ActiveRecord::Schema.define(version: 2020_11_02_230606) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -54,6 +54,20 @@ ActiveRecord::Schema.define(version: 2020_11_02_131211) do
     t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true
     t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type"
     t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
+  end
+
+  create_table "marc_records", force: :cascade do |t|
+    t.integer "file_id", null: false
+    t.integer "upload_id", null: false
+    t.string "marc001"
+    t.bigint "bytecount"
+    t.bigint "length"
+    t.bigint "index"
+    t.string "checksum"
+    t.index ["file_id", "marc001"], name: "index_marc_records_on_file_id_and_marc001"
+    t.index ["file_id"], name: "index_marc_records_on_file_id"
+    t.index ["upload_id", "marc001"], name: "index_marc_records_on_upload_id_and_marc001"
+    t.index ["upload_id"], name: "index_marc_records_on_upload_id"
   end
 
   create_table "organizations", force: :cascade do |t|
