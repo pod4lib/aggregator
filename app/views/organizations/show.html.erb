@@ -13,13 +13,19 @@
     <p class="lead">
       Last updated: <%= @organization.default_stream.uploads.last&.updated_at %>
     </p>
+    <p class="lead">
+      Records: <%= @organization.marc_records.distinct.count(:marc001) %> unique (<%= @organization.marc_records.count %> total)
+    </p>
   </div>
 </div>
 
 <div class="container">
   <div class="card">
     <div class="card-header d-flex justify-content-between">
-      <h2 class="h5 align-self-center mb-0">Files (<%= @organization.default_stream.files.size %> | <%= number_to_human_size @organization.default_stream.files.sum(:byte_size) %>)</h2>
+      <h2>Stream <%= @organization.default_stream.display_name %> (<%= @organization.default_stream.marc_records.distinct.count(:marc001) %> records)</h2>
+    </div>
+    <div class="card-header d-flex justify-content-between">
+      <h3 class="h5 align-self-center mb-0">Files (<%= @organization.default_stream.files.size %> | <%= number_to_human_size @organization.default_stream.files.sum(:byte_size) %>)</h3>
       <%= link_to 'Upload file', new_organization_upload_path(@organization), class: 'btn btn-primary' %>
     </div>
 

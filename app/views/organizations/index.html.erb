@@ -7,6 +7,7 @@
         <th>Name</th>
         <th>Files</th>
         <th>Last updated</th>
+        <th>Records</th>
         <th colspan="2"></th>
       </tr>
     </thead>
@@ -22,6 +23,7 @@
           </td>
           <td><%= organization.default_stream.files.size %> | <%= number_to_human_size organization.default_stream.files.sum(:byte_size) %></td>
           <td><%= organization.default_stream.uploads.last&.updated_at %></td>
+          <td><%= organization.marc_records.distinct.count(:marc001) %> unique (<%= organization.marc_records.count %> total)</td>
           <td><%= link_to 'Edit', edit_organization_path(organization), class: 'btn btn-secondary' if can? :edit, organization %></td>
           <td><%= link_to 'Destroy', organization, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' if can? :delete, organization %></td>
         </tr>
