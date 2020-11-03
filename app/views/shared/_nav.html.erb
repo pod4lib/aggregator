@@ -15,14 +15,20 @@
       <% end %>
     </ul>
     </div>
+
     <ul class="navbar-nav ml-auto">
-      <li class="nav-item">
-        <% if current_user %>
+      <% if current_user %>
+        <li class="nav-item">
+          <%= link_to current_user.email, edit_user_registration_path, class: 'nav-link' %>
+        </li>
+        <li class="nav-item">
           <%= link_to t('blacklight.header_links.logout'), destroy_user_session_path, class: 'nav-link', data: { method: :delete } %>
-        <% else %>
+        </li>
+      <% else %>
+        <li class="nav-item">
           <%= link_to t('blacklight.header_links.login'), new_user_session_path, class: 'nav-link' %>
-        <% end %>
-      </li>
+        </li>
+      <% end %>
     </ul>
   </div>
 </nav>
