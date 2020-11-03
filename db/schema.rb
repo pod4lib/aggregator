@@ -68,6 +68,20 @@ ActiveRecord::Schema.define(version: 2020_11_03_171119) do
     t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
   end
 
+  create_table "marc_records", force: :cascade do |t|
+    t.integer "file_id", null: false
+    t.integer "upload_id", null: false
+    t.string "marc001"
+    t.bigint "bytecount"
+    t.bigint "length"
+    t.bigint "index"
+    t.string "checksum"
+    t.index ["file_id", "marc001"], name: "index_marc_records_on_file_id_and_marc001"
+    t.index ["file_id"], name: "index_marc_records_on_file_id"
+    t.index ["upload_id", "marc001"], name: "index_marc_records_on_upload_id_and_marc001"
+    t.index ["upload_id"], name: "index_marc_records_on_upload_id"
+  end
+
   create_table "organizations", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
