@@ -9,4 +9,10 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
          :invitable
+
+  def to_s
+    return email if name.blank?
+
+    "#{name} (#{email})"
+  end
 end

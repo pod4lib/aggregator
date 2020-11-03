@@ -12,7 +12,14 @@
     <tbody>
       <% @users.each do |user| %>
         <tr>
-          <td><%= user.email %></td>
+          <td>
+            <%= content_tag :span, title: user do %>
+              <%= mail_to user.email, user.name.presence || user.email %>
+              <% if user.title.present? %>
+                (<%= user.title %>)
+              <% end %>
+            <% end %>
+          </td>
           <td>
             <% if user.has_role? :admin %>
               <%= link_to 'Remove from admin role', site_user_url(user, remove_role: 'admin'), method: :patch, class: 'btn btn-danger' %>
