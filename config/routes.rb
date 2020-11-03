@@ -5,9 +5,12 @@ Rails.application.routes.draw do
   root to: 'pages#home'
   get '/api', to: 'pages#api'
 
+  get 'contact_emails/confirm/:token', to: 'contact_emails#confirm', as: :contact_email_confirmation
+
   resources :organizations do
     resources :uploads
     resources :organization_users, as: 'users', only: :destroy
+    resources :organization_contact_emails, as: 'contact_emails', only: [:new, :create, :destroy]
 
     get 'invite/new', to: 'organization_invitations#new'
     post 'invite', to: 'organization_invitations#create'
