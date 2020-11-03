@@ -1,0 +1,3 @@
+<p>You can confirm your contact email through the link below:</p>
+
+<p><%= link_to 'Confirm my account', contact_email_confirmation_url(token: params[:contact_email].confirmation_token) %></p>

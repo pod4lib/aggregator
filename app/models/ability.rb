@@ -6,6 +6,7 @@ class Ability
 
   # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def initialize(user, token = nil)
+    can :confirm, ContactEmail
     return unless user || token
 
     if token

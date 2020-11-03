@@ -8,6 +8,7 @@ class Organization < ApplicationRecord
   has_paper_trail
   has_many :streams, dependent: :destroy
   has_many :allowlisted_jwts, as: :resource, dependent: :delete_all
+  has_many :contact_emails, dependent: :delete_all
   has_one_attached :icon
 
   def default_stream

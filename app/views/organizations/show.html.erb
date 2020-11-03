@@ -60,4 +60,21 @@
     </ul>
   </div>
 
+  <div class="card my-5">
+    <div class="card-header d-flex justify-content-between">
+      <h2 class="h5 align-self-center mb-0">Contact emails</h2>
+      <%= link_to 'Add', new_organization_contact_email_path(@organization), class: 'btn btn-primary' if can? :manage, @organization %>
+    </div>
+
+    <ul class="list-group list-group-flush">
+      <% @organization.contact_emails.each do |contact_email| %>
+        <li class="list-group-item">
+          <%= content_tag :span, contact_email.email %>
+          <%= content_tag :span, 'confirmed ✅', class: 'badge badge-success' if contact_email.confirmed_at.present? %>
+          <%= link_to 'Remove', [@organization, contact_email], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' if can? :manage, @organization %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+
 </div>

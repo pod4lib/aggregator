@@ -9,6 +9,10 @@ RSpec.describe Ability do
   let(:user) { nil }
   let(:token) { nil }
 
+  describe 'for an anonymous user' do
+    it { is_expected.to be_able_to(:confirm, ContactEmail) }
+  end
+
   describe 'with a token' do
     let(:org1) { FactoryBot.create(:organization) }
     let(:org2) { FactoryBot.create(:organization) }
