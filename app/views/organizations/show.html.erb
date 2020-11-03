@@ -58,7 +58,12 @@
       <% @organization.roles.each do |role| %>
         <% role.users.each do |user| %>
           <li class="list-group-item">
-            <%= content_tag :span, user.email.truncate(50), title: user.email %>
+            <%= content_tag :span, title: user do %>
+              <%= mail_to user.email, (user.name.presence || user.email).truncate(50) %>
+              <% if user.title.present? %>
+                (<%= user.title %>)
+              <% end %>
+            <% end %>
             <%= link_to 'Remove', [@organization, user], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' if can? :manage, @organization %>
           </li>
         <% end %>
