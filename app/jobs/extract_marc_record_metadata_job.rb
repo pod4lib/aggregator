@@ -25,7 +25,7 @@ class ExtractMarcRecordMetadataJob < ApplicationJob
 
     enumerable.each_slice(batch_size) do |batch|
       # rubocop:disable Rails/SkipsModelValidations
-      MarcRecord.insert_all(batch)
+      MarcRecord.insert_all(batch, returning: false)
       # rubocop:enable Rails/SkipsModelValidations
     end
   end
