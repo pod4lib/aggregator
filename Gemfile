@@ -86,6 +86,8 @@ gem 'inline_svg'
 gem 'marc'
 gem 'sidekiq'
 
+gem 'rack-attack'
+
 group :deployment do
   gem 'capistrano', '~> 3.0'
   gem 'capistrano-bundler'
