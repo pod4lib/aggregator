@@ -15,6 +15,11 @@ Rails.application.routes.draw do
     get 'invite/new', to: 'organization_invitations#new'
     post 'invite', to: 'organization_invitations#create'
     resources :allowlisted_jwts, only: [:index, :create, :destroy]
+    resources :streams, only: [:show], defaults: { format: :xml } do
+      member do
+        get :removed_since_previous_stream
+      end
+    end
   end
 
   get "/file/:id/:filename" => 'proxy#show', as: :proxy_download
