@@ -22,4 +22,19 @@ RSpec.describe '/organization/:id/stream', type: :request do
       expect(response.body).to include '<rs:md capability="resourceList"'
     end
   end
+
+  describe 'POST /make_default' do
+    let!(:default_stream) { organization.default_stream }
+
+    it 'toggles on the default attribute for the new stream' do
+      post make_default_organization_streams_url(organization_id: stream.organization.id, stream: stream, format: :html)
+      expect(response).to redirect_to(organization_url(stream.organization))
+      expect(stream.reload).to have_attributes default: true
+    end
+
+    it 'toggles off the default stream for the previous default' do
+      post make_default_organization_streams_url(organization_id: stream.organization.id, stream: stream, format: :html)
+      expect(default_stream.reload).to have_attributes default: false
+    end
+  end
 end
