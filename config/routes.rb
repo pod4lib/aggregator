@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
-  devise_for :users, controllers: { invitations: 'organization_invitations' }
+  devise_for :users, controllers: { invitations: 'organization_invitations', registrations: 'registrations' }
 
   root to: 'pages#home'
   get '/api', to: 'pages#api'

@@ -1,0 +1,15 @@
+<% if Settings.recaptcha.enabled %>
+  <% content_for(:head) do %>
+    <%= javascript_include_tag "https://www.google.com/recaptcha/api.js?render=#{Settings.recaptcha.site_key}", nonce: true %>
+  <% end %>
+
+  <% id = SecureRandom.hex(16) %>
+  <%= hidden_field 'recaptcha_token', '', id: 'recaptcha_' + id %>
+  <%= javascript_tag nonce: true do -%>
+    grecaptcha.ready(function() {
+      grecaptcha.execute('<%= Settings.recaptcha.site_key %>', {action: '<%= action %>'}).then(function(token) {
+        document.getElementById("recaptcha_<%= id %>").value = token;
+      });
+    });
+  <% end -%>
+<% end %>

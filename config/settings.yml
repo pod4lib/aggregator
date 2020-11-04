@@ -3,3 +3,6 @@ jwt:
   algorithm: 'HS256'
 sidekiq:
   logger_level: 'Logger::INFO' # The default from Sidekiq
+
+recaptcha:
+  enabled: false
