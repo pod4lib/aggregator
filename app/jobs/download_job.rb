@@ -6,7 +6,6 @@ class DownloadJob < ApplicationJob
                 file.write(record.marc.to_marc)
             end
         end
-        byebug
         file.rewind
         organization.full_dump_binary.attach(io: file, filename: "#{organization.slug}_#{Date.today}")
         file.close
