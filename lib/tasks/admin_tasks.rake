@@ -7,6 +7,7 @@ namespace :agg do
     u = prompt_to_create_user
 
     u.add_role(:admin)
+    u.confirm
     puts 'User created.'
   end
 
