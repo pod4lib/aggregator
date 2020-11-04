@@ -38,7 +38,7 @@ class ExtractMarcRecordMetadataJob < ApplicationJob
 
       marc_reader.each.with_index do |record, index|
         yield({
-          marc001: record['001'].value,
+          marc001: record['001']&.value,
           file_id: file.id,
           upload_id: upload.id,
           index: index,
@@ -59,7 +59,7 @@ class ExtractMarcRecordMetadataJob < ApplicationJob
         record = MARC::Reader.decode(bytes)
 
         yield({
-          marc001: record['001'].value,
+          marc001: record['001']&.value,
           file_id: file.id,
           upload_id: upload.id,
           bytecount: bytecount,
