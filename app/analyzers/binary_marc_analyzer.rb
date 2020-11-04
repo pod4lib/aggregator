@@ -12,7 +12,7 @@ class BinaryMarcAnalyzer < ActiveStorage::Analyzer
 
   def metadata
     read_file do |file|
-      { count: file.count }
+      { analyzer: self.class.to_s, count: file.count }
     end
   end
 
