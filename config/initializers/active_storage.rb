@@ -7,3 +7,7 @@ ActiveStorage::Engine
 
 Rails.application.config.active_storage.analyzers.append BinaryMarcAnalyzer
 Rails.application.config.active_storage.analyzers.append XmlMarcAnalyzer
+
+# Use default queue for analysis and purge for Sidekiq simplification
+Rails.application.config.active_storage.queues[:analysis] = :default
+Rails.application.config.active_storage.queues[:purge] = :default

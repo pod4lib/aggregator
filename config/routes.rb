@@ -24,4 +24,10 @@ Rails.application.routes.draw do
   end
 
   resources :site_users, only: [:index, :update]
+
+  authenticate :user, lambda { |u| u.has_role? :admin } do
+    require 'sidekiq/web'
+    Sidekiq::Web.set :session_secret, Rails.application.secrets[:secret_key_base]
+    mount Sidekiq::Web => '/sidekiq'
+  end
 end

@@ -84,6 +84,7 @@ gem 'rolify'
 gem 'sidekiq'
 gem 'inline_svg'
 gem 'marc'
+gem 'sidekiq'
 
 group :deployment do
   gem 'capistrano', '~> 3.0'
