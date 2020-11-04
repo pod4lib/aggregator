@@ -85,6 +85,7 @@ gem 'sidekiq'
 gem 'inline_svg'
 gem 'marc'
 gem 'sidekiq'
+gem 'whenever'
 
 gem 'rack-attack'
 
