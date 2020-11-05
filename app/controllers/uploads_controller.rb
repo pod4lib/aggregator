@@ -23,8 +23,6 @@ class UploadsController < ApplicationController
   # POST /uploads
   # POST /uploads.json
   def create
-    @upload.stream = current_stream
-
     respond_to do |format|
       if @upload.save
         format.html { redirect_to [@organization, @upload], notice: 'Upload was successfully created.' }
@@ -70,6 +68,10 @@ class UploadsController < ApplicationController
     else
       @organization.default_stream
     end
+  end
+
+  def create_params
+    upload_params.merge(stream_id: current_stream.id)
   end
 
   # Only allow a list of trusted parameters through.
