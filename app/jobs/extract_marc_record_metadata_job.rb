@@ -15,5 +15,7 @@ class ExtractMarcRecordMetadataJob < ApplicationJob
         # rubocop:enable Rails/SkipsModelValidations
       end
     end
+
+    UpdateOrganizationStatisticsJob.perform_later(upload.organization, upload.stream)
   end
 end

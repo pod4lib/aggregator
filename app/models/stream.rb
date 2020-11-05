@@ -9,6 +9,7 @@ class Stream < ApplicationRecord
   has_many :uploads, dependent: :destroy
   has_many :marc_records, through: :uploads
   has_many :files, source: :files_blobs, through: :uploads
+  has_one :statistic, dependent: :delete, as: :resource
 
   has_many_attached :snapshots
 

@@ -13,6 +13,7 @@ class Organization < ApplicationRecord
   has_one_attached :icon
   has_many_attached :full_dump_binary
   has_many_attached :full_dump_xml
+  has_many :statistics, dependent: :delete_all, as: :resource
 
   def default_stream
     @default_stream ||= streams.find_or_create_by(default: true)
@@ -20,5 +21,9 @@ class Organization < ApplicationRecord
 
   def jwt_token
     @jwt_token ||= allowlisted_jwts.first_or_create.encoded_token
+  end
+
+  def latest_statistics
+    statistics.latest.first_or_initialize
   end
 end
