@@ -37,4 +37,19 @@ RSpec.describe '/organization/:id/stream', type: :request do
       expect(default_stream.reload).to have_attributes default: false
     end
   end
+
+  describe 'DELETE /destroy' do
+    before { stream } # Ensure the stream is created before destroying
+
+    it 'destroys the requested stream' do
+      expect do
+        delete organization_stream_url(organization, stream)
+      end.to change(Stream, :count).by(-1)
+    end
+
+    it 'redirects to the organizations list' do
+      delete organization_stream_url(organization, stream)
+      expect(response).to redirect_to(organization_streams_url(organization))
+    end
+  end
 end

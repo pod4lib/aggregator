@@ -16,40 +16,27 @@
     <p class="lead">
       Records: <%= number_with_delimiter @organization.latest_statistics.unique_record_count %> unique (<%= number_with_delimiter @organization.latest_statistics.record_count %> total)
     </p>
+    <p class="lead">
+      Streams: <%= link_to number_with_delimiter(@organization.streams.count), organization_streams_path(@organization) %>
+    </p>
   </div>
 </div>
 
 <div class="container">
-  <div class="card">
-    <div class="card-header d-flex justify-content-between">
-      <h2>Stream <%= @organization.default_stream.display_name %> (<%= @organization.default_stream.statistic&.unique_record_count %> records)</h2>
-    </div>
-    <div class="card-header d-flex justify-content-between">
-      <h3 class="h5 align-self-center mb-0">Files (<%= number_with_delimiter @organization.default_stream.files.size %> | <%= number_to_human_size @organization.default_stream.files.sum(:byte_size) %>)</h3>
-      <%= link_to 'Upload file', new_organization_upload_path(@organization), class: 'btn btn-primary' %>
-    </div>
+  <%= render 'streams/stream_uploads', stream: @organization.default_stream %>
 
-    <% @organization.default_stream.uploads.each_with_index do |upload, ix| %>
-      <ul class="list-group list-group-flush">
-        <% upload.files.each do |file| %>
-          <li class="list-group-item"><%= link_to file.filename, download_url(file) %> (<%= number_to_human_size file.byte_size %> / <%= file.content_type %>) (<%= file.metadata['count'] ? number_with_delimiter(file.metadata['count']) : '???' %>)</li>
-        <% end %>
-      </ul>
-    <% end %>
-
+  <div class="card mt-5">
     <div class="card-header d-flex justify-content-between">
-      <h3 class="h5 align-self-center mb-0">Full Dumps (binary)</h3>
+      <h3 class="h5 align-self-center mb-0">Full Dumps</h3>
     </div>
-
-   <ul class="list-group list-group-flush">
-    <% @organization.full_dump_binary.attachments.each do |attachment| %>
-      <li class="list-group-item"><%= link_to attachment.filename, download_url(attachment) %> (<%= number_to_human_size attachment.byte_size %>)</li>
-    <% end %>
-     <% @organization.full_dump_xml.attachments.each do |attachment| %>
-       <li class="list-group-item"><%= link_to attachment.filename, download_url(attachment) %> (<%= number_to_human_size attachment.byte_size %>)</li>
-     <% end %>
+    <ul class="list-group list-group-flush">
+      <% @organization.full_dump_binary.attachments.each do |attachment| %>
+        <li class="list-group-item"><%= link_to attachment.filename, download_url(attachment) %> (<%= number_to_human_size attachment.byte_size %>)</li>
+      <% end %>
+      <% @organization.full_dump_xml.attachments.each do |attachment| %>
+        <li class="list-group-item"><%= link_to attachment.filename, download_url(attachment) %> (<%= number_to_human_size attachment.byte_size %>)</li>
+      <% end %>
     </ul>
-
   </div>
 
   <div class="card mt-5">
