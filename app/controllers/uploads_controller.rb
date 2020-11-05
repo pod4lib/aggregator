@@ -3,9 +3,7 @@
 # Controller to handle uploading files to orgs and managing those files
 class UploadsController < ApplicationController
   load_and_authorize_resource :organization
-  before_action :load_stream
-  authorize_resource :stream
-  load_and_authorize_resource through: :stream
+  load_and_authorize_resource through: :organization
   protect_from_forgery with: :null_session, if: :jwt_token
 
   # GET /uploads
@@ -25,6 +23,8 @@ class UploadsController < ApplicationController
   # POST /uploads
   # POST /uploads.json
   def create
+    @upload.stream = current_stream
+
     respond_to do |format|
       if @upload.save
         format.html { redirect_to [@organization, @upload], notice: 'Upload was successfully created.' }
@@ -62,14 +62,14 @@ class UploadsController < ApplicationController
 
   private
 
-  def load_stream
-    @stream = if params[:stream].present?
-                @organization.streams.find_or_create_by(slug: params[:stream]) do |stream|
-                  stream.name = params[:stream]
-                end
-              else
-                @organization.default_stream
-              end
+  def current_stream
+    if params[:stream].present?
+      @organization.streams.find_or_create_by(slug: params[:stream]) do |stream|
+        stream.name = params[:stream]
+      end
+    else
+      @organization.default_stream
+    end
   end
 
   # Only allow a list of trusted parameters through.
