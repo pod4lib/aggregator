@@ -33,7 +33,7 @@ Rails.application.routes.draw do
     end
   end
 
-  get "/file/:id/:filename" => 'proxy#show', as: :proxy_download
+  get "/file/:id/:filename" => 'proxy#show', as: :proxy_download, constraints: { filename: /.*/ }
 
   direct :download do |blob, options|
     route_for(:proxy_download, blob.id, blob.filename, options)
