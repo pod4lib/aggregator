@@ -28,7 +28,7 @@ class UploadsController < ApplicationController
     respond_to do |format|
       if @upload.save
         format.html { redirect_to [@organization, @upload], notice: 'Upload was successfully created.' }
-        format.json { render :show, status: :created, location: @upload }
+        format.json { render :show, status: :created, location: [@organization, @upload] }
       else
         format.html { render :new }
         format.json { render json: @upload.errors, status: :unprocessable_entity }
@@ -42,7 +42,7 @@ class UploadsController < ApplicationController
     respond_to do |format|
       if @upload.update(upload_params)
         format.html { redirect_to [@organization, @upload], notice: 'Upload was successfully updated.' }
-        format.json { render :show, status: :ok, location: @upload }
+        format.json { render :show, status: :ok, location: [@organization, @upload] }
       else
         format.html { render :edit }
         format.json { render json: @upload.errors, status: :unprocessable_entity }
