@@ -18,14 +18,17 @@ RSpec.describe '/uploads', type: :request do
   # Upload. As you add validations to Upload, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) do
-    skip('Add a hash of attributes valid for your model')
+    { files: [fixture_file_upload(Rails.root.join('spec/fixtures/1297245.marc'), 'application/octet-stream')] }
   end
 
+  let(:valid_model_attributes) { valid_attributes.merge(stream: stream) }
+
   let(:invalid_attributes) do
-    skip('Add a hash of attributes invalid for your model')
+    skip
   end
 
   let(:organization) { FactoryBot.create(:organization) }
+  let(:stream) { organization.default_stream }
 
   before do
     sign_in FactoryBot.create(:admin)
@@ -33,16 +36,16 @@ RSpec.describe '/uploads', type: :request do
 
   describe 'GET /index' do
     it 'renders a successful response' do
-      Upload.create! valid_attributes
-      get organization_uploads_url
+      Upload.create! valid_model_attributes
+      get organization_uploads_url(organization)
       expect(response).to be_successful
     end
   end
 
   describe 'GET /show' do
     it 'renders a successful response' do
-      upload = Upload.create! valid_attributes
-      get organization_upload_url(upload)
+      upload = Upload.create! valid_model_attributes
+      get organization_upload_url(organization, upload)
       expect(response).to be_successful
     end
   end
@@ -56,8 +59,8 @@ RSpec.describe '/uploads', type: :request do
 
   describe 'GET /edit' do
     it 'render a successful response' do
-      upload = Upload.create! valid_attributes
-      get edit_organization_upload_url(upload)
+      upload = Upload.create! valid_model_attributes
+      get edit_organization_upload_url(organization, upload)
       expect(response).to be_successful
     end
   end
@@ -72,7 +75,15 @@ RSpec.describe '/uploads', type: :request do
 
       it 'redirects to the created upload' do
         post organization_uploads_url(organization), params: { upload: valid_attributes }
-        expect(response).to redirect_to(upload_url(Upload.last))
+        expect(response).to redirect_to(organization_upload_url(organization, Upload.last))
+      end
+    end
+
+    context 'with a stream parameter' do
+      it 'creates a new Upload on the stream' do
+        expect do
+          post organization_uploads_url(organization), params: { stream: 'xyz', upload: valid_attributes }
+        end.to change { organization.streams.find_or_initialize_by(slug: 'xyz').uploads.count }.by(1)
       end
     end
 
@@ -93,28 +104,28 @@ RSpec.describe '/uploads', type: :request do
   describe 'PATCH /update' do
     context 'with valid parameters' do
       let(:new_attributes) do
-        skip('Add a hash of attributes valid for your model')
+        { files: [fixture_file_upload(Rails.root.join('spec/fixtures/12345.marcxml'), 'application/octet-stream')] }
       end
 
       it 'updates the requested upload' do
-        upload = Upload.create! valid_attributes
-        patch organization_upload_url([organization, upload]), params: { upload: new_attributes }
+        upload = Upload.create! valid_model_attributes
+        patch organization_upload_url(organization, upload), params: { upload: new_attributes }
         upload.reload
         skip('Add assertions for updated state')
       end
 
       it 'redirects to the upload' do
-        upload = Upload.create! valid_attributes
-        patch organization_upload_url([organization, upload]), params: { upload: new_attributes }
+        upload = Upload.create! valid_model_attributes
+        patch organization_upload_url(organization, upload), params: { upload: new_attributes }
         upload.reload
-        expect(response).to redirect_to(organization_upload_url([organization, upload]))
+        expect(response).to redirect_to(organization_upload_url(organization))
       end
     end
 
     context 'with invalid parameters' do
       it "renders a successful response (i.e. to display the 'edit' template)" do
-        upload = Upload.create! valid_attributes
-        patch organization_upload_url([organization, upload]), params: { upload: invalid_attributes }
+        upload = Upload.create! valid_model_attributes
+        patch organization_upload_url(organization, upload), params: { upload: invalid_attributes }
         expect(response).to be_successful
       end
     end
@@ -122,16 +133,16 @@ RSpec.describe '/uploads', type: :request do
 
   describe 'DELETE /destroy' do
     it 'destroys the requested upload' do
-      upload = Upload.create! valid_attributes
+      upload = Upload.create! valid_model_attributes
       expect do
-        delete organization_upload_url([organization, upload])
+        delete organization_upload_url(organization, upload)
       end.to change(Upload, :count).by(-1)
     end
 
     it 'redirects to the uploads list' do
-      upload = Upload.create! valid_attributes
-      delete organization_upload_url([organization, upload])
-      expect(response).to redirect_to(uploads_url)
+      upload = Upload.create! valid_model_attributes
+      delete organization_upload_url(organization, upload)
+      expect(response).to redirect_to(organization_uploads_url(organization))
     end
   end
 end

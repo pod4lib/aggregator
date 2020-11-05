@@ -16,6 +16,10 @@ Rails.application.routes.draw do
     post 'invite', to: 'organization_invitations#create'
     resources :allowlisted_jwts, only: [:index, :create, :destroy]
     resources :streams, only: [:show], defaults: { format: :xml } do
+      collection do
+        post 'make_default'
+      end
+
       member do
         get :removed_since_previous_stream
       end

@@ -39,3 +39,6 @@ Metrics/MethodLength:
 Metrics/AbcSize:
   Exclude:
     - 'app/models/ability.rb'
+
+RSpec/MultipleMemoizedHelpers:
+  Max: 10

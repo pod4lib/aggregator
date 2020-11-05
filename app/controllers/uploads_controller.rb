@@ -63,11 +63,17 @@ class UploadsController < ApplicationController
   private
 
   def load_stream
-    @stream = @organization.default_stream
+    @stream = if params[:stream].present?
+                @organization.streams.find_or_create_by(slug: params[:stream]) do |stream|
+                  stream.name = params[:stream]
+                end
+              else
+                @organization.default_stream
+              end
   end
 
   # Only allow a list of trusted parameters through.
   def upload_params
-    params.require(:upload).permit(:name, :stream_id, files: [])
+    params.require(:upload).permit(:name, files: []).tap { |p| p['files'].reject!(&:blank?) }
   end
 end
