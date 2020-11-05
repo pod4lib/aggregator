@@ -41,3 +41,6 @@ namespace :deploy do
     end
   end
 end
+
+# update shared_configs before restarting app
+before 'deploy:restart', 'shared_configs:update'
