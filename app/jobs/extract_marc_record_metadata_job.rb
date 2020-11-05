@@ -9,9 +9,10 @@ class ExtractMarcRecordMetadataJob < ApplicationJob
   def perform(upload)
     upload.with_lock do
       upload.marc_records.delete_all
+
       upload.each_marc_record_metadata.each_slice(100) do |batch|
         # rubocop:disable Rails/SkipsModelValidations
-        MarcRecord.insert_all(batch.map(&:attributes), returning: false)
+        MarcRecord.insert_all(batch.map { |x| x.attributes.except('id') }, returning: false)
         # rubocop:enable Rails/SkipsModelValidations
       end
     end
