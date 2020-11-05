@@ -45,6 +45,9 @@
     <% @organization.full_dump_binary.attachments.each do |attachment| %>
       <li class="list-group-item"><%= link_to attachment.filename, download_url(attachment) %> (<%= number_to_human_size attachment.byte_size %>)</li>
     <% end %>
+     <% @organization.full_dump_xml.attachments.each do |attachment| %>
+       <li class="list-group-item"><%= link_to attachment.filename, download_url(attachment) %> (<%= number_to_human_size attachment.byte_size %>)</li>
+     <% end %>
     </ul>
 
   </div>
