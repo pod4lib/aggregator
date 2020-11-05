@@ -14,15 +14,15 @@ class MarcRecord < ApplicationRecord
     return @marc if @marc
 
     @marc ||= if raw_marc
-      MARC::Reader.decode(raw_marc, external_encoding: 'UTF-8')
-    elsif index
-      file.blob.open do |tmpfile|
-        marc_reader = MARC::XMLReader.new(tmpfile, parser: 'nokogiri')
-        marc_reader.each.with_index do |record, index|
-          return record if index == self.index
-        end
-      end
-    end
+                MARC::Reader.decode(raw_marc, external_encoding: 'UTF-8')
+              elsif index
+                file.blob.open do |tmpfile|
+                  marc_reader = MARC::XMLReader.new(tmpfile, parser: 'nokogiri')
+                  marc_reader.each.with_index do |record, index|
+                    return record if index == self.index
+                  end
+                end
+              end
   end
 
   private

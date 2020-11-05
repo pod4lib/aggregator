@@ -19,13 +19,14 @@ class Upload < ApplicationRecord
 
   def each_marc_record_metadata(&block)
     return to_enum(:each_marc_record_metadata) unless block_given?
+
     files.each do |file|
-      if file.blob.content_type.ends_with?('xml') || file.blob.filename.to_s.ends_with?('xml')
+      content_type = file.blob.content_type
+      filename = file.blob.filename.to_s
+      if content_type.ends_with?('xml') || filename.ends_with?('xml')
         extract_marc_record_metadata_from_marc_xml(file, &block)
-      elsif file.blob.filename.to_s.ends_with?('mrc') || file.blob.filename.to_s.ends_with?('marc')
+      elsif filename.ends_with?('mrc') || filename.ends_with?('marc')
         extract_marc_record_metadata_from_marc_binary(file, &block)
-      else
-        # don't process
       end
     end
   end
@@ -34,48 +35,50 @@ class Upload < ApplicationRecord
     return to_enum(:extract_marc_record_metadata_from_marc_binary, file) unless block_given?
 
     file.blob.open do |tmpfile|
-      args = { invalid: :replace }
-
-      marc_reader = MARC::Reader.new(tmpfile, args)
+      marc_reader = MARC::Reader.new(tmpfile, { invalid: :replace })
 
       each_with_bytecount(marc_reader).with_index do |(bytes, bytecount, length), index|
         record = MARC::Reader.decode(bytes)
 
-        marc = MarcRecord.new(marc001: record['001']&.value,
-          file_id: file.id,
-          upload_id: id,
-          bytecount: bytecount,
-          length: length,
-          index: index,
-          checksum: Digest::MD5.hexdigest(bytes),
-          marc: record)
-
-        yield(marc)
+        yield(
+          MarcRecord.new(
+            marc001: record['001']&.value,
+            file_id: file.id,
+            upload_id: id,
+            bytecount: bytecount,
+            length: length,
+            index: index,
+            checksum: Digest::MD5.hexdigest(bytes),
+            marc: record
+          )
+        )
       end
     end
+  end
 
-    def extract_marc_record_metadata_from_marc_xml(file)
-      return to_enum(:extract_marc_record_metadata_from_marc_xml, file) unless block_given?
+  def extract_marc_record_metadata_from_marc_xml(file)
+    return to_enum(:extract_marc_record_metadata_from_marc_xml, file) unless block_given?
 
-      file.blob.open do |tmpfile|
-        marc_reader = MARC::XMLReader.new(tmpfile, parser: 'nokogiri')
+    file.blob.open do |tmpfile|
+      marc_reader = MARC::XMLReader.new(tmpfile, parser: 'nokogiri')
 
-        marc_reader.each.with_index do |record, index|
-          marc = MarcRecord.new(marc001: record['001']&.value,
-          file_id: file.id,
-          upload_id: upload.id,
-          index: index,
-          checksum: Digest::MD5.hexdigest(record.to_xml.to_s),
-          marc: record)
-
-          yield(marc)
-        end
+      marc_reader.each.with_index do |record, index|
+        yield(
+          MarcRecord.new(
+            marc001: record['001']&.value,
+            file_id: file.id,
+            upload_id: id,
+            index: index,
+            checksum: Digest::MD5.hexdigest(record.to_xml.to_s),
+            marc: record
+          )
+        )
       end
     end
-
   end
 
   private
+
   def each_with_bytecount(reader)
     return to_enum(:each_with_bytecount, reader) unless block_given?
 
