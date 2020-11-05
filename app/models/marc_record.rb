@@ -7,18 +7,22 @@ class MarcRecord < ApplicationRecord
   has_one :stream, through: :upload
   has_one :organization, through: :stream
 
+  attr_writer :marc
+
   # @return [MARC::Record]
   def marc
-    if raw_marc
-      MARC::Reader.decode(raw_marc, external_encoding: 'UTF-8')
-    elsif index
-      file.blob.open do |tmpfile|
-        marc_reader = MARC::XMLReader.new(tmpfile, parser: 'nokogiri')
-        marc_reader.each.with_index do |record, index|
-          return record if index == self.index
-        end
-      end
-    end
+    return @marc if @marc
+
+    @marc ||= if raw_marc
+                MARC::Reader.decode(raw_marc, external_encoding: 'UTF-8')
+              elsif index
+                file.blob.open do |tmpfile|
+                  marc_reader = MARC::XMLReader.new(tmpfile, parser: 'nokogiri')
+                  marc_reader.each.with_index do |record, index|
+                    return record if index == self.index
+                  end
+                end
+              end
   end
 
   private
