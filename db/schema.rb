@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_04_143930) do
+ActiveRecord::Schema.define(version: 2020_11_05_184543) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -101,6 +101,20 @@ ActiveRecord::Schema.define(version: 2020_11_04_143930) do
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource_type_and_resource_id"
   end
 
+  create_table "statistics", force: :cascade do |t|
+    t.string "resource_type", null: false
+    t.integer "resource_id", null: false
+    t.bigint "unique_record_count", default: 0
+    t.bigint "record_count", default: 0
+    t.bigint "file_size", default: 0
+    t.bigint "file_count", default: 0
+    t.date "date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["resource_type", "resource_id", "date"], name: "index_statistics_on_resource_type_and_resource_id_and_date"
+    t.index ["resource_type", "resource_id"], name: "index_statistics_on_resource_type_and_resource_id"
+  end
+
   create_table "streams", force: :cascade do |t|
     t.string "name"
     t.integer "organization_id"
@@ -117,6 +131,8 @@ ActiveRecord::Schema.define(version: 2020_11_04_143930) do
     t.integer "stream_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "slug"
+    t.index ["slug"], name: "index_uploads_on_slug"
     t.index ["stream_id"], name: "index_uploads_on_stream_id"
   end
 
