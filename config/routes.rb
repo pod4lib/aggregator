@@ -23,7 +23,7 @@ Rails.application.routes.draw do
     resources :allowlisted_jwts, only: [:index, :create, :destroy]
     resources :streams, only: [] do
       collection do
-        post 'make_default'
+        post 'make_default', defaults: { format: :json }
       end
 
       member do

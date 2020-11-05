@@ -3,7 +3,8 @@
 # Controller to handle streams
 class StreamsController < ApplicationController
   load_and_authorize_resource :organization
-  load_and_authorize_resource through: :organization
+  load_and_authorize_resource through: :organization, except: [:make_default]
+  protect_from_forgery with: :null_session, if: :jwt_token
 
   def show; end
 
@@ -13,6 +14,7 @@ class StreamsController < ApplicationController
 
   def make_default
     @stream = @organization.streams.find(params[:stream])
+    authorize!(:update, @stream)
 
     Stream.transaction do
       @organization.default_stream.update(default: false)
