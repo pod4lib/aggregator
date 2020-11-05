@@ -7,7 +7,13 @@ Rails.application.routes.draw do
 
   get 'contact_emails/confirm/:token', to: 'contact_emails#confirm', as: :contact_email_confirmation
 
+  get '/.well-known/resourcesync', to: 'resourcesync#source_description', as: :resourcesync_source_description, defaults: { format: :xml }
+  get '/.well-known/resourcesync/capabilitylist', to: 'resourcesync#capabilitylist', as: :resourcesync_capabilitylist, defaults: { format: :xml }
+
   resources :organizations do
+    collection do
+      get 'resourcelist', to: 'organizations#index', defaults: { format: :xml }
+    end
     resources :uploads
     resources :organization_users, as: 'users', only: :destroy
     resources :organization_contact_emails, as: 'contact_emails', only: [:new, :create, :destroy]
@@ -15,12 +21,13 @@ Rails.application.routes.draw do
     get 'invite/new', to: 'organization_invitations#new'
     post 'invite', to: 'organization_invitations#create'
     resources :allowlisted_jwts, only: [:index, :create, :destroy]
-    resources :streams, only: [:show], defaults: { format: :xml } do
+    resources :streams, only: [] do
       collection do
         post 'make_default'
       end
 
       member do
+        get 'resourcelist', to: 'streams#show', defaults: { format: :xml }
         get :removed_since_previous_stream
       end
     end

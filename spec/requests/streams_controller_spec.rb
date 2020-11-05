@@ -13,13 +13,13 @@ RSpec.describe '/organization/:id/stream', type: :request do
 
   describe 'GET /show' do
     it 'renders a successful response' do
-      get organization_stream_path(organization_id: stream.organization.id, id: stream.id)
+      get resourcelist_organization_stream_path(organization_id: stream.organization.id, id: stream.id)
       expect(response).to be_successful
     end
 
     it 'has some resourceSync stuff in it' do
-      get organization_stream_path(organization_id: stream.organization.id, id: stream.id)
-      expect(response.body).to include '<rs:md capability="resourceList"'
+      get resourcelist_organization_stream_path(organization_id: stream.organization.id, id: stream.id)
+      expect(response.body).to include '<rs:md capability="resourcelist"'
     end
   end
 
