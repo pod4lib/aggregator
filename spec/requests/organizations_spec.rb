@@ -37,6 +37,20 @@ RSpec.describe '/organizations', type: :request do
     end
   end
 
+  describe '/resourcelist' do
+    before do
+      FactoryBot.create(:organization)
+      FactoryBot.create(:organization)
+    end
+
+    it 'has some ResourceSync stuff in it' do
+      get resourcelist_organizations_url
+      expect(response.body).to include('<rs:md capability="resourcelist"')
+        .and(include(resourcelist_organization_stream_url(Organization.first, Organization.first.default_stream)))
+        .and(include(resourcelist_organization_stream_url(Organization.last, Organization.last.default_stream)))
+    end
+  end
+
   describe 'GET /show' do
     it 'renders a successful response' do
       organization = Organization.create! valid_attributes

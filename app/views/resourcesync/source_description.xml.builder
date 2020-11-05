@@ -7,15 +7,10 @@ xml.urlset(
   'xmlns' => 'http://www.sitemaps.org/schemas/sitemap/0.9',
   'xmlns:rs' => 'http://www.openarchives.org/rs/terms/'
 ) do
-  xml.tag!('rs:ln', rel: 'up', href: resourcesync_capabilitylist_url)
-  xml.tag!('rs:md', capability: 'resourcelist', at: Time.zone.now.iso8601)
-  @organizations.each do |org|
-    xml.url do
-      xml.tag!(
-        'rs:md',
-        at: org.default_stream.updated_at.iso8601
-      )
-      xml.loc(resourcelist_organization_stream_url(org, org.default_stream))
-    end
+  xml.tag!('rs:md', capability: 'description')
+
+  xml.url do
+    xml.loc resourcesync_capabilitylist_url
+    xml.tag!('rs:md', capability: 'capabilitylist')
   end
 end

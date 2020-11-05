@@ -7,6 +7,9 @@ Rails.application.routes.draw do
 
   get 'contact_emails/confirm/:token', to: 'contact_emails#confirm', as: :contact_email_confirmation
 
+  get '/.well-known/resourcesync', to: 'resourcesync#source_description', as: :resourcesync_source_description, defaults: { format: :xml }
+  get '/.well-known/resourcesync/capabilitylist', to: 'resourcesync#capabilitylist', as: :resourcesync_capabilitylist, defaults: { format: :xml }
+
   resources :organizations do
     collection do
       get 'resourcelist', to: 'organizations#index', defaults: { format: :xml }
