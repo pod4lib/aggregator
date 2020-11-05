@@ -3,10 +3,16 @@
 ##
 # Background job to create a full dump download for a resource (organization)
 class GenerateDeltaDumpJob < ApplicationJob
+  def self.enqueue_all
+    Organization.find_each { |org| GenerateDeltaDumpJob.perform_later(org) }
+  end
+
   # rubocop:disable Metrics/AbcSize
   def perform(organization)
     now = Time.zone.now
     full_dump = organization.default_stream.normalized_dumps.last
+    return unless full_dump
+
     from = full_dump.last_delta_dump_at
     uploads = organization.default_stream.uploads.where(updated_at: from...now)
 

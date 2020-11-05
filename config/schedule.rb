@@ -18,3 +18,12 @@
 # end
 
 # Learn more: http://github.com/javan/whenever
+
+# TODO: Raise this to monthly eventually?
+every :sunday do
+  runner 'GenerateFullDumpJob.enqueue_all'
+end
+
+every :day do
+  runner 'GenerateDeltaDumpJob.enqueue_all'
+end

@@ -27,6 +27,14 @@ RSpec.describe GenerateFullDumpJob, type: :job do
     end
   end
 
+  describe '.enqueue_all' do
+    it 'enqueues jobs for each organization' do
+      expect do
+        described_class.enqueue_all
+      end.to enqueue_job(described_class).exactly(Organization.count).times
+    end
+  end
+
   def download_and_uncompress(attachment)
     expect(attachment).to be_attached
 

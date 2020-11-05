@@ -3,6 +3,10 @@
 ##
 # Background job to create a full dump download for a resource (organization)
 class GenerateFullDumpJob < ApplicationJob
+  def self.enqueue_all
+    Organization.find_each { |org| GenerateFullDumpJob.perform_later(org) }
+  end
+
   # rubocop:disable Metrics/AbcSize
   def perform(organization)
     now = Time.zone.now
