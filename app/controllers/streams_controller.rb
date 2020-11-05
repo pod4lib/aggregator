@@ -8,6 +8,15 @@ class StreamsController < ApplicationController
 
   def show; end
 
+  def destroy
+    @stream.destroy
+
+    respond_to do |format|
+      format.html { redirect_to organization_streams_path, notice: 'Stream was successfully destroyed.' }
+      format.json { head :no_content }
+    end
+  end
+
   def removed_since_previous_stream
     render plain: @stream.removed_since_previous_stream.join("\n")
   end
