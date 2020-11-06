@@ -33,6 +33,7 @@
         <td><%= number_with_delimiter(@organizations.sum {|org| org.default_stream.files.size }) %> | <%= number_to_human_size @organizations.sum {|org| org.default_stream.files.sum(:byte_size)} %></td>
         <td></td>
         <td><%= number_with_delimiter(@organizations.sum { |org| org.latest_statistics.unique_record_count }) %> unique (<%= number_with_delimiter(@organizations.sum { |org| org.latest_statistics.record_count })%> total)</td>
+        <td colspan="2"></td>
       </tr>
     </tbody>
   </table>

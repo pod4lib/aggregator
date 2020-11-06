@@ -6,7 +6,7 @@
           <%= image_tag(@organization.icon, class: 'organization-icon') %>
         <% end %>
 
-        <%= @organization.name %>
+        <%= link_to_unless controller_name == 'organizations', @organization.name, @organization, class: 'text-body' %>
       </h1>
 
       <% if controller_name == 'organizations' %>
