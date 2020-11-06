@@ -14,6 +14,11 @@ class BinaryMarcAnalyzer < ActiveStorage::Analyzer
     read_file do |file|
       { analyzer: self.class.to_s, count: file.count }
     end
+  rescue MARC::Exception => e
+    Rails.logger.info(e)
+    Honeybadger.notify(e)
+
+    { analyzer: self.class.to_s, valid: false, error: e.message }
   end
 
   private
