@@ -1,15 +1,4 @@
-<div class="position-relative overflow-hidden mb-3 bg-light organization">
-  <div class="container">
-    <div class="d-flex justify-content-between">
-      <h1 class="display-4 font-weight-normal">
-        <% if @organization.icon.attached? %>
-          <%= image_tag(@organization.icon, class: 'organization-icon') %>
-        <% end %>
-
-        <%= @organization.name %>
-      </h1>
-      <%= link_to 'Edit', edit_organization_path(@organization), class: 'align-self-center btn btn-primary' if can? :edit, @organization %>
-    </div>
+<%= render 'shared/organization_header' do %>
     <p class="lead">
       Last updated: <%= @organization.default_stream.uploads.last&.updated_at %>
     </p>
@@ -20,7 +9,7 @@
       Streams: <%= link_to number_with_delimiter(@organization.streams.count), organization_streams_path(@organization) %>
     </p>
   </div>
-</div>
+<% end %>
 
 <div class="container">
   <%= render 'streams/stream_uploads', stream: @organization.default_stream %>
