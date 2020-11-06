@@ -4,7 +4,7 @@
   <%= link_to 'Streams', organization_streams_path %>
   <h1><%= @stream.display_name %></h1>
   <p class="lead">
-    Last updated: <%= @stream.uploads.last&.updated_at %>
+    Last updated: <%= content_tag :span, "#{time_ago_in_words(@stream.uploads.last&.updated_at)} ago", title: l(@stream.uploads.last&.updated_at) %>
   </p>
   <p class="lead">
     Records: <%= number_with_delimiter @stream.statistic&.unique_record_count || 0 %> unique (<%= number_with_delimiter @stream.statistic&.record_count || 0%> total)
