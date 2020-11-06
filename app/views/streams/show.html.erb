@@ -1,7 +1,14 @@
 <%= render 'shared/organization_header' %>
 
 <div class="container">
-  <h1>Stream</h1>
+  <%= link_to 'Streams', organization_streams_path %>
+  <h1><%= @stream.display_name %></h1>
+  <p class="lead">
+    Last updated: <%= @stream.uploads.last&.updated_at %>
+  </p>
+  <p class="lead">
+    Records: <%= number_with_delimiter @stream.statistic&.unique_record_count || 0 %> unique (<%= number_with_delimiter @stream.statistic&.record_count || 0%> total)
+  </p>
 
   <%= render 'stream_uploads', stream: @stream  %>
 </div>
