@@ -1,3 +1,7 @@
+<% content_for :header do %>
+  <%= render 'shared/organization_header' %>
+<% end %>
+
 <h2><%= t "devise.invitations.new.header" %></h2>
 
 <%= bootstrap_form_for(resource, as: resource_name, url: organization_invite_path(@organization), html: { method: :post }) do |f| %>
