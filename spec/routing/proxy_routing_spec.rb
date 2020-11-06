@@ -6,8 +6,7 @@ RSpec.describe ProxyController, type: :routing do
   describe 'routing' do
     it 'proxies files to #show' do
       expect(get: '/file/1/test.txt').to route_to(
-        controller: 'proxy', action: 'show', id: '1',
-        filename: 'test', format: 'txt'
+        controller: 'proxy', action: 'show', id: '1', filename: 'test.txt'
       )
     end
   end
