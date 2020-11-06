@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_05_184543) do
+ActiveRecord::Schema.define(version: 2020_11_06_161155) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -80,6 +80,15 @@ ActiveRecord::Schema.define(version: 2020_11_05_184543) do
     t.index ["file_id"], name: "index_marc_records_on_file_id"
     t.index ["upload_id", "marc001"], name: "index_marc_records_on_upload_id_and_marc001"
     t.index ["upload_id"], name: "index_marc_records_on_upload_id"
+  end
+
+  create_table "normalized_dumps", force: :cascade do |t|
+    t.integer "stream_id", null: false
+    t.datetime "last_full_dump_at"
+    t.datetime "last_delta_dump_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["stream_id"], name: "index_normalized_dumps_on_stream_id"
   end
 
   create_table "organizations", force: :cascade do |t|
@@ -183,4 +192,5 @@ ActiveRecord::Schema.define(version: 2020_11_05_184543) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "contact_emails", "organizations"
+  add_foreign_key "normalized_dumps", "streams"
 end

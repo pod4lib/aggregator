@@ -27,20 +27,6 @@
 
   <div class="card mt-5">
     <div class="card-header d-flex justify-content-between">
-      <h3 class="h5 align-self-center mb-0">Full Dumps</h3>
-    </div>
-    <ul class="list-group list-group-flush">
-      <% @organization.full_dump_binary.attachments.each do |attachment| %>
-        <li class="list-group-item"><%= link_to attachment.filename, download_url(attachment) %> (<%= number_to_human_size attachment.byte_size %>)</li>
-      <% end %>
-      <% @organization.full_dump_xml.attachments.each do |attachment| %>
-        <li class="list-group-item"><%= link_to attachment.filename, download_url(attachment) %> (<%= number_to_human_size attachment.byte_size %>)</li>
-      <% end %>
-    </ul>
-  </div>
-
-  <div class="card mt-5">
-    <div class="card-header d-flex justify-content-between">
       <h2 class="h5 align-self-center mb-0">Access Tokens</h2>
     </div>
     <div class="card-body">
