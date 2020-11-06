@@ -6,6 +6,7 @@ class GenerateFullDumpJob < ApplicationJob
   # rubocop:disable Metrics/AbcSize
   def perform(organization)
     now = Time.zone.now
+    full_dump = organization.default_stream.normalized_dumps.build(last_full_dump_at: now, last_delta_dump_at: now)
 
     with_gzipped_temporary_file("#{organization.slug}-marcxml") do |xml_file, xml_io|
       with_gzipped_temporary_file("#{organization.slug}-marcxml") do |binary_file, binary_io|
@@ -19,10 +20,10 @@ class GenerateFullDumpJob < ApplicationJob
         end
 
         binary_io.close
-        organization.full_dump_binary.attach(io: File.open(binary_file), filename: "#{organization.slug}_#{Time.zone.today}.gz")
+        full_dump.full_dump_binary.attach(io: File.open(binary_file), filename: "#{organization.slug}_#{Time.zone.today}.gz")
 
         xmlwriter.close
-        organization.full_dump_xml.attach(io: File.open(xml_file), filename: "#{organization.slug}_#{Time.zone.today}.xml.gz")
+        full_dump.full_dump_xml.attach(io: File.open(xml_file), filename: "#{organization.slug}_#{Time.zone.today}.xml.gz")
       end
     end
 

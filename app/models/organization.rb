@@ -12,8 +12,6 @@ class Organization < ApplicationRecord
   has_many :allowlisted_jwts, as: :resource, dependent: :delete_all
   has_many :contact_emails, dependent: :delete_all
   has_one_attached :icon
-  has_many_attached :full_dump_binary
-  has_many_attached :full_dump_xml
   has_many :statistics, dependent: :delete_all, as: :resource
 
   def default_stream
