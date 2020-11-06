@@ -53,6 +53,7 @@ group :development, :test do
   gem 'scss-lint'
 
   gem 'simplecov'
+  gem 'timecop'
   gem 'webmock'
 end
 
