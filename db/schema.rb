@@ -140,8 +140,6 @@ ActiveRecord::Schema.define(version: 2020_11_06_161155) do
     t.integer "stream_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "slug"
-    t.index ["slug"], name: "index_uploads_on_slug"
     t.index ["stream_id"], name: "index_uploads_on_stream_id"
   end
 
