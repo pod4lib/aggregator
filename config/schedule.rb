@@ -19,6 +19,9 @@
 
 # Learn more: http://github.com/javan/whenever
 
+every :day do
+  runner 'UpdateOrganizationStatisticsJob.perform_all'
+
 # TODO: Raise this to monthly eventually?
 every :sunday do
   runner 'GenerateFullDumpJob.enqueue_all'

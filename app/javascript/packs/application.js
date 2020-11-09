@@ -8,6 +8,8 @@ require('turbolinks').start();
 require('@rails/activestorage').start();
 require('../channels');
 require('../direct_uploads');
+require('chartkick')
+require('chart.js')
 require('../pod_console');
 
 // Uncomment to copy all static images under ../images to the output folder and reference
