@@ -20,6 +20,7 @@ AllCops:
     - 'storage/**/*'
     - 'vendor/**/*'
     - 'app/controllers/concerns/action_controller/**/*'
+    - 'app/models/custom_marc_writer.rb'
 
 Rails:
   Enabled: true
