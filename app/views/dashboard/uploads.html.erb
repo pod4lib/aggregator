@@ -31,7 +31,7 @@
         <tr class="bg-light">
           <td>
             <% if upload.organization.icon.attached? %>
-              <%= image_tag(upload.organization.icon, class: 'organization-icon') %>
+              <%= image_tag(upload.organization.icon, class: 'icon-sm') %>
             <% end %>
           </td>
           <td><%= link_to upload.organization.name, upload.organization %>

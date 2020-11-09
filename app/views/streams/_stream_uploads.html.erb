@@ -31,6 +31,15 @@
     <table class="table table-striped">
       <thead><th></th><th class="pl-4">File</th><th>Date created</th><th>Size</th><th class="text-right pr-4">Records</th></thead>
       <tbody>
+        <tr>
+          <td><span class="badge badge-danger">Deletes</span></td>
+          <td class="pl-4">
+            <%= link_to 'deleted-records.txt', removed_since_previous_stream_organization_stream_url(@organization, stream), download: true %>
+          </td>
+          <td class="font-italic">n/a</td>
+          <td class="font-italic">n/a</td>
+          <td class="font-italic pr-4 text-right">n/a</td>
+        </tr>
         <% stream.normalized_dumps.last.full_dump_binary.attachments.each do |attachment| %>
           <tr>
             <td><span class="badge badge-primary">Full</span></td>
