@@ -29,14 +29,14 @@
     </div>
 
     <table class="table table-striped">
-      <thead><th></th><th class="pl-4">File</th><th>Size</th><th>Created at</th><th class="text-right pr-4">Records</th></thead>
+      <thead><th></th><th class="pl-4">File</th><th>Date created</th><th>Size</th><th class="text-right pr-4">Records</th></thead>
       <tbody>
         <% stream.normalized_dumps.last.full_dump_binary.attachments.each do |attachment| %>
           <tr>
             <td><span class="badge badge-primary">Full</span></td>
             <td class="pl-4"><%= link_to attachment.filename, download_url(attachment) %></td>
+            <td><%= l(attachment.created_at, format: :short) %></td>
             <td><%= number_to_human_size attachment.byte_size %></td>
-            <td><%= l attachment.created_at %></td>
             <td></td>
           </tr>
         <% end %>
@@ -44,8 +44,8 @@
           <tr>
             <td><span class="badge badge-primary">Full</span></td>
             <td class="pl-4"><%= link_to attachment.filename, download_url(attachment) %></td>
+            <td><%= l(attachment.created_at, format: :short) %></td>
             <td><%= number_to_human_size attachment.byte_size %></td>
-            <td><%= l attachment.created_at %></td>
             <td></td>
           </tr>
         <% end %>
@@ -53,8 +53,8 @@
           <tr>
             <td><span class="badge badge-secondary">Delta</span></td>
             <td class="pl-4"><%= link_to attachment.filename, download_url(attachment) %></td>
+            <td><%= l(attachment.created_at, format: :short) %></td>
             <td><%= number_to_human_size attachment.byte_size %></td>
-            <td><%= l attachment.created_at %></td>
             <td></td>
           </tr>
         <% end %>
@@ -62,8 +62,8 @@
           <tr>
             <td><span class="badge badge-secondary">Delta</span></td>
             <td class="pl-4"><%= link_to attachment.filename, download_url(attachment) %></td>
+            <td><%= l(attachment.created_at, format: :short) %></td>
             <td><%= number_to_human_size attachment.byte_size %></td>
-            <td><%= l attachment.created_at %></td>
             <td></td>
           </tr>
         <% end %>
