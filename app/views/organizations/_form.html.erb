@@ -1,6 +1,7 @@
 <%= bootstrap_form_with(model: organization, local: true) do |form| %>
   <%= form.text_field :name %>
   <%= form.text_field :slug %>
+  <%= form.text_field :code, help: 'LoC MARC Organization Code' %>
 
   <div class="custom-file mb-3">
     <%= form.file_field_without_bootstrap :icon, type: :file, direct_upload: true, id: 'customFile', class: 'custom-file-input', accept: '.svg' %>

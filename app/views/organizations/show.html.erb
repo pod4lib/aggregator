@@ -1,5 +1,8 @@
 <%= render 'shared/organization_header' do %>
     <p class="lead">
+      Code: <%= @organization.code %>
+    </p>
+    <p class="lead">
       Last updated: <%= @organization.default_stream.uploads.last&.updated_at ? content_tag(:span, "#{time_ago_in_words(@organization.default_stream.uploads.last&.updated_at)} ago", title: l(@organization.default_stream.uploads.last&.updated_at)) : 'never' %>
     </p>
     <p class="lead">
