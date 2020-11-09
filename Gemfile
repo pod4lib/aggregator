@@ -91,6 +91,9 @@ gem 'whenever'
 
 gem 'rack-attack'
 
+gem 'chartkick'
+gem 'groupdate'
+
 group :deployment do
   gem 'capistrano', '~> 3.0'
   gem 'capistrano-bundler'
