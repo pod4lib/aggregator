@@ -21,6 +21,7 @@
 
 every :day do
   runner 'UpdateOrganizationStatisticsJob.perform_all'
+end
 
 # TODO: Raise this to monthly eventually?
 every :sunday do
