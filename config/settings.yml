@@ -6,3 +6,7 @@ sidekiq:
 
 recaptcha:
   enabled: false
+
+action_mailer:
+  default_options:
+    from: 'test@example.com'
