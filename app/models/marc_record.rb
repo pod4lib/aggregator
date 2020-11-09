@@ -25,6 +25,17 @@ class MarcRecord < ApplicationRecord
               end
   end
 
+  def augmented_marc
+    return marc if organization&.code.blank?
+
+    @augmented_marc ||= begin
+      duped_record = MARC::Record.new_from_hash(marc.to_hash)
+      duped_record.append(MARC::DataField.new('900', nil, nil, ['b', organization.code]))
+
+      duped_record
+    end
+  end
+
   private
 
   # Get the raw bytes for a MARC21 record

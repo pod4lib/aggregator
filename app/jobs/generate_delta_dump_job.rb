@@ -24,8 +24,8 @@ class GenerateDeltaDumpJob < ApplicationJob
 
         uploads.each do |upload|
           upload.each_marc_record_metadata.each do |record|
-            xmlwriter.write(record.marc)
-            binary_io.write(record.marc.to_marc)
+            xmlwriter.write(record.augmented_marc)
+            binary_io.write(record.augmented_marc.to_marc)
           end
         end
         binary_io.close
