@@ -4,6 +4,10 @@
 class UpdateOrganizationStatisticsJob < ApplicationJob
   queue_as :default
 
+  def self.perform_all
+    Organization.find_each { |o| perform_later(o) }
+  end
+
   def perform(organization, stream = nil)
     stream ||= organization.default_stream
 
