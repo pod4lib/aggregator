@@ -20,6 +20,20 @@
 @import 'logo';
 @import 'rails_bootstrap_forms';
 
+$footer-height: 176px;
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  position: relative;
+
+  &::after {
+    content: '';
+    display: block;
+    height: $footer-height;
+  }
+}
+
 #hero {
   .bg-image {
     width: 100%;
@@ -72,4 +86,13 @@
 
 input[type=file][data-direct-upload-url][disabled] {
   display: none;
+}
+
+.footer {
+  background-color: #f8f9fa;
+  border-top: 1px solid darken(#f8f9fa, 10%);
+  bottom: 0;
+  height: $footer-height;
+  position: absolute;
+  width: 100%;
 }
