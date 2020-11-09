@@ -28,15 +28,12 @@
     background-image: image-url('hero.jpg');
     background-size: contain;
     top: 0; bottom: 0; left: 0; right: 0;
-    filter:blur(3.5px) brightness(50%) sepia()  hue-rotate(160deg);
+    filter:blur(3.5px) brightness(50%) sepia(50%)  hue-rotate(160deg);
   }
 
-  margin-top: -0.5rem;
-
-  .hero-text {
-    border-radius: 20px;
+  .lead {
+    font-size: 1.25rem;
   }
-  .lead { font-size: 1.5rem; }
 }
 
 .direct-upload {
