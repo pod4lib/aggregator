@@ -9,7 +9,7 @@
         <%= link_to 'Organizations', organizations_url, class: 'nav-link' %>
       </li>
       <li class='nav-item'>
-        <%= link_to 'Activity', activity_url, class: 'nav-link' %>
+        <%= link_to 'Activity', activity_url, class: 'nav-link', data: { turbolinks: false } %>
       </li>
       <% if can? :manage, User %>
         <li class='nav-item'>
