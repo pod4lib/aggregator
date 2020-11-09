@@ -26,10 +26,36 @@ class Upload < ApplicationRecord
       if content_type.ends_with?('xml') || filename.ends_with?('xml')
         extract_marc_record_metadata_from_marc_xml(file, &block)
       elsif filename.ends_with?('mrc') || filename.ends_with?('marc')
-        extract_marc_record_metadata_from_marc_binary(file, &block)
+        extract_marc_record_metadata_from_marc_binary_with_combining(file, &block)
       end
     end
   end
+
+  private
+
+  # rubocop:disable Metrics/AbcSize
+  def extract_marc_record_metadata_from_marc_binary_with_combining(file)
+    return to_enum(:extract_marc_record_metadata_from_marc_binary_with_combining, file) unless block_given?
+
+    extract_marc_record_metadata_from_marc_binary(file)
+      .slice_when { |i, j| i.marc['001'].value != j.marc['001'].value }
+      .each do |records_to_combine|
+      if records_to_combine.length == 1
+        yield records_to_combine.first
+      else
+        bytes = records_to_combine.map(&:marc_bytes).join('')
+
+        yield MarcRecord.new(
+          **records_to_combine.first.attributes,
+          length: bytes.length,
+          checksum: Digest::MD5.hexdigest(bytes),
+          marc_bytes: bytes,
+          marc: nil
+        )
+      end
+    end
+  end
+  # rubocop:enable Metrics/AbcSize
 
   def extract_marc_record_metadata_from_marc_binary(file)
     return to_enum(:extract_marc_record_metadata_from_marc_binary, file) unless block_given?
@@ -49,6 +75,7 @@ class Upload < ApplicationRecord
             length: length,
             index: index,
             checksum: Digest::MD5.hexdigest(bytes),
+            marc_bytes: bytes,
             marc: record
           )
         )
@@ -76,8 +103,6 @@ class Upload < ApplicationRecord
       end
     end
   end
-
-  private
 
   def each_with_bytecount(reader)
     return to_enum(:each_with_bytecount, reader) unless block_given?

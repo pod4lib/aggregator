@@ -43,5 +43,16 @@ FactoryBot.define do
         )
       end
     end
+
+    trait :marc21_multi_record do
+      after(:build) do |upload|
+        upload.files.attach(
+          io: File.open(
+            Rails.root.join('spec/fixtures/9953670.marc')
+          ),
+          filename: '9953670.marc', content_type: 'application/octet-stream'
+        )
+      end
+    end
   end
 end
