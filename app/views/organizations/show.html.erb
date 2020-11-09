@@ -30,14 +30,14 @@
         </div>
         <div class="card-body">
           <p>Tokens you have generated that can be used to access the POD API.</p>
-          <%= link_to 'Manage tokens', organization_allowlisted_jwts_path(@organization), class: 'btn btn-primary' if can? :create, @organization.allowlisted_jwts.build %>
+          <%= link_to 'Manage tokens', organization_allowlisted_jwts_path(@organization), class: 'btn btn-sm btn-primary' if can? :create, @organization.allowlisted_jwts.build %>
         </div>
       </div>
 
       <div class="card my-5">
         <div class="card-header d-flex justify-content-between">
           <h2 class="h5 align-self-center mb-0">Users</h2>
-          <%= link_to 'Invite', organization_invite_new_path(@organization), class: 'btn btn-primary' if can? :invite, @organization %>
+          <%= link_to 'Invite', organization_invite_new_path(@organization), class: 'btn btn-sm btn-primary' if can? :invite, @organization %>
         </div>
 
         <ul class="list-group list-group-flush">
@@ -62,7 +62,7 @@
       <div class="card">
         <div class="card-header d-flex justify-content-between">
           <h2 class="h5 align-self-center mb-0">Contact emails</h2>
-          <%= link_to 'Add', new_organization_contact_email_path(@organization), class: 'btn btn-primary' if can? :manage, @organization %>
+          <%= link_to 'Add', new_organization_contact_email_path(@organization), class: 'btn btn-sm btn-primary' if can? :manage, @organization %>
         </div>
 
         <ul class="list-group list-group-flush">
