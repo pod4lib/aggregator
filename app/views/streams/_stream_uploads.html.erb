@@ -5,12 +5,13 @@
   </div>
 
   <table class="table table-striped">
-    <thead><th class="pl-4">File</th><th>Size</th><th>Content type</th><th class="text-right pr-4">Records</th></thead>
+    <thead><th class="pl-4">File</th><th>Date created</th><th>Size</th><th>Content type</th><th class="text-right pr-4">Records</th></thead>
     <tbody>
     <% stream.uploads.each_with_index do |upload, ix| %>
         <% upload.files.each do |file| %>
           <tr>
             <td class="pl-4"><%= link_to file.filename, download_url(file) %></td>
+            <td><%= l(file.created_at, format: :short) %></td>
             <td><%= number_to_human_size file.byte_size %></td>
             <td><%= file.content_type %></td>
             <td class="pr-4 text-right"><%= file.metadata['count'] ? number_with_delimiter(file.metadata['count']) : '???' %></td>
@@ -28,41 +29,41 @@
     </div>
 
     <table class="table table-striped">
-      <thead><th></th><th class="pl-4">File</th><th>Size</th><th>Created at</th><th class="text-right pr-4">Records</th></thead>
+      <thead><th></th><th class="pl-4">File</th><th>Date created</th><th>Size</th><th class="text-right pr-4">Records</th></thead>
       <tbody>
         <% stream.normalized_dumps.last.full_dump_binary.attachments.each do |attachment| %>
           <tr>
-            <th><span class="badge badge-primary">Full</span></th>
+            <td><span class="badge badge-primary">Full</span></td>
             <td class="pl-4"><%= link_to attachment.filename, download_url(attachment) %></td>
+            <td><%= l(attachment.created_at, format: :short) %></td>
             <td><%= number_to_human_size attachment.byte_size %></td>
-            <td><%= l attachment.created_at %></td>
             <td></td>
           </tr>
         <% end %>
         <% stream.normalized_dumps.last.full_dump_xml.attachments.each do |attachment| %>
           <tr>
-            <th><span class="badge badge-primary">Full</span></th>
+            <td><span class="badge badge-primary">Full</span></td>
             <td class="pl-4"><%= link_to attachment.filename, download_url(attachment) %></td>
+            <td><%= l(attachment.created_at, format: :short) %></td>
             <td><%= number_to_human_size attachment.byte_size %></td>
-            <td><%= l attachment.created_at %></td>
             <td></td>
           </tr>
         <% end %>
         <% stream.normalized_dumps.last.delta_dump_binary.attachments.each do |attachment| %>
           <tr>
-            <th><span class="badge badge-secondary">Delta</span></th>
+            <td><span class="badge badge-secondary">Delta</span></td>
             <td class="pl-4"><%= link_to attachment.filename, download_url(attachment) %></td>
+            <td><%= l(attachment.created_at, format: :short) %></td>
             <td><%= number_to_human_size attachment.byte_size %></td>
-            <td><%= l attachment.created_at %></td>
             <td></td>
           </tr>
         <% end %>
         <% stream.normalized_dumps.last.delta_dump_xml.attachments.each do |attachment| %>
           <tr>
-            <th><span class="badge badge-secondary">Delta</span></th>
+            <td><span class="badge badge-secondary">Delta</span></td>
             <td class="pl-4"><%= link_to attachment.filename, download_url(attachment) %></td>
+            <td><%= l(attachment.created_at, format: :short) %></td>
             <td><%= number_to_human_size attachment.byte_size %></td>
-            <td><%= l attachment.created_at %></td>
             <td></td>
           </tr>
         <% end %>
