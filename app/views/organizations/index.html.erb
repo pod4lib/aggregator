@@ -7,9 +7,9 @@
         <th></th>
         <th>Name</th>
         <th style="width: 6ch;" class="text-right">Files</th>
-        <th>Size</th>
-        <th>Unique records</th>
-        <th>Total records</th>
+        <th class="text-right">Size</th>
+        <th class="text-right">Unique records</th>
+        <th class="text-right">Total records</th>
         <th>Last updated</th>
         <th colspan="2"></th>
       </tr>
@@ -27,9 +27,9 @@
             <%= link_to organization.name, organization %>
           </td>
           <td style="width: 6ch;" class="text-right"><%= organization.default_stream.files.size %></td>
-          <td><%= number_to_human_size organization.default_stream.files.sum(:byte_size) %></td>
-          <td><%= number_with_delimiter organization.latest_statistics.unique_record_count %></td>
-          <td><%= number_with_delimiter organization.latest_statistics.record_count %></td>
+          <td class="text-right"><%= number_to_human_size organization.default_stream.files.sum(:byte_size) %></td>
+          <td class="text-right"><%= number_with_delimiter organization.latest_statistics.unique_record_count %></td>
+          <td class="text-right"><%= number_with_delimiter organization.latest_statistics.record_count %></td>
           <td><%= organization.default_stream.uploads.last&.updated_at %></td>
           <td><%= link_to 'Edit', edit_organization_path(organization), class: 'btn btn-secondary btn-sm' if can? :edit, organization %></td>
           <td><%= link_to 'Destroy', organization, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' if can? :delete, organization %></td>
@@ -39,9 +39,9 @@
         <td></td>
         <td></td>
         <td style="width: 6ch;" class="text-right"><%= number_with_delimiter(@organizations.sum {|org| org.default_stream.files.size }) %></td>
-        <td><%= number_to_human_size @organizations.sum {|org| org.default_stream.files.sum(:byte_size)} %></td>
-        <td><%= number_with_delimiter(@organizations.sum { |org| org.latest_statistics.unique_record_count }) %></td>
-        <td><%= number_with_delimiter(@organizations.sum { |org| org.latest_statistics.record_count })%></td>
+        <td class="text-right"><%= number_to_human_size @organizations.sum {|org| org.default_stream.files.sum(:byte_size)} %></td>
+        <td class="text-right"><%= number_with_delimiter(@organizations.sum { |org| org.latest_statistics.unique_record_count }) %></td>
+        <td class="text-right"><%= number_with_delimiter(@organizations.sum { |org| org.latest_statistics.record_count })%></td>
         <td></td>
         <td colspan="2"></td>
       </tr>
