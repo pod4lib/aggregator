@@ -21,11 +21,10 @@ class Upload < ApplicationRecord
     return to_enum(:each_marc_record_metadata) unless block_given?
 
     files.each do |file|
-      content_type = file.blob.content_type
-      filename = file.blob.filename.to_s
-      if content_type.ends_with?('xml') || filename.ends_with?('xml')
+      case file.blob.metadata['analyzer']
+      when 'XmlMarcAnalyzer'
         extract_marc_record_metadata_from_marc_xml(file, &block)
-      elsif filename.ends_with?('mrc') || filename.ends_with?('marc')
+      when 'BinaryMarcAnalyzer'
         extract_marc_record_metadata_from_marc_binary(file, &block)
       end
     end
