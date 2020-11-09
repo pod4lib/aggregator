@@ -1,0 +1,48 @@
+<div class="container">
+  <h1>Uploads</h1>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Organization</th>
+        <th>Name</th>
+        <th>Updated</th>
+        <th class="text-right">File count</th>
+        <th class="text-right">File size</th>
+        <th class="text-right">Records</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @uploads.each do |upload| %>
+        <tr class="bg-light">
+          <td>
+            <% if upload.organization.icon.attached? %>
+              <%= image_tag(upload.organization.icon, class: 'organization-icon') %>
+            <% end %>
+          </td>
+          <td><%= link_to upload.organization.name, upload.organization %>
+          <td><%= link_to upload.name, [upload.organization, upload] %></td>
+          <td><%= content_tag :span, "#{time_ago_in_words(upload.updated_at)} ago", title: l(upload.updated_at) %></td>
+          <td class="text-right"><%= number_with_delimiter(upload.files.count) %></td>
+          <td class="text-right"><%= number_to_human_size upload.files.sum(&:byte_size) %></td>
+          <td class="text-right"><%= number_with_delimiter upload.files.sum { |file| file.metadata['count'] || 0 } %></td>
+        </tr>
+        <% upload.files.each do |file| %>
+          <tr>
+            <td></td>
+            <td></td>
+            <td class="pl-5"><%= link_to file.filename, download_url(file) %></td>
+            <td><%= file.content_type %></td>
+            <td></td>
+            <td class="text-right"><%= number_to_human_size file.byte_size %></td>
+            <td class="text-right"><%= file.metadata['count'] ? number_with_delimiter(file.metadata['count']) : '???' %></td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%= paginate @uploads %>
+</div>

@@ -10,6 +10,8 @@ Rails.application.routes.draw do
   get '/.well-known/resourcesync', to: 'resourcesync#source_description', as: :resourcesync_source_description, defaults: { format: :xml }
   get '/.well-known/resourcesync/capabilitylist', to: 'resourcesync#capabilitylist', as: :resourcesync_capabilitylist, defaults: { format: :xml }
 
+  get 'dashboard/uploads', to: 'dashboard#uploads', as: :activity
+
   resources :organizations do
     collection do
       get 'resourcelist', to: 'organizations#index', defaults: { format: :xml }
