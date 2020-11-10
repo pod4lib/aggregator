@@ -13,6 +13,8 @@ class StreamsController < ApplicationController
   # POST /streams
   # POST /streams.json
   def create
+    @stream = Stream.new(stream_params)
+
     respond_to do |format|
       if @stream.save
         format.html { redirect_to [@organization, @stream], notice: 'Stream was successfully created.' }
@@ -59,7 +61,7 @@ class StreamsController < ApplicationController
   private
 
   # Only allow a list of trusted parameters through.
-  def organization_params
-    params.require(:stream).permit(:name, :slug)
+  def stream_params
+    params.require(:stream).permit(:name, :slug).merge(organization_id: @organization.id)
   end
 end
