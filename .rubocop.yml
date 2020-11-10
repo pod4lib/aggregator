@@ -24,6 +24,10 @@ AllCops:
 Rails:
   Enabled: true
 
+Metrics/ClassLength:
+  Exclude:
+    - 'app/services/marc_record_service.rb'
+
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
