@@ -14,7 +14,7 @@ class UpdateOrganizationStatisticsJob < ApplicationJob
     stream_statistics = stream.statistic || stream.create_statistic
     stream_statistics.update(date: Time.zone.today, **calculate_stream_statistics(stream))
 
-    org_statistics = organization.statistics.find_or_initialize_by(date: Time.zone.today)
+    org_statistics = organization.statistics.find_or_create_by(date: Time.zone.today)
 
     org_statistics.update(
       date: Time.zone.today,
