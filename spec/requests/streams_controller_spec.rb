@@ -34,14 +34,14 @@ RSpec.describe '/organization/:id/stream', type: :request do
     let(:valid_attributes) { { name: 'whatever' } }
 
     context 'with valid parameters' do
-      it 'creates a new Upload' do
+      it 'creates a new Stream' do
         expect do
-          post organization_streams_url(organization), params: { upload: valid_attributes }
+          post organization_streams_url(organization), params: { stream: valid_attributes }
         end.to change(Stream, :count).by(1)
       end
 
       it 'redirects to the created upload' do
-        post organization_streams_url(organization), params: { upload: valid_attributes }
+        post organization_streams_url(organization), params: { stream: valid_attributes }
         expect(response).to redirect_to(organization_stream_url(organization, Stream.last))
       end
     end
