@@ -25,7 +25,7 @@ class GenerateDeltaDumpJob < ApplicationJob
         uploads.each do |upload|
           upload.each_marc_record_metadata.each do |record|
             xmlwriter.write(record.augmented_marc)
-            binary_io.write(record.augmented_marc.to_marc)
+            binary_io.write(split_marc(record.augmented_marc))
           end
         end
         binary_io.close
@@ -45,5 +45,13 @@ class GenerateDeltaDumpJob < ApplicationJob
       gzip_io = Zlib::GzipWriter.new(file)
       yield file, gzip_io
     end
+  end
+
+  def split_marc(marc)
+    marc.to_marc
+  rescue MARC::Exception => e
+    return CustomMarcWriter.encode(marc) if e.message.include? "Can't write MARC record in binary format, as a length/offset"
+
+    raise e
   end
 end

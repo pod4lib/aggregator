@@ -37,6 +37,17 @@ FactoryBot.define do
       end
     end
 
+    trait :long_file do
+      after(:build) do |upload|
+        upload.files.attach(
+          io: File.open(
+            Rails.root.join('spec/fixtures/long-record.xml')
+          ),
+          filename: 'long-record.xml', content_type: 'application/xml'
+        )
+      end
+    end
+
     trait :multple_files do
       after(:build) do |upload|
         upload.files.attach(
