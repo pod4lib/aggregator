@@ -1,8 +1,12 @@
 <%= render 'shared/organization_header' %>
 
-<div class="container">
+<div class="container mb-5">
   <%= link_to 'Streams', organization_streams_path %>
-  <h1><%= @stream.display_name %></h1>
+  <div class="d-flex justify-content-between">
+    <h1><%= @stream.display_name %></h1>
+    <%= link_to 'Make default', make_default_organization_streams_path(@organization, stream: @stream.slug), method: :post, class: 'btn btn-info align-self-center' if !@stream.default? && can?(:manage, @stream) %>
+  </div>
+
   <p class="lead">
     Last updated: <%= content_tag :span, "#{time_ago_in_words(@stream.uploads.last&.updated_at)} ago", title: l(@stream.uploads.last&.updated_at) %>
   </p>

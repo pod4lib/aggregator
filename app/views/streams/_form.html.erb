@@ -1,0 +1,8 @@
+<%= bootstrap_form_with(model: stream, url: [@organization, stream], local: true) do |form| %>
+  <%= form.text_field :name %>
+  <%= form.text_field :slug %>
+
+  <div class="actions">
+    <%= form.primary %>
+  </div>
+<% end %>

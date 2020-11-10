@@ -8,6 +8,22 @@ class StreamsController < ApplicationController
 
   def show; end
 
+  def new; end
+
+  # POST /streams
+  # POST /streams.json
+  def create
+    respond_to do |format|
+      if @stream.save
+        format.html { redirect_to [@organization, @stream], notice: 'Stream was successfully created.' }
+        format.json { render :show, status: :created, location: [@organization, @stream] }
+      else
+        format.html { render :new }
+        format.json { render json: @stream.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   def destroy
     @stream.destroy
 
