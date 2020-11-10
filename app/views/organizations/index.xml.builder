@@ -7,15 +7,29 @@ xml.urlset(
   'xmlns' => 'http://www.sitemaps.org/schemas/sitemap/0.9',
   'xmlns:rs' => 'http://www.openarchives.org/rs/terms/'
 ) do
-  xml.tag!('rs:ln', rel: 'up', href: resourcesync_capabilitylist_url)
+  href = if params[:normalized]
+           resourcesync_normalized_dump_capabilitylist_url(flavor: params[:flavor])
+         else
+           resourcesync_capabilitylist_url
+         end
+
+  xml.tag!('rs:ln', rel: 'up', href: href)
   xml.tag!('rs:md', capability: 'resourcelist', at: Time.zone.now.iso8601)
   @organizations.each do |org|
     xml.url do
       xml.tag!(
         'rs:md',
-        at: org.default_stream.updated_at.iso8601
+        at: if params[:normalized]
+              (org.default_stream.normalized_dumps.last&.updated_at || Time.zone.now).iso8601
+            else
+              org.default_stream.updated_at.iso8601
+            end
       )
-      xml.loc(resourcelist_organization_stream_url(org, org.default_stream))
+      xml.loc(if params[:normalized]
+                normalized_resourcelist_organization_stream_url(org, org.default_stream, flavor: params[:flavor])
+              else
+                resourcelist_organization_stream_url(org, org.default_stream)
+              end)
     end
   end
 end

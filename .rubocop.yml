@@ -30,6 +30,7 @@ Metrics/ClassLength:
 
 Metrics/BlockLength:
   Exclude:
+    - 'app/views/**/*.builder'
     - 'spec/**/*'
     - 'lib/tasks/**/*'
 

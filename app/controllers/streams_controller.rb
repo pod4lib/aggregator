@@ -24,6 +24,10 @@ class StreamsController < ApplicationController
     end
   end
 
+  def normalized_dump
+    @normalized_dump = @stream.normalized_dumps.last || @stream.normalized_dumps.build
+  end
+
   def destroy
     @stream.destroy
 

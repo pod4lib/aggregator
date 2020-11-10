@@ -7,4 +7,6 @@ class ResourcesyncController < ApplicationController
   def source_description; end
 
   def capabilitylist; end
+
+  def normalized_capabilitylist; end
 end

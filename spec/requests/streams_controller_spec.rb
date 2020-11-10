@@ -47,6 +47,22 @@ RSpec.describe '/organization/:id/stream', type: :request do
     end
   end
 
+  describe 'GET /normalized_dump' do
+    it 'renders a successful response' do
+      get normalized_resourcelist_organization_stream_path(
+        organization_id: stream.organization.id, id: stream.id, flavor: 'marcxml'
+      )
+      expect(response).to be_successful
+    end
+
+    it 'has some resourceSync stuff in it' do
+      get normalized_resourcelist_organization_stream_path(
+        organization_id: stream.organization.id, id: stream.id, flavor: 'marcxml'
+      )
+      expect(response.body).to include '<rs:md capability="resourcelist"'
+    end
+  end
+
   describe 'POST /make_default' do
     let!(:default_stream) { organization.default_stream }
 
