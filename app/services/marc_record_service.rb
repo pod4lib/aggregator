@@ -16,7 +16,9 @@ class MarcRecordService
     @identify ||= begin
       start = download_chunk(0...5)
 
-      if start == '<?xml' # xml preamble
+      if start.bytes[0] == 0x1F && start.bytes[1] == 0x8B # gzip magic bytes
+        identify_gzip
+      elsif start == '<?xml' # xml preamble
         :marcxml
       elsif start == '<reco' # start of a record (is this even valid?)
         :marcxml
@@ -29,7 +31,7 @@ class MarcRecordService
   end
 
   def marc21?
-    %i[marc21].include? identify
+    %i[marc21 marc21_gzip].include? identify
   end
 
   # Iterate through the records in a file
@@ -56,9 +58,9 @@ class MarcRecordService
       from_bytes(download_chunk(range))
     else
       blob.open do |tmpfile|
-        seek(range.first)
+        tmpfile.seek(range.first)
 
-        from_bytes(tmpfile.read(range.length))
+        from_bytes(tmpfile.read(range.size))
       end
     end
   end
@@ -105,6 +107,10 @@ class MarcRecordService
       MARC::XMLReader.new(io, parser: 'nokogiri')
     when :marc21
       MARC::Reader.new(io, { invalid: :replace })
+    when :marcxml_gzip
+      MARC::XMLReader.new(Zlib::GzipReader.new(io), parser: 'nokogiri')
+    when :marc21_gzip
+      MARC::Reader.new(Zlib::GzipReader.new(io), { invalid: :replace })
     else
       raise "Unknown MARC type: #{identify}"
     end
@@ -127,6 +133,17 @@ class MarcRecordService
         }
         bytecount += length
       end
+    end
+  end
+
+  def identify_gzip
+    reader = Zlib::GzipReader.new(StringIO.new(download_chunk(0...1024)))
+    inner_start = reader.read(5)
+
+    case inner_start
+    when '<?xml' then :marcxml_gzip
+    when /^\d+$/ then :marc21_gzip
+    else :unknown
     end
   end
 
