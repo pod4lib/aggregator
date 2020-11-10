@@ -23,6 +23,30 @@ RSpec.describe '/organization/:id/stream', type: :request do
     end
   end
 
+  describe 'GET /new' do
+    it 'renders a successful response' do
+      get new_organization_stream_url(organization)
+      expect(response).to be_successful
+    end
+  end
+
+  describe 'POST /create' do
+    let(:valid_attributes) { { name: 'whatever' } }
+
+    context 'with valid parameters' do
+      it 'creates a new Upload' do
+        expect do
+          post organization_streams_url(organization), params: { upload: valid_attributes }
+        end.to change(Stream, :count).by(1)
+      end
+
+      it 'redirects to the created upload' do
+        post organization_streams_url(organization), params: { upload: valid_attributes }
+        expect(response).to redirect_to(organization_stream_url(organization, Stream.last))
+      end
+    end
+  end
+
   describe 'POST /make_default' do
     let!(:default_stream) { organization.default_stream }
 

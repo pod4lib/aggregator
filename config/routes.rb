@@ -25,9 +25,9 @@ Rails.application.routes.draw do
     get 'invite/new', to: 'organization_invitations#new'
     post 'invite', to: 'organization_invitations#create'
     resources :allowlisted_jwts, only: [:index, :create, :destroy]
-    resources :streams, only: [:index, :destroy, :show] do
+    resources :streams, only: [:index, :destroy, :show, :create, :new] do
       collection do
-        post 'make_default', defaults: { format: :json }
+        post 'make_default'
       end
 
       member do
