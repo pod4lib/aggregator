@@ -11,20 +11,17 @@ class MarcRecord < ApplicationRecord
   attr_writer :marc
 
   # @return [MARC::Record]
+  # rubocop:disable Metrics/AbcSize
   def marc
-    return @marc if @marc
-
-    @marc ||= if raw_marc
-                read_single_marc_record
+    @marc ||= if marc_bytes
+                merge_records(*service.from_bytes(marc_bytes).to_a)
+              elsif bytecount && length
+                merge_records(*service.at_bytes(bytecount...(bytecount + length)).to_a)
               elsif index
-                file.blob.open do |tmpfile|
-                  marc_reader = MARC::XMLReader.new(tmpfile, parser: 'nokogiri')
-                  marc_reader.each.with_index do |record, index|
-                    return record if index == self.index
-                  end
-                end
+                service.at_index(index)
               end
   end
+  # rubocop:enable Metrics/AbcSize
 
   def augmented_marc
     return marc if organization&.code.blank?
@@ -39,28 +36,14 @@ class MarcRecord < ApplicationRecord
 
   private
 
-  # Get the raw bytes for a MARC21 record
-  # @return [String]
-  def raw_marc
-    return @marc_bytes if @marc_bytes
-
-    return unless bytecount
-
-    file.blob.service.download_chunk file.blob.key, bytecount...(bytecount + length)
-  end
-
-  def read_single_marc_record
-    records = MARC::Reader.new(StringIO.new(raw_marc), external_encoding: 'UTF-8').to_a
-
-    if records.one?
-      records.first
-    else
-      merge_records(*records)
-    end
+  def service
+    @service ||= MarcRecordService.new(file.blob)
   end
 
   # rubocop:disable Metrics/AbcSize
   def merge_records(first_record, *other_records)
+    return first_record if other_records.blank?
+
     record = MARC::Record.new
 
     record.leader = first_record.leader

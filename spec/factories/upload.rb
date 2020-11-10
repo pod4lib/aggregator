@@ -10,7 +10,18 @@ FactoryBot.define do
           io: File.open(
             Rails.root.join('spec/fixtures/1297245.marc')
           ),
-          filename: '1297245.mrc', content_type: 'application/octet-stream'
+          filename: '1297245.marc', content_type: 'application/octet-stream'
+        )
+      end
+    end
+
+    trait :binary_marc_gz do
+      after(:build) do |upload|
+        upload.files.attach(
+          io: File.open(
+            Rails.root.join('spec/fixtures/1297245.marc.gz')
+          ),
+          filename: '1297245.marc.gz', content_type: 'application/octet-stream'
         )
       end
     end
