@@ -35,11 +35,15 @@ class MarcRecordService
   end
 
   # Iterate through the records in a file
-  def each(&block)
+  def each
     return to_enum(:each) unless block_given?
 
     with_reader do |reader|
-      reader.each(&block)
+      reader.each_with_index do |record, index|
+        with_honeybadger_context(index: index, marc001: record['001']&.value) do
+          yield record
+        end
+      end
     end
   end
 
@@ -97,7 +101,9 @@ class MarcRecordService
 
   def with_reader
     blob.open do |tmpfile|
-      yield reader(tmpfile)
+      with_honeybadger_context do
+        yield reader(tmpfile)
+      end
     end
   end
 
@@ -122,16 +128,20 @@ class MarcRecordService
     with_reader do |reader|
       bytecount = 0
       reader.each_raw.with_index do |bytes, index|
-        length = bytes[0...5].to_i
-        record = MARC::Reader.decode(bytes)
-        yield record, {
-          bytecount: bytecount,
-          length: length,
-          index: index,
-          checksum: Digest::MD5.hexdigest(bytes),
-          marc_bytes: bytes
-        }
-        bytecount += length
+        with_honeybadger_context(bytecount: bytecount, index: index) do
+          length = bytes[0...5].to_i
+          record = MARC::Reader.decode(bytes)
+          with_honeybadger_context(marc001: record['001']&.value, bytecount: bytecount, index: index) do
+            yield record, {
+              bytecount: bytecount,
+              length: length,
+              index: index,
+              checksum: Digest::MD5.hexdigest(bytes),
+              marc_bytes: bytes
+            }
+            bytecount += length
+          end
+        end
       end
     end
   end
@@ -149,5 +159,13 @@ class MarcRecordService
 
   def download_chunk(range)
     blob.service.download_chunk(blob.key, range)
+  end
+
+  def with_honeybadger_context(**context)
+    Honeybadger.context((Honeybadger.get_context || {}).merge(marc_record: { blob: blob.id, **context }))
+
+    yield(context).tap do
+      Honeybadger.context((Honeybadger.get_context || {}).except(:marc_record))
+    end
   end
 end
