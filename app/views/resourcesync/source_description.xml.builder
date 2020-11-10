@@ -13,4 +13,14 @@ xml.urlset(
     xml.loc resourcesync_capabilitylist_url
     xml.tag!('rs:md', capability: 'capabilitylist')
   end
+
+  xml.url do
+    xml.loc resourcesync_normalized_dump_capabilitylist_url(flavor: 'marcxml')
+    xml.tag!('rs:md', capability: 'capabilitylist')
+  end
+
+  xml.url do
+    xml.loc resourcesync_normalized_dump_capabilitylist_url(flavor: 'marc21')
+    xml.tag!('rs:md', capability: 'capabilitylist')
+  end
 end

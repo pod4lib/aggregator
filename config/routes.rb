@@ -9,6 +9,7 @@ Rails.application.routes.draw do
 
   get '/.well-known/resourcesync', to: 'resourcesync#source_description', as: :resourcesync_source_description, defaults: { format: :xml }
   get '/.well-known/resourcesync/capabilitylist', to: 'resourcesync#capabilitylist', as: :resourcesync_capabilitylist, defaults: { format: :xml }
+  get '/.well-known/resourcesync/normalized-capabilitylist/:flavor', to: 'resourcesync#normalized_capabilitylist', as: :resourcesync_normalized_dump_capabilitylist, defaults: { format: :xml }
 
   get 'dashboard/uploads', to: 'dashboard#uploads', as: :activity
   get 'charts/uploads', to: 'charts#uploads', as: :uploads_chart
@@ -17,6 +18,7 @@ Rails.application.routes.draw do
   resources :organizations do
     collection do
       get 'resourcelist', to: 'organizations#index', defaults: { format: :xml }
+      get 'normalized_resourcelist/:flavor', to: 'organizations#index', defaults: { normalized: true, format: :xml }, as: :normalized_resourcelist
     end
     resources :uploads
     resources :organization_users, as: 'users', only: :destroy
@@ -32,6 +34,7 @@ Rails.application.routes.draw do
 
       member do
         get 'resourcelist', to: 'streams#show', defaults: { format: :xml }
+        get 'normalized_resourcelist/:flavor', to: 'streams#normalized_dump', defaults: { format: :xml }, as: :normalized_resourcelist
         get :removed_since_previous_stream
       end
     end

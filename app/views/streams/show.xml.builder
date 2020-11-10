@@ -19,7 +19,7 @@ xml.urlset(
         length: file.byte_size
       )
       xml.loc(download_url(file))
-      xml.lastmod(file.created_at)
+      xml.lastmod(file.created_at.iso8601)
     end
   end
 end

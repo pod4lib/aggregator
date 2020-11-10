@@ -20,4 +20,11 @@ RSpec.describe '/.well-known/resourcesync', type: :request do
       expect(response.body).to include '<rs:md capability="capabilitylist"'
     end
   end
+
+  describe 'GET /normalized_capabilitylist' do
+    it 'has some resourceSync stuff in it' do
+      get resourcesync_normalized_dump_capabilitylist_url(flavor: 'marcxml')
+      expect(response.body).to include '<rs:md capability="capabilitylist"'
+    end
+  end
 end

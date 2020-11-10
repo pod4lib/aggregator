@@ -8,6 +8,16 @@ RSpec.describe OrganizationsController, type: :routing do
       expect(get: '/organizations').to route_to('organizations#index')
     end
 
+    it 'routes to #index as an xml sitemap' do
+      expect(get: '/organizations/resourcelist').to route_to('organizations#index', format: :xml)
+    end
+
+    it 'routes to #index as an format-specific xml sitemap' do
+      expect(get: '/organizations/normalized_resourcelist/marcxml').to route_to(
+        'organizations#index', normalized: true, flavor: 'marcxml', format: :xml
+      )
+    end
+
     it 'routes to #new' do
       expect(get: '/organizations/new').to route_to('organizations#new')
     end
