@@ -55,4 +55,11 @@ class StreamsController < ApplicationController
       format.json { render :show, status: :ok, location: @organization }
     end
   end
+
+  private
+
+  # Only allow a list of trusted parameters through.
+  def organization_params
+    params.require(:stream).permit(:name, :slug)
+  end
 end
