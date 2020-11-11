@@ -15,7 +15,7 @@ RSpec.describe '/files', type: :request do
         {
           'Accept-Ranges' => 'bytes',
           'Content-Disposition' => 'attachment',
-          'Content-Type' => 'application/octet-stream',
+          'Content-Type' => 'application/marc',
           'Etag' => 'W/"6f9974da7d9740e8341d81ba1d4d7d90"'
         }
       end
@@ -44,7 +44,7 @@ RSpec.describe '/files', type: :request do
         {
           'Accept-Ranges' => 'bytes',
           'Content-Disposition' => 'attachment',
-          'Content-Type' => 'application/octet-stream',
+          'Content-Type' => 'application/marc',
           'Content-Range' => 'bytes 0-3/1407'
         }
       end

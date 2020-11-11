@@ -1,4 +1,5 @@
 require 'active_storage_attachment_metadata_status'
+require 'active_storage_blob_content_types'
 
 # Allow uploaded SVGs to be rendered inline https://github.com/rails/rails/issues/34665
 ActiveStorage::Engine
@@ -16,4 +17,5 @@ Rails.application.config.active_storage.queues[:purge] = :default
 
 Rails.configuration.to_prepare do
   ActiveStorage::Attachment.send :include, ::ActiveStorageAttachmentMetadataStatus
+  ActiveStorage::Blob.send :include, ::ActiveStorageBlobContentTypes
 end

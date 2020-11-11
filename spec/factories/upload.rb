@@ -10,7 +10,7 @@ FactoryBot.define do
           io: File.open(
             Rails.root.join('spec/fixtures/1297245.marc')
           ),
-          filename: '1297245.marc', content_type: 'application/octet-stream'
+          filename: '1297245.marc', content_type: 'application/marc'
         )
       end
     end
@@ -32,7 +32,7 @@ FactoryBot.define do
           io: File.open(
             Rails.root.join('spec/fixtures/12345.marcxml')
           ),
-          filename: '1297245.marcxml', content_type: 'application/xml'
+          filename: '1297245.marcxml', content_type: 'application/marcxml+xml'
         )
       end
     end
@@ -43,7 +43,7 @@ FactoryBot.define do
           io: File.open(
             Rails.root.join('spec/fixtures/long-record.xml')
           ),
-          filename: 'long-record.xml', content_type: 'application/xml'
+          filename: 'long-record.xml', content_type: 'application/marcxml+xml'
         )
       end
     end
@@ -54,14 +54,14 @@ FactoryBot.define do
           io: File.open(
             Rails.root.join('spec/fixtures/1297245.marc')
           ),
-          filename: '1297245.mrc', content_type: 'application/octet-stream'
+          filename: '1297245.mrc', content_type: 'application/marc'
         )
 
         upload.files.attach(
           io: File.open(
             Rails.root.join('spec/fixtures/12345.marcxml')
           ),
-          filename: '1297245.marcxml', content_type: 'application/xml'
+          filename: '1297245.marcxml', content_type: 'application/marcxml+xml'
         )
       end
     end
@@ -72,7 +72,7 @@ FactoryBot.define do
           io: File.open(
             Rails.root.join('spec/fixtures/9953670.marc')
           ),
-          filename: '9953670.marc', content_type: 'application/octet-stream'
+          filename: '9953670.marc', content_type: 'application/marc'
         )
       end
     end
