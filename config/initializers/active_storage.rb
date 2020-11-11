@@ -1,3 +1,5 @@
+require 'active_storage_attachment_metadata_status'
+
 # Allow uploaded SVGs to be rendered inline https://github.com/rails/rails/issues/34665
 ActiveStorage::Engine
   .config
@@ -10,3 +12,8 @@ Rails.application.config.active_storage.analyzers.append MarcAnalyzer
 # Use default queue for analysis and purge for Sidekiq simplification
 Rails.application.config.active_storage.queues[:analysis] = :default
 Rails.application.config.active_storage.queues[:purge] = :default
+
+
+Rails.configuration.to_prepare do
+  ActiveStorage::Attachment.send :include, ::ActiveStorageAttachmentMetadataStatus
+end
