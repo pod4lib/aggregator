@@ -1,0 +1,13 @@
+.pod-metadata-status {
+  &.unknown::before {
+    content: '❓';
+  }
+
+  &.success::before {
+    content: '✅';
+  }
+
+  &.invalid::before {
+    content: '❌';
+  }
+}
