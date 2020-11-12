@@ -3,12 +3,14 @@
 # :nodoc:
 class Ability
   include CanCan::Ability
+  attr_reader :allowlisted_jwt, :user
 
   # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def initialize(user, token = nil)
     can :confirm, ContactEmail
     return unless user || token
 
+    @user = user
     if token
       token_payload = if token
                         JWT.decode(
@@ -24,7 +26,8 @@ class Ability
 
       can %i[create read update], [Stream, Upload], organization: { allowlisted_jwts: { jti: token_payload['jti'] } }
 
-      AllowlistedJwt.find_by(jti: token_payload['jti'])&.update(updated_at: Time.zone.now)
+      @allowlisted_jwt = AllowlistedJwt.find_by(jti: token_payload['jti'])
+      allowlisted_jwt&.update(updated_at: Time.zone.now)
       return
     end
 

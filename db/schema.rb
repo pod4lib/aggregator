@@ -143,6 +143,7 @@ ActiveRecord::Schema.define(version: 2020_11_12_222831) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "url"
     t.integer "user_id"
+    t.integer "allowlisted_jwts_id"
     t.string "ip_address"
     t.index ["stream_id"], name: "index_uploads_on_stream_id"
   end
