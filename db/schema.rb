@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_11_223315) do
+ActiveRecord::Schema.define(version: 2020_11_12_222831) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -142,6 +142,8 @@ ActiveRecord::Schema.define(version: 2020_11_11_223315) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "url"
+    t.integer "user_id"
+    t.string "ip_address"
     t.index ["stream_id"], name: "index_uploads_on_stream_id"
   end
 
