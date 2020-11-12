@@ -76,6 +76,6 @@ class UploadsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def upload_params
-    params.require(:upload).permit(:name, files: []).tap { |p| p['files'].reject!(&:blank?) }
+    params.require(:upload).permit(:name, :url, files: []).tap { |p| p['files']&.reject!(&:blank?) }
   end
 end
