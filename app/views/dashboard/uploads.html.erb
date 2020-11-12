@@ -22,6 +22,7 @@
         <th class="text-right">File count</th>
         <th class="text-right">File size</th>
         <th class="text-right">Records</th>
+        <th><span class="sr-only">File status</span></th>
       </tr>
     </thead>
 
@@ -39,6 +40,7 @@
           <td class="text-right"><%= number_with_delimiter(upload.files.count) %></td>
           <td class="text-right"><%= number_to_human_size upload.files.sum(&:byte_size) %></td>
           <td class="text-right"><%= number_with_delimiter upload.files.sum { |file| file.metadata['count'] || 0 } %></td>
+          <td></td>
         </tr>
         <% upload.files.each do |file| %>
           <tr>
@@ -49,6 +51,11 @@
             <td></td>
             <td class="text-right"><%= number_to_human_size file.byte_size %></td>
             <td class="text-right"><%= file.metadata['count'] ? number_with_delimiter(file.metadata['count']) : '???' %></td>
+            <td class="text-left">
+              <span class="pod-metadata-status <%= file.pod_metadata_status %>" title="<%= file.metadata['error'] %>">
+                <span class="sr-only"><%= file.pod_metadata_status %></span>
+              </span>
+            </td>
           </tr>
         <% end %>
       <% end %>
