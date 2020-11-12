@@ -16,9 +16,7 @@ class MarcAnalyzer < ActiveStorage::Analyzer
     { analyzer: self.class.to_s, valid: false, error: e.message }
   end
 
-  private
-
   def reader
-    @reader ||= MarcRecordService.new(@blob)
+    @reader ||= MarcRecordService.new(blob)
   end
 end
