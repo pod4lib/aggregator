@@ -9,12 +9,12 @@ RSpec.describe 'uploads/index', type: :view do
     assign(:uploads, [
              Upload.create!(
                name: 'Name',
-               files: [],
+               files: [fixture_file_upload(Rails.root.join('spec/fixtures/1297245.marc'), 'application/octet-stream')],
                stream_id: organization.default_stream.id
              ),
              Upload.create!(
                name: 'Name',
-               files: [],
+               files: [fixture_file_upload(Rails.root.join('spec/fixtures/1297245.marc'), 'application/octet-stream')],
                stream_id: organization.default_stream.id
              )
            ])

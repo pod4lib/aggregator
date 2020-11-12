@@ -5,11 +5,16 @@
 
   <div class="custom-file">
     <%= form.file_field_without_bootstrap :files, type: :file, multiple: true, direct_upload: true, id: 'customFile', class: 'custom-file-input' %>
-    <label class="custom-file-label" for="customFile">Choose file</label>
+    <label class="custom-file-label" for="customFile">Upload file</label>
   </div>
 
   <div class="direct-upload-area"></div>
 
+  <div class="font-weight-bold m-3">
+    OR
+  </div>
+
+  <%= form.text_field :url, placeholder: 'https://example.com/12345.marc', label: 'Upload via URL' %>
 
   <div class="actions mt-3">
     <%= form.primary %>
