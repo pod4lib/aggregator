@@ -7,7 +7,7 @@ RSpec.describe 'uploads/edit', type: :view do
   let(:upload) do
     Upload.create!(
       name: 'MyString',
-      files: [],
+      files: [fixture_file_upload(Rails.root.join('spec/fixtures/1297245.marc'), 'application/octet-stream')],
       stream_id: organization.default_stream.id
     )
   end

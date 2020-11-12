@@ -6,6 +6,11 @@ class Upload < ApplicationRecord
   belongs_to :stream, touch: true
   has_one :organization, through: :stream
   has_many :marc_records, dependent: :delete_all
+  validates :url, presence: true, if: proc { |upload| upload.files.blank? }
+  validates :files, presence: true, if: proc { |upload| upload.url.blank? }
+  validate :valid_url, if: proc { |upload| upload.url.present? }
+
+  after_create :attach_file_from_url
 
   has_many_attached :files
 
@@ -34,6 +39,16 @@ class Upload < ApplicationRecord
   end
 
   private
+
+  def valid_url
+    errors.add(:url, 'Unable to attach file from URL') unless URI.parse(url)&.host
+  end
+
+  def attach_file_from_url
+    return if url.blank?
+
+    AttachRemoteFileToUploadJob.perform_later(self)
+  end
 
   def extract_marc_record_metadata(file, service)
     return to_enum(:extract_marc_record_metadata, file, service) unless block_given?
