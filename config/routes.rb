@@ -3,7 +3,9 @@ Rails.application.routes.draw do
   devise_for :users, controllers: { invitations: 'organization_invitations', registrations: 'registrations' }
 
   root to: 'pages#home'
+  get '/documentation/:id', to: 'pages#show', as: :pages
   get '/api', to: 'pages#api'
+
 
   get 'contact_emails/confirm/:token', to: 'contact_emails#confirm', as: :contact_email_confirmation
 
