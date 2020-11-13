@@ -71,7 +71,12 @@ class UploadsController < ApplicationController
   end
 
   def create_params
-    upload_params.merge(stream_id: current_stream.id)
+    upload_params.merge(
+      stream_id: current_stream.id,
+      user_id: current_ability&.user&.id,
+      allowlisted_jwts_id: current_ability&.allowlisted_jwt&.id,
+      ip_address: request.env['HTTP_X_FORWARDED_FOR'] || request.remote_ip
+    )
   end
 
   # Only allow a list of trusted parameters through.

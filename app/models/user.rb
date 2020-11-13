@@ -10,6 +10,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :invitable, :confirmable
 
+  has_many :uploads # rubocop:disable Rails/HasManyOrHasOneDependent
+
   def to_s
     return email if name.blank?
 
