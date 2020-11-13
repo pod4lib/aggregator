@@ -62,6 +62,9 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
+  # make things easier for now by enqueuing these on the default queue instead of a separate mailer queue
+  config.action_mailer.deliver_later_queue_name = :default
+
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
