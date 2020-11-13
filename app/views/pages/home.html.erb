@@ -28,3 +28,36 @@
     </div>
   </div>
 </div>
+
+
+<div class="row rows-cols-2 w-100 my-md-3 pl-md-3 border-top">
+  <div class="col pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
+    <div class="my-3 py-3">
+      <h2 class="display-5">Read the documentation</h2>
+      <ul class="list-group lead align-left">
+        <li class="list-group-item border-0">
+          <%= link_to 'API documentation', api_path, class: 'text-muted' %>
+        </li>
+        <li class="list-group-item border-0">
+          <%= link_to 'Data guidelines', pages_path(id: 'data'), class: 'text-muted' %>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="col pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
+    <% if current_user %>
+      <div class="my-3 p-3">
+        <h2 class="display-5">My organizations</h2>
+        <ul class="list-group lead align-left">
+          <% organizations = Organization.with_role(:member, current_user) %>
+
+          <% organizations.each do |org| %>
+            <li class="list-group-item border-0">
+              <%= link_to org.name, org, class: 'text-muted' %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  </div>
+</div>
