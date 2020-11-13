@@ -8,4 +8,8 @@ class PagesController < ApplicationController
   def home; end
 
   def api; end
+
+  def show
+    render template: "pages/#{params[:id]}"
+  end
 end

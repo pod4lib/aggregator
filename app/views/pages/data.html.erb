@@ -1,0 +1,56 @@
+<div class="container mt-3">
+  <h2 class="display-4">Data Documentation</h2>
+
+  <p>POD accepts MARC data in several different formats. In all cases, we require the data to be syntactically valid.</p>
+
+  <p>NOTE: MARC data with non-standard tags or subfield codes may be removed or normalized for downstream use.</p>
+
+  <h3>Full dump formats</h3>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Format</th><th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>MARC21</td><td>
+        <ul>
+          <li>Records SHOULD use the UTF-8 character set</li>
+          <li>Records longer than the 99,999 byte limit MAY be split into multiple MARC records, as long as they are physically adjacent in the file and use the same MARC 001 field</li>
+        </ul>
+
+      </td></tr>
+      <tr><td>MARC21 (gzipped)</td><td></td></tr>
+      <tr><td>MARC21 (chunked)</td><td>
+        <ul>
+          <li>Multiple files MAY be concatenated together into a single file or uploaded as separate files</li>
+        </ul>
+      </td></tr>
+      <tr><td>MARCXML</td><td>
+        <p>The file ...</p>
+        <ul>
+          <li>... MUST be valid XML</li>
+          <li>... MUST use the XML namespace <span class="text-monospace">http://www.loc.gov/MARC21/slim</span></li>
+          <li>... SHOULD start with an XML declaration e.g. <span class="text-monospace">&lt;?xml version="1.0" ?&gt;</span></li>
+        </ul>
+      </td></tr>
+      <tr><td>MARCXML (gzipped)</td><td></td></tr>
+      <tr><td>MARCXML (chunked)</td><td></td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="mt-5 mb-3">Common errors</h3>
+
+  <dl>
+    <dt>Records count is 0</dt>
+    <dd>If you provided a MARCXML file, check that the document declares and uses the MARCXML namespace (<span class="text-monospace">http://www.loc.gov/MARC21/slim</span>)</dd>
+    <dt class="text-monospace">XML parsing error: XML declaration allowed only at the start of the document</dt>
+    <dd>Some systems export "MARCXML" as concatenated XML files. Ensure your XML file is valid.</dd>
+    <dt class="text-monospace">XML parsing error: Unescaped '<' not allowed in attributes values</dt>
+    <dd>Some systems fail to perform XML encoding on tags or subfield codes. Ensure your XML file is valid. </dd>
+    <dt class="text-monospace">XML parsing error: Input is not proper UTF-8, indicate encoding !Bytes: 0xA0 0x4D 0x75 0x73</dt>
+    <dd>This is likely caused by non-UTF8 data appearing in MARC21 records (that claim to use UTF-8, even.). Correct any character encoding issues present in the file.</dd>
+    <dt class="text-monospace">MARC::DataField objects can't have ControlField tag '000')</dt>
+    <dd>MARC fields 000 - 009 MUST use <span class="text-monospace">controlfield</span>, and MARC fields 010 - 999 MUST use <span class="text-monospace">datafield</span></dd>
+  </dl>
+</div>
