@@ -22,6 +22,7 @@ Rails.application.routes.draw do
       get 'resourcelist', to: 'organizations#index', defaults: { format: :xml }
       get 'normalized_resourcelist/:flavor', to: 'organizations#index', defaults: { normalized: true, format: :xml }, as: :normalized_resourcelist
     end
+    resources :marc_records, only: [:index, :show], defaults: { format: :json }
     resources :uploads
     resources :organization_users, as: 'users', only: :destroy
     resources :organization_contact_emails, as: 'contact_emails', only: [:new, :create, :destroy]
