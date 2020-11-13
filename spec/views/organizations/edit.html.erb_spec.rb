@@ -23,4 +23,13 @@ RSpec.describe 'organizations/edit', type: :view do
       assert_select 'input[name=?]', 'organization[slug]'
     end
   end
+
+  it 'renders fields for normalization' do
+    render
+
+    assert_select 'form[action=?][method=?]', organization_path(organization), 'post' do
+      assert_select 'input[name=?]', 'organization[normalization_steps[0][destination_tag]]'
+      assert_select 'input[name=?]', 'organization[normalization_steps[0][subfields][i]]'
+    end
+  end
 end

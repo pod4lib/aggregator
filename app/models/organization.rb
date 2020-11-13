@@ -26,4 +26,12 @@ class Organization < ApplicationRecord
   def latest_statistics
     statistics.latest.first_or_initialize
   end
+
+  def normalization_steps
+    super || {}
+  end
+
+  def augmented_marc_record_service
+    @augmented_marc_record_service ||= AugmentMarcRecordService.new(organization: self)
+  end
 end

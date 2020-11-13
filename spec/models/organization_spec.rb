@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe Organization do
-  describe 'jwt_token' do
-    let(:organization) { FactoryBot.create(:organization) }
+  let(:organization) { FactoryBot.create(:organization) }
 
+  describe '#jwt_token' do
     context 'when a jwt already exists' do
       before do
         AllowlistedJwt.create(resource: organization, jti: 'anything')
@@ -34,6 +34,12 @@ RSpec.describe Organization do
         token = JWT.decode(organization.jwt_token, Settings.jwt.secret, Settings.jwt.algorithm)
         expect(token[0]['jti']).to eq AllowlistedJwt.last.jti
       end
+    end
+  end
+
+  describe '#normalization_steps' do
+    it 'defaults to a hash' do
+      expect(organization.normalization_steps).to eq({})
     end
   end
 end

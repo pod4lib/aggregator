@@ -47,8 +47,24 @@ RSpec.describe MarcRecord, type: :model do
   describe '#augmented_marc' do
     let(:attr) { { bytecount: 0, length: 1407 } }
 
+    before do
+      organization.update(normalization_steps: { '0' => {
+                            destination_tag: '998',
+                            source_tag: '999',
+                            subfields: { i: 'i', a: 'a', m: 'm' }
+                          } })
+    end
+
     it "applies the Organization's code as the 900$b" do
       expect(marc_record.augmented_marc.fields('900').first['b']).to eq 'COOlCOdE'
+    end
+
+    it 'applies the organization normalization steps' do
+      field = marc_record.augmented_marc.fields('998').first
+
+      expect(field.subfields.map(&:to_s)).to include('$a NA737.K4 A4 1980 ')
+        .and include('$i 36105032407764 ')
+        .and include('$m ART ')
     end
   end
 end

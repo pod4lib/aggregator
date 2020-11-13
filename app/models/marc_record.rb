@@ -24,14 +24,9 @@ class MarcRecord < ApplicationRecord
   # rubocop:enable Metrics/AbcSize
 
   def augmented_marc
-    return marc if organization&.code.blank?
+    return marc unless organization
 
-    @augmented_marc ||= begin
-      duped_record = MARC::Record.new_from_hash(marc.to_hash)
-      duped_record.append(MARC::DataField.new('900', nil, nil, ['b', organization.code]))
-
-      duped_record
-    end
+    @augmented_marc ||= organization.augmented_marc_record_service.execute(marc)
   end
 
   private

@@ -103,20 +103,20 @@ RSpec.describe '/organizations', type: :request do
   end
 
   describe 'PATCH /update' do
+    let(:organization) { Organization.create! valid_attributes }
+
     context 'with valid parameters' do
       let(:new_attributes) do
         { name: 'Updated org name' }
       end
 
       it 'updates the requested organization' do
-        organization = Organization.create! valid_attributes
         patch organization_url(organization), params: { organization: new_attributes }
         organization.reload
-        skip('Add assertions for updated state')
+        expect(organization).to have_attributes name: 'Updated org name'
       end
 
       it 'accepts an icon upload' do
-        organization = Organization.create! valid_attributes
         icon = fixture_file_upload(Rails.root.join('spec/fixtures/pod_logo.svg'), 'image/svg+xml')
 
         expect(organization.icon.attached?).to be false
@@ -132,9 +132,22 @@ RSpec.describe '/organizations', type: :request do
       end
     end
 
+    context 'with mapping parameters' do
+      let(:new_attributes) do
+        { normalization_steps: [{ destination_tag: '999', source_tag: 'PRT', subfields: { i: 'a', a: 'b', m: 'c' } }] }
+      end
+
+      it 'updates the requested organization' do
+        patch organization_url(organization), params: { organization: new_attributes }
+        expect(organization.reload).to have_attributes normalization_steps: [
+          hash_including('destination_tag' => '999', 'source_tag' => 'PRT',
+                         'subfields' => { 'i' => 'a', 'a' => 'b', 'm' => 'c' })
+        ]
+      end
+    end
+
     context 'with invalid parameters' do
       it "renders a successful response (i.e. to display the 'edit' template)" do
-        organization = Organization.create! valid_attributes
         patch organization_url(organization), params: { organization: invalid_attributes }
         expect(response).to be_successful
       end
