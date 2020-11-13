@@ -8,5 +8,12 @@ class MarcRecordsController < ApplicationController
 
   def show; end
 
-  def index; end
+  def index
+    @marc_records = @marc_records.where(marc001: index_params[:marc001]) if index_params[:marc001]
+    @marc_records = @marc_records.page(index_params[:page])
+  end
+
+  def index_params
+    params.permit(:page, :marc001)
+  end
 end
