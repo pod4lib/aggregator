@@ -13,6 +13,14 @@ class MarcRecordsController < ApplicationController
     @marc_records = @marc_records.page(index_params[:page])
   end
 
+  def marc21
+    render body: @marc_record.marc.to_marc, content_type: 'application/marc'
+  end
+
+  def marcxml
+    render body: @marc_record.marc.to_xml, content_type: 'application/marcxml+xml'
+  end
+
   def index_params
     params.permit(:page, :marc001)
   end
