@@ -55,6 +55,10 @@ RSpec.describe MarcRecord, type: :model do
                           } })
     end
 
+    it 'adds a $5 to indicate a POD-added field' do
+      expect(marc_record.augmented_marc.fields('900').first['5']).to eq 'POD'
+    end
+
     it "applies the Organization's code as the 900$b" do
       expect(marc_record.augmented_marc.fields('900').first['b']).to eq 'COOlCOdE'
     end
@@ -65,6 +69,12 @@ RSpec.describe MarcRecord, type: :model do
       expect(field.subfields.map(&:to_s)).to include('$a NA737.K4 A4 1980 ')
         .and include('$i 36105032407764 ')
         .and include('$m ART ')
+    end
+
+    it 'includes provenance linking for derived data' do
+      field = marc_record.augmented_marc.fields('998').first
+
+      expect(field['8']).to eq '999.0\p'
     end
   end
 end
