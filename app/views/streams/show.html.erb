@@ -11,7 +11,7 @@
     Last updated: <%= content_tag :span, "#{time_ago_in_words(@stream.uploads.last&.updated_at || @stream.updated_at)} ago", title: l(@stream.uploads.last&.updated_at || @stream.updated_at) %>
   </p>
   <p class="lead">
-    Records: <%= number_with_delimiter @stream.statistic&.unique_record_count || 0 %> unique (<%= number_with_delimiter @stream.statistic&.record_count || 0%> total)
+    Records: <%= number_with_delimiter @stream.statistic&.unique_record_count || 0 %> unique (<%= number_with_delimiter @stream.statistic&.record_count || 0%> total) <%= link_to "(view all)", organization_marc_records_path(@organization, { stream: @stream}) %>
   </p>
 
   <%= render 'stream_uploads', stream: @stream  %>
