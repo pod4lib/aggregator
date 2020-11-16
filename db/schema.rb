@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_12_222831) do
+ActiveRecord::Schema.define(version: 2020_11_13_223126) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -97,6 +97,7 @@ ActiveRecord::Schema.define(version: 2020_11_12_222831) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "slug"
     t.string "code"
+    t.json "normalization_steps"
     t.index ["slug"], name: "index_organizations_on_slug", unique: true
   end
 

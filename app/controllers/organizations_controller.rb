@@ -64,6 +64,10 @@ class OrganizationsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def organization_params
-    params.require(:organization).permit(:name, :slug, :icon, :code)
+    params.require(:organization)
+          .permit(
+            :name, :slug, :icon, :code,
+            normalization_steps: [[:destination_tag, :source_tag, { subfields: %i[i a m] }]]
+          )
   end
 end
