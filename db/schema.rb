@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_13_223126) do
+ActiveRecord::Schema.define(version: 2020_11_16_185230) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -66,6 +66,19 @@ ActiveRecord::Schema.define(version: 2020_11_13_223126) do
     t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true
     t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type"
     t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
+  end
+
+  create_table "marc_profiles", force: :cascade do |t|
+    t.integer "upload_id", null: false
+    t.integer "blob_id", null: false
+    t.json "field_frequency"
+    t.json "record_frequency"
+    t.json "histogram_frequency"
+    t.json "sampled_values"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["blob_id"], name: "index_marc_profiles_on_blob_id"
+    t.index ["upload_id"], name: "index_marc_profiles_on_upload_id"
   end
 
   create_table "marc_records", force: :cascade do |t|
@@ -196,5 +209,6 @@ ActiveRecord::Schema.define(version: 2020_11_13_223126) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "contact_emails", "organizations"
+  add_foreign_key "marc_profiles", "uploads"
   add_foreign_key "normalized_dumps", "streams"
 end

@@ -8,7 +8,9 @@ class MarcAnalyzer < ActiveStorage::Analyzer
   end
 
   def metadata
-    { analyzer: self.class.to_s, count: reader.count, type: reader.identify }
+    { analyzer: self.class.to_s, count: reader.count, type: reader.identify }.tap do
+      MarcProfilingJob.perform_later(blob)
+    end
   rescue MARC::XMLParseError, MARC::Exception => e
     Rails.logger.info(e)
     Honeybadger.notify(e)
