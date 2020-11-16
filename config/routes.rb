@@ -22,7 +22,7 @@ Rails.application.routes.draw do
       get 'resourcelist', to: 'organizations#index', defaults: { format: :xml }
       get 'normalized_resourcelist/:flavor', to: 'organizations#index', defaults: { normalized: true, format: :xml }, as: :normalized_resourcelist
     end
-    resources :marc_records, only: [:index, :show], defaults: { format: :json } do
+    resources :marc_records, only: [:index, :show] do
       member do
         get 'marc21'
         get 'marcxml'

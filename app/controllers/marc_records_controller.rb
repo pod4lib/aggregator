@@ -10,6 +10,10 @@ class MarcRecordsController < ApplicationController
 
   def index
     @marc_records = @marc_records.where(marc001: index_params[:marc001]) if index_params[:marc001]
+    if index_params[:stream]
+      stream = @organization.streams.find_by(slug: index_params[:stream])
+      @marc_records = @marc_records.where(upload: stream.uploads)
+    end
     @marc_records = @marc_records.page(index_params[:page])
   end
 
@@ -22,6 +26,6 @@ class MarcRecordsController < ApplicationController
   end
 
   def index_params
-    params.permit(:page, :marc001)
+    params.permit(:page, :marc001, :stream)
   end
 end
