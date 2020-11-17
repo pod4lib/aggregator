@@ -8,6 +8,10 @@ RSpec.describe AllowlistedJwtsController, type: :routing do
       expect(get: '/organizations/1/allowlisted_jwts').to route_to('allowlisted_jwts#index', organization_id: '1')
     end
 
+    it 'routes to #new' do
+      expect(get: '/organizations/1/allowlisted_jwts/new').to route_to('allowlisted_jwts#new', organization_id: '1')
+    end
+
     it 'routes to #create' do
       expect(post: '/organizations/1/allowlisted_jwts').to route_to('allowlisted_jwts#create', organization_id: '1')
     end

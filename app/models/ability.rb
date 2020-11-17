@@ -24,9 +24,17 @@ class Ability
 
       can :read, Organization, allowlisted_jwts: { jti: token_payload['jti'] }
 
-      can %i[create read update], [Stream, Upload], organization: { allowlisted_jwts: { jti: token_payload['jti'] } }
-
       @allowlisted_jwt = AllowlistedJwt.find_by(jti: token_payload['jti'])
+
+      case @allowlisted_jwt.scope
+      when 'all'
+        can %i[create read update], [Stream, Upload], organization: { allowlisted_jwts: { jti: token_payload['jti'] } }
+      when 'upload'
+        can %i[create update], [Stream, Upload], organization: { allowlisted_jwts: { jti: token_payload['jti'] } }
+      when 'download'
+        can %i[read], [Stream, Upload], organization: { allowlisted_jwts: { jti: token_payload['jti'] } }
+      end
+
       allowlisted_jwt&.update(updated_at: Time.zone.now)
       return
     end

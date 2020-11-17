@@ -6,6 +6,7 @@
   <table class="table">
     <thead>
       <tr>
+        <th>Label</th>
         <th>Token</th>
         <th colspan="1"></th>
       </tr>
@@ -14,6 +15,7 @@
     <tbody>
       <% @allowlisted_jwts.each do |token| %>
         <tr>
+          <td><%= token.label %> (scope: <%= token.scope %>)</td>
           <td>
             <%= text_field_tag 'token', token.encoded_token, class: 'text-monospace w-100' %>
             <i class="small text-muted">
@@ -33,5 +35,5 @@
 
   <br>
 
-  <%= link_to 'Create token', organization_allowlisted_jwts_path(@organization), method: :post, class: 'btn btn-primary' if can? :create, @organization.allowlisted_jwts.build %>
+  <%= link_to 'Create token', new_organization_allowlisted_jwt_path(@organization), class: 'btn btn-primary' if can? :create, @organization.allowlisted_jwts.build %>
 </div>
