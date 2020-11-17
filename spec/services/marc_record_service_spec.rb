@@ -76,7 +76,7 @@ RSpec.describe MarcRecordService do
   end
 
   context 'with a gzipped marc21 file' do
-    let(:upload) { FactoryBot.create(:upload, :binary_marc_gz) }
+    let(:upload) { FactoryBot.create(:upload, :small_batch_gz) }
     let(:blob) { upload.files.first.blob }
 
     it { is_expected.to be_marc21 }
@@ -88,27 +88,27 @@ RSpec.describe MarcRecordService do
     end
 
     describe '#count' do
-      it 'is 1' do
-        expect(service.count).to eq 1
+      it 'is 50' do
+        expect(service.count).to eq 50
       end
     end
 
     describe '#at_index' do
       it 'extracts the record at the given index' do
-        expect(service.at_index(0)['001'].value).to eq 'a1297245'
+        expect(service.at_index(3)['001'].value).to eq 'a500003'
       end
     end
 
     describe '#at_bytes' do
       it 'extracts the record at the given byte range' do
-        expect(service.at_bytes(0...1407).first['001'].value).to eq 'a1297245'
+        expect(service.at_bytes(17_700...(17_700 + 1133)).first['001'].value).to eq 'a500016'
       end
     end
 
     describe '#each_with_metadata' do
       it 'includes information about the byte position' do
         _record, metadata = service.each_with_metadata.first
-        expect(metadata).to include bytecount: 0, length: 1407, index: 0
+        expect(metadata).to include bytecount: 0, length: 1068, index: 0
       end
     end
   end
