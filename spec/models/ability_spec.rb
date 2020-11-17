@@ -17,16 +17,33 @@ RSpec.describe Ability do
     let(:org1) { FactoryBot.create(:organization) }
     let(:org2) { FactoryBot.create(:organization) }
     let(:token) { JWT.encode({ jti: 'anything' }, Settings.jwt.secret, Settings.jwt.algorithm) }
+    let(:token_attributes) { {} }
 
     before do
-      AllowlistedJwt.create(resource: org1, jti: 'anything')
+      AllowlistedJwt.create(resource: org1, jti: 'anything', **token_attributes)
     end
 
     it { is_expected.to be_able_to(:read, org1) }
-    it { is_expected.to be_able_to(:create, Upload.new(organization: org1)) }
-
     it { is_expected.not_to be_able_to(:read, org2) }
+
+    it { is_expected.to be_able_to(:create, Upload.new(organization: org1)) }
     it { is_expected.not_to be_able_to(:create, Upload.new(organization: org2)) }
+
+    context 'with a token scoped to reads' do
+      let(:token_attributes) { { scope: 'download' } }
+
+      it { is_expected.to be_able_to(:read, org1) }
+      it { is_expected.not_to be_able_to(:read, org2) }
+      it { is_expected.not_to be_able_to(:create, Upload.new(organization: org1)) }
+    end
+
+    context 'with a token scoped to upload' do
+      let(:token_attributes) { { scope: 'upload' } }
+
+      it { is_expected.to be_able_to(:read, org1) }
+      it { is_expected.not_to be_able_to(:read, org2) }
+      it { is_expected.to be_able_to(:create, Upload.new(organization: org1)) }
+    end
   end
 
   describe 'with a user' do

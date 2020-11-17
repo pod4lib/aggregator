@@ -17,12 +17,26 @@ RSpec.describe '/organizations/1/allowlisted_jwts', type: :request do
     end
   end
 
+  describe 'GET /new' do
+    it 'renders a successful response' do
+      get new_organization_allowlisted_jwt_url(organization)
+      expect(response).to be_successful
+    end
+  end
+
   describe 'POST /create' do
+    let(:valid_attributes) { { label: 'best token ever', scope: 'download' } }
+
     context 'with valid parameters' do
       it 'creates a new AllowlistedJwt' do
         expect do
           post organization_allowlisted_jwts_url(organization)
         end.to change(AllowlistedJwt, :count).by(1)
+      end
+
+      it 'creates a new AllowlistedJwt with a label' do
+        post organization_allowlisted_jwts_url(organization), params: { allowlisted_jwt: valid_attributes }
+        expect(AllowlistedJwt.last).to have_attributes label: 'best token ever', scope: 'download'
       end
 
       it 'redirects to the list of tokens' do

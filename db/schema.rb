@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_17_134056) do
+ActiveRecord::Schema.define(version: 2020_11_17_154540) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -41,6 +41,8 @@ ActiveRecord::Schema.define(version: 2020_11_17_134056) do
     t.integer "resource_id"
     t.datetime "created_at", precision: 6
     t.datetime "updated_at", precision: 6
+    t.string "label"
+    t.string "scope", default: "all"
     t.index ["jti"], name: "index_allowlisted_jwts_on_jti", unique: true
     t.index ["resource_type", "resource_id"], name: "index_allowlisted_jwts_on_resource_type_and_resource_id"
   end

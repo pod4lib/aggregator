@@ -9,6 +9,9 @@ class AllowlistedJwtsController < ApplicationController
   # GET /organizations/1/allowlisted_jwts.json
   def index; end
 
+  # GET /organizations/1/allowlisted_jwts/new
+  def new; end
+
   # POST /organizations/1/allowlisted_jwts
   # POST /organizations/1/allowlisted_jwts/2.json
   def create
@@ -32,5 +35,14 @@ class AllowlistedJwtsController < ApplicationController
       format.html { redirect_to organization_allowlisted_jwts_path(@organization), notice: 'Token was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  private
+
+  # Only allow a list of trusted parameters through.
+  def allowlisted_jwt_params
+    return {} unless params.key? :allowlisted_jwt
+
+    params.require(:allowlisted_jwt).permit(:label, :scope)
   end
 end

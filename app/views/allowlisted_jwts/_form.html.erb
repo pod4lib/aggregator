@@ -1,0 +1,13 @@
+<%= bootstrap_form_with(model: [@organization, allowlisted_jwt], local: true, multipart: true) do |form| %>
+  <%= form.text_field :label %>
+
+  <%= form.form_group :scope, label: { text: 'Scope' } do %>
+    <%= form.radio_button :scope, 'all', label: 'all', checked: true %>
+    <%= form.radio_button :scope, 'download', label: 'download-only' %>
+    <%= form.radio_button :scope, 'upload', label: 'upload-only' %>
+  <% end %>
+
+  <div class="actions mt-3">
+    <%= form.primary 'Create token' %>
+  </div>
+<% end %>
