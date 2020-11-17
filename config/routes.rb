@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   get 'dashboard/uploads', to: 'dashboard#uploads', as: :activity
   get 'charts/uploads', to: 'charts#uploads', as: :uploads_chart
   get 'charts/records', to: 'charts#records', as: :records_chart
+  get 'charts/orgs', to: 'charts#orgs', as: :orgs_chart
 
   resources :organizations do
     collection do
