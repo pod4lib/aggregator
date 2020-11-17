@@ -7,7 +7,7 @@ class AttachRemoteFileToUploadJob < ApplicationJob
 
   def perform(upload)
     io = URI.open(upload.url)
-    upload.files.attach(io: io, filename: filename_from_io(io) || upload.name)
+    upload.files.attach(io: io, filename: filename_from_io(io) || filename_from_url(upload.url) || upload.name)
   rescue SocketError, OpenURI::HTTPError => e
     error = "Error opening #{url}: #{e}"
     Rails.logger.info(error)
@@ -27,5 +27,13 @@ class AttachRemoteFileToUploadJob < ApplicationJob
     end.compact
 
     filenames&.first&.gsub(/^["']|["']$/, '')
+  end
+
+  def filename_from_url(url)
+    potential_file_name = File.basename(url)
+
+    return unless potential_file_name.include?('.')
+
+    potential_file_name
   end
 end
