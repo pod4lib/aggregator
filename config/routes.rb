@@ -28,7 +28,11 @@ Rails.application.routes.draw do
         get 'marcxml'
       end
     end
-    resources :uploads, except: [:update]
+    resources :uploads, except: [:update] do
+      member do
+        get 'info/:blob_id', to: 'uploads#info', as: :file_info
+      end
+    end
     resources :organization_users, as: 'users', only: :destroy
     resources :organization_contact_emails, as: 'contact_emails', only: [:new, :create, :destroy]
 
