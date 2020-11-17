@@ -4,6 +4,21 @@
 class MarcRecordService
   include Enumerable
 
+  def self.marc_reader(io, type)
+    case type
+    when :marcxml
+      MARC::XMLReader.new(io, parser: 'nokogiri')
+    when :marc21
+      MARC::Reader.new(io, { external_encoding: 'UTF-8', invalid: :replace })
+    when :marcxml_gzip
+      MARC::XMLReader.new(Zlib::GzipReader.new(io), parser: 'nokogiri')
+    when :marc21_gzip
+      MARC::Reader.new(Zlib::GzipReader.new(io), { external_encoding: 'UTF-8', invalid: :replace })
+    else
+      raise "Unknown MARC type: #{type}"
+    end
+  end
+
   attr_reader :blob
 
   # @attr [ActiveStorage::Blob] blob
@@ -34,6 +49,10 @@ class MarcRecordService
     %i[marc21 marc21_gzip].include? identify
   end
 
+  def gzipped?
+    %i[marc21_gzip marcxml_gzip].include? identify
+  end
+
   # Iterate through the records in a file
   def each
     return to_enum(:each) unless block_given?
@@ -58,20 +77,38 @@ class MarcRecordService
 
   # Get the record at a specific byte range within the file
   def at_bytes(range)
-    if identify == :marc21
-      from_bytes(download_chunk(range))
-    else
+    if gzipped?
       blob.open do |tmpfile|
-        tmpfile.seek(range.first)
+        io = Zlib::GzipReader.new(tmpfile)
 
-        from_bytes(tmpfile.read(range.size))
+        fake_seek(io, range.first)
+
+        extracted_type = case identify
+                         when :marc21_gzip then :marc21
+                         when :marcxml_gzip then :marcxml
+                         else identify
+                         end
+
+        from_bytes(io.read(range.size), extracted_type)
       end
+    else
+      from_bytes(download_chunk(range))
     end
   end
 
+  # "seek" to the start of the record we're interested in
+  def fake_seek(io, pos, chunk_size: 1.megabyte)
+    return io.seek(pos) if io.respond_to? :seek
+
+    (pos / chunk_size).times { io.read(chunk_size) }
+    io.read(pos % chunk_size)
+
+    nil
+  end
+
   # Get a reader for a already-known range of bytes
-  def from_bytes(bytes)
-    reader(StringIO.new(bytes))
+  def from_bytes(bytes, type = nil)
+    self.class.marc_reader(StringIO.new(bytes), type || identify)
   end
 
   # Optimization for counting records in a file
@@ -108,18 +145,7 @@ class MarcRecordService
   end
 
   def reader(io)
-    case identify
-    when :marcxml
-      MARC::XMLReader.new(io, parser: 'nokogiri')
-    when :marc21
-      MARC::Reader.new(io, { external_encoding: 'UTF-8', invalid: :replace })
-    when :marcxml_gzip
-      MARC::XMLReader.new(Zlib::GzipReader.new(io), parser: 'nokogiri')
-    when :marc21_gzip
-      MARC::Reader.new(Zlib::GzipReader.new(io), { external_encoding: 'UTF-8', invalid: :replace })
-    else
-      raise "Unknown MARC type: #{identify}"
-    end
+    self.class.marc_reader(io, identify)
   end
 
   def each_with_metadata_for_marc21

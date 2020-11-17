@@ -76,5 +76,16 @@ FactoryBot.define do
         )
       end
     end
+
+    trait :small_batch_gz do
+      after(:build) do |upload|
+        upload.files.attach(
+          io: File.open(
+            Rails.root.join('spec/fixtures/stanford-50.mrc.gz')
+          ),
+          filename: 'stanford-50.mrc.gz', content_type: 'application/octet-stream'
+        )
+      end
+    end
   end
 end
