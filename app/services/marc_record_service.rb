@@ -112,11 +112,11 @@ class MarcRecordService
     when :marcxml
       MARC::XMLReader.new(io, parser: 'nokogiri')
     when :marc21
-      MARC::Reader.new(io, { invalid: :replace })
+      MARC::Reader.new(io, { external_encoding: 'UTF-8', invalid: :replace })
     when :marcxml_gzip
       MARC::XMLReader.new(Zlib::GzipReader.new(io), parser: 'nokogiri')
     when :marc21_gzip
-      MARC::Reader.new(Zlib::GzipReader.new(io), { invalid: :replace })
+      MARC::Reader.new(Zlib::GzipReader.new(io), { external_encoding: 'UTF-8', invalid: :replace })
     else
       raise "Unknown MARC type: #{identify}"
     end

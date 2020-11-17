@@ -82,7 +82,7 @@ class MarcProfilingJob < ApplicationJob
       field_frequency: instance_frequency,
       record_frequency: record_frequency,
       histogram_frequency: histogram_frequency,
-      sampled_values: sampled_values.transform_values { |v| v.to_a.map { |t| t.encode('UTF-8', invalid: :replace) } }
+      sampled_values: sampled_values.transform_values(&:to_a)
     )
   end
   # rubocop:enable all
