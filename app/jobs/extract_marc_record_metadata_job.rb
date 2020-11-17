@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'nokogiri'
-
 # Extract MarcRecord instances from an upload
 class ExtractMarcRecordMetadataJob < ApplicationJob
   queue_as :default
