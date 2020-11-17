@@ -3,6 +3,7 @@
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb bg-transparent row">
         <li class="breadcrumb-item"><%= link_to @organization.name, @organization %></li>
+        <li class="breadcrumb-item"><%= link_to @upload.stream.display_name, [@organization, @upload.stream] if @upload.stream %></li>
         <li class="breadcrumb-item active" aria-current="page"><%= @upload.name %></li>
       </ol>
     </nav>
@@ -15,8 +16,6 @@
 </div>
 
 <div class="container">
-
-
   <h2>Files</h2>
   <ul class="list-group list-group-flush">
     <% @upload.files.each do |file| %>
