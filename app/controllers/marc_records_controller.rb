@@ -18,10 +18,12 @@ class MarcRecordsController < ApplicationController
   end
 
   def marc21
+    response.headers['Content-Disposition'] = "filename=#{@organization.slug}-#{@marc_record.marc001}.mrc"
     render body: @marc_record.marc.to_marc, content_type: 'application/marc'
   end
 
   def marcxml
+    response.headers['Content-Disposition'] = "filename=#{@organization.slug}-#{@marc_record.marc001}.xml"
     render body: @marc_record.marc.to_xml, content_type: 'application/marcxml+xml'
   end
 
