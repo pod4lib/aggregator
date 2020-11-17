@@ -46,10 +46,8 @@ class MarcProfilingJob < ApplicationJob
       record_stats = Hash.new { |hash, key| hash[key] = 0 }
 
       record.fields.each do |field|
-        if record_stats[field.tag].zero?
-          record_stats[field.tag] += 1
-          record_frequency[field.tag] += 1
-        end
+        record_frequency[field.tag] += 1 if record_stats[field.tag].zero?
+        record_stats[field.tag] += 1
 
         instance_frequency[field.tag] += 1
 
@@ -61,10 +59,8 @@ class MarcProfilingJob < ApplicationJob
             key = "#{field.tag}$#{subfield.code}"
             sampled_values[key].add(subfield.value)
 
-            if record_stats[key].zero?
-              record_stats[key] += 1
-              record_frequency[key] += 1
-            end
+            record_frequency[key] += 1 if record_stats[key].zero?
+            record_stats[key] += 1
 
             instance_frequency[key] += 1
           end
