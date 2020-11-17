@@ -26,8 +26,21 @@ RSpec.describe AttachRemoteFileToUploadJob, type: :job do
     expect do
       described_class.perform_now(upload)
     end.to change(upload.files, :attached?).to(true)
-
     expect(upload.files.first.blob.checksum).to eq 'iXNNqQC8bbzJqws9rdm09Q=='
+  end
+
+  it 'gets the file name from the url' do
+    described_class.perform_now(upload)
+    expect(upload.files.first.filename).to eq '1297245.marc'
+  end
+
+  context 'when the url does not look like a file' do
+    let(:upload) { FactoryBot.create(:upload, files: [], url: 'http://example.com/1297245/marc/data') }
+
+    it 'uses the upload name as a placeholder' do
+      described_class.perform_now(upload)
+      expect(upload.files.first.filename.to_s).to eq upload.name.parameterize(preserve_case: true)
+    end
   end
 
   context 'when the file has a ContentDisposition' do
