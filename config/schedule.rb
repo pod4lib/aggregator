@@ -26,6 +26,7 @@ end
 # TODO: Raise this to monthly eventually?
 every :sunday do
   runner 'GenerateFullDumpJob.enqueue_all'
+  runner 'CleanupAndRemoveDataJob.enqueue_all'
 end
 
 every :day do
