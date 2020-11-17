@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe MarcProfilingJob do
-  let(:upload) { FactoryBot.create(:upload, :binary_marc) }
+  let(:upload) { FactoryBot.create(:upload, :small_batch_gz) }
 
   it 'stores some statistics about the MARC files' do
     upload.files.first.blob.update(metadata: { count: 1 })
@@ -14,27 +14,29 @@ RSpec.describe MarcProfilingJob do
     upload.files.first.blob.update(metadata: { count: 1 })
     described_class.perform_now(upload.files.first.blob)
 
-    expect(MarcProfile.last.field_frequency).to include('001' => 1, '245$a' => 1)
+    expect(MarcProfile.last.field_frequency).to include('001' => 50, '245$a' => 50, '690$d' => 8)
   end
 
   it 'counts field occurences by record' do
     upload.files.first.blob.update(metadata: { count: 1 })
     described_class.perform_now(upload.files.first.blob)
 
-    expect(MarcProfile.last.record_frequency).to include('001' => 1, '245$a' => 1)
+    expect(MarcProfile.last.record_frequency).to include('001' => 50, '245$a' => 50, '690$d' => 4)
   end
 
   it 'stores a histogram of number of field occurences per record' do
     upload.files.first.blob.update(metadata: { count: 1 })
     described_class.perform_now(upload.files.first.blob)
 
-    expect(MarcProfile.last.histogram_frequency).to include('001' => { '1' => 1 }, '245$a' => { '1' => 1 })
+    expect(MarcProfile.last.histogram_frequency).to include(
+      '001' => { '1' => 50 }, '245$a' => { '1' => 50 }, '690$d' => { '2' => 4 }
+    )
   end
 
   it 'samples some values' do
     upload.files.first.blob.update(metadata: { count: 1 })
     described_class.perform_now(upload.files.first.blob)
 
-    expect(MarcProfile.last.sampled_values).to include('001' => ['a1297245'])
+    expect(MarcProfile.last.sampled_values['001'].length).to eq 25
   end
 end
