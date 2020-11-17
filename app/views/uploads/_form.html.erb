@@ -1,7 +1,7 @@
 <%= bootstrap_form_with(model: [@organization, upload], local: true, multipart: true) do |form| %>
   <%= form.text_field :name %>
 
-  <%= hidden_field_tag(:stream, params[:stream]) if params[:stream] %>
+  <%= hidden_field_tag(:stream, (upload.stream || current_stream).friendly_id) unless (upload.stream || current_stream).default? %>
 
   <div class="custom-file">
     <%= form.file_field_without_bootstrap :files, type: :file, multiple: true, direct_upload: true, id: 'customFile', class: 'custom-file-input' %>

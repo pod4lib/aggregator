@@ -5,6 +5,7 @@ class UploadsController < ApplicationController
   load_and_authorize_resource :organization
   load_and_authorize_resource through: :organization
   protect_from_forgery with: :null_session, if: :jwt_token
+  helper_method :current_stream
 
   # GET /uploads
   # GET /uploads.json
@@ -58,17 +59,21 @@ class UploadsController < ApplicationController
     end
   end
 
-  private
-
   def current_stream
-    if params[:stream].present?
-      @organization.streams.find_or_create_by(slug: params[:stream]) do |stream|
-        stream.name = params[:stream]
+    @current_stream ||= begin
+      if params[:stream].present?
+        slug = @organization.default_stream.normalize_friendly_id(params[:stream])
+
+        @organization.streams.find_or_create_by(slug: slug) do |stream|
+          stream.name = params[:stream]
+        end
+      else
+        @organization.default_stream
       end
-    else
-      @organization.default_stream
     end
   end
+
+  private
 
   def create_params
     upload_params.merge(

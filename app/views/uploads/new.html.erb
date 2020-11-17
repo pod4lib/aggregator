@@ -12,7 +12,7 @@
        -F 'upload[files][]=@[LOCATION_TO_YOUR_FILE]' \
        -F 'upload[url]=[URL_TO_YOUR_FILE]' \
        -H 'Authorization: Bearer <%= @organization.jwt_token %>' \
-       <%= organization_uploads_url(@organization) %>
+       <%= organization_uploads_url(@organization, stream: current_stream.default? ? nil : current_stream.friendly_id) %>
     </pre>
   </div>
 
