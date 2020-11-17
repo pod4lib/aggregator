@@ -7,7 +7,16 @@ class AllowlistedJwt < ApplicationRecord
   before_create :set_default_token_values
 
   def encoded_token
-    @encoded_token ||= JWT.encode({ jti: jti }, Settings.jwt.secret, Settings.jwt.algorithm)
+    @encoded_token ||= JWT.encode(jwt_attributes, Settings.jwt.secret, Settings.jwt.algorithm)
+  end
+
+  def jwt_attributes
+    {
+      jti: jti,
+      scope: scope,
+      iss: 'POD',
+      name: label
+    }.reject { |_k, v| v.blank? }
   end
 
   def last_used
