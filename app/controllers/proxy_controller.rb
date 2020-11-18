@@ -4,7 +4,11 @@
 # Proxying over ActiveStorage so we can have sane routes.
 # Waiting on https://github.com/rails/rails/commit/dfb5a82b259e134eac89784ac4ace0c44d1b4aee
 class ProxyController < ActiveStorage::BaseController
-  before_action :authenticate_user!
+  include CustomPodAbilityConcern
+  include JwtTokenConcern
+
+  protect_from_forgery with: :null_session, if: :jwt_token
+  before_action :authenticate_user!, unless: :jwt_token
 
   rescue_from ActiveStorage::FileNotFoundError do |exception|
     render json: { error: exception.message }, status: :not_found
