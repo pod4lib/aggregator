@@ -24,7 +24,7 @@ RSpec.describe Ability do
     end
 
     it { is_expected.to be_able_to(:read, org1) }
-    it { is_expected.not_to be_able_to(:read, org2) }
+    it { is_expected.to be_able_to(:read, org2) }
 
     it { is_expected.to be_able_to(:create, Upload.new(organization: org1)) }
     it { is_expected.not_to be_able_to(:create, Upload.new(organization: org2)) }
@@ -33,7 +33,9 @@ RSpec.describe Ability do
       let(:token_attributes) { { scope: 'download' } }
 
       it { is_expected.to be_able_to(:read, org1) }
-      it { is_expected.not_to be_able_to(:read, org2) }
+      it { is_expected.to be_able_to(:read, org2) }
+      it { is_expected.to be_able_to(:read, FactoryBot.create(:upload, :binary_marc, organization: org1)) }
+      it { is_expected.to be_able_to(:read, FactoryBot.create(:upload, :binary_marc, organization: org2)) }
       it { is_expected.not_to be_able_to(:create, Upload.new(organization: org1)) }
     end
 
