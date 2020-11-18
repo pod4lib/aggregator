@@ -12,22 +12,16 @@ class GenerateFullDumpJob < ApplicationJob
     now = Time.zone.now
     full_dump = organization.default_stream.normalized_dumps.build(last_full_dump_at: now, last_delta_dump_at: now)
 
-    with_gzipped_temporary_file("#{organization.slug}-marcxml") do |xml_file, xml_io|
-      with_gzipped_temporary_file("#{organization.slug}-marcxml") do |binary_file, binary_io|
-        xmlwriter = MARC::XMLWriter.new(xml_io)
+    with_output_streams("#{organization.slug}-#{Time.zone.today}", attach_to: full_dump) do |errata_file, xml_io, binary_io|
+      xmlwriter = MARC::XMLWriter.new(xml_io)
 
-        organization.default_stream.uploads.each do |upload|
-          upload.each_marc_record_metadata.each do |record|
-            xmlwriter.write(record.augmented_marc)
-            binary_io.write(split_marc(record.augmented_marc))
-          end
+      organization.default_stream.uploads.each do |upload|
+        upload.each_marc_record_metadata.each do |record|
+          xmlwriter.write(record.augmented_marc)
+          binary_io.write(split_marc(record.augmented_marc))
+        rescue StandardError => e
+          errata_file.puts("#{record['001']}: #{e}")
         end
-
-        binary_io.close
-        full_dump.full_dump_binary.attach(io: File.open(binary_file), filename: "#{organization.slug}_#{Time.zone.today}.gz")
-
-        xmlwriter.close
-        full_dump.full_dump_xml.attach(io: File.open(xml_file), filename: "#{organization.slug}_#{Time.zone.today}.xml.gz")
       end
     end
 
@@ -35,10 +29,26 @@ class GenerateFullDumpJob < ApplicationJob
   end
   # rubocop:enable Metrics/AbcSize
 
-  def with_gzipped_temporary_file(name)
+  # rubocop:disable Naming/MethodParameterName
+  def with_gzipped_temporary_file(name, attach_to:, as:)
     Tempfile.create(name, binmode: true) do |file|
       gzip_io = Zlib::GzipWriter.new(file)
-      yield file, gzip_io
+      yield gzip_io
+
+      gzip_io.close
+      file.close
+      attach_to.public_send(as).attach(io: File.open(file), filename: name)
+    end
+  end
+  # rubocop:enable Naming/MethodParameterName
+
+  def with_output_streams(base_name, attach_to:)
+    with_gzipped_temporary_file("#{base_name}-errata.txt.gz", attach_to: attach_to, as: :errata) do |errata_file|
+      with_gzipped_temporary_file("#{base_name}-marcxml.xml.gz", attach_to: attach_to, as: :full_dump_xml) do |xml_io|
+        with_gzipped_temporary_file("#{base_name}-marc21.mrc.gz", attach_to: attach_to, as: :full_dump_binary) do |binary_io|
+          yield errata_file, xml_io, binary_io
+        end
+      end
     end
   end
 
