@@ -17,9 +17,7 @@ class Upload < ApplicationRecord
 
   has_many_attached :files
 
-  after_save_commit do
-    ExtractMarcRecordMetadataJob.perform_later(self)
-  end
+  after_save_commit :perform_extract_marc_record_metadata_job
 
   def name
     super.presence || created_at&.iso8601
@@ -42,6 +40,10 @@ class Upload < ApplicationRecord
   end
 
   private
+
+  def perform_extract_marc_record_metadata_job
+    ExtractMarcRecordMetadataJob.perform_later(self)
+  end
 
   def valid_url
     errors.add(:url, 'Unable to attach file from URL') unless URI.parse(url)&.host
