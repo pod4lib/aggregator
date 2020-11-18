@@ -112,4 +112,44 @@ RSpec.describe MarcRecordService do
       end
     end
   end
+
+  context 'with a MARC21 record that has been chunked' do
+    let(:upload) { FactoryBot.create(:upload, :marc21_multi_record) }
+    let(:blob) { upload.files.first.blob }
+
+    it { is_expected.to be_marc21 }
+
+    describe '#count' do
+      it 'is 2' do
+        expect(service.count).to eq 2
+      end
+    end
+
+    describe '#each' do
+      it 'combines records based on repeated 001 fields' do
+        expect(service.each.count).to eq 1
+      end
+    end
+
+    it 'has the leader from the first record' do
+      record = service.each.first
+      expect(record.leader).to eq '02269cas a2200421Ki 45 0'
+    end
+
+    it 'de-duplicates fields' do
+      record = service.each.first
+      expect(record.fields('001').length).to eq 1
+      expect(record.fields('001').first.value).to eq 'a9953670'
+    end
+
+    it 'merges fields from the second record' do
+      record = service.each.first
+      expect(record.fields('863').length).to eq 8
+    end
+
+    it 'merges the metadata information' do
+      _record, metadata = service.each_with_metadata.first
+      expect(metadata).to include length: 2269 + 518, checksum: '07a51130b70560cf5240e1e2c6c35b33'
+    end
+  end
 end

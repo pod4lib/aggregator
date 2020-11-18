@@ -45,25 +45,49 @@ class MarcRecordService
     end
   end
 
-  def marc21?
-    %i[marc21 marc21_gzip].include? identify
+  def marc21?(type = identify)
+    %i[marc21 marc21_gzip].include? type
   end
 
-  def gzipped?
-    %i[marc21_gzip marcxml_gzip].include? identify
+  def gzipped?(type = identify)
+    %i[marc21_gzip marcxml_gzip].include? type
   end
 
   # Iterate through the records in a file
-  def each
+  def each(&block)
     return to_enum(:each) unless block_given?
 
     with_reader do |reader|
-      reader.each_with_index do |record, index|
-        with_honeybadger_context(index: index, marc001: record['001']&.value) do
-          yield record
-        end
+      if marc21?
+        each_combined_record(reader, &block)
+      else
+        each_raw_record(reader, &block)
       end
     end
+  end
+
+  def each_raw_record(reader)
+    return to_enum(:each_raw_record, reader) unless block_given?
+
+    reader.each_with_index do |record, index|
+      with_honeybadger_context(index: index, marc001: record['001']&.value) do
+        yield record
+      end
+    end
+  end
+
+  def each_combined_record(reader)
+    return to_enum(:each_combined_record, reader) unless block_given?
+
+    each_raw_record(reader)
+      .slice_when { |i, j| i['001'].value != j['001'].value }
+      .each do |records_to_combine|
+        if records_to_combine.length == 1
+          yield records_to_combine.first
+        else
+          yield merge_records(*records_to_combine)
+        end
+      end
   end
 
   # Get the record at a specific index in the file
@@ -76,7 +100,7 @@ class MarcRecordService
   end
 
   # Get the record at a specific byte range within the file
-  def at_bytes(range)
+  def at_bytes(range, merge: false)
     if gzipped?
       blob.open do |tmpfile|
         io = Zlib::GzipReader.new(tmpfile)
@@ -89,10 +113,10 @@ class MarcRecordService
                          else identify
                          end
 
-        from_bytes(io.read(range.size), extracted_type)
+        from_bytes(io.read(range.size), extracted_type, merge: merge)
       end
     else
-      from_bytes(download_chunk(range))
+      from_bytes(download_chunk(range), merge: merge)
     end
   end
 
@@ -107,8 +131,12 @@ class MarcRecordService
   end
 
   # Get a reader for a already-known range of bytes
-  def from_bytes(bytes, type = nil)
-    self.class.marc_reader(StringIO.new(bytes), type || identify)
+  def from_bytes(bytes, type = nil, merge: false)
+    reader = self.class.marc_reader(StringIO.new(bytes), type || identify)
+
+    return reader unless marc21?(type || identify) && merge
+
+    merge_records(*reader.each.to_a)
   end
 
   # Optimization for counting records in a file
@@ -148,8 +176,33 @@ class MarcRecordService
     self.class.marc_reader(io, identify)
   end
 
+  # rubocop:disable Metrics/AbcSize
   def each_with_metadata_for_marc21
     return to_enum(:each_with_metadata_for_marc21) unless block_given?
+
+    each_raw_record_with_metadata_for_marc21
+      .slice_when { |i, j| i[:marc]['001'].value != j[:marc]['001'].value }
+      .each_with_index do |records_to_combine, index|
+      if records_to_combine.length == 1
+        yield(records_to_combine.first[:marc], records_to_combine.first.except(:marc))
+      else
+        bytes = records_to_combine.pluck(:marc_bytes).join('')
+
+        record = merge_records(*records_to_combine.pluck(:marc))
+
+        yield record, {
+          **records_to_combine.first.except(:marc, :marc_bytes),
+          index: index,
+          length: bytes.length,
+          checksum: Digest::MD5.hexdigest(bytes)
+        }
+      end
+    end
+  end
+  # rubocop:enable Metrics/AbcSize
+
+  def each_raw_record_with_metadata_for_marc21
+    return to_enum(:each_raw_record_with_metadata_for_marc21) unless block_given?
 
     with_reader do |reader|
       bytecount = 0
@@ -158,13 +211,14 @@ class MarcRecordService
           length = bytes[0...5].to_i
           record = MARC::Reader.decode(bytes)
           with_honeybadger_context(marc001: record['001']&.value, bytecount: bytecount, index: index) do
-            yield record, {
+            yield(
               bytecount: bytecount,
               length: length,
               index: index,
               checksum: Digest::MD5.hexdigest(bytes),
-              marc_bytes: bytes
-            }
+              marc_bytes: bytes,
+              marc: record
+            )
             bytecount += length
           end
         end
@@ -194,4 +248,32 @@ class MarcRecordService
       Honeybadger.context((Honeybadger.get_context || {}).except(:marc_record))
     end
   end
+
+  # rubocop:disable Metrics/AbcSize
+  def merge_records(first_record, *other_records)
+    return first_record if other_records.blank?
+
+    record = MARC::Record.new
+
+    record.leader = first_record.leader
+    record.instance_variable_get(:@fields).concat(first_record.instance_variable_get(:@fields))
+
+    other_records.each do |r|
+      record.instance_variable_get(:@fields).concat(r.instance_variable_get(:@fields).reject do |field|
+        field.tag < '010' ||
+        field.tag > '841' ||
+        record.instance_variable_get(:@fields).include?(field)
+      end)
+
+      # holdings... don't even try
+      record.instance_variable_get(:@fields).concat(r.fields(('841'..'889').to_a))
+
+      # local fields..
+      record.instance_variable_get(:@fields).concat(r.fields(('900'..'999').to_a))
+    end
+
+    record.instance_variable_get(:@fields).reindex
+    record
+  end
+  # rubocop:enable Metrics/AbcSize
 end
