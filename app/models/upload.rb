@@ -17,7 +17,7 @@ class Upload < ApplicationRecord
 
   has_many_attached :files
 
-  after_commit do
+  after_save_commit do
     ExtractMarcRecordMetadataJob.perform_later(self)
   end
 
