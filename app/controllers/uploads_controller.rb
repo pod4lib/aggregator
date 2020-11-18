@@ -3,7 +3,8 @@
 # Controller to handle uploading files to orgs and managing those files
 class UploadsController < ApplicationController
   load_and_authorize_resource :organization
-  load_and_authorize_resource through: :organization
+  load_and_authorize_resource through: :organization, except: %i[new create]
+  load_and_authorize_resource through: :current_stream, only: %i[new create]
   protect_from_forgery with: :null_session, if: :jwt_token
   helper_method :current_stream
 
@@ -77,7 +78,6 @@ class UploadsController < ApplicationController
 
   def create_params
     upload_params.merge(
-      stream_id: current_stream.id,
       user_id: current_ability&.user&.id,
       allowlisted_jwts_id: current_ability&.allowlisted_jwt&.id,
       ip_address: request.env['HTTP_X_FORWARDED_FOR'] || request.remote_ip
