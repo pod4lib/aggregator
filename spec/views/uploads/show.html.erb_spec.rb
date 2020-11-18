@@ -14,9 +14,9 @@ RSpec.describe 'uploads/show', type: :view do
     assign(:organization, organization)
   end
 
-  it 'renders attributes in <p>' do
+  it 'renders attributes' do
     render
     expect(rendered).to match(/Name/)
-    expect(rendered).to match(//)
+    expect(rendered).to match(/1297245.marc/)
   end
 end
