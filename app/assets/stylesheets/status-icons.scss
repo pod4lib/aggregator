@@ -1,6 +1,6 @@
 .pod-metadata-status {
   &.unknown::before {
-    content: '❓';
+    content: '🔄';
   }
 
   &.success::before {
