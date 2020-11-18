@@ -17,7 +17,7 @@
 <div class="container">
   <div class="d-flex justify-content-between">
     <h2><%= link_to_unless current_page?([@organization, @organization.default_stream]), @organization.default_stream.display_name, [@organization, @organization.default_stream] %> (<%= number_with_delimiter @organization.default_stream.statistic&.unique_record_count %> records)</h2>
-    <%= link_to 'Create', new_organization_stream_path(@organization), class: 'btn btn-primary align-self-center' %>
+    <%= link_to 'Create new stream', new_organization_stream_path(@organization), class: 'btn btn-primary align-self-center' %>
   </div>
   <%= render 'streams/stream_uploads', stream: @organization.default_stream %>
 
