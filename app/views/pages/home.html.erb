@@ -49,7 +49,7 @@
       <div class="my-3 p-3">
         <h2 class="display-5">My organizations</h2>
         <ul class="list-group lead align-left">
-          <% organizations = Organization.with_role(:member, current_user) %>
+          <% organizations = Organization.with_roles([:member, :owner], current_user) %>
 
           <% organizations.each do |org| %>
             <li class="list-group-item border-0">
