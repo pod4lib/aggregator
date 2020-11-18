@@ -28,11 +28,12 @@ class Ability
 
       case @allowlisted_jwt.scope
       when 'all'
-        can %i[create read update], [Stream, Upload], organization: { allowlisted_jwts: { jti: token_payload['jti'] } }
+        can %i[create update], [Stream, Upload], organization: { allowlisted_jwts: { jti: token_payload['jti'] } }
+        can :read, [Organization, Stream, Upload]
       when 'upload'
         can %i[create update], [Stream, Upload], organization: { allowlisted_jwts: { jti: token_payload['jti'] } }
       when 'download'
-        can %i[read], [Stream, Upload], organization: { allowlisted_jwts: { jti: token_payload['jti'] } }
+        can %i[read], [Organization, Stream, Upload]
       end
 
       allowlisted_jwt&.update(updated_at: Time.zone.now)

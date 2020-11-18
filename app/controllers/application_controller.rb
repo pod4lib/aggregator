@@ -2,6 +2,9 @@
 
 # :nodoc:
 class ApplicationController < ActionController::Base
+  include JwtTokenConcern
+  include CustomPodAbilityConcern
+
   before_action :authenticate_user!, unless: :jwt_token
   check_authorization unless: :devise_controller?
   before_action :set_paper_trail_whodunnit
@@ -15,21 +18,9 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def current_ability
-    @current_ability ||= Ability.new(current_user, jwt_token)
-  end
-
   protected
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:account_update, keys: %i[title name])
-  end
-
-  private
-
-  def jwt_token
-    type, token = request.headers['Authorization']&.split(' ')
-
-    token if type == 'Bearer'
   end
 end
