@@ -1,7 +1,13 @@
 <%= render 'shared/organization_header' %>
-
 <div class="container">
-  <h2><%= @blob.filename %></h2>
+  <%= link_to 'Stream', [@upload.organization, @upload.stream] %>
+  <div class="d-flex justify-content-between">
+    <h1><%= @blob.filename %></h1>
+
+    <div>
+      <%= link_to 'Download', download_url(@blob), class: 'btn btn-secondary' %>
+    </div>
+  </div>
 
   <%= @blob.byte_size %>
 
