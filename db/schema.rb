@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_17_154540) do
+ActiveRecord::Schema.define(version: 2020_11_19_175843) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -113,6 +113,7 @@ ActiveRecord::Schema.define(version: 2020_11_17_154540) do
     t.string "slug"
     t.string "code"
     t.json "normalization_steps"
+    t.boolean "public", default: true
     t.index ["slug"], name: "index_organizations_on_slug", unique: true
   end
 
