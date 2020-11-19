@@ -20,7 +20,7 @@
     </thead>
 
     <tbody>
-      <% @streams.each do |stream| %>
+      <% @streams.active.each do |stream| %>
         <tr>
           <td><%= content_tag :span, 'default', class: 'badge badge-info' if stream.default? %></td>
           <td><%= link_to stream.display_name, organization_stream_path(@organization, stream) %></td>
