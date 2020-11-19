@@ -7,6 +7,8 @@ class Ability
 
   # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def initialize(user, token = nil)
+    alias_action :create, :read, :update, :destroy, to: :crud
+
     can :confirm, ContactEmail
     return unless user || token
 
@@ -45,11 +47,11 @@ class Ability
 
     owned_orgs = Organization.with_role(:owner, user).pluck(:id)
     can :manage, Organization, id: owned_orgs
-    can :manage, [Stream, Upload], organization: { id: owned_orgs }
+    can :crud, [Stream, Upload], organization: { id: owned_orgs }
 
     member_orgs = Organization.with_role(:member, user).pluck(:id)
     can :invite, Organization, id: member_orgs
-    can :manage, [Stream, Upload], organization: { id: member_orgs }
+    can :crud, [Stream, Upload], organization: { id: member_orgs }
   end
   # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 end

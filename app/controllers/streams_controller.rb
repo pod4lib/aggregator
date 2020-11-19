@@ -3,7 +3,8 @@
 # Controller to handle streams
 class StreamsController < ApplicationController
   load_and_authorize_resource :organization
-  load_and_authorize_resource through: :organization, except: [:make_default]
+  load_and_authorize_resource through: :organization, except: %i[make_default]
+  skip_authorize_resource only: %i[normalized_dump removed_since_previous_stream]
   protect_from_forgery with: :null_session, if: :jwt_token
 
   def show; end
@@ -26,10 +27,6 @@ class StreamsController < ApplicationController
     end
   end
 
-  def normalized_dump
-    @normalized_dump = @stream.normalized_dumps.last || @stream.normalized_dumps.build
-  end
-
   def destroy
     @stream.destroy
 
@@ -39,7 +36,15 @@ class StreamsController < ApplicationController
     end
   end
 
+  def normalized_dump
+    authorize! :read, @stream
+
+    @normalized_dump = @stream.normalized_dumps.last || @stream.normalized_dumps.build
+  end
+
   def removed_since_previous_stream
+    authorize! :read, @stream
+
     render plain: @stream.removed_since_previous_stream.join("\n")
   end
 
