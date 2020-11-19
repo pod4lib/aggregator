@@ -1,4 +1,4 @@
-<% if upload.url && upload.files.none? %>
+<% if upload.url.present? && upload.files.none? %>
   <tr>
     <td class="pl-4">
       <i>Downloading...</i><br />
@@ -12,7 +12,7 @@
   <tr>
     <td class="pl-4">
       <%= link_to file.filename, download_url(file) %>
-      <% if upload.url %>
+      <% if upload.url.present? %>
         <br />
         <%= link_to 'Source 🔗', upload.url, title: upload.url %>
       <% end %>
