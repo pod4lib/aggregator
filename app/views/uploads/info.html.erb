@@ -1,16 +1,19 @@
 <%= render 'shared/organization_header' %>
 <div class="container">
   <%= link_to 'Stream', [@upload.organization, @upload.stream] %>
+
   <div class="d-flex justify-content-between">
-    <h1><%= @blob.filename %></h1>
+    <h2><%= @blob.filename %></h2>
 
     <div>
       <%= link_to 'Download', download_url(@blob), class: 'btn btn-secondary' %>
     </div>
   </div>
 
-  <%= @blob.byte_size %>
+  <p class="lead">Size: <%= number_to_human_size @blob.byte_size %></p>
+  <p class="lead">Records: <%= number_with_delimiter @blob.metadata['count'] || 0 %></p>
 
   <%= render 'marc_profiles/summary', marc_profile: @marc_profile %>
+  <%= render 'marc_profiles/histogram', marc_profile: @marc_profile %>
   <%= render 'marc_profiles/fields', marc_profile: @marc_profile %>
 </div>
