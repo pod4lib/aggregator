@@ -6,10 +6,10 @@ class AttachRemoteFileToUploadJob < ApplicationJob
   queue_as :default
 
   def perform(upload)
-    io = URI.open(upload.url)
+    io = URI.parse(upload.url).open
     upload.files.attach(io: io, filename: filename_from_io(io) || filename_from_url(upload.url) || upload.name)
   rescue SocketError, OpenURI::HTTPError => e
-    error = "Error opening #{url}: #{e}"
+    error = "Error opening #{upload.url}: #{e}"
     Rails.logger.info(error)
     Honeybadger.notify(error)
     raise e

@@ -33,9 +33,7 @@ class MarcRecordService
 
       if start.bytes[0] == 0x1F && start.bytes[1] == 0x8B # gzip magic bytes
         identify_gzip
-      elsif start == '<?xml' # xml preamble
-        :marcxml
-      elsif start == '<reco' # start of a record (is this even valid?)
+      elsif ['<?xml', '<reco', '<coll'].include? start # xml preamble
         :marcxml
       elsif start.match?(/^\d+$/) # kinda looks like a MARC21 leader...
         :marc21
@@ -55,7 +53,7 @@ class MarcRecordService
 
   # Iterate through the records in a file
   def each(&block)
-    return to_enum(:each) unless block_given?
+    return to_enum(:each) unless block
 
     with_reader do |reader|
       if marc21?
@@ -142,7 +140,7 @@ class MarcRecordService
   # Optimization for counting records in a file
   # @return [Number]
   def count(*args, &block)
-    super if args.any? || block_given?
+    super if args.any? || block
 
     if marc21?
       # TODO: cheat if we're just counting records?
@@ -155,7 +153,7 @@ class MarcRecordService
   # Iterate through the records in a file and yield the record plus some additional metadata
   # about the location + context of the record
   def each_with_metadata(&block)
-    return to_enum(:each_with_metadata) unless block_given?
+    return to_enum(:each_with_metadata) unless block
 
     return each_with_metadata_for_marc21(&block) if marc21?
 
