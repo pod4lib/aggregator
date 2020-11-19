@@ -22,7 +22,7 @@
     <td><%= file.content_type %></td>
     <td class="text-right"><%= file.metadata['count'] ? number_with_delimiter(file.metadata['count']) : '???' %></td>
     <td class="text-left">
-      <span class="pod-metadata-status <%= file.pod_metadata_status %>" title="<%= file.metadata['error'] %>">
+      <span class="pod-metadata-status <%= file.pod_metadata_status %>" title="<%= file.pod_error_message %>">
         <span class="sr-only"><%= file.pod_metadata_status %></span>
       </span>
     </td>
