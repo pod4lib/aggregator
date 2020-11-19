@@ -13,7 +13,7 @@ end
 
 RSpec.describe AttachRemoteFileToUploadJob, type: :job do
   before do
-    allow(URI).to receive(:open).and_return(fixture)
+    allow(URI).to receive(:parse).with(anything).and_return(instance_double('URI::HTTP', host: 'example.com', open: fixture))
   end
 
   let(:fixture) do

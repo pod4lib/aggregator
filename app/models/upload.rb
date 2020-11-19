@@ -24,7 +24,7 @@ class Upload < ApplicationRecord
   end
 
   def each_marc_record_metadata(&block)
-    return to_enum(:each_marc_record_metadata) unless block_given?
+    return to_enum(:each_marc_record_metadata) unless block
 
     files.each do |file|
       service = MarcRecordService.new(file.blob)
