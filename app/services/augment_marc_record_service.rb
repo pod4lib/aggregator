@@ -27,9 +27,9 @@ class AugmentMarcRecordService
   # provided the record to POD.
   # @param [MARC::Record] record to modify
   def append_pod_provenance_information(record)
-    return if organization.code.blank?
+    provenance_information = [pod_source_metadata, organization_metadata].reject(&:blank?)
 
-    record.append(MARC::DataField.new('900', nil, nil, pod_source_metadata, ['b', organization.code]))
+    record.append(MARC::DataField.new('900', nil, nil, *provenance_information))
   end
 
   # Perform organization-specific/specified normalization steps
@@ -60,6 +60,12 @@ class AugmentMarcRecordService
 
   def duped_record(source_record)
     MARC::Record.new_from_hash(source_record.to_hash)
+  end
+
+  def organization_metadata
+    return [] if organization.code.blank?
+
+    ['b', organization.code]
   end
 
   def pod_source_metadata
