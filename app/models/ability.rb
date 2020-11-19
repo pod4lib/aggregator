@@ -31,27 +31,37 @@ class Ability
       case @allowlisted_jwt.scope
       when 'all'
         can %i[create update], [Stream, Upload], organization: { allowlisted_jwts: { jti: token_payload['jti'] } }
-        can :read, [Organization, Stream, Upload]
+        can :read, Organization, public: true
+        can :read, [Stream, Upload], organization: { public: true }
+
+        can :read, ActiveStorage::Attachment, { record: { organization: { public: true } } }
       when 'upload'
         can %i[create update], [Stream, Upload], organization: { allowlisted_jwts: { jti: token_payload['jti'] } }
       when 'download'
-        can %i[read], [Organization, Stream, Upload]
+        can :read, Organization, public: true
+        can :read, [Stream, Upload], organization: { public: true }
+
+        can :read, ActiveStorage::Attachment, { record: { organization: { public: true } } }
       end
 
       allowlisted_jwt&.update(updated_at: Time.zone.now)
       return
     end
 
+    can :read, ActiveStorage::Attachment, { record: { organization: { public: true } } }
+
     can :manage, :all if user.has_role?(:admin)
-    can :read, Organization if user
+    can :read, Organization, public: true
 
     owned_orgs = Organization.with_role(:owner, user).pluck(:id)
     can :manage, Organization, id: owned_orgs
     can :crud, [Stream, Upload], organization: { id: owned_orgs }
+    can :read, ActiveStorage::Attachment, { record: { organization: { id: owned_orgs } } }
 
     member_orgs = Organization.with_role(:member, user).pluck(:id)
     can :invite, Organization, id: member_orgs
     can :crud, [Stream, Upload], organization: { id: member_orgs }
+    can :read, ActiveStorage::Attachment, { record: { organization: { id: member_orgs } } }
   end
   # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 end
