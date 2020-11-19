@@ -58,6 +58,15 @@ class StreamsController < ApplicationController
     end
   end
 
+  def reanalyze
+    ReanalyzeJob.perform_later(@stream)
+
+    respond_to do |format|
+      format.html { redirect_to [@organization, @stream], notice: 'Reanalyze job was successfully enqueued.' }
+      format.json { render :show, status: :ok, location: [@organization, @stream] }
+    end
+  end
+
   private
 
   # Only allow a list of trusted parameters through.

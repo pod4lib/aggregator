@@ -4,7 +4,10 @@
   <%= link_to 'Streams', organization_streams_path %>
   <div class="d-flex justify-content-between">
     <h1><%= @stream.display_name %></h1>
-    <%= link_to 'Make default', make_default_organization_streams_path(@organization, stream: @stream.slug), method: :post, class: 'btn btn-info align-self-center' if !@stream.default? && can?(:manage, @stream) %>
+    <div>
+      <%= link_to 'Reanalyze', reanalyze_organization_stream_path(@organization, @stream), method: :post, class: 'btn btn-secondary align-self-center' if can?(:reanalyze, @stream) %>
+      <%= link_to 'Make default', make_default_organization_streams_path(@organization, stream: @stream.slug), method: :post, class: 'btn btn-info align-self-center' if !@stream.default? && can?(:update, @stream) %>
+    </div>
   </div>
 
   <p class="lead">

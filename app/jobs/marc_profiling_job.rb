@@ -72,9 +72,11 @@ class MarcProfilingJob < ApplicationJob
       end
     end
 
-    MarcProfile.create(
-      blob: blob,
-      upload: blob.attachments.first.record,
+    profile = MarcProfile.where(blob: blob).first_or_initialize do |p|
+      p.upload = blob.attachments.first.record
+    end
+
+    profile.update(
       field_frequency: instance_frequency,
       record_frequency: record_frequency,
       histogram_frequency: histogram_frequency,

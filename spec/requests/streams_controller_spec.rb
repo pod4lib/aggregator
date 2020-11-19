@@ -92,4 +92,14 @@ RSpec.describe '/organization/:id/stream', type: :request do
       expect(response).to redirect_to(organization_streams_url(organization))
     end
   end
+
+  describe 'POST /reanalyze' do
+    let!(:default_stream) { organization.default_stream }
+
+    it 'enqueues a background job to re-analyze the stream content' do
+      expect do
+        post reanalyze_organization_stream_url(organization, default_stream)
+      end.to enqueue_job(ReanalyzeJob).with(default_stream)
+    end
+  end
 end
