@@ -8,8 +8,8 @@ class MarcAnalyzer < ActiveStorage::Analyzer
   end
 
   def metadata
-    { analyzer: self.class.to_s, count: reader.count, type: reader.identify }.tap do
-      MarcProfilingJob.perform_later(blob)
+    { analyzer: self.class.to_s, count: count, type: reader.identify }.tap do
+      MarcProfilingJob.perform_later(blob, count: count)
     end
   rescue MARC::XMLParseError, MARC::Exception => e
     Rails.logger.info(e)
@@ -20,5 +20,9 @@ class MarcAnalyzer < ActiveStorage::Analyzer
 
   def reader
     @reader ||= MarcRecordService.new(blob)
+  end
+
+  def count
+    @count ||= reader.count
   end
 end

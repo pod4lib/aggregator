@@ -32,10 +32,10 @@ class MarcProfilingJob < ApplicationJob
   #   - how many times a field/subfield is used in a record
   # and collect a sampling of field/subfield occurences.
   # rubocop:disable all (Ha!)
-  def perform(blob, sample_size: 25)
-    return unless blob.metadata['count']
+  def perform(blob, count: nil, sample_size: 25)
+    count ||= blob.metadata['count']
 
-    count = blob.metadata['count']
+    return unless count
 
     sampled_values = Hash.new { |hash, key| hash[key] = Sample.new(sample_size, count) }
     instance_frequency = Hash.new { |hash, key| hash[key] = 0 }
