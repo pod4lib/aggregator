@@ -1,0 +1,20 @@
+<% if stream.job_trackers.any? %>
+  <div class="alert alert-info">
+    <h3>Processing...</h3>
+
+    <% stream.job_trackers.each do |t| %>
+      <div>
+        <%= t.label %>
+
+        <%= content_tag :div, class: 'progress', title: t.progress_label do %>
+          <%= content_tag 'div', t.progress_label, title: t.progress_label, id: "status-#{t.job_id}", class: "progress-bar #{'progress-bar-striped' unless t.total?}", aria: { valuenow: t.progress, valuemin: 0, valuemax: t.total } %>
+
+          <%= javascript_tag nonce: true do -%>
+            // hack to get around the CSP policy denying inline styles...
+            document.getElementById('<%= "status-#{t.job_id}" %>').style.width = "<%= t.percent || 0 %>%";
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

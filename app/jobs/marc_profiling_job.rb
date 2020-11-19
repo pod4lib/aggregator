@@ -3,6 +3,7 @@
 # Extract MarcRecord instances from an upload
 class MarcProfilingJob < ApplicationJob
   queue_as :default
+  with_job_tracking
 
   # Adapted from https://t-a-w.blogspot.com/2010/07/random-sampling-or-processing-data.html
   class Sample
@@ -37,38 +38,43 @@ class MarcProfilingJob < ApplicationJob
 
     return unless count
 
+    progress.total = count
+
     sampled_values = Hash.new { |hash, key| hash[key] = Sample.new(sample_size, count) }
     instance_frequency = Hash.new { |hash, key| hash[key] = 0 }
     record_frequency = Hash.new { |hash, key| hash[key] = 0 }
     histogram_frequency = Hash.new { |hash, key| hash[key] = Hash.new { |h, k| h[k] = 0 } }
 
-    marc_record_service(blob).each do |record|
-      record_stats = Hash.new { |hash, key| hash[key] = 0 }
+    marc_record_service(blob).each_slice(100) do |batch|
+      progress.increment(batch.size)
 
-      record.fields.each do |field|
-        record_frequency[field.tag] += 1 if record_stats[field.tag].zero?
-        record_stats[field.tag] += 1
+      batch.each do |record|
+        record_stats = Hash.new { |hash, key| hash[key] = 0 }
+        record.fields.each do |field|
+          record_frequency[field.tag] += 1 if record_stats[field.tag].zero?
+          record_stats[field.tag] += 1
 
-        instance_frequency[field.tag] += 1
+          instance_frequency[field.tag] += 1
 
-        if field.is_a? MARC::ControlField
-          sampled_values[field.tag].add(field.value)
-        else
-          sampled_values[field.tag].add(field.to_s)
-          field.each do |subfield|
-            key = "#{field.tag}$#{subfield.code}"
-            sampled_values[key].add(subfield.value)
+          if field.is_a? MARC::ControlField
+            sampled_values[field.tag].add(field.value)
+          else
+            sampled_values[field.tag].add(field.to_s)
+            field.each do |subfield|
+              key = "#{field.tag}$#{subfield.code}"
+              sampled_values[key].add(subfield.value)
 
-            record_frequency[key] += 1 if record_stats[key].zero?
-            record_stats[key] += 1
+              record_frequency[key] += 1 if record_stats[key].zero?
+              record_stats[key] += 1
 
-            instance_frequency[key] += 1
+              instance_frequency[key] += 1
+            end
           end
         end
-      end
 
-      record_stats.each do |key, value|
-        histogram_frequency[key][value] += 1
+        record_stats.each do |key, value|
+          histogram_frequency[key][value] += 1
+        end
       end
     end
 
@@ -87,5 +93,16 @@ class MarcProfilingJob < ApplicationJob
 
   def marc_record_service(blob)
     MarcRecordService.new(blob)
+  end
+
+  private
+
+  def update_job_tracker_properties(tracker)
+    super
+    blob = arguments.first
+    upload = blob.attachments.first&.record
+
+    tracker.reports_on = upload&.stream
+    tracker.resource = blob
   end
 end

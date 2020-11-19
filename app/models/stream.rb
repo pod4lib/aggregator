@@ -11,6 +11,7 @@ class Stream < ApplicationRecord
   has_many :files, source: :files_blobs, through: :uploads
   has_one :statistic, dependent: :delete, as: :resource
   has_many :normalized_dumps, dependent: :destroy
+  has_many :job_trackers, dependent: :delete_all, as: :reports_on
 
   has_many_attached :snapshots
 

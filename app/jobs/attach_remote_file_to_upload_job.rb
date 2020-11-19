@@ -4,6 +4,7 @@
 # Job to upload files from a URL in the background
 class AttachRemoteFileToUploadJob < ApplicationJob
   queue_as :default
+  with_job_tracking
 
   def perform(upload)
     io = URI.parse(upload.url).open
@@ -35,5 +36,13 @@ class AttachRemoteFileToUploadJob < ApplicationJob
     return unless potential_file_name.include?('.')
 
     potential_file_name
+  end
+
+  def update_job_tracker_properties(tracker)
+    super
+
+    upload = arguments.first
+    tracker.reports_on = upload&.stream
+    tracker.resource = upload
   end
 end

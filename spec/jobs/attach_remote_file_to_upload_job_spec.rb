@@ -12,6 +12,8 @@ class RemoteUploadFixture < SimpleDelegator
 end
 
 RSpec.describe AttachRemoteFileToUploadJob, type: :job do
+  include ActiveJob::TestHelper
+
   before do
     allow(URI).to receive(:parse).with(anything).and_return(instance_double('URI::HTTP', host: 'example.com', open: fixture))
   end
@@ -53,5 +55,18 @@ RSpec.describe AttachRemoteFileToUploadJob, type: :job do
       described_class.perform_now(upload)
       expect(upload.files.first.filename).to eq 'CD-filename.xml'
     end
+  end
+
+  it 'tracks job statistics' do
+    expect do
+      described_class.perform_later(upload)
+    end.to change(JobTracker, :count) # .by(1) # ... would be nice, but the test adapter
+    # seems to change job ids between enqueue + perform...
+
+    expect(JobTracker.last).to have_attributes(resource: upload, reports_on: upload.stream)
+  end
+
+  it 'cleans up job tracking after running' do
+    described_class.perform_now(upload)
   end
 end
