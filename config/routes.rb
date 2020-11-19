@@ -45,6 +45,7 @@ Rails.application.routes.draw do
       end
 
       member do
+        get 'profile', to: 'streams#profile'
         post 'reanalyze', to: 'streams#reanalyze'
         get 'resourcelist', to: 'streams#show', defaults: { format: :xml }
         get 'normalized_resourcelist/:flavor', to: 'streams#normalized_dump', defaults: { format: :xml }, as: :normalized_resourcelist

@@ -72,6 +72,10 @@ class StreamsController < ApplicationController
     end
   end
 
+  def profile
+
+  end
+
   private
 
   # Only allow a list of trusted parameters through.
