@@ -9,4 +9,5 @@ class NormalizedDump < ApplicationRecord
   has_one_attached :full_dump_xml
   has_many_attached :delta_dump_binary
   has_many_attached :delta_dump_xml
+  has_many_attached :errata
 end
