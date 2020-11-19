@@ -10,7 +10,11 @@ class CleanupAndRemoveDataJob < ApplicationJob
   def perform(organization)
     # Keep the most recent ("default") stream from each organization
     # Keep older streams for an organization for a quarter after it is no longer the default.
-    organization.streams.where(default: false).where.not(updated_at: (Time.zone.now - 3.months)..Time.zone.now).destroy_all
+    organization
+      .streams
+      .where(default: false)
+      .where.not(updated_at: (Time.zone.now - 3.months)..Time.zone.now)
+      .find_each(&:archive)
     # Keep the 2 most recent normalized dumps
     last_two = organization.default_stream.normalized_dumps.last(2)
     (organization.default_stream.normalized_dumps - last_two).map(&:destroy)

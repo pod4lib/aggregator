@@ -11,11 +11,17 @@ class Stream < ApplicationRecord
   has_many :files, source: :files_blobs, through: :uploads
   has_one :statistic, dependent: :delete, as: :resource
   has_many :normalized_dumps, dependent: :destroy
+  default_scope { where(status: 'active') }
 
   has_many_attached :snapshots
 
   def display_name
     name.presence || default_name
+  end
+
+  def archive
+    update(status: 'archive', default: false)
+    uploads.find_each(&:archive)
   end
 
   def removed_since_previous_stream
