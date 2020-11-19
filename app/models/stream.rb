@@ -36,11 +36,12 @@ class Stream < ApplicationRecord
   end
 
   def marc_profile
-    profile = MarcProfile.new(count: statistic.record_count, record_frequency: {}, sampled_values: {})
+    profile = MarcProfile.new(count: 0, record_frequency: {}, sampled_values: {})
 
     files.find_each do |blob|
       blob_profile = MarcProfile.find_by(blob_id: blob.id)
 
+      profile.count += blob.metadata['count'] || 0
       profile.record_frequency.merge!(blob_profile.record_frequency) { |_key, oldval, newval| newval + oldval }
       profile.sampled_values.merge!(blob_profile.sampled_values) { |_key, oldval, newval| newval + oldval }
     end
