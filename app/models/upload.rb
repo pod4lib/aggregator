@@ -12,7 +12,8 @@ class Upload < ApplicationRecord
   validates :url, presence: true, if: proc { |upload| upload.files.blank? }
   validates :files, presence: true, if: proc { |upload| upload.url.blank? }
   validate :valid_url, if: proc { |upload| upload.url.present? }
-  default_scope { where(status: 'active') }
+  scope :active, -> { where(status: 'active') }
+  scope :archived, -> { where(status: 'archived') }
 
   after_create :attach_file_from_url
 
@@ -25,7 +26,7 @@ class Upload < ApplicationRecord
   end
 
   def archive
-    update(status: 'archive')
+    update(status: 'archived')
     files.find_each(&:purge_later)
   end
 

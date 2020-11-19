@@ -11,7 +11,8 @@ class Stream < ApplicationRecord
   has_many :files, source: :files_blobs, through: :uploads
   has_one :statistic, dependent: :delete, as: :resource
   has_many :normalized_dumps, dependent: :destroy
-  default_scope { where(status: 'active') }
+  scope :active, -> { where(status: 'active') }
+  scope :archived, -> { where(status: 'archived') }
 
   has_many_attached :snapshots
 
@@ -20,7 +21,7 @@ class Stream < ApplicationRecord
   end
 
   def archive
-    update(status: 'archive', default: false)
+    update(status: 'archived', default: false)
     uploads.find_each(&:archive)
   end
 

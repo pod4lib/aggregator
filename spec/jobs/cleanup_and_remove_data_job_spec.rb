@@ -5,11 +5,24 @@ require 'rails_helper'
 RSpec.describe CleanupAndRemoveDataJob, type: :job do
   let(:organization) { FactoryBot.create(:organization) }
 
-  describe 'remove older streams for an organization after a quarter of not being updated' do
+  describe 'archives older streams for an organization after a quarter of not being updated' do
     before do
       organization.default_stream
       Timecop.travel(4.months.ago)
       FactoryBot.create_list(:stream, 4, organization: organization)
+      Timecop.return
+    end
+
+    it do
+      expect { described_class.perform_now(organization) }.to change { organization.streams.active.count }.by(-4)
+    end
+  end
+
+  describe 'removes streams for an organization after 6 months of not being updated' do
+    before do
+      organization.default_stream
+      Timecop.travel(7.months.ago)
+      FactoryBot.create_list(:stream, 4, organization: organization, status: 'archived')
       Timecop.return
     end
 

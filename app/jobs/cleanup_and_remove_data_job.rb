@@ -20,6 +20,11 @@ class CleanupAndRemoveDataJob < ApplicationJob
     (organization.default_stream.normalized_dumps - last_two).map(&:destroy)
     # Keep deltas for an additional month (1 whole quarter)
     # Keep deleted record information for 6 months after it is removed
+    organization
+      .streams
+      .archived
+      .where.not(updated_at: (Time.zone.now - 6.months)..Time.zone.now)
+      .destroy_all
   end
   # rubocop:enable Metrics/AbcSize
 end
