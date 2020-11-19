@@ -31,11 +31,9 @@ class Upload < ApplicationRecord
 
       format = service.identify
 
-      if service.marc21?
-        extract_marc_record_metadata_from_marc_binary_with_combining(file, service, &block)
-      elsif format != :unknown
-        extract_marc_record_metadata(file, service, &block)
-      end
+      next if format == :unknown
+
+      extract_marc_record_metadata(file, service, &block)
     end
   end
 
@@ -72,29 +70,4 @@ class Upload < ApplicationRecord
       yield out
     end
   end
-
-  # rubocop:disable Metrics/AbcSize
-  # MARC21 records may be split across multiple physical records
-  def extract_marc_record_metadata_from_marc_binary_with_combining(file, service)
-    return to_enum(:extract_marc_record_metadata_from_marc_binary_with_combining, file, service) unless block_given?
-
-    extract_marc_record_metadata(file, service)
-      .slice_when { |i, j| i.marc['001'].value != j.marc['001'].value }
-      .each do |records_to_combine|
-      if records_to_combine.length == 1
-        yield records_to_combine.first
-      else
-        bytes = records_to_combine.map(&:marc_bytes).join('')
-
-        yield MarcRecord.new(
-          **records_to_combine.first.attributes,
-          length: bytes.length,
-          checksum: Digest::MD5.hexdigest(bytes),
-          marc_bytes: bytes,
-          marc: nil
-        )
-      end
-    end
-  end
-  # rubocop:enable Metrics/AbcSize
 end
