@@ -5,7 +5,7 @@ class Ability
   include CanCan::Ability
   attr_reader :allowlisted_jwt, :user
 
-  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  # rubocop:disable Metrics/CyclomaticComplexity
   def initialize(user, token = nil)
     alias_action :create, :read, :update, :destroy, to: :crud
 
@@ -13,30 +13,21 @@ class Ability
     return unless user || token
 
     @user = user
+
     if token
-      token_payload = if token
-                        JWT.decode(
-                          token,
-                          Settings.jwt.secret,
-                          Settings.jwt.algorithm
-                        )[0]
-                      else
-                        {}
-                      end
+      can :read, Organization, allowlisted_jwts: { jti: token['jti'] }
 
-      can :read, Organization, allowlisted_jwts: { jti: token_payload['jti'] }
-
-      @allowlisted_jwt = AllowlistedJwt.find_by(jti: token_payload['jti'])
+      @allowlisted_jwt = AllowlistedJwt.find_by(jti: token['jti'])
 
       case @allowlisted_jwt.scope
       when 'all'
-        can %i[create update], [Stream, Upload], organization: { allowlisted_jwts: { jti: token_payload['jti'] } }
+        can %i[create update], [Stream, Upload], organization: { allowlisted_jwts: { jti: token['jti'] } }
         can :read, Organization, public: true
         can :read, [Stream, Upload], organization: { public: true }
 
         can :read, ActiveStorage::Attachment, { record: { organization: { public: true } } }
       when 'upload'
-        can %i[create update], [Stream, Upload], organization: { allowlisted_jwts: { jti: token_payload['jti'] } }
+        can %i[create update], [Stream, Upload], organization: { allowlisted_jwts: { jti: token['jti'] } }
       when 'download'
         can :read, Organization, public: true
         can :read, [Stream, Upload], organization: { public: true }
@@ -63,5 +54,5 @@ class Ability
     can :crud, [Stream, Upload], organization: { id: member_orgs }
     can :read, ActiveStorage::Attachment, { record: { organization: { id: member_orgs } } }
   end
-  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  # rubocop:enable Metrics/CyclomaticComplexity
 end
