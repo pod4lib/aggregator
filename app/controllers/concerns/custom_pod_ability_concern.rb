@@ -18,4 +18,10 @@ module CustomPodAbilityConcern
 
     token.first
   end
+
+  def current_allowlisted_token
+    return unless current_token
+
+    @current_allowlisted_token ||= AllowlistedJwt.find_by(jti: current_token.dig(0, 'jti'))
+  end
 end

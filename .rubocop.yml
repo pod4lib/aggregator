@@ -52,3 +52,7 @@ RSpec/MultipleMemoizedHelpers:
 RSpec/ExampleLength:
   Exclude:
     - 'spec/features/**/*'
+
+RSpec/MultipleExpectations:
+  Exclude:
+    - 'spec/features/**/*'

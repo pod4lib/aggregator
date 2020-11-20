@@ -91,6 +91,7 @@ gem 'whenever'
 
 gem 'rack-attack'
 
+gem 'ahoy_matey'
 gem 'chartkick'
 gem 'groupdate'
 
