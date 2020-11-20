@@ -3,6 +3,10 @@
     content: '🔄';
   }
 
+  &.not_marc::before {
+    content: '❓';
+  }
+
   &.success::before {
     content: '✅';
   }

@@ -28,7 +28,7 @@ RSpec.describe ActiveStorageAttachmentMetadataStatus do
     context 'when an analyzer other than the MARC analyzer has processed the file' do
       let(:metadata) { { 'analyzer' => 'ImageAnalyzer', 'identified' => true, 'analyzed' => true } }
 
-      it { expect(test_class.pod_metadata_status).to eq :unknown }
+      it { expect(test_class.pod_metadata_status).to eq :not_marc }
     end
 
     context 'when the MarcAnalyzer has successfully analyzed the file' do
