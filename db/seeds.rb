@@ -8,7 +8,7 @@
 
 require_relative '../spec/support/marc_fixture_seed_fetcher'
 
-Upload.skip_callback(:save_commit, :after, :perform_extract_marc_record_metadata_job)
+Upload.skip_callback(:commit, :after, :perform_extract_marc_record_metadata_job)
 
 Settings.marc_fixture_seeds.organizations.each do |org|
   organization = Organization.create(name: org, slug: org.downcase)
@@ -28,4 +28,4 @@ Settings.marc_fixture_seeds.organizations.each do |org|
   end
 end
 
-Upload.set_callback(:save_commit, :after, :perform_extract_marc_record_metadata_job)
+Upload.set_callback(:commit, :after, :perform_extract_marc_record_metadata_job)
