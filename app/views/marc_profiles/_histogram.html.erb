@@ -16,7 +16,7 @@
         <td><%= field.first %></td>
         <td><%= number_to_percentage(100.0 * field.last / marc_profile.count) %></td>
         <td>
-          <%= marc_profile.histogram_frequency[field.first].sort_by { |k, _v| k }.map { |k, v| "#{k}x: #{v}"}.join(', ') %>
+          <%= marc_profile.histogram_frequency[field.first].sort_by { |k, _v| k.to_i }.map { |k, v| "#{k}x: #{v}"}.join(', ') %>
         </td>
         <td>
           <% if subfields.any? %>
@@ -43,7 +43,7 @@
                 <tr class="<%= MarcRules.common_practice?(*subfield.split("$",2)) ? '' : 'bg-local-practice' %>">
                   <td><%= subfield.split('$', 2).last %></td>
                   <td><%= number_to_percentage(100.0 * count / field.last) %></td>
-                  <td><%= marc_profile.histogram_frequency[subfield].sort_by { |k, _v| k }.map { |k, v| "#{k}x: #{v}"}.join(', ') %></td>
+                  <td><%= marc_profile.histogram_frequency[subfield].sort_by { |k, _v| k.to_i }.map { |k, v| "#{k}x: #{v}"}.join(', ') %></td>
                 </tr>
               <% end %>
             </table>
