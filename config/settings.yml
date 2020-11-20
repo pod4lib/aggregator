@@ -16,7 +16,6 @@ marc_fixture_seeds:
   token: ''
   upload_count: 5
   organizations:
-    - Brown
     - Cornell
     - Princeton
     - Stanford
