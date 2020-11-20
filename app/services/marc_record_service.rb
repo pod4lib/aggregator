@@ -207,7 +207,7 @@ class MarcRecordService
       reader.each_raw.with_index do |bytes, index|
         with_honeybadger_context(bytecount: bytecount, index: index) do
           length = bytes[0...5].to_i
-          record = MARC::Reader.decode(bytes)
+          record = MARC::Reader.decode(bytes, external_encoding: 'UTF-8', invalid: :replace)
           with_honeybadger_context(marc001: record['001']&.value, bytecount: bytecount, index: index) do
             yield(
               bytecount: bytecount,
