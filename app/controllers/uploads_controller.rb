@@ -19,9 +19,6 @@ class UploadsController < ApplicationController
   # GET /uploads/new
   def new; end
 
-  # GET /uploads/1/edit
-  def edit; end
-
   # POST /uploads
   # POST /uploads.json
   def create
