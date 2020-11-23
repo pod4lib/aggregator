@@ -28,7 +28,7 @@ Rails.application.routes.draw do
         get 'marcxml'
       end
     end
-    resources :uploads
+    resources :uploads, except: [:update]
     resources :organization_users, as: 'users', only: :destroy
     resources :organization_contact_emails, as: 'contact_emails', only: [:new, :create, :destroy]
 

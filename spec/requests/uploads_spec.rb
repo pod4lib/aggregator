@@ -57,14 +57,6 @@ RSpec.describe '/uploads', type: :request do
     end
   end
 
-  describe 'GET /edit' do
-    it 'render a successful response' do
-      upload = Upload.create! valid_model_attributes
-      get edit_organization_upload_url(organization, upload)
-      expect(response).to be_successful
-    end
-  end
-
   describe 'POST /create' do
     context 'with valid parameters' do
       it 'creates a new Upload' do
@@ -96,36 +88,6 @@ RSpec.describe '/uploads', type: :request do
 
       it "renders a successful response (i.e. to display the 'new' template)" do
         post organization_uploads_url(organization), params: { upload: invalid_attributes }
-        expect(response).to be_successful
-      end
-    end
-  end
-
-  describe 'PATCH /update' do
-    context 'with valid parameters' do
-      let(:new_attributes) do
-        { files: [fixture_file_upload(Rails.root.join('spec/fixtures/12345.marcxml'), 'application/octet-stream')] }
-      end
-
-      it 'updates the requested upload' do
-        upload = Upload.create! valid_model_attributes
-        patch organization_upload_url(organization, upload), params: { upload: new_attributes }
-        upload.reload
-        skip('Add assertions for updated state')
-      end
-
-      it 'redirects to the upload' do
-        upload = Upload.create! valid_model_attributes
-        patch organization_upload_url(organization, upload), params: { upload: new_attributes }
-        upload.reload
-        expect(response).to redirect_to(organization_upload_url(organization))
-      end
-    end
-
-    context 'with invalid parameters' do
-      it "renders a successful response (i.e. to display the 'edit' template)" do
-        upload = Upload.create! valid_model_attributes
-        patch organization_upload_url(organization, upload), params: { upload: invalid_attributes }
         expect(response).to be_successful
       end
     end
