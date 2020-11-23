@@ -6,12 +6,18 @@ module ActiveStorageAttachmentMetadataStatus
   # rubocop:disable Metrics/CyclomaticComplexity
   def pod_metadata_status
     return :invalid if marc_analyzer? && metadata['valid'] == false
-    return :unknown if metadata['identified'] && metadata['analyzed'] && !marc_analyzer?
+    return :not_marc if metadata['identified'] && metadata['analyzed'] && !marc_analyzer?
     return :success if metadata['analyzed'] && marc_analyzer?
 
     :unknown
   end
   # rubocop:enable Metrics/CyclomaticComplexity
+
+  def pod_error_message
+    return 'Unacceptable data format' if pod_metadata_status == :not_marc
+
+    metadata['error']
+  end
 
   private
 

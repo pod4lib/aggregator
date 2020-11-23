@@ -13,10 +13,18 @@ class Stream < ApplicationRecord
   has_many :normalized_dumps, dependent: :destroy
   has_many :job_trackers, dependent: :delete_all, as: :reports_on
 
+  scope :active, -> { where(status: 'active') }
+  scope :archived, -> { where(status: 'archived') }
+
   has_many_attached :snapshots
 
   def display_name
     name.presence || default_name
+  end
+
+  def archive
+    update(status: 'archived', default: false)
+    uploads.find_each(&:archive)
   end
 
   def removed_since_previous_stream

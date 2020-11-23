@@ -17,7 +17,7 @@ class ProxyController < ActiveStorage::BaseController
   # rubocop:disable Metrics/AbcSize
   def show
     attachment = ActiveStorage::Attachment.find(params[:id])
-    authorize!(:read, attachment.record)
+    authorize!(:read, attachment)
 
     fresh_when(last_modified: attachment.blob.created_at, public: true, etag: attachment.blob.checksum)
     set_content_headers_from(attachment.blob)

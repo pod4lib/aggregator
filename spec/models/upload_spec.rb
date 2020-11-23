@@ -26,6 +26,19 @@ RSpec.describe Upload, type: :model do
     end
   end
 
+  describe '#archive' do
+    it 'sets status to archived' do
+      upload.archive
+      expect(upload.status).to eq 'archived'
+    end
+
+    it 'enqueues purge_later for every file' do
+      expect do
+        upload.archive
+      end.to have_enqueued_job(ActiveStorage::PurgeJob)
+    end
+  end
+
   describe '#url' do
     it 'submits a job to attach the file from the URL if a URL is provided' do
       expect do

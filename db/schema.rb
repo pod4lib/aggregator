@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_19_153628) do
-
+ActiveRecord::Schema.define(version: 2020_11_19_191234) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -127,6 +126,7 @@ ActiveRecord::Schema.define(version: 2020_11_19_153628) do
     t.string "slug"
     t.string "code"
     t.json "normalization_steps"
+    t.boolean "public", default: true
     t.index ["slug"], name: "index_organizations_on_slug", unique: true
   end
 
@@ -162,8 +162,10 @@ ActiveRecord::Schema.define(version: 2020_11_19_153628) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "slug"
+    t.string "status", default: "active"
     t.index ["organization_id"], name: "index_streams_on_organization_id"
     t.index ["slug"], name: "index_streams_on_slug", unique: true
+    t.index ["status"], name: "index_streams_on_status"
   end
 
   create_table "uploads", force: :cascade do |t|
@@ -175,6 +177,8 @@ ActiveRecord::Schema.define(version: 2020_11_19_153628) do
     t.integer "user_id"
     t.integer "allowlisted_jwts_id"
     t.string "ip_address"
+    t.string "status", default: "active"
+    t.index ["status"], name: "index_uploads_on_status"
     t.index ["stream_id"], name: "index_uploads_on_stream_id"
   end
 

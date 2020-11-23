@@ -12,6 +12,8 @@ class Upload < ApplicationRecord
   validates :url, presence: true, if: proc { |upload| upload.files.blank? }
   validates :files, presence: true, if: proc { |upload| upload.url.blank? }
   validate :valid_url, if: proc { |upload| upload.url.present? }
+  scope :active, -> { where(status: 'active') }
+  scope :archived, -> { where(status: 'archived') }
 
   after_create :attach_file_from_url
 
@@ -21,6 +23,11 @@ class Upload < ApplicationRecord
 
   def name
     super.presence || created_at&.iso8601
+  end
+
+  def archive
+    update(status: 'archived')
+    files.find_each(&:purge_later)
   end
 
   def each_marc_record_metadata(&block)
