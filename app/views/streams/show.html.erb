@@ -17,5 +17,7 @@
     Records: <%= number_with_delimiter @stream.statistic&.unique_record_count || 0 %> unique (<%= number_with_delimiter @stream.statistic&.record_count || 0%> total) <%= link_to "(view all)", organization_marc_records_path(@organization, { stream: @stream}) %>
   </p>
 
+  <%= render 'job_status', stream: @stream %>
+
   <%= render 'stream_uploads', stream: @stream  %>
 </div>

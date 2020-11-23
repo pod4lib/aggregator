@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_19_191233) do
-
+ActiveRecord::Schema.define(version: 2020_11_19_191234) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -68,6 +67,20 @@ ActiveRecord::Schema.define(version: 2020_11_19_191233) do
     t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true
     t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type"
     t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
+  end
+
+  create_table "job_trackers", force: :cascade do |t|
+    t.string "reports_on_type", null: false
+    t.integer "reports_on_id", null: false
+    t.string "resource_type", null: false
+    t.integer "resource_id", null: false
+    t.string "job_id"
+    t.string "job_class"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["job_id"], name: "index_job_trackers_on_job_id"
+    t.index ["reports_on_type", "reports_on_id"], name: "index_job_trackers_on_reports_on_type_and_reports_on_id"
+    t.index ["resource_type", "resource_id"], name: "index_job_trackers_on_resource_type_and_resource_id"
   end
 
   create_table "marc_profiles", force: :cascade do |t|
