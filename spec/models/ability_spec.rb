@@ -62,5 +62,18 @@ RSpec.describe Ability do
       it { is_expected.not_to be_able_to(:read, Upload.new) }
       it { is_expected.not_to be_able_to(:read, Stream.new) }
     end
+
+    context 'with a member of an org' do
+      let(:organization) { FactoryBot.create(:organization) }
+      let(:user) { FactoryBot.create(:user) }
+
+      before do
+        user.add_role :member, organization
+      end
+
+      it { is_expected.to be_able_to(:create, Upload.new(organization: organization)) }
+      it { is_expected.to be_able_to(:create, Stream.new(organization: organization)) }
+      it { is_expected.to be_able_to(:create, AllowlistedJwt.new(resource: organization)) }
+    end
   end
 end
