@@ -56,5 +56,25 @@ RSpec.describe 'Downloading normalzed files from POD', type: :feature do
         expect(marc['900']['b']).to eq organization.code
       end
     end
+
+    it 'tracks the download' do
+      visit organization_url(organization)
+
+      expect do
+        # Note, this won't work in a driver other that Rack::Test w/o some other magic
+        click_link "#{organization.slug}-2020-01-01-marc21.mrc.gz"
+      end.to change(Ahoy::Event, :count).by(1)
+
+      expect(Ahoy::Event.last.properties.with_indifferent_access).to include(
+        attachment_name: 'full_dump_binary',
+        byte_size: 891,
+        filename: "#{organization.slug}-2020-01-01-marc21.mrc.gz",
+        organization_id: organization.slug
+      )
+
+      expect(Ahoy::Event.last.visit).to have_attributes(
+        organization_id: organization.slug
+      )
+    end
   end
 end

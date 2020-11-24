@@ -18,6 +18,7 @@ class ProxyController < ActiveStorage::BaseController
   def show
     attachment = ActiveStorage::Attachment.find(params[:id])
     authorize!(:read, attachment)
+    add_analytics_event(attachment)
 
     fresh_when(last_modified: attachment.blob.created_at, public: true, etag: attachment.blob.checksum)
     set_content_headers_from(attachment.blob)
@@ -75,4 +76,18 @@ class ProxyController < ActiveStorage::BaseController
     response.stream.close
   end
   # rubocop:enable Metrics/AbcSize
+
+  def add_analytics_event(attachment)
+    properties = {
+      attachment_id: attachment.id,
+      attachment_name: attachment.name,
+      byte_size: attachment.blob.byte_size,
+      content_type: attachment.blob.content_type,
+      filename: attachment.blob.filename
+    }
+
+    properties[:organization_id] = attachment.record.organization.slug if attachment.record.respond_to? :organization
+
+    ahoy.track 'Download', properties
+  end
 end

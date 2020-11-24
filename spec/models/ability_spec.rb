@@ -16,7 +16,7 @@ RSpec.describe Ability do
   describe 'with a token' do
     let(:org1) { FactoryBot.create(:organization) }
     let(:org2) { FactoryBot.create(:organization) }
-    let(:token) { JWT.encode({ jti: 'anything' }, Settings.jwt.secret, Settings.jwt.algorithm) }
+    let(:token) { { 'jti' => 'anything' } }
     let(:token_attributes) { {} }
 
     before do
