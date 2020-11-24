@@ -490,6 +490,7 @@ DEPENDENCIES
   rack-attack
   rails (~> 6.0.3, >= 6.0.3.3)
   rails-controller-testing
+  redis (~> 4.0)
   rolify
   rspec-rails
   rubocop
