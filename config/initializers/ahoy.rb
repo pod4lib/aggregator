@@ -1,7 +1,7 @@
 class Ahoy::Store < Ahoy::DatabaseStore
   def track_visit(data)
     data[:organization_id] = organization_context_id
-    data[:token_id] = controller.current_token&.dig(0, 'jti')
+    data[:token_id] = controller.current_token&.dig(0, 'jti') if controller.respond_to? :current_token
     super(data)
   end
 
