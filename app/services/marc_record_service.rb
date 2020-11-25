@@ -78,7 +78,7 @@ class MarcRecordService
     return to_enum(:each_combined_record, reader) unless block_given?
 
     each_raw_record(reader)
-      .slice_when { |i, j| i['001'].value != j['001'].value }
+      .slice_when { |i, j| !same_record?(i, j) }
       .each do |records_to_combine|
         if records_to_combine.length == 1
           yield records_to_combine.first
@@ -179,7 +179,7 @@ class MarcRecordService
     return to_enum(:each_with_metadata_for_marc21) unless block_given?
 
     each_raw_record_with_metadata_for_marc21
-      .slice_when { |i, j| i[:marc]['001'].value != j[:marc]['001'].value }
+      .slice_when { |i, j| !same_record?(i[:marc], j[:marc]) }
       .each_with_index do |records_to_combine, index|
       if records_to_combine.length == 1
         yield(records_to_combine.first[:marc], records_to_combine.first.except(:marc))
@@ -274,4 +274,10 @@ class MarcRecordService
     record
   end
   # rubocop:enable Metrics/AbcSize
+
+  def same_record?(record, next_record)
+    return true if record['001'].blank? || next_record['001'].blank?
+
+    record['001']&.value == next_record['001']&.value
+  end
 end
