@@ -65,6 +65,13 @@ RSpec.describe '/uploads', type: :request do
         end.to change(Upload, :count).by(1)
       end
 
+      it 'creates a new with url Upload stripping whitespace' do
+        expect do
+          post organization_uploads_url(organization), params: { upload: { url: ' http://example.com/file.mrc  ' } }
+        end.to change(Upload, :count).by(1)
+        expect(Upload.last.url).to eq 'http://example.com/file.mrc'
+      end
+
       it 'redirects to the created upload' do
         post organization_uploads_url(organization), params: { upload: valid_attributes }
         expect(response).to redirect_to(organization_upload_url(organization, Upload.last))
