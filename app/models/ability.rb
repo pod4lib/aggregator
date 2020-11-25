@@ -47,11 +47,13 @@ class Ability
     owned_orgs = Organization.with_role(:owner, user).pluck(:id)
     can :manage, Organization, id: owned_orgs
     can :crud, [Stream, Upload], organization: { id: owned_orgs }
+    can :crud, AllowlistedJwt, resource_type: 'Organization', resource: owned_orgs
     can :read, ActiveStorage::Attachment, { record: { organization: { id: owned_orgs } } }
 
     member_orgs = Organization.with_role(:member, user).pluck(:id)
     can :invite, Organization, id: member_orgs
     can :crud, [Stream, Upload], organization: { id: member_orgs }
+    can :crud, AllowlistedJwt, resource_type: 'Organization', resource_id: member_orgs
     can :read, ActiveStorage::Attachment, { record: { organization: { id: member_orgs } } }
   end
   # rubocop:enable Metrics/CyclomaticComplexity
