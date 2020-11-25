@@ -28,7 +28,11 @@ Rails.application.routes.draw do
         get 'marcxml'
       end
     end
-    resources :uploads, except: [:update]
+    resources :uploads, except: [:update] do
+      member do
+        get 'info/:blob_id', to: 'uploads#info', as: :file_info
+      end
+    end
     resources :organization_users, as: 'users', only: :destroy
     resources :organization_contact_emails, as: 'contact_emails', only: [:new, :create, :destroy]
 
@@ -41,6 +45,7 @@ Rails.application.routes.draw do
       end
 
       member do
+        get 'profile', to: 'streams#profile'
         post 'reanalyze', to: 'streams#reanalyze'
         get 'resourcelist', to: 'streams#show', defaults: { format: :xml }
         get 'normalized_resourcelist/:flavor', to: 'streams#normalized_dump', defaults: { format: :xml }, as: :normalized_resourcelist

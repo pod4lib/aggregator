@@ -31,7 +31,7 @@ RSpec.describe MarcProfilingJob do
     described_class.perform_now(upload.files.first.blob)
 
     expect(MarcProfile.last.histogram_frequency).to include(
-      '001' => { '1' => 50 }, '245$a' => { '1' => 50 }, '690$d' => { '2' => 4 }
+      '001' => { '1' => 50 }, '245$a' => { '1' => 50 }, '856$x' => { '3' => 3, '6' => 2 }
     )
   end
 

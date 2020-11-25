@@ -11,10 +11,11 @@
 <% upload.files.each do |file| %>
   <tr>
     <td class="pl-4">
-      <%= link_to file.filename, download_url(file) %>
+      <%= link_to file.filename, file_info_organization_upload_path(@organization, upload, file) %>
+      <br />
+      <%= link_to 'Download ⬇️', download_url(file), class: 'btn btn-link' %>
       <% if upload.url.present? %>
-        <br />
-        <%= link_to 'Source 🔗', upload.url, title: upload.url %>
+        <%= link_to 'Source 🔗', upload.url, title: upload.url, class: 'btn btn-link' %>
       <% end %>
     </td>
     <td><%= l(file.created_at, format: :short) %></td>

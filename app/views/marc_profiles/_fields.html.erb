@@ -1,0 +1,74 @@
+<h3 class="mt-5">Non-standard fields</h3>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Sample values</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% marc_profile.sampled_values.reject { |key,value| key.include?('$') || MarcRules.common_field?(*key.split("$",2)) }.sort_by { |key,value| key}.each do |field,values| %>
+      <tr>
+        <td class="align-top"><%= field.split("$").first %></td>
+        <td>
+          <% if values.uniq.one? %>
+            <span class="text-monospace"><%= values.uniq.first %></span>
+          <% else %>
+            <button class="btn p-0 m-0 border-0 align-top text-left text-monospace" type="button" data-toggle="collapse" data-target="#profile-<%= field %>" aria-expanded="false" aria-controls="collapseExample">
+              <%= values.uniq.first %>
+              <%= inline_svg_tag 'bootstrap-icons/icons/chevron-right.svg', height: 12, width: 12 %>
+            </button>
+
+            <div class="collapse" id="profile-<%= field %>">
+              <div class="card card-body">
+                <% values.uniq.each do |v| %>
+                  <pre class="mb-1"><%= v %></pre>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h3 class="mt-5">Non-standard subfields</h3>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Subfield</th>
+      <th>Sample values</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% marc_profile.sampled_values.select { |key, value| key.include?('$') && MarcRules.common_field?(*key.split("$", 2).first) }.reject { |key,value| MarcRules.common_practice?(*key.split("$",2)) }.sort_by { |key,value| key }.slice_when { |(k1, _v1), (k2, _v2)| k1.split("$",2).first != k2.split("$",2).first }.each do |field_group| %>
+      <tr class="bg-info text-white font-weight-bolder"><td colspan="3"><%= field_group.first.first.split('$', 2).first %></td></tr>
+      <% field_group.each do |field, values| %>
+        <tr>
+          <td><span class="sr-only"><%= field.split("$", 2).first %></span></td>
+          <td><%= field.split("$", 2).last %></td>
+          <td>
+            <% if values.uniq.length <= 3 %>
+              <span class="text-monospace"><%= values.uniq.first(3).join(', ') %></span>
+            <% else %>
+              <button class="btn p-0 m-0 border-0 align-top text-left text-monospace" type="button" data-toggle="collapse" data-target="#profile-<%= field.parameterize %>" aria-expanded="false" aria-controls="collapseExample">
+                <%= values.uniq.first(3).join(', ').truncate(100) %>
+                <%= inline_svg_tag 'bootstrap-icons/icons/chevron-right.svg', height: 12, width: 12 %>
+              </button>
+
+              <div class="collapse" id="profile-<%= field.parameterize %>">
+                <div class="card card-body">
+                  <% values.uniq.each do |v| %>
+                    <pre class="mb-1"><%= v %></pre>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>

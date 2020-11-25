@@ -106,3 +106,7 @@ input[type=file][data-direct-upload-url][disabled] {
   position: absolute;
   width: 100%;
 }
+
+.bg-local-practice {
+  background-color: lighten($warning, 40%) !important;
+}

@@ -35,6 +35,18 @@ class Stream < ApplicationRecord
     MarcRecord.from(MarcRecord.arel_table.create_table_alias(except_stream, :marc_records)).pluck(:marc001)
   end
 
+  def marc_profile
+    profile = MarcProfile.new(count: 0, histogram_frequency: {}, record_frequency: {}, sampled_values: {})
+
+    files.find_each do |blob|
+      blob_profile = MarcProfile.find_by(blob_id: blob.id)
+
+      profile.deep_merge!(blob_profile) if blob_profile
+    end
+
+    profile
+  end
+
   private
 
   def default_name

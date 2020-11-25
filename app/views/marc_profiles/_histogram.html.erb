@@ -1,0 +1,55 @@
+<h3 class="mt-5">Histogram</h3>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>%</th>
+      <th>Occurences</th>
+      <th>Subfields</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% marc_profile.record_frequency.sort_by { |key, _value| key }.slice_when { |(k1, _v1), (k2, _v2)| k1.split("$",2).first != k2.split("$",2).first }.each do |field_group| %>
+    <% field, *subfields = field_group %>
+      <tr class="<%= MarcRules.common_field?(field.first) ? cycle('bg-light', '') : 'bg-local-practice' %>">
+        <td><%= field.first %></td>
+        <td><%= number_to_percentage(100.0 * field.last / marc_profile.count) %></td>
+        <td>
+          <%= marc_profile.histogram_frequency[field.first].sort_by { |k, _v| k.to_i }.map { |k, v| "#{k}x: #{v}"}.join(', ') %>
+        </td>
+        <td>
+          <% if subfields.any? %>
+            <button class="btn p-0 m-0 border-0 align-top text-left text-monospace" type="button" data-toggle="collapse" data-target="#histogram-subfields-<%= field.first.parameterize %>" aria-expanded="false" aria-controls="histogram-subfields-<%= field.first.parameterize %>">
+              <span class="sr-only">Expand</span>
+              <%= inline_svg_tag 'bootstrap-icons/icons/chevron-right.svg', height: 20, width: 20 %>
+            </button>
+          <% end %>
+        </td>
+      </tr>
+      <% if subfields.any? %>
+        <tr id="histogram-subfields-<%= field.first.parameterize %>" class="collapse">
+          <td colspan="4">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Subfield</th>
+                  <th>%</th>
+                  <th>Occurences</th>
+                </tr>
+              </thead>
+
+              <% subfields.each do |subfield, count| %>
+                <tr class="<%= MarcRules.common_practice?(*subfield.split("$",2)) ? '' : 'bg-local-practice' %>">
+                  <td><%= subfield.split('$', 2).last %></td>
+                  <td><%= number_to_percentage(100.0 * count / field.last) %></td>
+                  <td><%= marc_profile.histogram_frequency[subfield].sort_by { |k, _v| k.to_i }.map { |k, v| "#{k}x: #{v}"}.join(', ') %></td>
+                </tr>
+              <% end %>
+            </table>
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>

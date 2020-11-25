@@ -50,6 +50,8 @@ class MarcProfilingJob < ApplicationJob
 
       batch.each do |record|
         record_stats = Hash.new { |hash, key| hash[key] = 0 }
+        record_subfield_stats = Hash.new { |hash, key| hash[key] = 0 }
+
         record.fields.each do |field|
           record_frequency[field.tag] += 1 if record_stats[field.tag].zero?
           record_stats[field.tag] += 1
@@ -60,14 +62,21 @@ class MarcProfilingJob < ApplicationJob
             sampled_values[field.tag].add(field.value)
           else
             sampled_values[field.tag].add(field.to_s)
+            subfield_frequency = Hash.new { |hash, key| hash[key] = 0 }
+
             field.each do |subfield|
               key = "#{field.tag}$#{subfield.code}"
               sampled_values[key].add(subfield.value)
 
-              record_frequency[key] += 1 if record_stats[key].zero?
-              record_stats[key] += 1
+              record_frequency[key] += 1 if record_subfield_stats[key].zero?
+              record_subfield_stats[key] += 1
+              subfield_frequency[key] += 1
 
               instance_frequency[key] += 1
+            end
+
+            subfield_frequency.each do |key, count|
+              histogram_frequency[key][count] += 1 unless count == 0
             end
           end
         end

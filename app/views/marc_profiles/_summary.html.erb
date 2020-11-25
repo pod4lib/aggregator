@@ -1,0 +1,30 @@
+<h3 class="mt-5">Summary</h3>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th>Fields</th>
+      <th>Info</th>
+    </tr>
+  </thead>
+
+  <tbody>
+      <tr>
+        <td></td>
+        <td>001</td>
+        <td><%= marc_profile.record_frequency["001"] %> of <%= marc_profile.count %></td>
+      </tr>
+      <tr>
+        <td>MHLD information</td>
+        <td>85x, 86x, 87x</td>
+        <td>85x: <%= marc_profile.record_frequency.keys.any? {|field| field.start_with?("85")} %><br>
+        86x: <%= marc_profile.record_frequency.keys.any? {|field| field.start_with?("86")} %><br>
+        87x: <%= marc_profile.record_frequency.keys.any? {|field| field.start_with?("87")} %></td>
+      </tr>
+      <tr>
+        <td>Mutilingual data</td>
+        <td>88x</td>
+        <td><%= marc_profile.record_frequency.keys.any? {|field| field.start_with?("88")} %></td>
+      </tr>
+  </tbody>
+</table>
