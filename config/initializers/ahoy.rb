@@ -15,3 +15,4 @@ end
 Ahoy.api = true
 Ahoy.mask_ips = true
 Ahoy.track_bots = true # too aggressive (and unnecessary as we're tracking auth'ed events only)
+Ahoy.geocode = false
