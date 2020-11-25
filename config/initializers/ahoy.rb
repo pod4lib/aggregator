@@ -7,7 +7,7 @@ class Ahoy::Store < Ahoy::DatabaseStore
 
   def organization_context_id
     return Organization.with_roles([:member, :owner], controller.current_user).first&.friendly_id if controller.current_user
-    return controller.current_allowlisted_token&.organization.friendly_id if controller.current_allowlisted_token
+    return controller.current_allowlisted_token&.organization&.friendly_id if controller.respond_to? :current_allowlisted_token
   end
 end
 
