@@ -46,4 +46,12 @@ RSpec.describe Upload, type: :model do
       end.to enqueue_job(AttachRemoteFileToUploadJob).exactly(1).times.with(described_class.last)
     end
   end
+
+  context 'with a tar.gz' do
+    it 'submits a job to extract the file' do
+      expect do
+        FactoryBot.create(:upload, :tar_gz)
+      end.to enqueue_job(ExtractFilesJob).exactly(1).times.with(described_class.last)
+    end
+  end
 end
