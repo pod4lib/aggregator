@@ -1,21 +1,44 @@
 # frozen_string_literal: true
 
+require 'active_storage_blob_io'
+
 # Service class for reading MARC records out of ActiveStorage::Blobs
 class MarcRecordService
   include Enumerable
 
   def self.marc_reader(io, type)
     case type
-    when :marcxml
-      MARC::XMLReader.new(io, parser: 'nokogiri')
-    when :marc21
-      MARC::Reader.new(io, { external_encoding: 'UTF-8', invalid: :replace })
-    when :marcxml_gzip
-      MARC::XMLReader.new(Zlib::GzipReader.new(io), parser: 'nokogiri')
-    when :marc21_gzip
-      MARC::Reader.new(Zlib::GzipReader.new(io), { external_encoding: 'UTF-8', invalid: :replace })
+    when :marcxml, :marc21
+      MultifileMarcReader.new([io])
+    when :marcxml_gzip, :marc21_gzip
+      MultifileMarcReader.new([Zlib::GzipReader.new(io)])
+    when :tar_gzip
+      MultifileMarcReader.new(Gem::Package::TarReader.new(Zlib::GzipReader.new(io)))
     else
       raise "Unknown MARC type: #{type}"
+    end
+  end
+
+  def self.identify_from_signature(io)
+    str = io.read(512)
+    io.rewind
+
+    if str.bytes[0] == 0x1F && str.bytes[1] == 0x8B # gzip magic bytes
+      # hopefully str was long enough to allow us to read enough of the data
+      # to look for
+      reader = Zlib::GzipReader.new(io)
+      [
+        identify_from_signature(reader),
+        :gzip
+      ]
+    elsif str[0x101...0x106] == 'ustar' # tar magic bytes
+      :tar
+    elsif ['<?xml', '<reco', '<coll'].include? str[0...5] # xml preamble
+      :marcxml
+    elsif str[0...5].match?(/^\d+$/) # kinda looks like a MARC21 leader...
+      :marc21
+    else
+      :unknown
     end
   end
 
@@ -29,16 +52,12 @@ class MarcRecordService
   # Identify what type of MARC is in the blob by reading just a little bit of it
   def identify
     @identify ||= begin
-      start = download_chunk(0...5)
+      result = self.class.identify_from_signature(io)
 
-      if start.bytes[0] == 0x1F && start.bytes[1] == 0x8B # gzip magic bytes
-        identify_gzip
-      elsif ['<?xml', '<reco', '<coll'].include? start # xml preamble
-        :marcxml
-      elsif start.match?(/^\d+$/) # kinda looks like a MARC21 leader...
-        :marc21
+      if result.is_a? Array
+        result.flatten.map(&:to_s).join('_').to_sym
       else
-        :unknown
+        result
       end
     end
   end
@@ -49,6 +68,10 @@ class MarcRecordService
 
   def gzipped?(type = identify)
     %i[marc21_gzip marcxml_gzip].include? type
+  end
+
+  def multifile?(type = identify)
+    type == :tar_gzip
   end
 
   # Iterate through the records in a file
@@ -189,7 +212,7 @@ class MarcRecordService
         record = merge_records(*records_to_combine.pluck(:marc))
 
         yield record, {
-          **records_to_combine.first.except(:marc, :marc_bytes),
+          **records_to_combine.first.except(:marc, :marc_bytes, (multifile? ? :bytecount : nil)),
           index: index,
           length: bytes.length,
           checksum: Digest::MD5.hexdigest(bytes)
@@ -221,17 +244,6 @@ class MarcRecordService
           end
         end
       end
-    end
-  end
-
-  def identify_gzip
-    reader = Zlib::GzipReader.new(StringIO.new(download_chunk(0...1024)))
-    inner_start = reader.read(5)
-
-    case inner_start
-    when '<?xml' then :marcxml_gzip
-    when /^\d+$/ then :marc21_gzip
-    else :unknown
     end
   end
 
@@ -279,5 +291,9 @@ class MarcRecordService
     return true if record['001'].blank? || next_record['001'].blank?
 
     record['001']&.value == next_record['001']&.value
+  end
+
+  def io
+    ActiveStorageBlobIO.new(blob)
   end
 end
