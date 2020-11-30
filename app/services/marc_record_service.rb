@@ -276,7 +276,7 @@ class MarcRecordService
   # rubocop:enable Metrics/AbcSize
 
   def same_record?(record, next_record)
-    return true if record['001'].blank? || next_record['001'].blank?
+    return false if record['001'].blank? || next_record['001'].blank?
 
     record['001']&.value == next_record['001']&.value
   end
