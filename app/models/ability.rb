@@ -51,7 +51,7 @@ class Ability
     can :read, ActiveStorage::Attachment, { record: { organization: { id: owned_orgs } } }
 
     member_orgs = Organization.with_role(:member, user).pluck(:id)
-    can :invite, Organization, id: member_orgs
+    can %i[invite read], Organization, id: member_orgs
     can %i[crud profile], [Stream, Upload], organization: { id: member_orgs }
     can :crud, AllowlistedJwt, resource_type: 'Organization', resource_id: member_orgs
     can :read, ActiveStorage::Attachment, { record: { organization: { id: member_orgs } } }
