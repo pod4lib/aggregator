@@ -6,7 +6,7 @@
     <h2><%= @blob.filename %></h2>
 
     <div>
-      <%= link_to 'Download', download_url(@blob), class: 'btn btn-secondary' %>
+      <%= link_to 'Download', download_url(@blob), class: 'btn btn-secondary' if can? :read, @upload %>
     </div>
   </div>
 

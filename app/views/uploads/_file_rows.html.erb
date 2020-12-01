@@ -1,4 +1,4 @@
-<% if upload.url.present? && upload.files.none? %>
+<% if can?(:read, upload) && upload.url.present? && upload.files.none? %>
   <tr>
     <td class="pl-4">
       <i>Downloading...</i><br />
@@ -11,11 +11,13 @@
 <% upload.files.each do |file| %>
   <tr>
     <td class="pl-4">
-      <%= link_to file.filename, file_info_organization_upload_path(@organization, upload, file) %>
-      <br />
-      <%= link_to 'Download ⬇️', download_url(file), class: 'btn btn-link' %>
-      <% if upload.url.present? %>
-        <%= link_to 'Source 🔗', upload.url, title: upload.url, class: 'btn btn-link' %>
+      <%= link_to_if can?(:read, upload), file.filename, file_info_organization_upload_path(@organization, upload, file) %>
+      <% if can? :read, upload %>
+        <br />
+        <%= link_to 'Download ⬇️', download_url(file), class: 'btn btn-link' %>
+        <% if upload.url.present? %>
+          <%= link_to 'Source 🔗', upload.url, title: upload.url, class: 'btn btn-link' %>
+        <% end %>
       <% end %>
     </td>
     <td><%= l(file.created_at, format: :short) %></td>

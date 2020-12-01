@@ -39,7 +39,10 @@ class Ability
       return
     end
 
-    can :read, ActiveStorage::Attachment, { record: { organization: { public: true } } }
+    if user.roles.any?
+      can :read, ActiveStorage::Attachment, { record: { organization: { public: true } } }
+      can :read, [Stream, Upload], organization: { public: true }
+    end
 
     can :manage, :all if user.has_role?(:admin)
     can :read, Organization, public: true
