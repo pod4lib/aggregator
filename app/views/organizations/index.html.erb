@@ -17,7 +17,7 @@
     <tbody>
       <% @organizations.each do |organization| %>
         <tr>
-          <td class="text-center">
+          <td class="text-center icon-column">
             <% if organization.icon.attached? %>
               <%= image_tag(organization.icon, class: 'icon-sm') %>
             <% end %>
