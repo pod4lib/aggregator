@@ -6,18 +6,18 @@
       Last updated: <%= @organization.default_stream.uploads.last&.updated_at ? content_tag(:span, "#{time_ago_in_words(@organization.default_stream.uploads.last&.updated_at)} ago", title: l(@organization.default_stream.uploads.last&.updated_at)) : 'never' %>
     </p>
     <p class="lead">
-      Records: <%= number_with_delimiter @organization.latest_statistics.unique_record_count %> unique (<%= number_with_delimiter @organization.latest_statistics.record_count %> total) <%= link_to "(view all)", organization_marc_records_path(@organization) %>
+      Records: <%= number_with_delimiter @organization.latest_statistics.unique_record_count %> unique (<%= number_with_delimiter @organization.latest_statistics.record_count %> total) <%= link_to "(view all)", organization_marc_records_path(@organization) if @organization.marc_records.accessible_by(current_ability).any? %>
     </p>
     <p class="lead">
-      Streams: <%= link_to "#{number_with_delimiter(@organization.streams.active.count)} (view all)", organization_streams_path(@organization) %>
+      Streams: <%= link_to_if @organization.streams.accessible_by(current_ability).any?, "#{number_with_delimiter(@organization.streams.active.count)} (view all)", organization_streams_path(@organization) %>
     </p>
   </div>
 <% end %>
 
 <div class="container">
   <div class="d-flex justify-content-between">
-    <h2><%= link_to_unless current_page?([@organization, @organization.default_stream]), @organization.default_stream.display_name, [@organization, @organization.default_stream] %> (<%= number_with_delimiter @organization.default_stream.statistic&.unique_record_count || 0 %> records)</h2>
-    <%= link_to 'Create new stream', new_organization_stream_path(@organization), class: 'btn btn-primary align-self-center' %>
+    <h2><%= link_to_if can?(:read, @organization.default_stream) && !current_page?([@organization, @organization.default_stream]), @organization.default_stream.display_name, [@organization, @organization.default_stream] %> (<%= number_with_delimiter @organization.default_stream.statistic&.unique_record_count || 0 %> records)</h2>
+    <%= link_to 'Create new stream', new_organization_stream_path(@organization), class: 'btn btn-primary align-self-center' if can? :create, @organization.streams.build %>
   </div>
   <%= render 'streams/job_status', stream: @organization.default_stream if can? :update, @organization.default_stream %>
   <%= render 'streams/stream_uploads', stream: @organization.default_stream %>
