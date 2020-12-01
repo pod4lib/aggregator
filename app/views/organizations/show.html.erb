@@ -26,38 +26,42 @@
   <h2 class="mt-5 mb-4">Organization management</h2>
   <div class="row">
     <div class="col">
-      <div class="card">
-        <div class="card-header d-flex justify-content-between">
-          <h2 class="h5 align-self-center mb-0">Access Tokens</h2>
+      <% if can? :create, @organization.allowlisted_jwts.build %>
+        <div class="card">
+          <div class="card-header d-flex justify-content-between">
+            <h2 class="h5 align-self-center mb-0">Access Tokens</h2>
+          </div>
+          <div class="card-body">
+            <p>Tokens you have generated that can be used to access the POD API.</p>
+            <%= link_to 'Manage tokens', organization_allowlisted_jwts_path(@organization), class: 'btn btn-sm btn-primary' %>
+          </div>
         </div>
-        <div class="card-body">
-          <p>Tokens you have generated that can be used to access the POD API.</p>
-          <%= link_to 'Manage tokens', organization_allowlisted_jwts_path(@organization), class: 'btn btn-sm btn-primary' if can? :create, @organization.allowlisted_jwts.build %>
-        </div>
-      </div>
+      <% end %>
 
-      <div class="card my-5">
-        <div class="card-header d-flex justify-content-between">
-          <h2 class="h5 align-self-center mb-0">Users</h2>
-          <%= link_to 'Invite', organization_invite_new_path(@organization), class: 'btn btn-sm btn-primary' if can? :invite, @organization %>
-        </div>
+      <% if can? :invite, @organization %>
+        <div class="card my-5">
+          <div class="card-header d-flex justify-content-between">
+            <h2 class="h5 align-self-center mb-0">Users</h2>
+            <%= link_to 'Invite', organization_invite_new_path(@organization), class: 'btn btn-sm btn-primary' %>
+          </div>
 
-        <ul class="list-group list-group-flush">
-          <% @organization.roles.each do |role| %>
-            <% role.users.each do |user| %>
-              <li class="list-group-item d-flex justify-content-between">
-                <%= content_tag :span, title: user do %>
-                  <%= mail_to user.email, (user.name.presence || user.email).truncate(50) %>
-                  <% if user.title.present? %>
-                    (<%= user.title %>)
+          <ul class="list-group list-group-flush">
+            <% @organization.roles.each do |role| %>
+              <% role.users.each do |user| %>
+                <li class="list-group-item d-flex justify-content-between">
+                  <%= content_tag :span, title: user do %>
+                    <%= mail_to user.email, (user.name.presence || user.email).truncate(50) %>
+                    <% if user.title.present? %>
+                      (<%= user.title %>)
+                    <% end %>
                   <% end %>
-                <% end %>
-                <%= link_to 'Remove', [@organization, user], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' if can? :manage, @organization %>
-              </li>
+                  <%= link_to 'Remove', [@organization, user], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' if can? :manage, @organization %>
+                </li>
+              <% end %>
             <% end %>
-          <% end %>
-        </ul>
-      </div>
+          </ul>
+        </div>
+      <% end %>
     </div>
 
     <div class="col">
