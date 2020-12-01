@@ -5,7 +5,7 @@
     <thead>
       <tr>
         <th colspan="2">Name</th>
-        <th style="width: 6ch;" class="text-right">Files</th>
+        <th class="text-right files-column">Files</th>
         <th class="text-right">Size</th>
         <th class="text-right">Unique records</th>
         <th class="text-right">Total records</th>
@@ -17,7 +17,7 @@
     <tbody>
       <% @organizations.each do |organization| %>
         <tr>
-          <td class="text-center">
+          <td class="text-center icon-column">
             <% if organization.icon.attached? %>
               <%= image_tag(organization.icon, class: 'icon-sm') %>
             <% end %>
@@ -25,7 +25,7 @@
           <td>
             <%= link_to organization.name, organization %>
           </td>
-          <td style="width: 6ch;" class="text-right"><%= organization.default_stream.files.size %></td>
+          <td class="text-right files-column"><%= organization.default_stream.files.size %></td>
           <td class="text-right"><%= number_to_human_size organization.default_stream.files.sum(:byte_size) %></td>
           <td class="text-right"><%= number_with_delimiter organization.latest_statistics.unique_record_count %></td>
           <td class="text-right"><%= number_with_delimiter organization.latest_statistics.record_count %></td>
@@ -37,7 +37,7 @@
       <tr class="table-info">
         <td></td>
         <td></td>
-        <td style="width: 6ch;" class="text-right"><%= number_with_delimiter(@organizations.sum {|org| org.default_stream.files.size }) %></td>
+        <td class="text-right files-column"><%= number_with_delimiter(@organizations.sum {|org| org.default_stream.files.size }) %></td>
         <td class="text-right"><%= number_to_human_size @organizations.sum {|org| org.default_stream.files.sum(:byte_size)} %></td>
         <td class="text-right"><%= number_with_delimiter(@organizations.sum { |org| org.latest_statistics.unique_record_count }) %></td>
         <td class="text-right"><%= number_with_delimiter(@organizations.sum { |org| org.latest_statistics.record_count })%></td>
