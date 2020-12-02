@@ -1,11 +1,12 @@
 <div class="container mt-3">
   <h2 class="display-4">Data Documentation</h2>
 
+  <h3 id="marc-data" class="hover-anchor">MARC data<a href="#marc-data">#</a></h3>
   <p>POD accepts MARC data in several different formats. In all cases, we require the data to be syntactically valid.</p>
 
   <p>NOTE: MARC data with non-standard tags or subfield codes may be removed or normalized for downstream use.</p>
 
-  <h3>Full dump formats</h3>
+  <h4>Full dump formats</h4>
   <table class="table table-striped">
     <thead>
       <tr>
@@ -39,7 +40,7 @@
     </tbody>
   </table>
 
-  <h3 class="mt-5 mb-3">Common errors</h3>
+  <h4 class="mt-5 mb-3">Common errors</h4>
 
   <dl>
     <dt>Records count is 0</dt>
@@ -53,4 +54,24 @@
     <dt class="text-monospace">MARC::DataField objects can't have ControlField tag '000')</dt>
     <dd>MARC fields 000 - 009 MUST use <span class="text-monospace">controlfield</span>, and MARC fields 010 - 999 MUST use <span class="text-monospace">datafield</span></dd>
   </dl>
+
+  <h3 id="delete-data" class="hover-anchor">Record delete data<a href="#delete-data">#</a></h3>
+  <p>Pod also supports the ability to upload a "delete" file for a stream. This delete file will specify MARC records that have been deleted</p>
+
+  <h4>Delete formats</h4>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Format</th><th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>text/plain</td><td>
+        <ul>
+          <li>A line delimted text file</li>
+          <li>Each line should consist of a marc001 identifier that should be deleted</li>
+        </ul>
+      </td></tr>
+    </tbody>
+  </table>
 </div>
