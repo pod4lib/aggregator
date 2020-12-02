@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 ##
-# Background job to create a full dump download for a resource (organization)
+# Background job to create a delta dump download for a resource (organization)
 class GenerateDeltaDumpJob < ApplicationJob
   def self.enqueue_all
     Organization.find_each { |org| GenerateDeltaDumpJob.perform_later(org) }
