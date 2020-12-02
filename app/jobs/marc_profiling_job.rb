@@ -49,6 +49,8 @@ class MarcProfilingJob < ApplicationJob
       progress.increment(batch.size)
 
       batch.each do |record|
+        id = record['001']&.value
+
         record_stats = Hash.new { |hash, key| hash[key] = 0 }
         record_subfield_stats = Hash.new { |hash, key| hash[key] = 0 }
 
@@ -59,14 +61,14 @@ class MarcProfilingJob < ApplicationJob
           instance_frequency[field.tag] += 1
 
           if field.is_a? MARC::ControlField
-            sampled_values[field.tag].add(field.value)
+            sampled_values[field.tag].add([field.value, id])
           else
-            sampled_values[field.tag].add(field.to_s)
+            sampled_values[field.tag].add([field.to_s, id])
             subfield_frequency = Hash.new { |hash, key| hash[key] = 0 }
 
             field.each do |subfield|
               key = "#{field.tag}$#{subfield.code}"
-              sampled_values[key].add(subfield.value)
+              sampled_values[key].add([subfield.value, id])
 
               record_frequency[key] += 1 if record_subfield_stats[key].zero?
               record_subfield_stats[key] += 1

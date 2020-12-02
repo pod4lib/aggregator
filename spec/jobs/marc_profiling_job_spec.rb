@@ -42,6 +42,16 @@ RSpec.describe MarcProfilingJob do
     expect(MarcProfile.last.sampled_values['001'].length).to eq 25
   end
 
+  it 'stores the 001 field with the sampled value' do
+    upload.files.first.blob.update(metadata: { count: 1 })
+    described_class.perform_now(upload.files.first.blob)
+
+    expect(MarcProfile.last.sampled_values['001'].first.length).to eq 2
+    value, id = MarcProfile.last.sampled_values['001'].first
+
+    expect(value).to eq id
+  end
+
   it 'tracks job statistics' do
     expect do
       described_class.perform_later(upload.files.first.blob)
