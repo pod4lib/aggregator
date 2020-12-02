@@ -227,7 +227,9 @@ class MarcRules
     '887' => %w[a 2]
   }.freeze
 
-  def self.common_field?(field)
+  def self.common_field?(field = nil)
+    return false if field.nil?
+
     COMMON_FIELDS.key?(field)
   end
 
