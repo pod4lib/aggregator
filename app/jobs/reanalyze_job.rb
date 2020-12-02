@@ -16,7 +16,6 @@ class ReanalyzeJob < ApplicationJob
       target.files.find_each { |x| ReanalyzeJob.perform_later(x.blob) }
     when ActiveStorage::Blob
       target.analyze_later
-      MarcProfilingJob.perform_later(target)
     end
   end
 end

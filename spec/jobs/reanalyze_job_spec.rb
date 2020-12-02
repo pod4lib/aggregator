@@ -40,9 +40,5 @@ RSpec.describe ReanalyzeJob, type: :job do
       described_class.perform_now(file)
       expect(file).to have_received(:analyze_later)
     end
-
-    it 'enqueues reprofiling the file' do
-      expect { described_class.perform_now(file) }.to enqueue_job(MarcProfilingJob).once.with(file)
-    end
   end
 end
