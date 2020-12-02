@@ -12,6 +12,7 @@
         <th>marc001</th>
         <th>Stream</th>
         <th>Download</th>
+        <th>Type</th>
       </tr>
     </thead>
 
@@ -20,7 +21,12 @@
         <tr>
           <td><%= marc_record.marc001 %></td>
           <td><%= link_to(marc_record.stream.display_name, organization_stream_path(@organization, marc_record.stream)) %></td>
-          <td><%= link_to('marc21', marc21_organization_marc_record_url(@organization, marc_record)) %>, <%= link_to('marcxml', marcxml_organization_marc_record_url(@organization, marc_record)) %></td>
+          <td>
+            <% unless marc_record.status == 'delete' %>
+              <%= link_to('marc21', marc21_organization_marc_record_url(@organization, marc_record)) %>, <%= link_to('marcxml', marcxml_organization_marc_record_url(@organization, marc_record)) %>
+            <% end %>
+          </td>
+          <td><%= marc_record.status %></td>
         </tr>
       <% end %>
     </tbody>
