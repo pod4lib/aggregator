@@ -14,4 +14,8 @@
   &.invalid::before {
     content: '❌';
   }
+
+  &.deletes::before {
+    content: '🗑';
+  }
 }

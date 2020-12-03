@@ -38,6 +38,8 @@ class Upload < ApplicationRecord
 
       format = service.identify
 
+      extract_marc_record_delete_metadata(file, &block) if format == :unknown && file.blob.content_type == 'text/plain'
+
       next if format == :unknown
 
       extract_marc_record_metadata(file, service, &block)
@@ -58,6 +60,21 @@ class Upload < ApplicationRecord
     return if url.blank?
 
     AttachRemoteFileToUploadJob.perform_later(self)
+  end
+
+  def extract_marc_record_delete_metadata(file)
+    return to_enum(:extract_marc_record_delete_metadata, file) unless block_given?
+
+    file.blob.open do |tmpfile|
+      tmpfile.each_line do |line|
+        yield MarcRecord.new(
+          marc001: line.strip,
+          file_id: file.id,
+          upload_id: id,
+          status: 'delete'
+        )
+      end
+    end
   end
 
   def extract_marc_record_metadata(file, service)
