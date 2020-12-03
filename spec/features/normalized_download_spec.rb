@@ -41,7 +41,7 @@ RSpec.describe 'Downloading normalzed files from POD', type: :feature do
       marc = MarcRecordService.marc_reader(StringIO.new(page.body), :marc21_gzip)
 
       expect(page.response_headers['Content-Disposition']).to eq 'attachment'
-      expect(marc.each_raw.count).to eq 4
+      expect(marc.each_raw.count).to eq 1
     end
 
     it 'provides augmented MARC records with POD and Organizational provenance' do
@@ -67,7 +67,7 @@ RSpec.describe 'Downloading normalzed files from POD', type: :feature do
 
       expect(Ahoy::Event.last.properties.with_indifferent_access).to include(
         attachment_name: 'marc21',
-        byte_size: 891,
+        byte_size: 844,
         filename: "#{organization.slug}-2020-01-01-marc21.mrc.gz",
         organization_id: organization.slug
       )

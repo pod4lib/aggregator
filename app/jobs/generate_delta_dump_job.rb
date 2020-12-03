@@ -7,7 +7,7 @@ class GenerateDeltaDumpJob < ApplicationJob
     Organization.find_each { |org| GenerateDeltaDumpJob.perform_later(org) }
   end
 
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
   def perform(organization)
     now = Time.zone.now
     full_dump = organization.default_stream.current_full_dump
@@ -19,14 +19,24 @@ class GenerateDeltaDumpJob < ApplicationJob
     return unless uploads.any?
 
     delta_dump = full_dump.deltas.create(stream_id: full_dump.stream_id)
+    base_name = "#{organization.slug}-#{Time.zone.today}"
 
-    with_output_streams("#{organization.slug}-#{Time.zone.today}", attach_to: delta_dump) do |errata_file, xml_io, binary_io|
+    with_output_streams(base_name, attach_to: delta_dump) do |errata_file, xml_io, binary_io, deletes_io|
+      # run through the files to find out which records to output, delete, etc.
+      hash = current_marc_records(uploads)
+
       xmlwriter = MARC::XMLWriter.new(xml_io)
 
       uploads.each do |upload|
         upload.each_marc_record_metadata.each do |record|
-          xmlwriter.write(record.augmented_marc)
-          binary_io.write(split_marc(record.augmented_marc))
+          next unless hash.dig(record.marc001, 'file_id') == record.file_id
+
+          if hash.dig(record.marc001, 'status') == 'delete'
+            deletes_io.puts(record.marc001)
+          else
+            xmlwriter.write(record.augmented_marc)
+            binary_io.write(split_marc(record.augmented_marc))
+          end
         rescue StandardError => e
           errata_file.puts("#{record['001']}: #{e}")
         end
@@ -37,7 +47,19 @@ class GenerateDeltaDumpJob < ApplicationJob
 
     full_dump.update(last_delta_dump_at: now)
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+  # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+
+  def current_marc_records(uploads)
+    hash = {}
+
+    uploads.each do |upload|
+      upload.each_marc_record_metadata.each do |record|
+        hash[record.marc001] = record.attributes.slice('file_id', 'status')
+      end
+    end
+
+    hash
+  end
 
   # rubocop:disable Naming/MethodParameterName
   def with_tempory_file(name, attach_to:, as:)
@@ -63,7 +85,9 @@ class GenerateDeltaDumpJob < ApplicationJob
     with_gzipped_temporary_file("#{base_name}-errata.txt.gz", attach_to: attach_to, as: :errata) do |errata_file|
       with_gzipped_temporary_file("#{base_name}-marcxml.xml.gz", attach_to: attach_to, as: :marcxml) do |xml_io|
         with_gzipped_temporary_file("#{base_name}-marc21.mrc.gz", attach_to: attach_to, as: :marc21) do |binary_io|
-          yield errata_file, xml_io, binary_io
+          with_tempory_file("#{base_name}-deletes.del", attach_to: attach_to, as: :deletes) do |deletes_io|
+            yield errata_file, xml_io, binary_io, deletes_io
+          end
         end
       end
     end

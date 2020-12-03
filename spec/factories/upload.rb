@@ -111,6 +111,17 @@ FactoryBot.define do
       end
     end
 
+    trait :deletes do
+      after(:build) do |upload|
+        upload.files.attach(
+          io: File.open(
+            Rails.root.join('spec/fixtures/deletes.txt')
+          ),
+          filename: 'deletes.txt', content_type: 'text/plain'
+        )
+      end
+    end
+
     trait :tar_gz do
       after(:build) do |upload|
         upload.files.attach(

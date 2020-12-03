@@ -18,10 +18,14 @@ class GenerateFullDumpJob < ApplicationJob
     full_dump = organization.default_stream.normalized_dumps.build(last_full_dump_at: now, last_delta_dump_at: now)
 
     with_output_streams("#{organization.slug}-#{Time.zone.today}", attach_to: full_dump) do |errata_file, xml_io, binary_io|
+      hash = current_marc_records(organization.default_stream.uploads)
+
       xmlwriter = MARC::XMLWriter.new(xml_io)
 
       organization.default_stream.uploads.each do |upload|
         upload.each_marc_record_metadata.each do |record|
+          next unless hash.dig(record.marc001, 'file_id') == record.file_id || hash.dig(record.marc001, 'status') == 'delete'
+
           xmlwriter.write(record.augmented_marc)
           binary_io.write(split_marc(record.augmented_marc))
         rescue StandardError => e
@@ -37,6 +41,18 @@ class GenerateFullDumpJob < ApplicationJob
     GenerateDeltaDumpJob.perform_later(organization)
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+
+  def current_marc_records(uploads)
+    hash = {}
+
+    uploads.each do |upload|
+      upload.each_marc_record_metadata.each do |record|
+        hash[record.marc001] = record.attributes.slice('file_id', 'status')
+      end
+    end
+
+    hash
+  end
 
   # rubocop:disable Naming/MethodParameterName
   def with_gzipped_temporary_file(name, attach_to:, as:)
