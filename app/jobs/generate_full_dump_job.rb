@@ -53,8 +53,8 @@ class GenerateFullDumpJob < ApplicationJob
 
   def with_output_streams(base_name, attach_to:)
     with_gzipped_temporary_file("#{base_name}-errata.txt.gz", attach_to: attach_to, as: :errata) do |errata_file|
-      with_gzipped_temporary_file("#{base_name}-marcxml.xml.gz", attach_to: attach_to, as: :full_dump_xml) do |xml_io|
-        with_gzipped_temporary_file("#{base_name}-marc21.mrc.gz", attach_to: attach_to, as: :full_dump_binary) do |binary_io|
+      with_gzipped_temporary_file("#{base_name}-marcxml.xml.gz", attach_to: attach_to, as: :marcxml) do |xml_io|
+        with_gzipped_temporary_file("#{base_name}-marc21.mrc.gz", attach_to: attach_to, as: :marc21) do |binary_io|
           yield errata_file, xml_io, binary_io
         end
       end

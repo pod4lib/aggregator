@@ -28,7 +28,7 @@ RSpec.describe GenerateFullDumpJob, type: :job do
   it 'contains all the MARC records from the organization' do
     described_class.perform_now(organization)
 
-    download_and_uncompress(organization.default_stream.normalized_dumps.last.full_dump_xml) do |file|
+    download_and_uncompress(organization.default_stream.normalized_dumps.last.marcxml) do |file|
       expect(Nokogiri::XML(file).xpath('//marc:record', marc: 'http://www.loc.gov/MARC21/slim').count).to eq 3
       expect(file.rewind && file.read).to include '</collection>'
     end

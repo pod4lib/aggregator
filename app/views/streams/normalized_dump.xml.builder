@@ -14,9 +14,9 @@ xml.urlset(
     xml.url(removed_since_previous_stream_organization_stream_url(@stream))
 
     full = if params[:flavor] == 'marc21'
-             @normalized_dump.full_dump_binary
+             @normalized_dump.marc21
            else
-             @normalized_dump.full_dump_xml
+             @normalized_dump.marcxml
            end
 
     xml.url do
@@ -32,13 +32,13 @@ xml.urlset(
 
     # deltas
 
-    deltas = if params[:flavor] == 'marc21'
-               @normalized_dump.delta_dump_binary
+    @normalized_dump.deltas.each do |delta|
+      file = if params[:flavor] == 'marc21'
+               delta.marc21
              else
-               @normalized_dump.delta_dump_xml
+               delta.marcxml
              end
 
-    deltas.each do |file|
       xml.url do
         xml.tag!(
           'rs:md',

@@ -66,7 +66,7 @@ RSpec.describe 'Downloading normalzed files from POD', type: :feature do
       end.to change(Ahoy::Event, :count).by(1)
 
       expect(Ahoy::Event.last.properties.with_indifferent_access).to include(
-        attachment_name: 'full_dump_binary',
+        attachment_name: 'marc21',
         byte_size: 891,
         filename: "#{organization.slug}-2020-01-01-marc21.mrc.gz",
         organization_id: organization.slug
