@@ -29,6 +29,8 @@ class GenerateDeltaDumpJob < ApplicationJob
           errata_file.puts("#{record['001']}: #{e}")
         end
       end
+
+      xmlwriter.close
     end
 
     full_dump.update(last_delta_dump_at: now)
