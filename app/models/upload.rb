@@ -20,6 +20,11 @@ class Upload < ApplicationRecord
   has_many_attached :files
 
   after_save_commit :perform_extract_marc_record_metadata_job
+  after_save_commit :perform_extract_files_job, if: :active?
+
+  def active?
+    status == 'active'
+  end
 
   def name
     super.presence || created_at&.iso8601
@@ -50,6 +55,10 @@ class Upload < ApplicationRecord
 
   def perform_extract_marc_record_metadata_job
     ExtractMarcRecordMetadataJob.perform_later(self)
+  end
+
+  def perform_extract_files_job
+    ExtractFilesJob.perform_later(self)
   end
 
   def valid_url

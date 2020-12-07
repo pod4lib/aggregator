@@ -50,19 +50,20 @@ FactoryBot.define do
 
     trait :multple_files do
       after(:build) do |upload|
-        upload.files.attach(
-          io: File.open(
-            Rails.root.join('spec/fixtures/1297245.marc')
-          ),
-          filename: '1297245.mrc', content_type: 'application/marc'
-        )
-
-        upload.files.attach(
-          io: File.open(
-            Rails.root.join('spec/fixtures/12345.marcxml')
-          ),
-          filename: '1297245.marcxml', content_type: 'application/marcxml+xml'
-        )
+        upload.files.attach([
+                              {
+                                io: File.open(
+                                  Rails.root.join('spec/fixtures/1297245.marc')
+                                ),
+                                filename: '1297245.mrc', content_type: 'application/marc'
+                              },
+                              {
+                                io: File.open(
+                                  Rails.root.join('spec/fixtures/12345.marcxml')
+                                ),
+                                filename: '1297245.marcxml', content_type: 'application/marcxml+xml'
+                              }
+                            ])
       end
     end
 
@@ -85,6 +86,36 @@ FactoryBot.define do
           ),
           filename: 'stanford-50.mrc.gz', content_type: 'application/octet-stream'
         )
+      end
+    end
+
+    trait :tar_gz do
+      after(:build) do |upload|
+        upload.files.attach(
+          io: File.open(
+            Rails.root.join('spec/fixtures/multifile-tar-gz.tar.gz')
+          ),
+          filename: 'multifile-tar-gz.tar', content_type: 'application/octet-stream'
+        )
+      end
+    end
+
+    trait :mixed_file_with_tar_gz do
+      after(:build) do |upload|
+        upload.files.attach([
+                              {
+                                io: File.open(
+                                  Rails.root.join('spec/fixtures/1297245.marc')
+                                ),
+                                filename: '1297245.mrc', content_type: 'application/marc'
+                              },
+                              {
+                                io: File.open(
+                                  Rails.root.join('spec/fixtures/multifile-tar-gz.tar.gz')
+                                ),
+                                filename: 'multifile-tar-gz.tar', content_type: 'application/octet-stream'
+                              }
+                            ])
       end
     end
   end
