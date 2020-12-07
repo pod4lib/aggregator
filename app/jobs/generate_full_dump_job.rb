@@ -33,6 +33,8 @@ class GenerateFullDumpJob < ApplicationJob
     end
 
     full_dump.save!
+
+    GenerateDeltaDumpJob.perform_later(organization)
   end
   # rubocop:enable Metrics/AbcSize
 
