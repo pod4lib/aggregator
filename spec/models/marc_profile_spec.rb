@@ -3,5 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe MarcProfile, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  let(:upload) { FactoryBot.create(:upload, :binary_marc) }
+  let(:blob) { upload.files.first.blob }
+
+  it 'can be created without an upload' do
+    expect { described_class.create(blob: blob) }.to change(described_class, :count).by(1)
+  end
 end
