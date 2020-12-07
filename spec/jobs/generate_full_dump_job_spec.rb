@@ -19,6 +19,12 @@ RSpec.describe GenerateFullDumpJob, type: :job do
     expect(NormalizedDump.last).to have_attributes stream_id: organization.default_stream.id
   end
 
+  it 'kicks off a delta dump' do
+    expect do
+      described_class.perform_now(organization)
+    end.to enqueue_job GenerateDeltaDumpJob
+  end
+
   it 'contains all the MARC records from the organization' do
     described_class.perform_now(organization)
 
