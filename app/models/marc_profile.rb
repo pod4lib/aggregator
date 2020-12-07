@@ -2,7 +2,7 @@
 
 # Stored MARC dataset profiling data
 class MarcProfile < ApplicationRecord
-  belongs_to :upload
+  belongs_to :upload, optional: true
   belongs_to :blob, class_name: 'ActiveStorage::Blob'
   attr_writer :count
 

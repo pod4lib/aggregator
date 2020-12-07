@@ -90,7 +90,7 @@ class MarcProfilingJob < ApplicationJob
     end
 
     profile = MarcProfile.where(blob: blob).first_or_initialize do |p|
-      p.upload = blob.attachments.first.record
+      p.upload = blob.attachments.first.record if blob.attachments.first.record.is_a? Upload
     end
 
     profile.update(
