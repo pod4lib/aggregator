@@ -26,6 +26,7 @@ RSpec.describe GenerateDeltaDumpJob, type: :job do
 
     download_and_uncompress(organization.default_stream.normalized_dumps.last.delta_dump_xml.last) do |file|
       expect(Nokogiri::XML(file).xpath('//marc:record', marc: 'http://www.loc.gov/MARC21/slim').count).to eq 1
+      expect(file.rewind && file.read).to include '</collection>'
     end
   end
 
