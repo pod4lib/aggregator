@@ -4,7 +4,12 @@
 # Background job to create a full dump download for a resource (organization)
 class GenerateFullDumpJob < ApplicationJob
   def self.enqueue_all
-    Organization.find_each { |org| GenerateFullDumpJob.perform_later(org) }
+    Organization.find_each do |org|
+      full_dump = org.default_stream.normalized_dumps.last
+      next if full_dump && org.default_stream.uploads.where(updated_at: full_dump.last_full_dump_at...Time.zone.now).none?
+
+      GenerateFullDumpJob.perform_later(org)
+    end
   end
 
   # rubocop:disable Metrics/AbcSize
