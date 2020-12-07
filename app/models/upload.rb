@@ -48,6 +48,8 @@ class Upload < ApplicationRecord
       next if format == :unknown
 
       extract_marc_record_metadata(file, service, &block)
+    rescue StandardError => e
+      Honeybadger.notify(e)
     end
   end
 
