@@ -7,7 +7,7 @@ class GenerateDeltaDumpJob < ApplicationJob
     Organization.find_each { |org| GenerateDeltaDumpJob.perform_later(org) }
   end
 
-  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def perform(organization)
     now = Time.zone.now
     full_dump = organization.default_stream.normalized_dumps.last
@@ -35,7 +35,7 @@ class GenerateDeltaDumpJob < ApplicationJob
 
     full_dump.update(last_delta_dump_at: now)
   end
-  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   # rubocop:disable Naming/MethodParameterName
   def with_gzipped_temporary_file(name, attach_to:, as:)

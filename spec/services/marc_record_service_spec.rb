@@ -41,6 +41,15 @@ RSpec.describe MarcRecordService do
         expect(metadata).to include bytecount: 0, length: 1407, index: 0
       end
     end
+
+    context 'with a "delete" record' do
+      let(:upload) { FactoryBot.create(:upload, :deleted_binary_marc) }
+
+      it 'sets the delete status for the record' do
+        _record, metadata = service.each_with_metadata.first
+        expect(metadata).to include status: 'delete'
+      end
+    end
   end
 
   context 'with a marcxml file' do
@@ -71,6 +80,15 @@ RSpec.describe MarcRecordService do
       it 'includes information about the index' do
         _record, metadata = service.each_with_metadata.first
         expect(metadata).to include index: 0
+      end
+    end
+
+    context 'with a "delete" record' do
+      let(:upload) { FactoryBot.create(:upload, :deleted_marc_xml) }
+
+      it 'sets the delete status for the record' do
+        _record, metadata = service.each_with_metadata.first
+        expect(metadata).to include status: 'delete'
       end
     end
   end
