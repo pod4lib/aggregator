@@ -13,7 +13,12 @@
   <p class="lead">Size: <%= number_to_human_size @blob.byte_size %></p>
   <p class="lead">Records: <%= number_with_delimiter @blob.metadata['count'] || 0 %></p>
 
-  <%= render 'marc_profiles/summary', marc_profile: @marc_profile %>
-  <%= render 'marc_profiles/histogram', marc_profile: @marc_profile %>
-  <%= render 'marc_profiles/fields', marc_profile: @marc_profile %>
+
+  <% if @marc_profile %>
+    <%= render 'marc_profiles/summary', marc_profile: @marc_profile %>
+    <%= render 'marc_profiles/histogram', marc_profile: @marc_profile %>
+    <%= render 'marc_profiles/fields', marc_profile: @marc_profile %>
+  <% else %>
+    <div class="alert alert-info">No MARC profiling data found</div>
+  <% end %>
 </div>

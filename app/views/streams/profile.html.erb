@@ -7,7 +7,15 @@
     <h1><%= @stream.display_name %></h1>
   </div>
 
-  <%= render 'marc_profiles/summary', marc_profile: @stream.marc_profile %>
-  <%= render 'marc_profiles/histogram', marc_profile: @stream.marc_profile %>
-  <%= render 'marc_profiles/fields', marc_profile: @stream.marc_profile %>
+  <% if @stream.marc_profile %>
+    <%= render 'marc_profiles/summary', marc_profile: @stream.marc_profile %>
+    <%= render 'marc_profiles/histogram', marc_profile: @stream.marc_profile %>
+    <%= render 'marc_profiles/fields', marc_profile: @stream.marc_profile %>
+  <% else %>
+    <div class="alert alert-info">
+      No MARC profiling data found.<br />
+
+      <%= link_to 'Reanalyze', reanalyze_organization_stream_path(@organization, @stream), method: :post, class: 'btn btn-secondary align-self-center mt-3' if can?(:reanalyze, @stream) %>
+    </div>
+  <% end %>
 </div>

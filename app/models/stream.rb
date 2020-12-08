@@ -36,13 +36,18 @@ class Stream < ApplicationRecord
   end
 
   def marc_profile
+    any = false
     profile = MarcProfile.new(count: 0, histogram_frequency: {}, record_frequency: {}, sampled_values: {})
 
     files.find_each do |blob|
       blob_profile = MarcProfile.find_by(blob_id: blob.id)
+      next unless blob_profile
 
-      profile.deep_merge!(blob_profile) if blob_profile
+      any = true
+      profile.deep_merge!(blob_profile)
     end
+
+    return unless any
 
     profile
   end
