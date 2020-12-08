@@ -157,10 +157,18 @@ class MarcRecordService
 
     return each_with_metadata_for_marc21(&block) if marc21?
 
-    each.with_index { |record, index| yield record, { index: index } }
+    each.with_index { |record, index| yield record, extract_record_metadata(record).merge(index: index) }
   end
 
   private
+
+  def extract_record_metadata(record)
+    metadata = {}
+
+    metadata[:status] = 'delete' if record.leader[5] == 'd'
+
+    metadata
+  end
 
   def with_reader
     blob.open do |tmpfile|
@@ -184,7 +192,7 @@ class MarcRecordService
       if records_to_combine.length == 1
         yield(records_to_combine.first[:marc], records_to_combine.first.except(:marc))
       else
-        bytes = records_to_combine.pluck(:marc_bytes).join('')
+        bytes = records_to_combine.pluck(:marc_bytes).join
 
         record = merge_records(*records_to_combine.pluck(:marc))
 
@@ -209,12 +217,14 @@ class MarcRecordService
           record = MARC::Reader.decode(bytes, external_encoding: 'UTF-8', invalid: :replace)
           with_honeybadger_context(marc001: record['001']&.value, bytecount: bytecount, index: index) do
             yield(
-              bytecount: bytecount,
-              length: length,
-              index: index,
-              checksum: Digest::MD5.hexdigest(bytes),
-              marc_bytes: bytes,
-              marc: record
+              extract_record_metadata(record).merge(
+                bytecount: bytecount,
+                length: length,
+                index: index,
+                checksum: Digest::MD5.hexdigest(bytes),
+                marc_bytes: bytes,
+                marc: record
+              )
             )
             bytecount += length
           end
