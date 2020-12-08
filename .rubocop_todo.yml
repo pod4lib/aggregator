@@ -5,12 +5,3 @@
 # one by one as the offenses are removed from the code base.
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
-
-# Offense count: 8
-# Configuration parameters: CountComments, CountAsOne, ExcludedMethods.
-Metrics/MethodLength:
-  Max: 22
-
-# Offense count: 11
-RSpec/MultipleExpectations:
-  Max: 2

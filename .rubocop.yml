@@ -39,6 +39,7 @@ Layout/LineLength:
   Max: 130
 
 Metrics/MethodLength:
+  Max: 15
   Exclude:
     - 'app/models/ability.rb'
 
@@ -54,5 +55,6 @@ RSpec/ExampleLength:
     - 'spec/features/**/*'
 
 RSpec/MultipleExpectations:
+  Max: 2
   Exclude:
     - 'spec/features/**/*'

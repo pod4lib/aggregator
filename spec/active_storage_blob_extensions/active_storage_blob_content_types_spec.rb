@@ -3,33 +3,32 @@
 require 'spec_helper'
 require 'active_storage_blob_content_types'
 
-def blob_class
-  Class.new do
-    attr_reader :analyzer, :content_type, :metadata
-
-    def initialize(content_type, analyzer)
-      @content_type = content_type
-      @analyzer = analyzer
-      @metadata = {}
-    end
-
-    def extract_metadata_via_analyzer
-      {
-        content_type: content_type
-      }
-    end
-
-    def update!(args)
-      @content_type = args[:content_type]
-    end
-
-    include ActiveStorageBlobContentTypes
-  end
-end
-
 RSpec.describe ActiveStorageBlobContentTypes do
   let(:content_type) { nil }
   let(:analyzer) { nil }
+  let(:blob_class) do
+    Class.new do
+      attr_reader :analyzer, :content_type, :metadata
+
+      def initialize(content_type, analyzer)
+        @content_type = content_type
+        @analyzer = analyzer
+        @metadata = {}
+      end
+
+      def extract_metadata_via_analyzer
+        {
+          content_type: content_type
+        }
+      end
+
+      def update!(args)
+        @content_type = args[:content_type]
+      end
+
+      include ActiveStorageBlobContentTypes
+    end
+  end
   let(:test_class) { blob_class.new(content_type, analyzer) }
 
   describe '#analyze' do

@@ -174,7 +174,7 @@ class MarcRecordService
     self.class.marc_reader(io, identify)
   end
 
-  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def each_with_metadata_for_marc21
     return to_enum(:each_with_metadata_for_marc21) unless block_given?
 
@@ -197,7 +197,6 @@ class MarcRecordService
       end
     end
   end
-  # rubocop:enable Metrics/AbcSize
 
   def each_raw_record_with_metadata_for_marc21
     return to_enum(:each_raw_record_with_metadata_for_marc21) unless block_given?
@@ -223,6 +222,7 @@ class MarcRecordService
       end
     end
   end
+  # rubocop:enable Metrics/AbcSize,Metrics/MethodLength
 
   def identify_gzip
     reader = Zlib::GzipReader.new(StringIO.new(download_chunk(0...1024)))
