@@ -19,33 +19,37 @@ class GenerateDeltaDumpJob < ApplicationJob
     return unless uploads.any?
 
     delta_dump = full_dump.deltas.create(stream_id: full_dump.stream_id)
-    base_name = "#{organization.slug}-#{Time.zone.today}"
 
-    with_output_streams(base_name, attach_to: delta_dump) do |errata_file, xml_io, binary_io, deletes_io|
+    writer = MarcRecordWriterService.new("#{organization.slug}-#{Time.zone.today}-delta")
+
+    begin
       # run through the files to find out which records to output, delete, etc.
       hash = current_marc_records(uploads)
-
-      xmlwriter = MARC::XMLWriter.new(xml_io)
 
       uploads.each do |upload|
         upload.each_marc_record_metadata.each do |record|
           next unless hash.dig(record.marc001, 'file_id') == record.file_id
 
           if hash.dig(record.marc001, 'status') == 'delete'
-            deletes_io.puts(record.marc001)
+            writer.write_delete(record)
           else
-            xmlwriter.write(record.augmented_marc)
-            binary_io.write(split_marc(record.augmented_marc))
+            writer.write_marc_record(record)
           end
-        rescue StandardError => e
-          errata_file.puts("#{record['001']}: #{e}")
         end
       end
 
-      xmlwriter.close
-    end
+      writer.finalize
 
-    full_dump.update(last_delta_dump_at: now)
+      writer.files.each do |as, file|
+        delta_dump.public_send(as).attach(io: File.open(file), filename: as)
+      end
+
+      delta_dump.save!
+      full_dump.update(last_delta_dump_at: now)
+    ensure
+      writer.close
+      writer.unlink
+    end
   end
   # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
 
@@ -59,45 +63,5 @@ class GenerateDeltaDumpJob < ApplicationJob
     end
 
     hash
-  end
-
-  # rubocop:disable Naming/MethodParameterName
-  def with_tempory_file(name, attach_to:, as:)
-    Tempfile.create(name, binmode: true) do |file|
-      yield file
-
-      file.close
-      attach_to.public_send(as).attach(io: File.open(file), filename: name)
-    end
-  end
-
-  def with_gzipped_temporary_file(name, attach_to:, as:)
-    with_tempory_file(name, attach_to: attach_to, as: as) do |file|
-      gzip_io = Zlib::GzipWriter.new(file)
-      yield gzip_io
-
-      gzip_io.close
-    end
-  end
-  # rubocop:enable Naming/MethodParameterName
-
-  def with_output_streams(base_name, attach_to:)
-    with_gzipped_temporary_file("#{base_name}-errata.txt.gz", attach_to: attach_to, as: :errata) do |errata_file|
-      with_gzipped_temporary_file("#{base_name}-marcxml.xml.gz", attach_to: attach_to, as: :marcxml) do |xml_io|
-        with_gzipped_temporary_file("#{base_name}-marc21.mrc.gz", attach_to: attach_to, as: :marc21) do |binary_io|
-          with_tempory_file("#{base_name}-deletes.del", attach_to: attach_to, as: :deletes) do |deletes_io|
-            yield errata_file, xml_io, binary_io, deletes_io
-          end
-        end
-      end
-    end
-  end
-
-  def split_marc(marc)
-    marc.to_marc
-  rescue MARC::Exception => e
-    return CustomMarcWriter.encode(marc) if e.message.include? "Can't write MARC record in binary format, as a length/offset"
-
-    raise e
   end
 end

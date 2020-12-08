@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Downloading normalzed files from POD', type: :feature do
+RSpec.describe 'Downloading normalized files from POD', type: :feature do
   let(:organization) { FactoryBot.create(:organization, code: 'best-org') }
   let(:user) { FactoryBot.create(:user) }
 
@@ -29,15 +29,15 @@ RSpec.describe 'Downloading normalzed files from POD', type: :feature do
     it 'generates binary & xml full dump files and provides a link to them' do
       visit organization_url(organization)
 
-      expect(page).to have_link "#{organization.slug}-2020-01-01-marc21.mrc.gz"
-      expect(page).to have_link "#{organization.slug}-2020-01-01-marcxml.xml.gz"
+      expect(page).to have_link "#{organization.slug}-2020-01-01-full-marc21.mrc.gz"
+      expect(page).to have_link "#{organization.slug}-2020-01-01-full-marcxml.xml.gz"
     end
 
     it 'provides all MARC records that have been uploaded to the default stream gzipped into one dump file' do
       visit organization_url(organization)
 
       # Note, this won't work in a driver other that Rack::Test w/o some other magic
-      click_link "#{organization.slug}-2020-01-01-marc21.mrc.gz"
+      click_link "#{organization.slug}-2020-01-01-full-marc21.mrc.gz"
       marc = MarcRecordService.marc_reader(StringIO.new(page.body), :marc21_gzip)
 
       expect(page.response_headers['Content-Disposition']).to eq 'attachment'
@@ -48,7 +48,7 @@ RSpec.describe 'Downloading normalzed files from POD', type: :feature do
       visit organization_url(organization)
 
       # Note, this won't work in a driver other that Rack::Test w/o some other magic
-      click_link "#{organization.slug}-2020-01-01-marc21.mrc.gz"
+      click_link "#{organization.slug}-2020-01-01-full-marc21.mrc.gz"
       records = MarcRecordService.marc_reader(StringIO.new(page.body), :marc21_gzip)
 
       records.each do |marc|
@@ -62,13 +62,13 @@ RSpec.describe 'Downloading normalzed files from POD', type: :feature do
 
       expect do
         # Note, this won't work in a driver other that Rack::Test w/o some other magic
-        click_link "#{organization.slug}-2020-01-01-marc21.mrc.gz"
+        click_link "#{organization.slug}-2020-01-01-full-marc21.mrc.gz"
       end.to change(Ahoy::Event, :count).by(1)
 
       expect(Ahoy::Event.last.properties.with_indifferent_access).to include(
         attachment_name: 'marc21',
         byte_size: 844,
-        filename: "#{organization.slug}-2020-01-01-marc21.mrc.gz",
+        filename: "#{organization.slug}-2020-01-01-full-marc21.mrc.gz",
         organization_id: organization.slug
       )
 
