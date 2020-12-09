@@ -35,6 +35,7 @@ class ProxyController < ActiveStorage::BaseController
 
   # rubocop:disable Naming/AccessorMethodName
   def set_content_headers_from(blob)
+    response.headers['Content-Length'] = blob.byte_size
     response.headers['Content-Type'] = blob.content_type
     response.headers['Content-Disposition'] = 'attachment'
     response.headers['Accept-Ranges'] = 'bytes'
@@ -43,6 +44,7 @@ class ProxyController < ActiveStorage::BaseController
 
   def set_content_range_header(range, size)
     # TODO: this header is only compliant on single ranges
+    response.headers['Content-Length'] = range.size
     response.headers['Content-Range'] = "bytes #{range.first}-#{range.end}/#{size}"
   end
 
