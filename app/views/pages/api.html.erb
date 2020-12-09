@@ -9,7 +9,7 @@
       <table class="table">
         <thead><th>Name</th><th>Description</th></thead>
         <tbody>
-          <tr><td class="text-monospace">upload[files][]</td><td>Attach one or more files; see the <%= link_to 'data documentation', pages_url(id: 'data') %> for more information about accepted file types.</td></tr>
+          <tr><td class="text-monospace">upload[files][]</td><td>Attach one or more files; see the <%= link_to 'data documentation', pages_url(id: 'data') %> for more information about accepted file types. Each uploaded file SHOULD include a <code>Content-Type</code> (one of: <code>application/marc</code>, <code>application/marcxml+xml</code>, or <code>text/plain</code> (for plain text deletes)).</td></tr>
           <tr><td class="text-monospace">upload[url]</td><td>"Upload" from an external URL; POD will attempt to download the file from this URL</td></tr>
           <tr><td class="text-monospace">stream</td><td>(optional) a locally-defined value used to group multiple uploads together</td></tr>
         </tbody>
@@ -33,11 +33,12 @@
     $ export ACCESS_TOKEN="..." # put your access token here
     $ export STREAM_ID=$(date +%F) #  or some other identifier for the stream
 
-    # Upload the files in the current directory in a single upload
-    $ ls -d * | xargs -I{} printf "\-F 'upload[files][]=@%s' " {} {} | xargs curl -H "Authorization: Bearer $ACCESS_TOKEN" --url <%= organization_uploads_url(organization_id: '$ORG_CODE', stream: 'STREAM_ID').sub('STREAM_ID', '$STREAM_ID') %>
+    # Upload the e.g. MARC21 files in the current directory in a single upload
+    $ ls -d * | xargs -I{} printf "\-F 'upload[files][]=@%s;type=application/marc' " {} {} | xargs curl -H "Authorization: Bearer $ACCESS_TOKEN" --url <%= organization_uploads_url(organization_id: '$ORG_CODE', stream: 'STREAM_ID').sub('STREAM_ID', '$STREAM_ID') %>
+    # use application/marcxml+xml for MARCXML, and text/plain for newline-delimited deletes.
 
     # OR, upload multiple files in parallel
-    $ ls -d * | xargs -I{} curl -F 'upload[files][]=@{}' -H 'Authorization: Bearer $ACCESS_TOKEN' --url <%= organization_uploads_url(organization_id: '$ORG_CODE', stream: 'STREAM_ID').sub('STREAM_ID', '$STREAM_ID') %>
+    $ ls -d * | xargs -I{} curl -F 'upload[files][]=@{};type=application/marc' -H 'Authorization: Bearer $ACCESS_TOKEN' --url <%= organization_uploads_url(organization_id: '$ORG_CODE', stream: 'STREAM_ID').sub('STREAM_ID', '$STREAM_ID') %>
     # Make the full dump available for harvesting
     $ curl -X POST -H "Authorization: Bearer $ACCESS_TOKEN" --url <%= make_default_organization_streams_url(organization_id: '$ORG_CODE', stream: 'STREAM_ID').sub('STREAM_ID', '$STREAM_ID') %>
   </pre>

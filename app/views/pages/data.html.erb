@@ -68,13 +68,14 @@
     <tbody>
       <tr><td>text/plain</td><td>
         <ul>
-          <li>A line delimted text file</li>
+          <li>A new-line delimited text file, either with a file name ending in <span class="text-monospace">.del.txt</span> or uploaded to the API (using e.g. curl) with the <span class="text-monospace">text/plain</span> mime type (e.g. <span class="text-monospace">curl -F 'upload[files][]=@20201209-deletes.del;type=text/plain'</span>)</li>
           <li>Each line should consist of a marc001 identifier that should be deleted</li>
         </ul>
       </td></tr>
       <tr><td>MARC21</td><td>
         <ul>
           <li>Record specified as deleted by using <span class="text-monospace font-weight-bolder">d</span> in position <span class="text-monospace font-weight-bolder">05</span> for the MARC Leader</li>
+          <li>At a minimum, each record should also contain a MARC <span class="text-monospace font-weight-bolder">001</span> field identifying the record to delete</li>
           <li>See other <a href="#marc-data">MARC data</a> notes</li>
         </ul>
 
@@ -82,6 +83,7 @@
       <tr><td>MarcXML</td><td>
         <ul>
           <li>Record specified as deleted by using <span class="text-monospace font-weight-bolder">d</span> in position <span class="text-monospace font-weight-bolder">05</span> for the MARC Leader</li>
+          <li>At a minimum, each record should also contain a MARC <span class="text-monospace font-weight-bolder">001</span> field identifying the record to delete</li>
           <li>See other <a href="#marc-data">MARC data</a> notes</li>
         </ul>
 
