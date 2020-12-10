@@ -30,7 +30,7 @@ Rails.application.routes.draw do
     end
     resources :uploads, except: [:update] do
       member do
-        get 'info/:blob_id', to: 'uploads#info', as: :file_info
+        get 'info/:attachment_id', to: 'uploads#info', as: :file_info
       end
     end
     resources :organization_users, as: 'users', only: :destroy
