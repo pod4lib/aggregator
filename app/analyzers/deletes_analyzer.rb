@@ -4,7 +4,7 @@
 # https://edgeapi.rubyonrails.org/classes/ActiveStorage/Analyzer/ImageAnalyzer.html#method-i-metadata
 class DeletesAnalyzer < ActiveStorage::Analyzer
   def self.accept?(blob)
-    MarcRecordService.new(blob).identify == :unknown && blob.content_type == 'text/plain'
+    MarcRecordService.new(blob).identify == :delete
   end
 
   def metadata
