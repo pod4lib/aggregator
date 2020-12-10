@@ -42,7 +42,7 @@ class Ability
     if user.roles.any?
       can :read, ActiveStorage::Attachment, { record: { organization: { public: true } } }
       can :read, MarcRecord, upload: { organization: { public: true } }
-      can :read, [Stream, Upload], organization: { public: true }
+      can %i[read profile info], [Stream, Upload], organization: { public: true }
     end
 
     can :manage, :all if user.has_role?(:admin)
@@ -50,14 +50,14 @@ class Ability
 
     owned_orgs = Organization.with_role(:owner, user).pluck(:id)
     can :manage, Organization, id: owned_orgs
-    can %i[crud profile], [Stream, Upload], organization: { id: owned_orgs }
+    can %i[crud profile info], [Stream, Upload], organization: { id: owned_orgs }
     can :read, MarcRecord, upload: { organization: { id: owned_orgs } }
     can :crud, AllowlistedJwt, resource_type: 'Organization', resource: owned_orgs
     can :read, ActiveStorage::Attachment, { record: { organization: { id: owned_orgs } } }
 
     member_orgs = Organization.with_role(:member, user).pluck(:id)
     can %i[invite read], Organization, id: member_orgs
-    can %i[crud profile], [Stream, Upload], organization: { id: member_orgs }
+    can %i[crud profile info], [Stream, Upload], organization: { id: member_orgs }
     can :read, MarcRecord, upload: { organization: { id: member_orgs } }
     can :crud, AllowlistedJwt, resource_type: 'Organization', resource_id: member_orgs
     can :read, ActiveStorage::Attachment, { record: { organization: { id: member_orgs } } }
