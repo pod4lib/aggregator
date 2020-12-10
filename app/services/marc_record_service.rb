@@ -37,10 +37,16 @@ class MarcRecordService
         :marcxml
       elsif start.match?(/^\d+$/) # kinda looks like a MARC21 leader...
         :marc21
+      elsif delete?
+        :delete
       else
         :unknown
       end
     end
+  end
+
+  def delete?
+    blob.content_type == 'text/plain' || %w[del delete].include?(blob.filename.extension)
   end
 
   def marc21?(type = identify)

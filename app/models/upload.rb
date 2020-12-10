@@ -43,7 +43,7 @@ class Upload < ApplicationRecord
 
       format = service.identify
 
-      extract_marc_record_delete_metadata(file, &block) if format == :unknown && file.blob.content_type == 'text/plain'
+      extract_marc_record_delete_metadata(file, &block) if format == :delete
 
       next if format == :unknown
 
