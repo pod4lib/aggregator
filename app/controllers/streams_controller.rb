@@ -39,7 +39,7 @@ class StreamsController < ApplicationController
   def normalized_dump
     authorize! :read, @stream
 
-    @normalized_dump = @stream.normalized_dumps.last || @stream.normalized_dumps.build
+    @normalized_dump = @stream.normalized_dumps.full_dumps.last || @stream.normalized_dumps.build
   end
 
   def removed_since_previous_stream

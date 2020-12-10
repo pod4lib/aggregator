@@ -14,9 +14,9 @@ xml.urlset(
     xml.url(removed_since_previous_stream_organization_stream_url(@stream))
 
     full = if params[:flavor] == 'marc21'
-             @normalized_dump.full_dump_binary
+             @normalized_dump.marc21.attachment&.blob
            else
-             @normalized_dump.full_dump_xml
+             @normalized_dump.marcxml.attachment&.blob
            end
 
     xml.url do
@@ -32,13 +32,13 @@ xml.urlset(
 
     # deltas
 
-    deltas = if params[:flavor] == 'marc21'
-               @normalized_dump.delta_dump_binary
+    @normalized_dump.deltas.each do |delta|
+      file = if params[:flavor] == 'marc21'
+               delta.marc21.attachment&.blob
              else
-               @normalized_dump.delta_dump_xml
+               delta.marcxml.attachment&.blob
              end
 
-    deltas.each do |file|
       xml.url do
         xml.tag!(
           'rs:md',
@@ -48,6 +48,19 @@ xml.urlset(
         )
         xml.loc(download_url(file))
         xml.lastmod(file.created_at.iso8601)
+      end
+
+      next unless delta.deletes.attachment
+
+      xml.url do
+        xml.tag!(
+          'rs:md',
+          hash: "md5:#{Base64.decode64(delta.deletes.attachment.blob.checksum).unpack1('H*')}",
+          type: delta.deletes.attachment.blob.content_type,
+          length: delta.deletes.attachment.blob.byte_size
+        )
+        xml.loc(download_url(delta.deletes.attachment.blob))
+        xml.lastmod(delta.deletes.attachment.blob.created_at.iso8601)
       end
     end
   end

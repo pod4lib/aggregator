@@ -7,10 +7,10 @@ class GenerateDeltaDumpJob < ApplicationJob
     Organization.find_each { |org| GenerateDeltaDumpJob.perform_later(org) }
   end
 
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
   def perform(organization)
     now = Time.zone.now
-    full_dump = organization.default_stream.normalized_dumps.last
+    full_dump = organization.default_stream.current_full_dump
     return unless full_dump
 
     from = full_dump.last_delta_dump_at
@@ -18,53 +18,50 @@ class GenerateDeltaDumpJob < ApplicationJob
 
     return unless uploads.any?
 
-    with_output_streams("#{organization.slug}-#{Time.zone.today}", attach_to: full_dump) do |errata_file, xml_io, binary_io|
-      xmlwriter = MARC::XMLWriter.new(xml_io)
+    delta_dump = full_dump.deltas.create(stream_id: full_dump.stream_id)
+
+    writer = MarcRecordWriterService.new("#{organization.slug}-#{Time.zone.today}-delta")
+
+    begin
+      # run through the files to find out which records to output, delete, etc.
+      hash = current_marc_records(uploads)
 
       uploads.each do |upload|
         upload.each_marc_record_metadata.each do |record|
-          xmlwriter.write(record.augmented_marc)
-          binary_io.write(split_marc(record.augmented_marc))
-        rescue StandardError => e
-          errata_file.puts("#{record['001']}: #{e}")
+          next unless hash.dig(record.marc001, 'file_id') == record.file_id
+
+          if hash.dig(record.marc001, 'status') == 'delete'
+            writer.write_delete(record)
+          else
+            writer.write_marc_record(record)
+          end
         end
       end
 
-      xmlwriter.close
-    end
+      writer.finalize
 
-    full_dump.update(last_delta_dump_at: now)
-  end
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+      writer.files.each do |as, file|
+        delta_dump.public_send(as).attach(io: File.open(file), filename: as)
+      end
 
-  # rubocop:disable Naming/MethodParameterName
-  def with_gzipped_temporary_file(name, attach_to:, as:)
-    Tempfile.create(name, binmode: true) do |file|
-      gzip_io = Zlib::GzipWriter.new(file)
-      yield gzip_io
-
-      gzip_io.close
-      file.close
-      attach_to.public_send(as).attach(io: File.open(file), filename: name)
+      delta_dump.save!
+      full_dump.update(last_delta_dump_at: now)
+    ensure
+      writer.close
+      writer.unlink
     end
   end
-  # rubocop:enable Naming/MethodParameterName
+  # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
 
-  def with_output_streams(base_name, attach_to:)
-    with_gzipped_temporary_file("#{base_name}-errata.txt.gz", attach_to: attach_to, as: :errata) do |errata_file|
-      with_gzipped_temporary_file("#{base_name}-marcxml.xml.gz", attach_to: attach_to, as: :delta_dump_xml) do |xml_io|
-        with_gzipped_temporary_file("#{base_name}-marc21.mrc.gz", attach_to: attach_to, as: :delta_dump_binary) do |binary_io|
-          yield errata_file, xml_io, binary_io
-        end
+  def current_marc_records(uploads)
+    hash = {}
+
+    uploads.each do |upload|
+      upload.each_marc_record_metadata.each do |record|
+        hash[record.marc001] = record.attributes.slice('file_id', 'status')
       end
     end
-  end
 
-  def split_marc(marc)
-    marc.to_marc
-  rescue MARC::Exception => e
-    return CustomMarcWriter.encode(marc) if e.message.include? "Can't write MARC record in binary format, as a length/offset"
-
-    raise e
+    hash
   end
 end

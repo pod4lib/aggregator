@@ -52,6 +52,11 @@ class Stream < ApplicationRecord
     profile
   end
 
+  def current_full_dump
+    @current_full_dump ||= normalized_dumps.full_dumps.last ||
+                           normalized_dumps.full_dumps.create(last_delta_dump_at: Time.zone.at(0))
+  end
+
   private
 
   def default_name

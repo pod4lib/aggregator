@@ -18,15 +18,53 @@ RSpec.describe GenerateDeltaDumpJob, type: :job do
   it 'creates a new normalized delta dump' do
     expect do
       described_class.perform_now(organization)
-    end.to change { organization.default_stream.normalized_dumps.last.reload.delta_dump_xml.count }.by(1)
+    end.to change { organization.default_stream.reload.current_full_dump.deltas.count }.by(1)
   end
 
   it 'contains just the new the MARC records from the organization' do
     described_class.perform_now(organization)
 
-    download_and_uncompress(organization.default_stream.normalized_dumps.last.delta_dump_xml.last) do |file|
+    download_and_uncompress(organization.default_stream.reload.current_full_dump.deltas.last.marcxml) do |file|
       expect(Nokogiri::XML(file).xpath('//marc:record', marc: 'http://www.loc.gov/MARC21/slim').count).to eq 1
       expect(file.rewind && file.read).to include '</collection>'
+    end
+  end
+
+  context 'with deletes' do
+    before do
+      organization.default_stream.uploads << FactoryBot.build(:upload, :deletes)
+      organization.default_stream.uploads << FactoryBot.build(:upload, :deletes)
+    end
+
+    it 'collects deletes into a single file' do
+      described_class.perform_now(organization)
+      organization.default_stream.reload.current_full_dump.deltas.last.deletes.download do |file|
+        expect(file.each_line.count).to eq 4
+      end
+    end
+
+    it 'does not include MARC records that were deleted' do
+      described_class.perform_now(organization)
+
+      expect(organization.default_stream.reload.current_full_dump.deltas.last.marcxml.attachment).to be_nil
+    end
+
+    it 'does not include deletes that were readded' do
+      organization.default_stream.uploads << FactoryBot.build(:upload, :binary_marc)
+      described_class.perform_now(organization)
+
+      organization.default_stream.reload.current_full_dump.deltas.last.deletes.download do |file|
+        expect(file).not_to include 'a1297245'
+      end
+    end
+
+    it 'includes MARC records that were re-added' do
+      organization.default_stream.uploads << FactoryBot.build(:upload, :binary_marc)
+      described_class.perform_now(organization)
+
+      download_and_uncompress(organization.default_stream.reload.current_full_dump.deltas.last.marcxml) do |file|
+        expect(Nokogiri::XML(file).xpath('//marc:record', marc: 'http://www.loc.gov/MARC21/slim').count).to eq 1
+      end
     end
   end
 

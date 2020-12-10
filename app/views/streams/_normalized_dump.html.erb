@@ -1,0 +1,30 @@
+<% if normalized_dump %>
+  <div class="card mt-5">
+    <div class="card-header d-flex justify-content-between">
+      <h3 class="h5 align-self-center mb-0">Normalized data</h3>
+    </div>
+
+    <table class="table table-striped">
+      <thead><th></th><th class="pl-4">File</th><th>Date created</th><th>Size</th><th class="text-right pr-4">Records</th></thead>
+      <tbody>
+        <tr>
+          <td><span class="badge badge-danger">Deletes</span></td>
+          <td class="pl-4">
+            <%= link_to_if can?(:read, normalized_dump.stream), 'deleted-records.txt', removed_since_previous_stream_organization_stream_url(@organization, normalized_dump.stream), download: true %>
+          </td>
+          <td class="font-italic">n/a</td>
+          <td class="font-italic">n/a</td>
+          <td class="font-italic pr-4 text-right">n/a</td>
+        </tr>
+        <%= render partial: 'streams/dump_attachment', locals: { type: 'Full', attachment: normalized_dump.marc21.attachment, stream: normalized_dump.stream } %>
+        <%= render partial: 'streams/dump_attachment', locals: { type: 'Full', attachment: normalized_dump.marcxml.attachment, stream: normalized_dump.stream } %>
+
+        <% normalized_dump.deltas.each do |delta| %>
+          <%= render partial: 'streams/dump_attachment', locals: { type: 'Delta', attachment: normalized_dump.marc21.attachment, stream: normalized_dump.stream } %>
+          <%= render partial: 'streams/dump_attachment', locals: { type: 'Delta', attachment: normalized_dump.marcxml.attachment, stream: normalized_dump.stream } %>
+          <%= render partial: 'streams/dump_attachment', locals: { type: 'Deletes', attachment: normalized_dump.deletes.attachment, stream: normalized_dump.stream } %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
