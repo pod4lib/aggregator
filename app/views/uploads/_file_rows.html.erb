@@ -21,7 +21,7 @@
       <% end %>
     </td>
     <td><%= l(file.created_at, format: :short) %></td>
-    <td><%= number_to_human_size file.byte_size %></td>
+    <td class="text-right"><%= number_to_human_size file.byte_size %></td>
     <td><%= file.content_type %></td>
     <td class="text-right"><%= file.metadata['count'] ? number_with_delimiter(file.metadata['count']) : '???' %></td>
     <td class="text-center">
