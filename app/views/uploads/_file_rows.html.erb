@@ -1,33 +1,40 @@
 <% if can?(:read, upload) && upload.url.present? && upload.files.none? %>
   <tr>
-    <td class="pl-4">
-      <i>Downloading...</i><br />
-      <%= link_to 'Source 🔗', upload.url, title: upload.url %>
+    <td class="text-center">🔄</td>
+    <td>
+      <i>Downloading...</i>
     </td>
     <td><%= l(upload.created_at, format: :short) %></td>
-    <td colspan="4"></td>
+    <td class="text-right">-</td>
+    <td>-</td>
+    <td class="text-right">-</td>
+    <td><%= link_to 'Source 🔗', upload.url, title: upload.url %></td>
   </tr>
 <% end %>
 <% upload.files.each do |file| %>
   <tr>
-    <td class="pl-4">
-      <%= link_to_if can?(:read, upload), file.filename, file_info_organization_upload_path(@organization, upload, file) %>
-      <% if can? :read, upload %>
-        <br />
-        <%= link_to 'Download ⬇️', download_url(file), class: 'btn btn-link' %>
-        <% if upload.url.present? %>
-          <%= link_to 'Source 🔗', upload.url, title: upload.url, class: 'btn btn-link' %>
-        <% end %>
-      <% end %>
-    </td>
-    <td><%= l(file.created_at, format: :short) %></td>
-    <td class="text-right"><%= number_to_human_size file.byte_size %></td>
-    <td><%= file.content_type %></td>
-    <td class="text-right"><%= file.metadata['count'] ? number_with_delimiter(file.metadata['count']) : '???' %></td>
     <td class="text-center">
       <span class="pod-metadata-status <%= file.pod_metadata_status %>" title="<%= file.pod_error_message %>">
         <span class="sr-only"><%= file.pod_metadata_status %></span>
       </span>
+    </td>
+    <td>
+      <%= link_to_if can?(:read, upload), file.filename, download_url(file), title: "Download #{file.filename}" %>
+    </td>
+    <td><%= l(file.created_at, format: :short) %></td>
+    <td class="text-right"><%= number_to_human_size file.byte_size %></td>
+    <td><%= file.content_type %></td>
+    <td class="text-right"><%= file.metadata['count'] ? number_with_delimiter(file.metadata['count']) : '-' %></td>
+
+    <td>
+      <% if can? :read, upload %>
+        <%= link_to file_info_organization_upload_path(@organization, upload, file), class: 'btn btn-secondary' do %>
+          <span class="sr-only">Profile</span> 🔎
+        <% end %>
+        <% if upload.url.present? %>
+          <%= link_to 'Source 🔗', upload.url, title: upload.url, class: 'btn btn-link' %>
+        <% end %>
+      <% end %>
     </td>
   </tr>
 <% end %>

@@ -1,0 +1,33 @@
+<div class="d-flex justify-content-between">
+  <div class="d-flex">
+    <div class="h2">
+      <% content = capture do %>
+        Streams <span class="badge badge-secondary"><%= stream.organization.streams.active.count %></span>
+      <% end %>
+      <%= link_to_if stream.organization.streams.accessible_by(current_ability).any?, content, organization_streams_path(stream.organization) %>
+    </div>
+  </div>
+  <div>
+    <%= link_to 'Create new stream', new_organization_stream_path(stream.organization), class: 'btn btn-secondary align-self-center' if can? :create, stream.organization.streams.build %>
+  </div>
+</div>
+
+<% if current_page?([stream.organization, stream]) %>
+  <h1 class="h5 d-inline-block font-weight-normal">Name: <%= stream.display_name %></h1>
+<% else %>
+  <h2 class="h5 d-inline-block font-weight-normal">Name: <%= stream.display_name %></h2>
+<% end %>
+<p class="lead">
+  Last updated: <%= content_tag :span, "#{time_ago_in_words(stream.uploads.last&.updated_at || stream.updated_at)} ago", title: l(stream.uploads.last&.updated_at || stream.updated_at) %>
+</p>
+
+<div class="mb-3">
+<% unless stream.default? %>
+  <%= link_to 'Make default', make_default_organization_streams_path(stream.organization, stream: stream.slug), method: :post, class: 'btn btn-secondary align-self-center' if can?(:update, stream) %>
+<% end %>
+</div>
+
+<div class="mb-3">
+  <%= link_to 'Upload file', new_organization_upload_path(stream.organization, stream: (stream.default? ? nil : stream.friendly_id)), class: 'btn btn-primary' if can? :create, stream.uploads.build %>
+  <%= link_to 'Re-analyze', reanalyze_organization_stream_path(stream.organization, stream), method: :post, class: 'btn btn-secondary align-self-center' if can?(:reanalyze, stream) %>
+</div>
