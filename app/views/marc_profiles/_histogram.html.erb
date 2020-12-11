@@ -1,11 +1,17 @@
+<% buckets = [1..1, 2..5, 6..10, 11..50] %>
+
 <h3 class="mt-5">Distribution of occurrences by MARC data field</h3>
 <table class="table">
   <thead>
     <tr>
       <th>Field</th>
-      <th>%</th>
-      <th>Occurences</th>
-      <th>Subfields</th>
+      <th class="text-right border-right">%</th>
+      <% buckets.each do |range| %>
+        <th class="text-right"><%= [range.min, range.max].uniq.join('-') %></th>
+      <% end %>
+      <th class="text-right"><%= buckets.last.max + 1 %>+</th>
+      <th class="text-right border-left">Max</th>
+      <th class="text-center">Subfields</th>
     </tr>
   </thead>
 
@@ -13,12 +19,14 @@
     <% marc_profile.record_frequency.sort_by { |key, _value| key }.slice_when { |(k1, _v1), (k2, _v2)| k1.split("$",2).first != k2.split("$",2).first }.each do |field_group| %>
     <% field, *subfields = field_group %>
       <tr class="<%= MarcRules.common_field?(field.first) ? cycle('bg-light', '') : 'bg-local-practice' %>">
-        <td><%= field.first %></td>
-        <td><%= number_to_percentage(100.0 * field.last / marc_profile.count) %></td>
-        <td>
-          <%= marc_profile.histogram_frequency[field.first].sort_by { |k, _v| k.to_i }.map { |k, v| "#{k}x: #{v}"}.join(', ') %>
-        </td>
-        <td>
+        <td class="font-weight-bold"><%= field.first %></td>
+        <td class="text-right border-right"><%= number_to_percentage(100.0 * field.last / marc_profile.count, precision: 2) %></td>
+        <% buckets.each do |range| %>
+          <td class="text-right"><%= number_with_delimiter marc_profile.histogram_frequency[field.first].select { |k, _v| range.cover? k.to_i }.values.sum %></td>
+        <% end %>
+        <td class="text-right"><%= number_with_delimiter marc_profile.histogram_frequency[field.first].select { |k, _v| k.to_i > buckets.last.max }.values.sum %></td>
+        <td class="text-right border-left"><%= marc_profile.histogram_frequency[field.first].max { |(k, _v)| k.to_i }.first %></td>
+        <td class="text-center">
           <% if subfields.any? %>
             <button class="btn p-0 m-0 border-0 align-top text-left text-monospace" type="button" data-toggle="collapse" data-target="#histogram-subfields-<%= field.first.parameterize %>" aria-expanded="false" aria-controls="histogram-subfields-<%= field.first.parameterize %>">
               <span class="sr-only">Expand</span>
@@ -29,7 +37,34 @@
       </tr>
       <% if subfields.any? %>
         <tr id="histogram-subfields-<%= field.first.parameterize %>" class="collapse">
-          <td colspan="4">
+          <td colspan="10" class="pl-5">
+            <div class="h3">Example values</div>
+            <% values = marc_profile.sampled_values[field.first] %>
+
+            <% if values.uniq { |(value, id)| value }.one? %>
+              <% value, id = values.first %>
+              <span class="text-monospace"><%= value %> [<%= id %>]</span>
+            <% else %>
+
+            <button class="btn btn-sm btn-secondary" type="button" data-toggle="collapse" data-target="#profiles-<%= field.first %>" aria-expanded="false" aria-controls="profiles-<%= field.first %>">
+              Toggle more/less <%= inline_svg_tag 'bootstrap-icons/icons/chevron-right.svg', height: 12, width: 12 %>
+            </button>
+              <div class="position-relative">
+                <span class="text-monospace">
+                  <% values.first(3).each do |(value, id)| %>
+                    <pre class="mb-1"><%= value %> [<%= id %>]</pre>
+                  <% end %>
+
+                  <div class="collapse" id="profiles-<%= field.first %>">
+                    <% values.uniq { |(value, id)| value }.each do |(value, id)| %>
+                      <pre class="mb-1"><%= value %> [<%= id %>]</pre>
+                    <% end %>
+                  </div>
+                </span>
+              </div>
+            <% end %>
+
+            <div class="h3 mt-3">Subfield distribution</div>
             <table class="table table-striped">
               <thead>
                 <tr>
