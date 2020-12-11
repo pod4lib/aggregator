@@ -19,15 +19,17 @@ xml.urlset(
              @normalized_dump.marcxml.attachment&.blob
            end
 
-    xml.url do
-      xml.tag!(
-        'rs:md',
-        hash: "md5:#{Base64.decode64(full.checksum).unpack1('H*')}",
-        type: full.content_type,
-        length: full.byte_size
-      )
-      xml.loc(download_url(full))
-      xml.lastmod(full.created_at.iso8601)
+    if full
+      xml.url do
+        xml.tag!(
+          'rs:md',
+          hash: "md5:#{Base64.decode64(full.checksum).unpack1('H*')}",
+          type: full.content_type,
+          length: full.byte_size
+        )
+        xml.loc(download_url(full))
+        xml.lastmod(full.created_at.iso8601)
+      end
     end
 
     # deltas
@@ -39,15 +41,17 @@ xml.urlset(
                delta.marcxml.attachment&.blob
              end
 
-      xml.url do
-        xml.tag!(
-          'rs:md',
-          hash: "md5:#{Base64.decode64(file.checksum).unpack1('H*')}",
-          type: file.content_type,
-          length: file.byte_size
-        )
-        xml.loc(download_url(file))
-        xml.lastmod(file.created_at.iso8601)
+      if file
+        xml.url do
+          xml.tag!(
+            'rs:md',
+            hash: "md5:#{Base64.decode64(file.checksum).unpack1('H*')}",
+            type: file.content_type,
+            length: file.byte_size
+          )
+          xml.loc(download_url(file))
+          xml.lastmod(file.created_at.iso8601)
+        end
       end
 
       next unless delta.deletes.attachment
