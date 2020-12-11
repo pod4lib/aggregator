@@ -55,7 +55,7 @@
                       (<%= user.title %>)
                     <% end %>
                   <% end %>
-                  <%= link_to 'Remove', [@organization, user], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' if can? :manage, @organization %>
+                  <%= link_to 'Remove', [@organization, user], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm align-self-center' if can? :manage, @organization %>
                 </li>
               <% end %>
             <% end %>
@@ -78,7 +78,7 @@
                 <%= content_tag :span, contact_email.email %>
                 <%= content_tag :span, 'confirmed ✅', class: 'badge badge-success' if contact_email.confirmed_at.present? %>
               </span>
-              <%= link_to 'Remove', [@organization, contact_email], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' if can? :manage, @organization %>
+              <%= link_to 'Remove', [@organization, contact_email], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm align-self-center' if can? :manage, @organization %>
             </li>
           <% end %>
         </ul>
