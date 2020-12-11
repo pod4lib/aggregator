@@ -4,8 +4,8 @@
 class MarcRecord < ApplicationRecord
   belongs_to :file, class_name: 'ActiveStorage::Attachment'
   belongs_to :upload
-  has_one :stream, through: :upload
-  has_one :organization, through: :stream
+  has_one :stream, through: :upload, inverse_of: :marc_records
+  has_one :organization, through: :stream, inverse_of: :marc_records
 
   attr_accessor :marc_bytes
   attr_writer :marc
@@ -20,9 +20,9 @@ class MarcRecord < ApplicationRecord
   end
 
   def augmented_marc
-    return marc unless organization
+    return marc unless upload.organization
 
-    @augmented_marc ||= organization.augmented_marc_record_service.execute(marc)
+    @augmented_marc ||= upload.organization.augmented_marc_record_service.execute(marc)
   end
 
   private
