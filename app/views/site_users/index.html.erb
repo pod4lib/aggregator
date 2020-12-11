@@ -22,9 +22,9 @@
           </td>
           <td>
             <% if user.has_role? :admin %>
-              <%= link_to 'Remove from admin role', site_user_url(user, remove_role: 'admin'), method: :patch, class: 'btn btn-danger' %>
+              <%= link_to 'Remove from admin role', site_user_url(user, remove_role: 'admin'), method: :patch, class: 'btn btn-danger btn-sm' %>
             <% else %>
-              <%= link_to 'Add admin role', site_user_url(user, add_role: 'admin'), method: :patch, class: 'btn btn-secondary' %>
+              <%= link_to 'Add admin role', site_user_url(user, add_role: 'admin'), method: :patch, class: 'btn btn-secondary btn-sm' %>
             <% end %>
           </td>
         </tr>

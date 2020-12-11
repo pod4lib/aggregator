@@ -8,59 +8,61 @@
   </div>
 </div>
 
-<div class="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3">
-  <div class="mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
-    <div class="my-3 py-3">
-      <h2 class="display-5">MVP Goal</h2>
-      <p class="lead">Support receiving and transmitting both full dumps and delta change sets</p>
+<div class="container">
+  <div class="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3">
+    <div class="mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
+      <div class="my-3 py-3">
+        <h2 class="display-5">MVP Goal</h2>
+        <p class="lead">Support receiving and transmitting both full dumps and delta change sets</p>
+      </div>
     </div>
-  </div>
-  <div class="mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
-    <div class="my-3 p-3">
-      <h2 class="display-5">MVP Goal</h2>
-      <p class="lead">Enable external normalization, analysis, and discovery indexing, and basic reporting and data reconciliation</p>
-    </div>
-  </div>
-  <div class="mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
-    <div class="my-3 p-3">
-      <h2 class="display-5">MVP Goal</h2>
-      <p class="lead">Help POD refine and develop operational models for a service based on the MVP</p>
-    </div>
-  </div>
-</div>
-
-
-<div class="row rows-cols-2 w-100 my-md-3 pl-md-3 border-top">
-  <div class="col pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
-    <div class="my-3 py-3">
-      <h2 class="display-5">Read the documentation</h2>
-      <ul class="list-group lead align-left">
-        <li class="list-group-item border-0">
-          <%= link_to 'API documentation', api_path, class: 'text-muted' %>
-        </li>
-        <li class="list-group-item border-0">
-          <%= link_to 'Data guidelines', pages_path(id: 'data'), class: 'text-muted' %>
-        </li>
-        <li class="list-group-item border-0">
-          <%= link_to 'Data retention policy', pages_path(id: 'retention'), class: 'text-muted' %>
-        </li>
-      </ul>
-    </div>
-  </div>
-  <div class="col pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
-    <% if current_user %>
+    <div class="mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
       <div class="my-3 p-3">
-        <h2 class="display-5">My organizations</h2>
-        <ul class="list-group lead align-left">
-          <% organizations = Organization.with_roles([:member, :owner], current_user) %>
+        <h2 class="display-5">MVP Goal</h2>
+        <p class="lead">Enable external normalization, analysis, and discovery indexing, and basic reporting and data reconciliation</p>
+      </div>
+    </div>
+    <div class="mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
+      <div class="my-3 p-3">
+        <h2 class="display-5">MVP Goal</h2>
+        <p class="lead">Help POD refine and develop operational models for a service based on the MVP</p>
+      </div>
+    </div>
+  </div>
 
-          <% organizations.each do |org| %>
-            <li class="list-group-item border-0">
-              <%= link_to org.name, org, class: 'text-muted' %>
-            </li>
-          <% end %>
+
+  <div class="row rows-cols-2 w-100 my-md-3 pl-md-3 border-top">
+    <div class="col pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
+      <div class="my-3 py-3">
+        <h2 class="display-5">Read the documentation</h2>
+        <ul class="list-group lead align-left">
+          <li class="list-group-item border-0">
+            <%= link_to 'API documentation', api_path, class: 'text-muted' %>
+          </li>
+          <li class="list-group-item border-0">
+            <%= link_to 'Data guidelines', pages_path(id: 'data'), class: 'text-muted' %>
+          </li>
+          <li class="list-group-item border-0">
+            <%= link_to 'Data retention policy', pages_path(id: 'retention'), class: 'text-muted' %>
+          </li>
         </ul>
       </div>
-    <% end %>
+    </div>
+    <div class="col pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
+      <% if current_user %>
+        <div class="my-3 p-3">
+          <h2 class="display-5">My organizations</h2>
+          <ul class="list-group lead align-left">
+            <% organizations = Organization.with_roles([:member, :owner], current_user) %>
+
+            <% organizations.each do |org| %>
+              <li class="list-group-item border-0">
+                <%= link_to org.name, org, class: 'text-muted' %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+    </div>
   </div>
 </div>

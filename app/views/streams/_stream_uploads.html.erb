@@ -1,6 +1,6 @@
 <div class="card">
   <div class="card-header d-flex justify-content-between">
-    <h3 class="h5 align-self-center mb-0">Files <%= number_with_delimiter stream.files.size %> | Size <%= number_to_human_size stream.files.sum(:byte_size) %></h3>
+    <h3 class="h5 align-self-center mb-0">Files: <%= number_with_delimiter stream.files.size %> | Size: <%= number_to_human_size stream.files.sum(:byte_size) %></h3>
 
     <div>
       <%= link_to 'Profile', profile_organization_stream_path(@organization, stream), class: 'btn btn-info' %>
@@ -9,7 +9,7 @@
   </div>
 
   <table class="table table-striped mb-0">
-    <thead><th class="pl-4">File</th><th>Date created</th><th>Size</th><th>Content type</th><th class="text-right">Records</th><th><span class="sr-only">File status</span></th></thead>
+    <thead><th class="pl-4">File</th><th>Date created</th><th class="text-right">Size</th><th>Content type</th><th class="text-right">Records</th><th>File status</th></thead>
     <tbody>
       <% stream.uploads.active.each do |upload| %>
         <%= render 'uploads/file_rows', upload: upload %>
