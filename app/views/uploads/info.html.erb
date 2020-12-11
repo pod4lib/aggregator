@@ -5,9 +5,12 @@
   <div class="d-flex justify-content-between">
     <h2><%= @blob.filename %></h2>
 
-    <div>
-      <%= link_to 'Download', download_url(@blob), class: 'btn btn-secondary' if can? :read, @upload %>
-    </div>
+    <% if can? :read, @upload %>
+      <div>
+        <%= link_to 'Download', download_url(@blob), class: 'btn btn-secondary' %>
+        <%= link_to 'Source 🔗', @upload.url, title: @upload.url, class: 'btn btn-secondary' if @upload.url %>
+      </div>
+    <% end %>
   </div>
 
   <p class="lead">Size: <%= number_to_human_size @blob.byte_size %></p>
