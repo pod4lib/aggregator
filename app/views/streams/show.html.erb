@@ -1,21 +1,7 @@
 <%= render 'shared/organization_header' %>
 
 <div class="container mb-5">
-  <%= link_to 'Streams', organization_streams_path %>
-  <div class="d-flex justify-content-between">
-    <h1><%= @stream.display_name %></h1>
-    <div>
-      <%= link_to 'Reanalyze', reanalyze_organization_stream_path(@organization, @stream), method: :post, class: 'btn btn-secondary align-self-center' if can?(:reanalyze, @stream) %>
-      <%= link_to 'Make default', make_default_organization_streams_path(@organization, stream: @stream.slug), method: :post, class: 'btn btn-info align-self-center' if !@stream.default? && can?(:update, @stream) %>
-    </div>
-  </div>
-
-  <p class="lead">
-    Last updated: <%= content_tag :span, "#{time_ago_in_words(@stream.uploads.last&.updated_at || @stream.updated_at)} ago", title: l(@stream.uploads.last&.updated_at || @stream.updated_at) %>
-  </p>
-  <p class="lead">
-    Records: <%= number_with_delimiter @stream.statistic&.unique_record_count || 0 %> unique (<%= number_with_delimiter @stream.statistic&.record_count || 0%> total) <%= link_to "(view all)", organization_marc_records_path(@organization, { stream: @stream}) %>
-  </p>
+  <%= render 'header', stream: @stream %>
 
   <%= render 'job_status', stream: @stream %>
 
