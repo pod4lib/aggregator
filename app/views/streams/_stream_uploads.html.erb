@@ -9,7 +9,7 @@
   </div>
 
   <table class="table table-striped mb-0">
-    <thead><th class="pl-4">File</th><th>Date created</th><th>Size</th><th>Content type</th><th class="text-right">Records</th><th><span class="sr-only">File status</span></th></thead>
+    <thead><th class="pl-4">File</th><th>Date created</th><th>Size</th><th>Content type</th><th class="text-right">Records</th><th>File status</th></thead>
     <tbody>
       <% stream.uploads.active.each do |upload| %>
         <%= render 'uploads/file_rows', upload: upload %>
