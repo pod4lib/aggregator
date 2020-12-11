@@ -9,6 +9,12 @@ RSpec.describe MarcAnalyzer do
     expect(upload.files.blobs.first.metadata).to include(type: 'marcxml', count: 1)
   end
 
+  it 'returns an error if no records are found' do
+    upload = FactoryBot.create(:upload, :alma_marc_xml_ish)
+    upload.files.blobs.first.analyze
+    expect(upload.files.blobs.first.metadata).to include(valid: false, count: 0, error: 'No MARC records found')
+  end
+
   it 'reads and uploads metadata count for binary marc' do
     upload = FactoryBot.create(:upload, :binary_marc)
     upload.files.blobs.first.analyze

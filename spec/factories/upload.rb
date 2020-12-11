@@ -151,5 +151,16 @@ FactoryBot.define do
                             ])
       end
     end
+
+    trait :alma_marc_xml_ish do
+      after(:build) do |upload|
+        upload.files.attach(
+          io: File.open(
+            Rails.root.join('spec/fixtures/not.marcxml')
+          ),
+          filename: 'not.marcxml', content_type: 'application/marcxml+xml'
+        )
+      end
+    end
   end
 end

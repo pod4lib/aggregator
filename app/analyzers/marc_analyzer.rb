@@ -8,14 +8,21 @@ class MarcAnalyzer < ActiveStorage::Analyzer
   end
 
   def metadata
-    { analyzer: self.class.to_s, count: count, type: reader.identify }.tap do
-      MarcProfilingJob.perform_later(blob, count: count)
-    end
+    metadata = { analyzer: self.class.to_s, count: count, type: type }
+    return metadata.merge(valid: false, error: 'No MARC records found') if count.zero?
+
+    MarcProfilingJob.perform_later(blob, count: count)
+
+    metadata
   rescue MARC::XMLParseError, MARC::Exception => e
     Rails.logger.info(e)
     Honeybadger.notify(e)
 
     { analyzer: self.class.to_s, valid: false, error: e.message }
+  end
+
+  def type
+    @type ||= reader.identify
   end
 
   def reader
