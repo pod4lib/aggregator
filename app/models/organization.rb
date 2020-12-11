@@ -9,7 +9,7 @@ class Organization < ApplicationRecord
   has_paper_trail
   has_many :streams, dependent: :destroy
   has_many :uploads, through: :streams
-  has_many :marc_records, through: :streams
+  has_many :marc_records, through: :streams, inverse_of: :organization
   has_many :allowlisted_jwts, as: :resource, dependent: :delete_all
   has_many :contact_emails, dependent: :delete_all
   has_one_attached :icon

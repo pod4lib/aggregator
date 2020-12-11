@@ -7,7 +7,7 @@ class Stream < ApplicationRecord
   friendly_id :name, use: %i[finders slugged scoped], scope: :organization
   belongs_to :organization
   has_many :uploads, dependent: :destroy
-  has_many :marc_records, through: :uploads
+  has_many :marc_records, through: :uploads, inverse_of: :stream
   has_many :files, source: :files_blobs, through: :uploads
   has_one :statistic, dependent: :delete, as: :resource
   has_many :normalized_dumps, dependent: :destroy
