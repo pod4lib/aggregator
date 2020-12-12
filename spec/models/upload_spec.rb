@@ -54,4 +54,14 @@ RSpec.describe Upload, type: :model do
       end.to enqueue_job(ExtractFilesJob).exactly(1).times.with(described_class.last)
     end
   end
+
+  describe '#each_marc_record_metadata' do
+    subject(:upload) { FactoryBot.create(:upload, :small_batch_gz) }
+
+    it 'uses the same object for the upload' do
+      first, second = upload.each_marc_record_metadata.first(2).map(&:upload)
+
+      expect(first.object_id).to eq second.object_id
+    end
+  end
 end

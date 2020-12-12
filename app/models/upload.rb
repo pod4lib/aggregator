@@ -78,9 +78,10 @@ class Upload < ApplicationRecord
 
     file.blob.open do |tmpfile|
       tmpfile.each_line do |line|
-        yield marc_records.build(
+        yield MarcRecord.new(
           marc001: line.strip,
           file: file,
+          upload: self,
           status: 'delete'
         )
       end
@@ -91,12 +92,12 @@ class Upload < ApplicationRecord
     return to_enum(:extract_marc_record_metadata, file, service) unless block_given?
 
     service.each_with_metadata do |record, metadata|
-      out = marc_records.build(
+      out = MarcRecord.new(
         **metadata,
         marc001: record['001']&.value,
         file: file,
         marc: record,
-        stream: stream
+        upload: self
       )
 
       out.checksum ||= Digest::MD5.hexdigest(record.to_xml.to_s)
