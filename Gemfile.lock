@@ -502,6 +502,7 @@ DEPENDENCIES
   rails (~> 6.1.0)
   rails-controller-testing
   redis (~> 4.0)
+  rexml
   rolify
   rspec-rails
   rubocop
