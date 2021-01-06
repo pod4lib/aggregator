@@ -8,8 +8,10 @@ ActiveStorage::Engine
   .content_types_to_serve_as_binary
   .delete('image/svg+xml')
 
-Rails.application.config.active_storage.analyzers.append DeletesAnalyzer
-Rails.application.config.active_storage.analyzers.append MarcAnalyzer
+Rails.application.reloader.to_prepare do
+  Rails.application.config.active_storage.analyzers.append DeletesAnalyzer
+  Rails.application.config.active_storage.analyzers.append MarcAnalyzer
+end
 
 # Use default queue for analysis and purge for Sidekiq simplification
 Rails.application.config.active_storage.queues[:analysis] = :default
