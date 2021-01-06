@@ -3,6 +3,9 @@
 # It's helpful, but not entirely necessary to understand cron before proceeding.
 # http://en.wikipedia.org/wiki/Cron
 
+# Work-around for loading spring unless RAILS_ENV is actually defined...
+job_type :runner,  "cd :path && :environment_variable=:environment bin/rails runner -e :environment ':task' :output"
+
 # Example:
 #
 # set :output, "/path/to/my/cron_log.log"

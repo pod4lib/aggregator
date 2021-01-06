@@ -8,8 +8,7 @@ RSpec.describe 'uploads/new', type: :view do
 
   before do
     assign(:upload, Upload.new(
-                      name: 'MyString',
-                      files: ''
+                      name: 'MyString'
                     ))
     assign(:organization, organization)
     without_partial_double_verification do

@@ -64,6 +64,7 @@ RSpec.describe MarcProfilingJob do
   it 'cleans up job tracking after running' do
     described_class.perform_later(upload.files.first.blob)
     perform_enqueued_jobs
+    perform_enqueued_jobs
     expect(JobTracker.count).to eq 0
   end
 end

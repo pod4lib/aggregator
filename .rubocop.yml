@@ -10,6 +10,7 @@ AllCops:
   DisplayCopNames: true
   NewCops: enable
   Exclude:
+    - 'config.ru'
     - 'Gemfile'
     - 'bin/**/*'
     - 'db/**/*'

@@ -16,7 +16,7 @@ RSpec.describe '/files', type: :request do
           'Accept-Ranges' => 'bytes',
           'Content-Disposition' => 'attachment',
           'Content-Type' => 'application/marc',
-          'Etag' => 'W/"6f9974da7d9740e8341d81ba1d4d7d90"'
+          'Etag' => 'W/"38c691f04e7e59e58c3fea6eb54b5421"'
         }
       end
 
