@@ -52,7 +52,7 @@ class Ability
     can :manage, Organization, id: owned_orgs
     can %i[crud profile info], [Stream, Upload], organization: { id: owned_orgs }
     can :read, MarcRecord, upload: { organization: { id: owned_orgs } }
-    can :crud, AllowlistedJwt, resource_type: 'Organization', resource: owned_orgs
+    can :crud, AllowlistedJwt, resource_type: 'Organization', resource_id: owned_orgs
     can :read, ActiveStorage::Attachment, { record: { organization: { id: owned_orgs } } }
 
     member_orgs = Organization.with_role(:member, user).pluck(:id)
