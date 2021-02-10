@@ -86,6 +86,7 @@ gem 'rolify'
 gem 'sidekiq'
 gem 'inline_svg'
 gem 'marc'
+gem 'rexml' # see https://github.com/ruby-marc/ruby-marc/issues/67...
 gem 'sidekiq'
 gem 'whenever'
 
