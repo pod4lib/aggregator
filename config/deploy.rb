@@ -1,8 +1,13 @@
 set :application, 'aggregator'
 set :repo_url, 'https://github.com/ivplus/aggregator.git'
 
-# Default branch is :master
-ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call unless ENV['DEPLOY']
+
+if ENV['DEPLOY']
+  # Default branch is :master so we need to update to main
+  set :branch, 'main'
+else
+  ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
+end
 
 # Default deploy_to directory is /var/www/my_app
 set :deploy_to, "/opt/app/pod/aggregator"
