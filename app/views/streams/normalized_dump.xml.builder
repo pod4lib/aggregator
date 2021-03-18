@@ -14,18 +14,18 @@ xml.urlset(
     xml.url(removed_since_previous_stream_organization_stream_url(@stream))
 
     full = if params[:flavor] == 'marc21'
-             @normalized_dump.marc21.attachment&.blob
+             @normalized_dump.marc21.attachment
            else
-             @normalized_dump.marcxml.attachment&.blob
+             @normalized_dump.marcxml.attachment
            end
 
-    if full
+    if full&.blob
       xml.url do
         xml.tag!(
           'rs:md',
-          hash: "md5:#{Base64.decode64(full.checksum).unpack1('H*')}",
-          type: full.content_type,
-          length: full.byte_size
+          hash: "md5:#{Base64.decode64(full.blob.checksum).unpack1('H*')}",
+          type: full.blob.content_type,
+          length: full.blob.byte_size
         )
         xml.loc(download_url(full))
         xml.lastmod(full.created_at.iso8601)
@@ -36,25 +36,25 @@ xml.urlset(
 
     @normalized_dump.deltas.each do |delta|
       file = if params[:flavor] == 'marc21'
-               delta.marc21.attachment&.blob
+               delta.marc21.attachment
              else
-               delta.marcxml.attachment&.blob
+               delta.marcxml.attachment
              end
 
-      if file
+      if file&.blob
         xml.url do
           xml.tag!(
             'rs:md',
-            hash: "md5:#{Base64.decode64(file.checksum).unpack1('H*')}",
-            type: file.content_type,
-            length: file.byte_size
+            hash: "md5:#{Base64.decode64(file.blob.checksum).unpack1('H*')}",
+            type: file.blob.content_type,
+            length: file.blob.byte_size
           )
           xml.loc(download_url(file))
           xml.lastmod(file.created_at.iso8601)
         end
       end
 
-      next unless delta.deletes.attachment
+      next unless delta.deletes.attachment&.blob
 
       xml.url do
         xml.tag!(
@@ -63,8 +63,8 @@ xml.urlset(
           type: delta.deletes.attachment.blob.content_type,
           length: delta.deletes.attachment.blob.byte_size
         )
-        xml.loc(download_url(delta.deletes.attachment.blob))
-        xml.lastmod(delta.deletes.attachment.blob.created_at.iso8601)
+        xml.loc(download_url(delta.deletes.attachment))
+        xml.lastmod(delta.deletes.attachment.created_at.iso8601)
       end
     end
   end
