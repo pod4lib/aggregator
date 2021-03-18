@@ -4,6 +4,7 @@
 # Proxying over ActiveStorage so we can have sane routes.
 # Waiting on https://github.com/rails/rails/commit/dfb5a82b259e134eac89784ac4ace0c44d1b4aee
 class ProxyController < ActiveStorage::BaseController
+  include ActionController::Live
   include CustomPodAbilityConcern
   include JwtTokenConcern
 
