@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 xml.instruct! :xml, version: '1.0', encoding: 'UTF-8'
-xml.urlset(
+xml.sitemapindex(
   'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
   'xsi:schemaLocation' => 'http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd',
   'xmlns' => 'http://www.sitemaps.org/schemas/sitemap/0.9',
@@ -16,7 +16,7 @@ xml.urlset(
   xml.tag!('rs:ln', rel: 'up', href: href)
   xml.tag!('rs:md', capability: 'resourcelist', at: Time.zone.now.iso8601)
   @organizations.each do |org|
-    xml.url do
+    xml.sitemap do
       xml.tag!(
         'rs:md',
         at: if params[:normalized]
