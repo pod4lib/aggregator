@@ -12,7 +12,7 @@ xml.urlset(
 
   if @normalized_dump.persisted?
     xml.url do
-      xml.loc(removed_since_previous_stream_organization_stream_url(@stream))
+      xml.loc(removed_since_previous_stream_organization_stream_url(@organization, @stream))
     end
 
     full = if params[:flavor] == 'marc21'
