@@ -63,7 +63,7 @@ class UploadsController < ApplicationController
   end
 
   def current_stream
-    @current_stream ||= begin
+    @current_stream ||=
       if params[:stream].present?
         slug = @organization.default_stream.normalize_friendly_id(params[:stream])
 
@@ -73,7 +73,6 @@ class UploadsController < ApplicationController
       else
         @organization.default_stream
       end
-    end
   end
 
   private
