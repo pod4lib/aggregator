@@ -53,9 +53,9 @@ class AugmentMarcRecordService
   end
 
   def map_subfield_data(field, mapping)
-    mapping.sort_by { |k, _v| k }.map do |destination_subfield, source_subfield|
+    mapping.sort_by { |k, _v| k }.filter_map do |destination_subfield, source_subfield|
       [destination_subfield, field[source_subfield]] if source_subfield && field[source_subfield].present?
-    end.compact
+    end
   end
 
   def duped_record(source_record)

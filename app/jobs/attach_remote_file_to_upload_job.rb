@@ -20,12 +20,12 @@ class AttachRemoteFileToUploadJob < ApplicationJob
 
   def filename_from_io(io)
     content_disposition = io.meta['content-disposition']&.split(';') || []
-    filenames = content_disposition.map do |disp|
+    filenames = content_disposition.filter_map do |disp|
       key, value = disp.split('=')
       next unless key == 'filename'
 
       value
-    end.compact
+    end
 
     filenames&.first&.gsub(/^["']|["']$/, '')
   end
