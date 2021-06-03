@@ -2,7 +2,7 @@
   <div class="d-flex">
     <div class="h2">
       <% content = capture do %>
-        Streams <span class="badge badge-secondary"><%= stream.organization.streams.active.count %></span>
+        Streams <span class="badge bg-secondary"><%= stream.organization.streams.active.count %></span>
       <% end %>
       <%= link_to_if stream.organization.streams.accessible_by(current_ability).any?, content, organization_streams_path(stream.organization) %>
     </div>

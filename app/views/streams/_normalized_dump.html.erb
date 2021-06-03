@@ -8,7 +8,7 @@
       <thead><th></th><th class="pl-4">File</th><th>Date created</th><th>Size</th><th class="text-right pr-4">Records</th></thead>
       <tbody>
         <tr>
-          <td><span class="badge badge-danger">Deletes</span></td>
+          <td><span class="badge bg-danger">Deletes</span></td>
           <td class="pl-4">
             <%= link_to_if can?(:read, normalized_dump.stream), 'deleted-records.txt', removed_since_previous_stream_organization_stream_url(@organization, normalized_dump.stream), download: true %>
           </td>
