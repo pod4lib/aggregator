@@ -11,8 +11,8 @@
     <% if flash[type] %>
       <% Array(flash[type]).each do |message| %>
         <div class="alert <%=alert_class %> mt-3">
-          <a class="close float-right" data-dismiss="alert" href="#">&times;</a>
           <%= message.html_safe %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
       <% end %>
     <% end %>
