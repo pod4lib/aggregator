@@ -22,7 +22,7 @@
     <tbody>
       <% @streams.active.each do |stream| %>
         <tr>
-          <td><%= content_tag :span, 'default', class: 'badge badge-info' if stream.default? %></td>
+          <td><%= content_tag :span, 'default', class: 'badge bg-info' if stream.default? %></td>
           <td><%= link_to stream.display_name, organization_stream_path(@organization, stream) %></td>
           <td><%= stream.updated_at %></td>
           <td><%= stream.files.size %> | <%= number_to_human_size stream.files.sum(:byte_size) %></td>

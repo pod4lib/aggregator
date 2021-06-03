@@ -30,8 +30,8 @@
         </td>
         <td class="text-center">
           <% if subfields.any? %>
-            <button class="btn p-0 m-0 border-0 align-top text-left text-monospace" type="button" data-toggle="collapse" data-target="#histogram-subfields-<%= field.first.parameterize %>" aria-expanded="false" aria-controls="histogram-subfields-<%= field.first.parameterize %>">
-              <span class="sr-only">Expand</span>
+            <button class="btn p-0 m-0 border-0 align-top text-left text-monospace" type="button" data-bs-toggle="collapse" data-bs-target="#histogram-subfields-<%= field.first.parameterize %>" aria-expanded="false" aria-controls="histogram-subfields-<%= field.first.parameterize %>">
+              <span class="visually-hidden">Expand</span>
               <%= inline_svg_tag 'bootstrap-icons/icons/chevron-right.svg', height: 20, width: 20 %>
             </button>
           <% end %>
@@ -48,7 +48,7 @@
               <span class="text-monospace"><%= value %> [<%= id %>]</span>
             <% else %>
 
-            <button class="btn btn-sm btn-secondary" type="button" data-toggle="collapse" data-target="#profiles-<%= field.first %>" aria-expanded="false" aria-controls="profiles-<%= field.first %>">
+            <button class="btn btn-sm btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#profiles-<%= field.first %>" aria-expanded="false" aria-controls="profiles-<%= field.first %>">
               Toggle more/less <%= inline_svg_tag 'bootstrap-icons/icons/chevron-right.svg', height: 12, width: 12 %>
             </button>
               <div class="position-relative">

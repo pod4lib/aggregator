@@ -64,7 +64,7 @@
             <li class="list-group-item d-flex justify-content-between">
               <span>
                 <%= content_tag :span, contact_email.email %>
-                <%= content_tag :span, 'confirmed ✅', class: 'badge badge-success' if contact_email.confirmed_at.present? %>
+                <%= content_tag :span, 'confirmed ✅', class: 'badge bg-success' if contact_email.confirmed_at.present? %>
               </span>
               <%= link_to 'Remove', [@organization, contact_email], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm align-self-center' if can? :manage, @organization %>
             </li>
