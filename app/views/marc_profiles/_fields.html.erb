@@ -49,7 +49,7 @@
       <tr class="bg-info text-white font-weight-bolder"><td colspan="3"><%= field_group.first.first.split('$', 2).first %></td></tr>
       <% field_group.each do |field, values| %>
         <tr>
-          <td><span class="sr-only"><%= field.split("$", 2).first %></span></td>
+          <td><span class="visually-hidden"><%= field.split("$", 2).first %></span></td>
           <td><%= field.split("$", 2).last %></td>
           <td>
             <% selected_values = values.uniq { |(value, id)| value }.first(3) %>

@@ -22,7 +22,7 @@
         <th class="text-right">File count</th>
         <th class="text-right">File size</th>
         <th class="text-right">Records</th>
-        <th><span class="sr-only">File status</span></th>
+        <th><span class="visually-hidden">File status</span></th>
       </tr>
     </thead>
 
@@ -53,7 +53,7 @@
             <td class="text-right"><%= file.metadata['count'] ? number_with_delimiter(file.metadata['count']) : '???' %></td>
             <td class="text-left">
               <span class="pod-metadata-status <%= file.pod_metadata_status %>" title="<%= file.metadata['error'] %>">
-                <span class="sr-only"><%= file.pod_metadata_status %></span>
+                <span class="visually-hidden"><%= file.pod_metadata_status %></span>
               </span>
             </td>
           </tr>

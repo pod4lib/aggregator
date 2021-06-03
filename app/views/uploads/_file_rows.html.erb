@@ -15,7 +15,7 @@
   <tr>
     <td class="text-center">
       <span class="pod-metadata-status <%= file.pod_metadata_status %>" title="<%= file.pod_error_message %>">
-        <span class="sr-only"><%= file.pod_metadata_status %></span>
+        <span class="visually-hidden"><%= file.pod_metadata_status %></span>
       </span>
     </td>
     <td>
@@ -29,7 +29,7 @@
     <td>
       <% if can? :read, upload %>
         <%= link_to file_info_organization_upload_path(@organization, upload, file), class: 'btn btn-secondary' do %>
-          <span class="sr-only">Profile</span> 🔎
+          <span class="visually-hidden">Profile</span> 🔎
         <% end %>
         <% if upload.url.present? %>
           <%= link_to 'Source 🔗', upload.url, title: upload.url, class: 'btn btn-link' %>
