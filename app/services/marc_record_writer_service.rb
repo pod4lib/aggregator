@@ -13,13 +13,13 @@ class MarcRecordWriterService
 
   def write_marc_record(record)
     begin
-      marcxml_writer.write(record.augmented_marc)
+      writer(:marc21).write(split_marc(record.augmented_marc))
     rescue StandardError => e
       write_errata("#{record['001']}: #{e}")
     end
 
     begin
-      writer(:marc21).write(split_marc(record.augmented_marc))
+      marcxml_writer.write(record.augmented_marc)
     rescue StandardError => e
       write_errata("#{record['001']}: #{e}")
     end
