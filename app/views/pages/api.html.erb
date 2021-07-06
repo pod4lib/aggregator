@@ -44,7 +44,7 @@
   </pre>
 
   <h3 id="harvesting">Harvesting full dumps and lists of deleted records</h3>
-  <p>The POD Data Lake uses <a href="http://www.openarchives.org/rs/1.1/resourcesync">ResourceSync</a>, an extension of the <a href="https://sitemaps.org/">Sitemaps Protocol</a>, to expose aggregated data in three forms. The links below point to specifc ResourceSync resource lists that serve as the starting point for harvesting.</p>
+  <p>The POD Data Lake uses <a href="http://www.openarchives.org/rs/1.1/resourcesync">ResourceSync</a>, an extension of the <a href="https://sitemaps.org/">Sitemaps Protocol</a>, to expose aggregated data in three forms. The links below point to specific ResourceSync resource lists that serve as the starting point for harvesting.</p>
   <p>Like uploads, harvesting data requires an access token. To harvest the data, you would start by harvesting the correct sitemap, and retriving linked resource lists and resources. Currently, the POD Data Lake supports <strong><a href="http://www.openarchives.org/rs/1.1/resourcesync#DestPers">baseline synchronization</a></strong>; incremental synchronization (as defined by the ResourceSync specification) is not yet implemented. Please also note that you must parse and inspect the returned sitemaps to determine the URLs to the original or nomralized ata you wish to harvest.</p>
   <p>Since harvesting using ResourceSync requires parsing the returned sitemaps to find the additional links to follow, using ResourceSync client like <a href="https://github.com/resync/resync"><code>resync</code></a> is recommended.</p>
   <h4 class="mt-3">API documentation</h4>
