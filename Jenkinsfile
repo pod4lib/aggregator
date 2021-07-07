@@ -36,13 +36,13 @@ pipeline {
       post {
         success {
           sh '''#!/bin/bash -l
-            curl -X POST -H 'Content-type: application/json' --data '{"text":"The deploy to prod was successful"}' $SLACK_WEBHOOK_URL
+            curl -X POST -H 'Content-type: application/json' --data '{"text":"[ivplus/aggregator] The deploy to prod was successful"}' $SLACK_WEBHOOK_URL
           '''
         }
 
         failure {
           sh '''#!/bin/bash -l
-            curl -X POST -H 'Content-type: application/json' --data '{"text":"The deploy to prod was unsuccessful"}' $SLACK_WEBHOOK_URL
+            curl -X POST -H 'Content-type: application/json' --data '{"text":"[ivplus/aggregator] The deploy to prod was unsuccessful"}' $SLACK_WEBHOOK_URL
           '''
         }
       }
