@@ -66,7 +66,7 @@ class ExtractFilesJob < ApplicationJob
 
   def multifile?(attachment)
     blob = attachment.blob
-    chunk = blob.service.download_chunk(blob.key, 0..2.kilobytes)
+    chunk = blob.service.download_chunk(blob.key, 0..(2.kilobytes))
 
     # tar.gz magic bytes
     if chunk.bytes[0] == 0x1F && chunk.bytes[1] == 0x8B
