@@ -1,11 +1,13 @@
 <div class="container mt-3">
   <h2 class="display-4">API Documentation</h2>
 
+  <h3>Streams</h3>
+  <p><strong>Streams</strong> are used to group full dumps and subsequent incremental updates and deletes together. Each organization can have many associated streams, but only one <em>default stream</em>. The default stream indicates the current active dump for a given organization, used in other parts of the Aggregator (e.g. harvesting and statistics). You can create new streams from your organization page; only the stream name is required.</p>
   <h3>Uploading a new "full dump"</h3>
   <h4 class="mt-3">API documentation</h4>
   <ul class="list-group">
     <li class="list-group-item">
-      <span class="badge bg-info mr-3">POST</span><%= content_tag :span, organization_uploads_url(organization_id: '$ORG_CODE'), class: 'text-monospace font-weight-bolder' %> Upload a file or files to the default stream
+      <span class="badge bg-info mr-3">POST</span><%= content_tag :span, organization_uploads_url(organization_id: '$ORG_CODE'), class: 'text-monospace font-weight-bolder' %> Upload a file or files to the default stream, or a given stream
       <table class="table">
         <thead><th>Name</th><th>Description</th></thead>
         <tbody>
@@ -34,7 +36,7 @@
     $ export STREAM_ID=$(date +%F) #  or some other identifier for the stream
 
     # Upload the e.g. MARC21 files in the current directory in a single upload
-    $ ls -d * | xargs -I{} printf "\-F 'upload[files][]=@%s;type=application/marc' " {} {} | xargs curl -H "Authorization: Bearer $ACCESS_TOKEN" --url <%= organization_uploads_url(organization_id: '$ORG_CODE', stream: 'STREAM_ID').sub('STREAM_ID', '$STREAM_ID') %>
+    $ ls -d * | xargs -I{} printf "\-F 'upload[files][]=@%s;type=application/marc' " {} | xargs curl -H "Authorization: Bearer $ACCESS_TOKEN" --url <%= organization_uploads_url(organization_id: '$ORG_CODE', stream: 'STREAM_ID').sub('STREAM_ID', '$STREAM_ID') %>
     # use application/marcxml+xml for MARCXML, and text/plain for newline-delimited deletes.
 
     # OR, upload multiple files in parallel
