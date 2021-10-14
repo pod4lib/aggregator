@@ -20,9 +20,9 @@
         <%= render partial: 'streams/dump_attachment', locals: { type: 'Full', attachment: normalized_dump.marcxml.attachment, stream: normalized_dump.stream } %>
 
         <% normalized_dump.deltas.each do |delta| %>
-          <%= render partial: 'streams/dump_attachment', locals: { type: 'Delta', attachment: normalized_dump.marc21.attachment, stream: normalized_dump.stream } %>
-          <%= render partial: 'streams/dump_attachment', locals: { type: 'Delta', attachment: normalized_dump.marcxml.attachment, stream: normalized_dump.stream } %>
-          <%= render partial: 'streams/dump_attachment', locals: { type: 'Deletes', attachment: normalized_dump.deletes.attachment, stream: normalized_dump.stream } %>
+          <%= render partial: 'streams/dump_attachment', locals: { type: 'Delta', attachment: delta.marc21.attachment, stream: normalized_dump.stream } %>
+          <%= render partial: 'streams/dump_attachment', locals: { type: 'Delta', attachment: delta.marcxml.attachment, stream: normalized_dump.stream } %>
+          <%= render partial: 'streams/dump_attachment', locals: { type: 'Deletes', attachment: delta.deletes.attachment, stream: normalized_dump.stream } %>
         <% end %>
       </tbody>
     </table>
