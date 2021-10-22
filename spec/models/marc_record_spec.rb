@@ -24,6 +24,20 @@ RSpec.describe MarcRecord, type: :model do
         expect(marc_record.marc['001'].value).to eq 'a12345'
       end
     end
+
+    context 'with serialized json' do
+      let(:original_record) do
+        MARC::Record.new.tap { |record| record.leader = '123' }
+      end
+
+      before do
+        marc_record.update(json: Zlib::Deflate.new.deflate(original_record.to_marchash.to_json, Zlib::FINISH))
+      end
+
+      it 'gets the MARC record from the serialized json' do
+        expect(marc_record.marc.leader).to eq '123'
+      end
+    end
   end
 
   describe '#augmented_marc' do
