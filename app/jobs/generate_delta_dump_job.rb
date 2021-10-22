@@ -27,7 +27,7 @@ class GenerateDeltaDumpJob < ApplicationJob
       hash = current_marc_records(uploads)
 
       uploads.each do |upload|
-        upload.each_marc_record_metadata.each do |record|
+        upload.each_marc_record_metadata(checksum: false).each do |record|
           next unless hash.dig(record.marc001, 'file_id') == record.file_id
 
           if hash.dig(record.marc001, 'status') == 'delete'
@@ -57,7 +57,7 @@ class GenerateDeltaDumpJob < ApplicationJob
     hash = {}
 
     uploads.each do |upload|
-      upload.each_marc_record_metadata.each do |record|
+      upload.each_marc_record_metadata(checksum: false).each do |record|
         hash[record.marc001] = record.attributes.slice('file_id', 'status')
       end
     end
