@@ -43,11 +43,14 @@ class Upload < ApplicationRecord
 
       format = service.identify
 
-      extract_marc_record_delete_metadata(file, &block) if format == :delete
-
-      next if format == :unknown
-
-      extract_marc_record_metadata(file, service, &block)
+      case format
+      when :delete
+        extract_marc_record_delete_metadata(file, &block)
+      when :unknown
+        next
+      else
+        extract_marc_record_metadata(file, service, &block)
+      end
     rescue StandardError => e
       Honeybadger.notify(e)
     end
