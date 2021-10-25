@@ -35,19 +35,22 @@ class Upload < ApplicationRecord
     files.find_each(&:purge_later)
   end
 
-  def each_marc_record_metadata(&block)
-    return to_enum(:each_marc_record_metadata) unless block
+  def each_marc_record_metadata(**options, &block)
+    return to_enum(:each_marc_record_metadata, **options) unless block
 
     files.each do |file|
       service = MarcRecordService.new(file.blob)
 
       format = service.identify
 
-      extract_marc_record_delete_metadata(file, &block) if format == :delete
-
-      next if format == :unknown
-
-      extract_marc_record_metadata(file, service, &block)
+      case format
+      when :delete
+        extract_marc_record_delete_metadata(file, &block)
+      when :unknown
+        next
+      else
+        extract_marc_record_metadata(file, service, **options, &block)
+      end
     rescue StandardError => e
       Honeybadger.notify(e)
     end
@@ -88,8 +91,8 @@ class Upload < ApplicationRecord
     end
   end
 
-  def extract_marc_record_metadata(file, service)
-    return to_enum(:extract_marc_record_metadata, file, service) unless block_given?
+  def extract_marc_record_metadata(file, service, checksum: true)
+    return to_enum(:extract_marc_record_metadata, file, service, checksum: checksum) unless block_given?
 
     service.each_with_metadata do |record, metadata|
       out = MarcRecord.new(
@@ -101,7 +104,7 @@ class Upload < ApplicationRecord
         json: Zlib::Deflate.new.deflate(record.to_marchash.to_json, Zlib::FINISH)
       )
 
-      out.checksum ||= Digest::MD5.hexdigest(record.to_xml.to_s)
+      out.checksum ||= Digest::MD5.hexdigest(record.to_xml.to_s) if checksum
 
       yield out
     end

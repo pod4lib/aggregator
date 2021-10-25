@@ -24,7 +24,7 @@ class GenerateFullDumpJob < ApplicationJob
       hash = current_marc_records(organization.default_stream.uploads)
 
       organization.default_stream.uploads.each do |upload|
-        upload.each_marc_record_metadata.each do |record|
+        upload.each_marc_record_metadata(checksum: false).each do |record|
           next unless hash.dig(record.marc001, 'file_id') == record.file_id || hash.dig(record.marc001, 'status') == 'delete'
 
           writer.write_marc_record(record)
@@ -68,7 +68,7 @@ class GenerateFullDumpJob < ApplicationJob
     hash = {}
 
     uploads.each do |upload|
-      upload.each_marc_record_metadata.each do |record|
+      upload.each_marc_record_metadata(checksum: false).each do |record|
         hash[record.marc001] = record.attributes.slice('file_id', 'status')
       end
     end
