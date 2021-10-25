@@ -12,7 +12,9 @@ class MarcRecord < ApplicationRecord
 
   # @return [MARC::Record]
   def marc
-    @marc ||= if bytecount && length
+    @marc ||= if json
+                load_record_from_json
+              elsif bytecount && length
                 service.at_bytes(bytecount...(bytecount + length), merge: true)
               elsif index
                 service.at_index(index)
@@ -29,5 +31,9 @@ class MarcRecord < ApplicationRecord
 
   def service
     @service ||= MarcRecordService.new(file.blob)
+  end
+
+  def load_record_from_json
+    MARC::Record.new_from_marchash(JSON.parse(Zlib::Inflate.inflate(json)))
   end
 end

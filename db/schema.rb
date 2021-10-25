@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_06_160233) do
+ActiveRecord::Schema.define(version: 2021_10_22_194847) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -158,6 +158,7 @@ ActiveRecord::Schema.define(version: 2021_01_06_160233) do
     t.bigint "index"
     t.string "checksum"
     t.string "status"
+    t.binary "json"
     t.index ["file_id", "marc001"], name: "index_marc_records_on_file_id_and_marc001"
     t.index ["file_id"], name: "index_marc_records_on_file_id"
     t.index ["upload_id", "marc001"], name: "index_marc_records_on_upload_id_and_marc001"

@@ -97,7 +97,8 @@ class Upload < ApplicationRecord
         marc001: record['001']&.value,
         file: file,
         marc: record,
-        upload: self
+        upload: self,
+        json: Zlib::Deflate.new.deflate(record.to_marchash.to_json, Zlib::FINISH)
       )
 
       out.checksum ||= Digest::MD5.hexdigest(record.to_xml.to_s)
