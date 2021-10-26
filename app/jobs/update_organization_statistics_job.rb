@@ -8,9 +8,16 @@ class UpdateOrganizationStatisticsJob < ApplicationJob
     Organization.find_each { |o| perform_later(o) }
   end
 
-  def perform(organization, stream = nil)
+  def perform(organization, stream = nil, upload = nil)
     stream ||= organization.default_stream
 
+    # short-circuit if our statstics job is already obsolete
+    return if upload && stream.uploads.where('created_at > ?', upload.created_at)
+
+    generate_statistics!(organization, stream)
+  end
+
+  def generate_statistics!(organization, stream)
     stream_statistics = stream.statistic || stream.create_statistic
     stream_statistics.update(date: Time.zone.today, **calculate_stream_statistics(stream))
 
