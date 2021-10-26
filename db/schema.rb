@@ -153,9 +153,9 @@ ActiveRecord::Schema.define(version: 2021_10_22_194847) do
     t.integer "file_id", null: false
     t.integer "upload_id", null: false
     t.string "marc001"
-    t.bigint "bytecount"
-    t.bigint "length"
-    t.bigint "index"
+    t.integer "bytecount"
+    t.integer "length"
+    t.integer "index"
     t.string "checksum"
     t.string "status"
     t.binary "json"
