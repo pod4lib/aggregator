@@ -12,7 +12,7 @@
         <% end %>
       </td>
     </tr>
-    <% stream.uploads.active.each do |upload| %>
+    <% stream.uploads.active.sort_by(&:created_at).each do |upload| %>
       <%= render 'uploads/file_rows', upload: upload %>
     <% end %>
   </tbody>
