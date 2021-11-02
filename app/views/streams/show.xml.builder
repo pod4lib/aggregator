@@ -13,7 +13,7 @@ xml.urlset(
     xml.loc(removed_since_previous_stream_organization_stream_url(@organization, @stream))
   end
 
-  @stream.files.each do |file|
+  @stream.files.sort_by(&:created_at).each do |file|
     xml.url do
       xml.tag!(
         'rs:md',

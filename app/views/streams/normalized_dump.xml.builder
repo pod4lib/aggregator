@@ -36,7 +36,7 @@ xml.urlset(
 
     # deltas
 
-    @normalized_dump.deltas.each do |delta|
+    @normalized_dump.deltas.sort_by(&:created_at).each do |delta|
       file = if params[:flavor] == 'marc21'
                delta.marc21.attachment
              else
