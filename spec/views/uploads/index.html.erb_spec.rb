@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'uploads/index', type: :view do
-  let(:organization) { FactoryBot.create(:organization) }
+  let(:organization) { create(:organization) }
 
   before do
     assign(:uploads, [

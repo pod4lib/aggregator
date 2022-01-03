@@ -3,15 +3,15 @@
 require 'rails_helper'
 
 RSpec.describe ReanalyzeJob, type: :job do
-  let(:organization) { FactoryBot.create(:organization) }
+  let(:organization) { create(:organization) }
 
   context 'with a stream' do
     let(:stream) { organization.default_stream }
 
     before do
-      stream.uploads << FactoryBot.build(:upload, :binary_marc)
-      stream.uploads << FactoryBot.build(:upload, :binary_marc)
-      stream.uploads << FactoryBot.build(:upload, :binary_marc)
+      stream.uploads << build(:upload, :binary_marc)
+      stream.uploads << build(:upload, :binary_marc)
+      stream.uploads << build(:upload, :binary_marc)
     end
 
     it 'enqueues reanalyzing uploads' do
@@ -20,7 +20,7 @@ RSpec.describe ReanalyzeJob, type: :job do
   end
 
   context 'with an upload' do
-    let(:upload) { FactoryBot.create(:upload, :binary_marc) }
+    let(:upload) { create(:upload, :binary_marc) }
 
     it 'enqueues extracting the marc records' do
       expect { described_class.perform_now(upload) }.to enqueue_job(ExtractMarcRecordMetadataJob).once.with(upload)
@@ -32,7 +32,7 @@ RSpec.describe ReanalyzeJob, type: :job do
   end
 
   context 'with a file' do
-    let(:upload) { FactoryBot.create(:upload, :binary_marc) }
+    let(:upload) { create(:upload, :binary_marc) }
     let(:file) { upload.files.first.blob }
 
     it 'enqueues reanalyzing the file' do

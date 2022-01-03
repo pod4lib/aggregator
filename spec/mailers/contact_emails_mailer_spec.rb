@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe ContactEmailsMailer, type: :mailer do
-  let(:contact_email) { FactoryBot.build(:contact_email) }
+  let(:contact_email) { build(:contact_email) }
 
   describe 'confirm_email' do
     subject(:mail) { described_class.with(contact_email: contact_email).confirm_email }

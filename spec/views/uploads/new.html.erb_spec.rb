@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'uploads/new', type: :view do
-  let(:organization) { FactoryBot.create(:organization) }
+  let(:organization) { create(:organization) }
   let(:stream) { organization.default_stream }
 
   before do

@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe 'site_users/index', type: :view do
-  let(:user) { FactoryBot.create(:user) }
-  let(:admin) { FactoryBot.create(:admin) }
+  let(:user) { create(:user) }
+  let(:admin) { create(:admin) }
 
   before do
     assign(:users, [user, admin])

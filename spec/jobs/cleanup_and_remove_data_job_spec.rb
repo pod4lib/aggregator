@@ -3,13 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe CleanupAndRemoveDataJob, type: :job do
-  let(:organization) { FactoryBot.create(:organization) }
+  let(:organization) { create(:organization) }
 
   describe 'archives older streams for an organization after a quarter of not being updated' do
     before do
       organization.default_stream
       Timecop.travel(4.months.ago)
-      FactoryBot.create_list(:stream, 4, organization: organization)
+      create_list(:stream, 4, organization: organization)
       Timecop.return
     end
 
@@ -22,7 +22,7 @@ RSpec.describe CleanupAndRemoveDataJob, type: :job do
     before do
       organization.default_stream
       Timecop.travel(7.months.ago)
-      FactoryBot.create_list(:stream, 4, organization: organization, status: 'archived')
+      create_list(:stream, 4, organization: organization, status: 'archived')
       Timecop.return
     end
 
@@ -33,7 +33,7 @@ RSpec.describe CleanupAndRemoveDataJob, type: :job do
 
   describe 'removes all but the last two normalized_dumps' do
     before do
-      FactoryBot.create_list(:normalized_dump, 4, stream: organization.default_stream)
+      create_list(:normalized_dump, 4, stream: organization.default_stream)
     end
 
     it do

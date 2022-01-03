@@ -3,10 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe '/organizations/1/invite', type: :request do
-  let(:organization) { FactoryBot.create(:organization) }
+  let(:organization) { create(:organization) }
 
   before do
-    sign_in FactoryBot.create(:admin)
+    sign_in create(:admin)
   end
 
   describe 'GET /new' do
@@ -17,7 +17,7 @@ RSpec.describe '/organizations/1/invite', type: :request do
   end
 
   describe 'POST /create' do
-    let(:user) { FactoryBot.build(:user) }
+    let(:user) { build(:user) }
     let(:valid_attributes) do
       { email: user.email }
     end
@@ -35,7 +35,7 @@ RSpec.describe '/organizations/1/invite', type: :request do
     end
 
     context 'with a user that already exists' do
-      let(:user) { FactoryBot.create(:user) }
+      let(:user) { create(:user) }
 
       it 'adds the user to the organization' do
         post organization_invite_url(organization), params: { user: valid_attributes }

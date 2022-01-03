@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'allowlisted_jwts/index', type: :view do
-  let(:organization) { FactoryBot.build(:organization) }
+  let(:organization) { build(:organization) }
 
   before do
     assign(:organization, organization)

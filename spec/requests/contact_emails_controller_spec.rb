@@ -3,10 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe '/contact_emails', type: :request do
-  let(:organization) { FactoryBot.create(:organization) }
+  let(:organization) { create(:organization) }
 
   describe 'GET /confirm/12345' do
-    let(:contact_email) { FactoryBot.create(:contact_email, organization: organization) }
+    let(:contact_email) { create(:contact_email, organization: organization) }
 
     it 'confirms the contact email' do
       get contact_email_confirmation_url(token: contact_email.confirmation_token)

@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe MarcProfile, type: :model do
-  let(:upload) { FactoryBot.create(:upload, :binary_marc) }
+  let(:upload) { create(:upload, :binary_marc) }
   let(:blob) { upload.files.first.blob }
 
   it 'can be created without an upload' do

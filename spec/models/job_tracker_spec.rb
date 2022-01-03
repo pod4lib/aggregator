@@ -15,7 +15,7 @@ RSpec.describe JobTracker, type: :model do
 
   describe '#label' do
     context 'with a blob' do
-      let(:attributes) { { resource: FactoryBot.build(:upload, :binary_marc).files.first.blob } }
+      let(:attributes) { { resource: build(:upload, :binary_marc).files.first.blob } }
 
       it 'includes the file name' do
         expect(job_tracker.label).to eq '[Whatever] 1297245.marc'
@@ -23,7 +23,7 @@ RSpec.describe JobTracker, type: :model do
     end
 
     context 'with an upload' do
-      let(:attributes) { { resource: FactoryBot.build(:upload, name: 'zzz') } }
+      let(:attributes) { { resource: build(:upload, name: 'zzz') } }
 
       it 'includes the upload name' do
         expect(job_tracker.label).to eq '[Whatever] zzz'

@@ -27,11 +27,11 @@ RSpec.describe '/uploads', type: :request do
     skip
   end
 
-  let(:organization) { FactoryBot.create(:organization) }
+  let(:organization) { create(:organization) }
   let(:stream) { organization.default_stream }
 
   before do
-    sign_in FactoryBot.create(:admin)
+    sign_in create(:admin)
   end
 
   describe 'GET /index' do

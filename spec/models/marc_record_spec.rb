@@ -6,8 +6,8 @@ RSpec.describe MarcRecord, type: :model do
   subject(:marc_record) { described_class.new(file: upload.files.first, upload: upload, **attr) }
 
   let(:attr) { {} }
-  let(:organization) { FactoryBot.create(:organization, code: 'COOlCOdE') }
-  let(:upload) { FactoryBot.create(:upload, :binary_marc, organization: organization) }
+  let(:organization) { create(:organization, code: 'COOlCOdE') }
+  let(:upload) { create(:upload, :binary_marc, organization: organization) }
 
   describe '#marc' do
     let(:attr) { { bytecount: 0, length: 1407 } }
@@ -17,7 +17,7 @@ RSpec.describe MarcRecord, type: :model do
     end
 
     context 'with a marcxml file' do
-      let(:upload) { FactoryBot.create(:upload, :marc_xml) }
+      let(:upload) { create(:upload, :marc_xml) }
       let(:attr) { { index: 0 } }
 
       it 'gets the MARC record from the file by its index' do

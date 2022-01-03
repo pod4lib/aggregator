@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe ExtractFilesJob, type: :job do
-  let!(:upload) { FactoryBot.create(:upload, :tar_gz) }
+  let!(:upload) { create(:upload, :tar_gz) }
 
   it 'creates additional uploads for each extracted file' do
     expect do
@@ -18,7 +18,7 @@ RSpec.describe ExtractFilesJob, type: :job do
   end
 
   context 'with a non-tar file' do
-    let!(:upload) { FactoryBot.create(:upload, :binary_marc) }
+    let!(:upload) { create(:upload, :binary_marc) }
 
     it 'does nothing' do
       expect do
@@ -28,7 +28,7 @@ RSpec.describe ExtractFilesJob, type: :job do
   end
 
   context 'with a multi-file upload' do
-    let!(:upload) { FactoryBot.create(:upload, :mixed_file_with_tar_gz) }
+    let!(:upload) { create(:upload, :mixed_file_with_tar_gz) }
 
     it 'extracts files and copies non-tar files to a new upload' do
       expect do

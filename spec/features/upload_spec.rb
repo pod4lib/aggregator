@@ -4,8 +4,8 @@ require 'rails_helper'
 
 RSpec.describe 'uploading files to POD', type: :feature do
   context 'with an organization user' do
-    let(:organization) { FactoryBot.create(:organization, name: 'Best University') }
-    let(:user) { FactoryBot.create(:user) }
+    let(:organization) { create(:organization, name: 'Best University') }
+    let(:user) { create(:user) }
 
     before do
       user.add_role :member, organization

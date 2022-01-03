@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe ContactEmail, type: :model do
-  subject(:contact_email) { FactoryBot.build(:contact_email, organization: organization) }
+  subject(:contact_email) { build(:contact_email, organization: organization) }
 
-  let(:organization) { FactoryBot.build(:organization) }
+  let(:organization) { build(:organization) }
 
   describe 'changing the email' do
     before do
