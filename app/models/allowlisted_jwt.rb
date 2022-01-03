@@ -16,7 +16,7 @@ class AllowlistedJwt < ApplicationRecord
       scope: scope,
       iss: 'POD',
       name: label
-    }.reject { |_k, v| v.blank? }
+    }.compact_blank
   end
 
   def last_used

@@ -27,7 +27,7 @@ class AugmentMarcRecordService
   # provided the record to POD.
   # @param [MARC::Record] record to modify
   def append_pod_provenance_information(record)
-    provenance_information = [pod_source_metadata, organization_metadata].reject(&:blank?)
+    provenance_information = [pod_source_metadata, organization_metadata].compact_blank
 
     record.append(MARC::DataField.new('900', nil, nil, *provenance_information))
   end
