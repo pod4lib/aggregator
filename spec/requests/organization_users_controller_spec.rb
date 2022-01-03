@@ -3,11 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe '/organizations/1/organization_users', type: :request do
-  let(:organization) { FactoryBot.create(:organization) }
-  let(:user) { FactoryBot.create(:user) }
+  let(:organization) { create(:organization) }
+  let(:user) { create(:user) }
 
   before do
-    sign_in FactoryBot.create(:admin)
+    sign_in create(:admin)
   end
 
   describe 'DELETE /destroy' do

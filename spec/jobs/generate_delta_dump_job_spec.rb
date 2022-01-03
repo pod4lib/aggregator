@@ -3,16 +3,16 @@
 require 'rails_helper'
 
 RSpec.describe GenerateDeltaDumpJob, type: :job do
-  let(:organization) { FactoryBot.create(:organization) }
+  let(:organization) { create(:organization) }
 
   before do
     Timecop.travel(5.days.ago)
-    organization.default_stream.uploads << FactoryBot.build(:upload, :binary_marc)
-    organization.default_stream.uploads << FactoryBot.build(:upload, :binary_marc)
+    organization.default_stream.uploads << build(:upload, :binary_marc)
+    organization.default_stream.uploads << build(:upload, :binary_marc)
     GenerateFullDumpJob.perform_now(organization)
 
     Timecop.return
-    organization.default_stream.uploads << FactoryBot.build(:upload, :binary_marc)
+    organization.default_stream.uploads << build(:upload, :binary_marc)
   end
 
   it 'creates a new normalized delta dump' do
@@ -32,8 +32,8 @@ RSpec.describe GenerateDeltaDumpJob, type: :job do
 
   context 'with deletes' do
     before do
-      organization.default_stream.uploads << FactoryBot.build(:upload, :deletes)
-      organization.default_stream.uploads << FactoryBot.build(:upload, :deletes)
+      organization.default_stream.uploads << build(:upload, :deletes)
+      organization.default_stream.uploads << build(:upload, :deletes)
     end
 
     it 'collects deletes into a single file' do
@@ -50,7 +50,7 @@ RSpec.describe GenerateDeltaDumpJob, type: :job do
     end
 
     it 'does not include deletes that were readded' do
-      organization.default_stream.uploads << FactoryBot.build(:upload, :binary_marc)
+      organization.default_stream.uploads << build(:upload, :binary_marc)
       described_class.perform_now(organization)
 
       organization.default_stream.reload.current_full_dump.deltas.last.deletes.download do |file|
@@ -59,7 +59,7 @@ RSpec.describe GenerateDeltaDumpJob, type: :job do
     end
 
     it 'includes MARC records that were re-added' do
-      organization.default_stream.uploads << FactoryBot.build(:upload, :binary_marc)
+      organization.default_stream.uploads << build(:upload, :binary_marc)
       described_class.perform_now(organization)
 
       download_and_uncompress(organization.default_stream.reload.current_full_dump.deltas.last.marcxml) do |file|

@@ -4,11 +4,11 @@ require 'rails_helper'
 
 RSpec.describe '/files', type: :request do
   before do
-    sign_in FactoryBot.create(:admin)
+    sign_in create(:admin)
   end
 
   describe 'GET /files/' do
-    let(:upload) { FactoryBot.create(:upload, :binary_marc) }
+    let(:upload) { create(:upload, :binary_marc) }
 
     context 'when non-range requests' do
       let(:expected_headers) do

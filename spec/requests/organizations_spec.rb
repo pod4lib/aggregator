@@ -16,7 +16,7 @@ require 'rails_helper'
 
 RSpec.describe '/organizations', type: :request do
   before do
-    sign_in FactoryBot.create(:admin)
+    sign_in create(:admin)
   end
 
   # Organization. As you add validations to Organization, be sure to
@@ -39,8 +39,8 @@ RSpec.describe '/organizations', type: :request do
 
   describe '/resourcelist' do
     before do
-      FactoryBot.create(:organization)
-      FactoryBot.create(:organization)
+      create(:organization)
+      create(:organization)
     end
 
     it 'has some ResourceSync stuff in it' do

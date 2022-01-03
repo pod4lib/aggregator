@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe AllowlistedJwt do
-  let(:organization) { FactoryBot.create(:organization) }
+  let(:organization) { create(:organization) }
 
   it 'can be successfully created when assocated with a resource' do
     expect(described_class.create(resource: organization)).to be_persisted

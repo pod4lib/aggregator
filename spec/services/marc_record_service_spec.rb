@@ -6,7 +6,7 @@ RSpec.describe MarcRecordService do
   subject(:service) { described_class.new(blob) }
 
   context 'with a marc21 file' do
-    let(:upload) { FactoryBot.create(:upload, :binary_marc) }
+    let(:upload) { create(:upload, :binary_marc) }
     let(:blob) { upload.files.first.blob }
 
     it { is_expected.to be_marc21 }
@@ -43,7 +43,7 @@ RSpec.describe MarcRecordService do
     end
 
     context 'with a "delete" record' do
-      let(:upload) { FactoryBot.create(:upload, :deleted_binary_marc) }
+      let(:upload) { create(:upload, :deleted_binary_marc) }
 
       it 'sets the delete status for the record' do
         _record, metadata = service.each_with_metadata.first
@@ -53,7 +53,7 @@ RSpec.describe MarcRecordService do
   end
 
   context 'with a marcxml file' do
-    let(:upload) { FactoryBot.create(:upload, :marc_xml) }
+    let(:upload) { create(:upload, :marc_xml) }
     let(:blob) { upload.files.first.blob }
 
     it { is_expected.not_to be_marc21 }
@@ -84,7 +84,7 @@ RSpec.describe MarcRecordService do
     end
 
     context 'with a "delete" record' do
-      let(:upload) { FactoryBot.create(:upload, :deleted_marc_xml) }
+      let(:upload) { create(:upload, :deleted_marc_xml) }
 
       it 'sets the delete status for the record' do
         _record, metadata = service.each_with_metadata.first
@@ -94,7 +94,7 @@ RSpec.describe MarcRecordService do
   end
 
   context 'with a gzipped marc21 file' do
-    let(:upload) { FactoryBot.create(:upload, :small_batch_gz) }
+    let(:upload) { create(:upload, :small_batch_gz) }
     let(:blob) { upload.files.first.blob }
 
     it { is_expected.to be_marc21 }
@@ -132,7 +132,7 @@ RSpec.describe MarcRecordService do
   end
 
   context 'with a MARC21 record that has been chunked' do
-    let(:upload) { FactoryBot.create(:upload, :marc21_multi_record) }
+    let(:upload) { create(:upload, :marc21_multi_record) }
     let(:blob) { upload.files.first.blob }
 
     it { is_expected.to be_marc21 }

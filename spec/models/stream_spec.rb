@@ -31,8 +31,8 @@ RSpec.describe Stream, type: :model do
     end
 
     it 'archives uploads' do
-      organization = FactoryBot.create(:organization)
-      stream_with_upload = FactoryBot.create(:stream_with_uploads, organization: organization)
+      organization = create(:organization)
+      stream_with_upload = create(:stream_with_uploads, organization: organization)
       expect { stream_with_upload.archive }.to change { stream_with_upload.uploads.archived.count }.by(1)
     end
   end

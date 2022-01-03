@@ -22,7 +22,7 @@ RSpec.describe AttachRemoteFileToUploadJob, type: :job do
     RemoteUploadFixture.new(fixture_file_upload(Rails.root.join('spec/fixtures/1297245.marc'), 'application/octet-stream'))
   end
 
-  let(:upload) { FactoryBot.create(:upload, files: [], url: 'http://example.com/1297245.marc') }
+  let(:upload) { create(:upload, files: [], url: 'http://example.com/1297245.marc') }
 
   it 'attaches files at the given URL' do
     expect do
@@ -37,7 +37,7 @@ RSpec.describe AttachRemoteFileToUploadJob, type: :job do
   end
 
   context 'when the url does not look like a file' do
-    let(:upload) { FactoryBot.create(:upload, files: [], url: 'http://example.com/1297245/marc/data') }
+    let(:upload) { create(:upload, files: [], url: 'http://example.com/1297245/marc/data') }
 
     it 'uses the upload name as a placeholder' do
       described_class.perform_now(upload)

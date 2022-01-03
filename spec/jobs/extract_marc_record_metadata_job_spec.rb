@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe ExtractMarcRecordMetadataJob, type: :job do
   include ActiveJob::TestHelper
 
-  let(:upload) { FactoryBot.create(:upload, :binary_marc) }
+  let(:upload) { create(:upload, :binary_marc) }
 
   it 'extract MarcRecord instances from data from each file' do
     expect do

@@ -3,15 +3,15 @@
 require 'rails_helper'
 
 RSpec.describe 'Downloading normalized files from POD', type: :feature do
-  let(:organization) { FactoryBot.create(:organization, code: 'best-org') }
-  let(:user) { FactoryBot.create(:user) }
+  let(:organization) { create(:organization, code: 'best-org') }
+  let(:user) { create(:user) }
 
   before do
     user.add_role :member, organization
     login_as(user, scope: :user)
 
-    FactoryBot.create_list(:upload, 2, :binary_marc, organization: organization, stream: organization.default_stream)
-    FactoryBot.create_list(:upload, 2, :binary_marc_gz, organization: organization, stream: organization.default_stream)
+    create_list(:upload, 2, :binary_marc, organization: organization, stream: organization.default_stream)
+    create_list(:upload, 2, :binary_marc_gz, organization: organization, stream: organization.default_stream)
   end
 
   describe 'Full dumps' do

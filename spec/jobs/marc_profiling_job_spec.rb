@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe MarcProfilingJob do
   include ActiveJob::TestHelper
 
-  let(:upload) { FactoryBot.create(:upload, :small_batch_gz) }
+  let(:upload) { create(:upload, :small_batch_gz) }
 
   it 'stores some statistics about the MARC files' do
     upload.files.first.blob.update(metadata: { count: 1 })

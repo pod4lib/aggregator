@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe CustomMarcWriter do
-  let(:long_upload) { FactoryBot.create(:upload, :long_file) }
+  let(:long_upload) { create(:upload, :long_file) }
   let(:split_marc_records) do
     MARC::Reader.new(
       StringIO.new(

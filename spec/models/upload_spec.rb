@@ -3,12 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe Upload, type: :model do
-  subject(:upload) { FactoryBot.create(:upload, :binary_marc) }
+  subject(:upload) { create(:upload, :binary_marc) }
 
   describe 'validations' do
     it 'validates that a URL or files are present' do
       expect do
-        FactoryBot.create(:upload, files: [])
+        create(:upload, files: [])
       end.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Url can't be blank, Files can't be blank")
     end
 
@@ -42,7 +42,7 @@ RSpec.describe Upload, type: :model do
   describe '#url' do
     it 'submits a job to attach the file from the URL if a URL is provided' do
       expect do
-        FactoryBot.create(:upload, files: [], url: 'http://example.com/12345.marc')
+        create(:upload, files: [], url: 'http://example.com/12345.marc')
       end.to enqueue_job(AttachRemoteFileToUploadJob).exactly(1).times.with(described_class.last)
     end
   end
@@ -50,13 +50,13 @@ RSpec.describe Upload, type: :model do
   context 'with a tar.gz' do
     it 'submits a job to extract the file' do
       expect do
-        FactoryBot.create(:upload, :tar_gz)
+        create(:upload, :tar_gz)
       end.to enqueue_job(ExtractFilesJob).exactly(1).times.with(described_class.last)
     end
   end
 
   describe '#each_marc_record_metadata' do
-    subject(:upload) { FactoryBot.create(:upload, :small_batch_gz) }
+    subject(:upload) { create(:upload, :small_batch_gz) }
 
     it 'uses the same object for the upload' do
       first, second = upload.each_marc_record_metadata.first(2).map(&:upload)

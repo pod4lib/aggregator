@@ -3,12 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe UpdateOrganizationStatisticsJob, type: :job do
-  let(:organization) { FactoryBot.create(:organization) }
+  let(:organization) { create(:organization) }
 
   before do
-    organization.default_stream.uploads << FactoryBot.build(:upload, :binary_marc)
-    organization.default_stream.uploads << FactoryBot.build(:upload, :binary_marc)
-    organization.default_stream.uploads << FactoryBot.build(:upload, :binary_marc)
+    organization.default_stream.uploads << build(:upload, :binary_marc)
+    organization.default_stream.uploads << build(:upload, :binary_marc)
+    organization.default_stream.uploads << build(:upload, :binary_marc)
 
     # populate the MarcRecords index
     organization.default_stream.uploads.each { |u| ExtractMarcRecordMetadataJob.perform_now(u) }

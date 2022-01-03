@@ -3,12 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe GenerateFullDumpJob, type: :job do
-  let(:organization) { FactoryBot.create(:organization) }
+  let(:organization) { create(:organization) }
 
   before do
-    organization.default_stream.uploads << FactoryBot.build(:upload, :binary_marc)
-    organization.default_stream.uploads << FactoryBot.build(:upload, :long_file)
-    organization.default_stream.uploads << FactoryBot.build(:upload, :binary_marc)
+    organization.default_stream.uploads << build(:upload, :binary_marc)
+    organization.default_stream.uploads << build(:upload, :long_file)
+    organization.default_stream.uploads << build(:upload, :binary_marc)
   end
 
   it 'creates a new normalized dump' do

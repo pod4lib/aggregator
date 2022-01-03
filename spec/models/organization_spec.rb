@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Organization do
-  let(:organization) { FactoryBot.create(:organization) }
+  let(:organization) { create(:organization) }
 
   describe '#jwt_token' do
     context 'when a jwt already exists' do

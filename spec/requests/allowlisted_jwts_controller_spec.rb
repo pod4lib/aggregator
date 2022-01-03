@@ -3,10 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe '/organizations/1/allowlisted_jwts', type: :request do
-  let(:organization) { FactoryBot.create(:organization) }
+  let(:organization) { create(:organization) }
 
   before do
-    sign_in FactoryBot.create(:admin)
+    sign_in create(:admin)
   end
 
   describe 'GET /index' do

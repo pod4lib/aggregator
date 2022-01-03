@@ -14,8 +14,8 @@ RSpec.describe Ability do
   end
 
   describe 'with a token' do
-    let(:org1) { FactoryBot.create(:organization) }
-    let(:org2) { FactoryBot.create(:organization) }
+    let(:org1) { create(:organization) }
+    let(:org2) { create(:organization) }
     let(:token) { { 'jti' => 'anything' } }
     let(:token_attributes) { {} }
 
@@ -34,8 +34,8 @@ RSpec.describe Ability do
 
       it { is_expected.to be_able_to(:read, org1) }
       it { is_expected.to be_able_to(:read, org2) }
-      it { is_expected.to be_able_to(:read, FactoryBot.create(:upload, :binary_marc, organization: org1)) }
-      it { is_expected.to be_able_to(:read, FactoryBot.create(:upload, :binary_marc, organization: org2)) }
+      it { is_expected.to be_able_to(:read, create(:upload, :binary_marc, organization: org1)) }
+      it { is_expected.to be_able_to(:read, create(:upload, :binary_marc, organization: org2)) }
       it { is_expected.not_to be_able_to(:create, Upload.new(organization: org1)) }
     end
 
@@ -50,7 +50,7 @@ RSpec.describe Ability do
 
   describe 'with a user' do
     context 'with an admin' do
-      let(:user) { FactoryBot.create(:admin) }
+      let(:user) { create(:admin) }
 
       it { is_expected.to be_able_to(:manage, :all) }
     end
@@ -58,14 +58,14 @@ RSpec.describe Ability do
     context 'when a non-admin user' do
       let(:user) { User.new }
 
-      it { is_expected.to be_able_to(:read, FactoryBot.create(:organization)) }
+      it { is_expected.to be_able_to(:read, create(:organization)) }
       it { is_expected.not_to be_able_to(:read, Upload.new) }
       it { is_expected.not_to be_able_to(:read, Stream.new) }
     end
 
     context 'with a member of an org' do
-      let(:organization) { FactoryBot.create(:organization) }
-      let(:user) { FactoryBot.create(:user) }
+      let(:organization) { create(:organization) }
+      let(:user) { create(:user) }
 
       before do
         user.add_role :member, organization

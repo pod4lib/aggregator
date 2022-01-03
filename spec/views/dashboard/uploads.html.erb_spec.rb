@@ -3,13 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe 'dashboard/uploads', type: :view do
-  let(:organization) { FactoryBot.create(:organization) }
-  let(:stream) { FactoryBot.create(:stream, organization: organization) }
+  let(:organization) { create(:organization) }
+  let(:stream) { create(:stream, organization: organization) }
   let(:uploads) do
     [
-      FactoryBot.create(:upload, :binary_marc, stream: stream),
-      FactoryBot.create(:upload, :marc_xml, stream: stream),
-      FactoryBot.create(:upload, :multple_files, stream: stream)
+      create(:upload, :binary_marc, stream: stream),
+      create(:upload, :marc_xml, stream: stream),
+      create(:upload, :multple_files, stream: stream)
     ]
   end
 
