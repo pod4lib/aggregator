@@ -13,7 +13,7 @@ class CleanupAndRemoveDataJob < ApplicationJob
     organization
       .streams
       .where(default: false)
-      .where.not(updated_at: (Time.zone.now - 3.months)..Time.zone.now)
+      .where.not(updated_at: 3.months.ago..Time.zone.now)
       .find_each(&:archive)
     # Keep the 2 most recent normalized dumps
     last_two = organization.default_stream.normalized_dumps.last(2)
@@ -23,7 +23,7 @@ class CleanupAndRemoveDataJob < ApplicationJob
     organization
       .streams
       .archived
-      .where.not(updated_at: (Time.zone.now - 6.months)..Time.zone.now)
+      .where.not(updated_at: 6.months.ago..Time.zone.now)
       .destroy_all
   end
   # rubocop:enable Metrics/AbcSize
