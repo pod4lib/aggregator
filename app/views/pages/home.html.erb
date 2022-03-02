@@ -1,14 +1,14 @@
 <div id="hero" class="position-relative overflow-hidden p-3 p-md-5 text-center bg-dark text-light">
   <div class="bg-image"></div>
   <div class="hero-text col-md-7 p-lr-3 mx-auto my-4">
-    <h1 class="display-4 font-weight-normal mb-5">POD Data Lake <span class="badge bg-info">MVP</span></h1>
+    <h1 class="display-4 font-weight-normal mb-5">POD Data Lake</h1>
     <p class="lead font-weight-normal">
-      The POD Data Lake MVP will produce a openly developed minimum viable product to receive and transmit MARC bibliographic and holdings data from multiple institutions
+      The POD Data Lake MVP is a openly developed aggregator to receive and transmit MARC bibliographic and holdings data from multiple institutions.
     </p>
   </div>
 </div>
 
-<div class="container">
+<!-- <div class="container">
   <div class="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3">
     <div class="mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
       <div class="my-3 py-3">
@@ -28,7 +28,7 @@
         <p class="lead">Help POD refine and develop operational models for a service based on the MVP</p>
       </div>
     </div>
-  </div>
+  </div> -->
 
 
   <div class="row rows-cols-2 w-100 my-md-3 pl-md-3 border-top">
@@ -37,13 +37,16 @@
         <h2 class="display-5">Read the documentation</h2>
         <ul class="list-group lead align-left">
           <li class="list-group-item border-0">
-            <%= link_to 'API documentation', api_path, class: 'text-muted' %>
+            <%= link_to 'Creating and managing API tokens', 'https://github.com/pod4lib/aggregator/wiki/Creating-and-managing-API-tokens', class: 'text-muted' %>
           </li>
           <li class="list-group-item border-0">
-            <%= link_to 'Data guidelines', pages_path(id: 'data'), class: 'text-muted' %>
+            <%= link_to 'Data requirements', 'https://github.com/pod4lib/aggregator/wiki/Data-requirements', class: 'text-muted' %>
           </li>
           <li class="list-group-item border-0">
-            <%= link_to 'Data retention policy', pages_path(id: 'retention'), class: 'text-muted' %>
+            <%= link_to 'Uploading data using the API', 'https://github.com/pod4lib/aggregator/wiki/Uploading-data-using-the-API', class: 'text-muted' %>
+          </li>
+          <li class="list-group-item border-0">
+            <%= link_to 'More...', 'https://github.com/pod4lib/aggregator/wiki', class: 'text-muted' %>
           </li>
         </ul>
       </div>
