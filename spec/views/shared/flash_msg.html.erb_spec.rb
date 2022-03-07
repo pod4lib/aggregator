@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'shared/_flash_msg.html.erb', type: :view do
+RSpec.describe 'shared/_flash_msg', type: :view do
   context 'with an alert flash' do
     before do
       flash[:alert] = 'This is an alert!'
