@@ -76,12 +76,12 @@ RSpec.describe JobTracker, type: :model do
 
     let(:status_attributes) { { total: 100 } }
 
-    it { is_expected.to eq true }
+    it { is_expected.to be true }
 
     context 'with an unknown or 0 total' do
       let(:status_attributes) { { total: 0 } }
 
-      it { is_expected.to eq false }
+      it { is_expected.to be false }
     end
   end
 

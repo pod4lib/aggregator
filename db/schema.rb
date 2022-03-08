@@ -10,14 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_22_194847) do
-
+ActiveRecord::Schema[7.0].define(version: 2022_03_07_195048) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
     t.integer "record_id", null: false
     t.integer "blob_id", null: false
-    t.datetime "created_at", null: false
+    t.datetime "created_at", precision: nil, null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
@@ -28,8 +27,8 @@ ActiveRecord::Schema.define(version: 2021_10_22_194847) do
     t.string "content_type"
     t.text "metadata"
     t.integer "byte_size", null: false
-    t.string "checksum", null: false
-    t.datetime "created_at", null: false
+    t.string "checksum"
+    t.datetime "created_at", precision: nil, null: false
     t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
@@ -45,7 +44,7 @@ ActiveRecord::Schema.define(version: 2021_10_22_194847) do
     t.integer "user_id"
     t.string "name"
     t.json "properties"
-    t.datetime "time"
+    t.datetime "time", precision: nil
     t.index ["name", "time"], name: "index_ahoy_events_on_name_and_time"
     t.index ["user_id"], name: "index_ahoy_events_on_user_id"
     t.index ["visit_id"], name: "index_ahoy_events_on_visit_id"
@@ -76,7 +75,7 @@ ActiveRecord::Schema.define(version: 2021_10_22_194847) do
     t.string "app_version"
     t.string "os_version"
     t.string "platform"
-    t.datetime "started_at"
+    t.datetime "started_at", precision: nil
     t.string "token_id"
     t.string "organization_id"
     t.index ["organization_id"], name: "index_ahoy_visits_on_organization_id"
@@ -88,11 +87,11 @@ ActiveRecord::Schema.define(version: 2021_10_22_194847) do
   create_table "allowlisted_jwts", force: :cascade do |t|
     t.string "jti", null: false
     t.string "aud"
-    t.datetime "exp"
+    t.datetime "exp", precision: nil
     t.string "resource_type"
     t.integer "resource_id"
-    t.datetime "created_at", precision: 6
-    t.datetime "updated_at", precision: 6
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string "label"
     t.string "scope", default: "all"
     t.index ["jti"], name: "index_allowlisted_jwts_on_jti", unique: true
@@ -103,10 +102,10 @@ ActiveRecord::Schema.define(version: 2021_10_22_194847) do
     t.string "email"
     t.integer "organization_id", null: false
     t.string "confirmation_token"
-    t.datetime "confirmed_at"
-    t.datetime "confirmation_sent_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "confirmed_at", precision: nil
+    t.datetime "confirmation_sent_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["confirmation_token"], name: "index_contact_emails_on_confirmation_token", unique: true
     t.index ["organization_id"], name: "index_contact_emails_on_organization_id"
   end
@@ -116,7 +115,7 @@ ActiveRecord::Schema.define(version: 2021_10_22_194847) do
     t.integer "sluggable_id", null: false
     t.string "sluggable_type", limit: 50
     t.string "scope"
-    t.datetime "created_at"
+    t.datetime "created_at", precision: nil
     t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true
     t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type"
     t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
@@ -129,8 +128,8 @@ ActiveRecord::Schema.define(version: 2021_10_22_194847) do
     t.integer "resource_id", null: false
     t.string "job_id"
     t.string "job_class"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["job_id"], name: "index_job_trackers_on_job_id"
     t.index ["reports_on_type", "reports_on_id"], name: "index_job_trackers_on_reports_on_type_and_reports_on_id"
     t.index ["resource_type", "resource_id"], name: "index_job_trackers_on_resource_type_and_resource_id"
@@ -143,8 +142,8 @@ ActiveRecord::Schema.define(version: 2021_10_22_194847) do
     t.json "record_frequency"
     t.json "histogram_frequency"
     t.json "sampled_values"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["blob_id"], name: "index_marc_profiles_on_blob_id"
     t.index ["upload_id"], name: "index_marc_profiles_on_upload_id"
   end
@@ -167,10 +166,10 @@ ActiveRecord::Schema.define(version: 2021_10_22_194847) do
 
   create_table "normalized_dumps", force: :cascade do |t|
     t.integer "stream_id", null: false
-    t.datetime "last_full_dump_at"
-    t.datetime "last_delta_dump_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "last_full_dump_at", precision: nil
+    t.datetime "last_delta_dump_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "full_dump_id"
     t.index ["full_dump_id"], name: "index_normalized_dumps_on_full_dump_id"
     t.index ["stream_id"], name: "index_normalized_dumps_on_stream_id"
@@ -178,8 +177,8 @@ ActiveRecord::Schema.define(version: 2021_10_22_194847) do
 
   create_table "organizations", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "slug"
     t.string "code"
     t.json "normalization_steps"
@@ -191,8 +190,8 @@ ActiveRecord::Schema.define(version: 2021_10_22_194847) do
     t.string "name"
     t.string "resource_type"
     t.integer "resource_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
     t.index ["name"], name: "index_roles_on_name"
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource_type_and_resource_id"
@@ -206,8 +205,8 @@ ActiveRecord::Schema.define(version: 2021_10_22_194847) do
     t.bigint "file_size", default: 0
     t.bigint "file_count", default: 0
     t.date "date"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["resource_type", "resource_id", "date"], name: "index_statistics_on_resource_type_and_resource_id_and_date"
     t.index ["resource_type", "resource_id"], name: "index_statistics_on_resource_type_and_resource_id"
   end
@@ -216,8 +215,8 @@ ActiveRecord::Schema.define(version: 2021_10_22_194847) do
     t.string "name"
     t.integer "organization_id"
     t.boolean "default", default: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "slug"
     t.string "status", default: "active"
     t.index ["organization_id"], name: "index_streams_on_organization_id"
@@ -228,8 +227,8 @@ ActiveRecord::Schema.define(version: 2021_10_22_194847) do
   create_table "uploads", force: :cascade do |t|
     t.string "name"
     t.integer "stream_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "url"
     t.integer "user_id"
     t.integer "allowlisted_jwts_id"
@@ -243,22 +242,22 @@ ActiveRecord::Schema.define(version: 2021_10_22_194847) do
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "reset_password_sent_at", precision: nil
+    t.datetime "remember_created_at", precision: nil
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "invitation_token"
-    t.datetime "invitation_created_at"
-    t.datetime "invitation_sent_at"
-    t.datetime "invitation_accepted_at"
+    t.datetime "invitation_created_at", precision: nil
+    t.datetime "invitation_sent_at", precision: nil
+    t.datetime "invitation_accepted_at", precision: nil
     t.integer "invitation_limit"
     t.integer "invited_by_id"
     t.string "invited_by_type"
     t.string "name"
     t.string "title"
     t.string "confirmation_token"
-    t.datetime "confirmed_at"
-    t.datetime "confirmation_sent_at"
+    t.datetime "confirmed_at", precision: nil
+    t.datetime "confirmation_sent_at", precision: nil
     t.string "unconfirmed_email"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
@@ -279,7 +278,7 @@ ActiveRecord::Schema.define(version: 2021_10_22_194847) do
     t.string "event", null: false
     t.string "whodunnit"
     t.text "object", limit: 1073741823
-    t.datetime "created_at"
+    t.datetime "created_at", precision: nil
     t.text "object_changes", limit: 1073741823
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
