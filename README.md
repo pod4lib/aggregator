@@ -52,10 +52,16 @@ The continuous integration tests for POD aggregator can be run using:
 $ bundle exec rake
 ```
 
-## Local production-like setup
+### Emulating production
+While using a standard development setup locally, developers may experience some issues with read/write concurrency in Sqlite and job processing using the ActiveJob AsyncAdapter.
 
-While using a standard development setup locally, developers may experience some issues with read/write concurrency in Sqlite and job processing using the ActiveJob AsyncAdapter. One solution to this is to temporarily switch to using PostgreSQL and Sidekiq with Redis locally for a more "production like" development environment.
+One solution to this is to temporarily switch to using PostgreSQL and Sidekiq with Redis locally for a more "production like" development environment. Assuming you have PostgreSQL and Redis running on your local machine, you can set environment variables prior to invoking the server:
+```sh
+export REDIS_HOST=localhost
+export REDIS_PORT=6379
+export DATABASE_URL=postgresql://user:password@localhost:5432/dbname
+bundle exec rails server  # or other commands
+```
 
 ## Deployment
-
 Deployment is setup using Capistrano using standard [Stanford Digital Library Systems and Services practices](https://github.com/sul-dlss/DeveloperPlaybook/blob/master/best-practices/deployment.md#ruby-applications).
