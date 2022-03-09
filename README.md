@@ -1,12 +1,14 @@
 ![CI](https://github.com/ivplus/aggregator/workflows/Ruby/badge.svg)
+![tested on ruby 3](https://img.shields.io/badge/ruby-v3-red)
+![tested on nodeJS 16](https://img.shields.io/badge/nodeJS-v16-blue)
 
 # POD Aggregator
-
 The POD Aggregator project is a Ruby on Rails application that receives and transmits MARC bibliographic and holdings data from multiple institutions.
 
-## Pre-requisites
-Ruby 2.7.x, [yarn](https://yarnpkg.com/)
+## Developing
 
+### Pre-requisites
+This project is tested on ruby 3 and nodeJS 16. **Other versions may work but are unsupported.** JavaScript package management is done via [yarn](https://yarnpkg.com/). 
 
 ## Getting started
 ```
