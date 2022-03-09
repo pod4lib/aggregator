@@ -10,46 +10,34 @@ The POD Aggregator project is a Ruby on Rails application that receives and tran
 ### Pre-requisites
 This project is tested on ruby 3 and nodeJS 16. **Other versions may work but are unsupported.** JavaScript package management is done via [yarn](https://yarnpkg.com/). 
 
-## Getting started
+### Getting started
+Pull down the code and enter the project directory:
 ```
-$ ruby --version
-# ruby 2.7.x
-
-$ git clone https://github.com/ivplus/aggregator.git
-$ cd aggregator
-
-$ bin/setup
-
-$ bin/rails console
-# Running via Spring preloader in process 96719
-# Loading development environment (Rails 6.0.3.3)
-# irb(main):001:0>
+git clone https://github.com/ivplus/aggregator.git
+cd aggregator
 ```
-
-### Creating a local admin user
-
+Install dependencies and prepare the database:
 ```sh
-$ bin/rails agg:create_admin
+bin/setup
+```
+Create a local admin user for development:
+```sh
+bin/rails agg:create_admin
 ```
 
 ### Configurations
-
 POD Aggregator has several configuration settings many of which are available using the [config](https://github.com/rubyconfig/config) gem at `config/settings.yml`.
 
-### Hydrating your local lake
-
-While adding MARC data locally is perfectly fine for many development use cases, you may want to more broadly hydrate your data lake. You can do this using the configurable `db:seed` task.
-
+### Adding data
+While adding MARC data locally is perfectly fine for many development use cases, you may want to more broadly populate the database. You can do this using the configurable `db:seed` task.
 ```sh
-$ bundle exec rake db:seed
+bundle exec rake db:seed
 ```
 
 ## Testing
-
 The continuous integration tests for POD aggregator can be run using:
-
 ```sh
-$ bundle exec rake
+bundle exec rake
 ```
 
 ### Emulating production
