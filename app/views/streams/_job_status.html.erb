@@ -2,7 +2,7 @@
   <div class="alert alert-info">
     <h3>Processing...</h3>
 
-    <% stream.job_trackers.each do |t| %>
+    <% stream.job_trackers.order(:created_at).each do |t| %>
       <div>
         <%= t.label %>
 
