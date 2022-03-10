@@ -28,25 +28,39 @@ class MarcRecordService
 
   # Identify what type of MARC is in the blob by reading just a little bit of it
   def identify
-    @identify ||= begin
-      start = download_chunk(0...5)
-
-      if start.bytes[0] == 0x1F && start.bytes[1] == 0x8B # gzip magic bytes
-        identify_gzip
-      elsif ['<?xml', '<reco', '<coll'].include? start # xml preamble
-        :marcxml
-      elsif start.match?(/^\d+$/) # kinda looks like a MARC21 leader...
-        :marc21
-      elsif delete?
-        :delete
-      else
-        :unknown
-      end
-    end
+    @identify ||= identify_by_file || identify_by_content || :unknown
   end
 
-  def delete?
-    blob.content_type == 'text/plain' || %w[del delete].include?(blob.filename.extension)
+  def identify_by_file
+    content_types_to_identity = {
+      'text/plain' => :delete,
+      'application/marc' => :marc21,
+      'application/marcxml+xml' => :marcxml
+    }
+
+    return content_types_to_identity[blob.content_type] if content_types_to_identity[blob.content_type]
+
+    extensions_to_identity = {
+      'del' => :delete,
+      'delete' => :delete,
+      'marc' => :marc21,
+      'mrc' => :marc21,
+      'xml' => :marcxml
+    }
+
+    extensions_to_identity[blob.filename.extension]
+  end
+
+  def identify_by_content
+    start = download_chunk(0...5)
+
+    if start.bytes[0] == 0x1F && start.bytes[1] == 0x8B # gzip magic bytes
+      identify_gzip
+    elsif ['<?xml', '<reco', '<coll'].include? start # xml preamble
+      :marcxml
+    elsif start.match?(/^\d+$/) # kinda looks like a MARC21 leader...
+      :marc21
+    end
   end
 
   def marc21?(type = identify)
