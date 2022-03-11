@@ -25,7 +25,7 @@ class GenerateFullDumpJob < ApplicationJob
 
       organization.default_stream.uploads.each do |upload|
         upload.each_marc_record_metadata(checksum: false).each do |record|
-          next unless hash.dig(record.marc001, 'file_id') == record.file_id || hash.dig(record.marc001, 'status') == 'delete'
+          next if hash.dig(record.marc001, 'file_id') != record.file_id || hash.dig(record.marc001, 'status') == 'delete'
 
           writer.write_marc_record(record)
         end
