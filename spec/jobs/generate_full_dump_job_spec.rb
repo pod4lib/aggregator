@@ -34,6 +34,15 @@ RSpec.describe GenerateFullDumpJob, type: :job do
     end
   end
 
+  it 'does not contain any deleted MARC records from the organization' do
+    organization.default_stream.uploads << build(:upload, :deletes)
+    described_class.perform_now(organization)
+
+    download_and_uncompress(organization.default_stream.normalized_dumps.last.marcxml) do |file|
+      expect(Nokogiri::XML(file).xpath('//marc:record', marc: 'http://www.loc.gov/MARC21/slim').count).to eq 1
+    end
+  end
+
   describe '.enqueue_all' do
     it 'enqueues jobs for each organization' do
       expect do
