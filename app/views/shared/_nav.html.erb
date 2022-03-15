@@ -11,21 +11,33 @@
       <li class='nav-item'>
         <%= link_to 'Activity', activity_url, class: 'nav-link', data: { turbolinks: false } %>
       </li>
-      <% if can? :manage, User %>
-        <li class='nav-item'>
-          <%= link_to 'Users', site_users_url, class: 'nav-link' %>
-        </li>
-      <% end %>
     </ul>
     </div>
 
     <ul class="navbar-nav ml-auto">
       <% if current_user %>
-        <li class="nav-item">
-          <%= link_to current_user, edit_user_registration_path, class: 'nav-link' %>
-        </li>
-        <li class="nav-item">
-          <%= link_to 'Logout', destroy_user_session_path, class: 'nav-link', data: { method: :delete } %>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <%= current_user %>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
+              <% current_user.organizations.each do | organization | %>
+                <li class="nav-item"><%= link_to "#{organization.name} POD", organization, class: 'nav-link' %></li>
+              <% end %>
+             <li class="nav-item">
+              <%= link_to 'Edit profile', edit_user_registration_path, class: 'nav-link' %>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <% if can? :manage, User %>
+              <li class='nav-item'>
+                <%= link_to 'Manage users', site_users_url, class: 'nav-link' %>
+              </li>
+            <% end %>
+            <li><hr class="dropdown-divider"></li>
+            <li class="nav-item">
+              <%= link_to 'Logout', destroy_user_session_path, class: 'nav-link', data: { method: :delete } %>
+            </li>
+          </ul>
         </li>
       <% else %>
         <li class="nav-item">
