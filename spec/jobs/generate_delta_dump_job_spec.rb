@@ -30,6 +30,34 @@ RSpec.describe GenerateDeltaDumpJob, type: :job do
     end
   end
 
+  it 'has a content type of application/gzip for compressed marcxml' do
+    described_class.perform_now(organization)
+
+    expect(organization.default_stream.reload.current_full_dump.deltas.last
+                       .marcxml.attachment.blob.content_type).to eq 'application/gzip'
+  end
+
+  it 'has a filename of marcxml.xml.gz for compressed marcxml' do
+    described_class.perform_now(organization)
+
+    expect(organization.default_stream.reload.current_full_dump.deltas.last
+                       .marcxml.attachment.blob.filename).to eq 'marcxml.xml.gz'
+  end
+
+  it 'has a content type of application/gzip for compressed marc21' do
+    described_class.perform_now(organization)
+
+    expect(organization.default_stream.reload.current_full_dump.deltas.last
+                       .marc21.attachment.blob.content_type).to eq 'application/gzip'
+  end
+
+  it 'has a filename of marc21.mrc.gz for compressed marc21' do
+    described_class.perform_now(organization)
+
+    expect(organization.default_stream.reload.current_full_dump.deltas.last
+                       .marc21.attachment.blob.filename).to eq 'marc21.mrc.gz'
+  end
+
   context 'with deletes' do
     before do
       organization.default_stream.uploads << build(:upload, :deletes)
@@ -41,6 +69,20 @@ RSpec.describe GenerateDeltaDumpJob, type: :job do
       organization.default_stream.reload.current_full_dump.deltas.last.deletes.download do |file|
         expect(file.each_line.count).to eq 4
       end
+    end
+
+    it 'has a content type of text/plain for deletes' do
+      described_class.perform_now(organization)
+
+      expect(organization.default_stream.reload.current_full_dump.deltas.last
+                         .deletes.attachment.blob.content_type).to eq 'text/plain'
+    end
+
+    it 'has a filename of deletes.del.txt for deletes' do
+      described_class.perform_now(organization)
+
+      expect(organization.default_stream.reload.current_full_dump.deltas.last
+                         .deletes.attachment.blob.filename).to eq 'deletes.del.txt'
     end
 
     it 'does not include MARC records that were deleted' do

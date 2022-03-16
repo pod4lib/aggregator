@@ -43,6 +43,30 @@ RSpec.describe GenerateFullDumpJob, type: :job do
     end
   end
 
+  it 'has a content type of application/gzip for compressed marcxml' do
+    described_class.perform_now(organization)
+
+    expect(organization.default_stream.normalized_dumps.last.marcxml.attachment.blob.content_type).to eq 'application/gzip'
+  end
+
+  it 'has a filename of marcxml.xml.gz for compressed marcxml' do
+    described_class.perform_now(organization)
+
+    expect(organization.default_stream.normalized_dumps.last.marcxml.attachment.blob.filename.to_s).to match(/marcxml.xml.gz/)
+  end
+
+  it 'has a content type of application/gzip for compressed marc21' do
+    described_class.perform_now(organization)
+
+    expect(organization.default_stream.normalized_dumps.last.marc21.attachment.blob.content_type).to eq 'application/gzip'
+  end
+
+  it 'has a filename of marc21.mrc.gz for compressed marc21' do
+    described_class.perform_now(organization)
+
+    expect(organization.default_stream.normalized_dumps.last.marc21.attachment.blob.filename.to_s).to match(/marc21.mrc.gz/)
+  end
+
   describe '.enqueue_all' do
     it 'enqueues jobs for each organization' do
       expect do
