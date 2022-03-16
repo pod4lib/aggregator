@@ -34,6 +34,12 @@ While adding MARC data locally is perfectly fine for many development use cases,
 bundle exec rake db:seed
 ```
 
+### Manually triggering normalization jobs
+To generate normalized data locally you can trigger a cron job from the terminal. This will generate normalized full dumps, deletes, and deltas.
+
+`bundle exec rails runner "GenerateFullDumpJob.enqueue_all"`
+
+
 ## Testing
 The continuous integration tests for POD aggregator can be run using:
 ```sh
@@ -43,7 +49,22 @@ bundle exec rake
 ### Emulating production
 While using a standard development setup locally, developers may experience some issues with read/write concurrency in Sqlite and job processing using the ActiveJob AsyncAdapter.
 
-One solution to this is to temporarily switch to using PostgreSQL and Sidekiq with Redis locally for a more "production like" development environment. Assuming you have PostgreSQL and Redis running on your local machine, you can set environment variables prior to invoking the server:
+One solution to this is to temporarily switch to using PostgreSQL and Sidekiq with Redis locally for a more "production like" development environment. Steps:
+
+1. In `config/cable.yml`, change the entry for development to use Redis:
+```yaml
+development:
+  adapter: redis
+  url: <%= ENV.fetch("REDIS_URL") { "redis://localhost:6379/1" } %>
+  channel_prefix: aggregator_development
+```
+
+2. Copy the following config setting from production into `config/environments/development.rb`:
+```ruby
+ config.cache_store = :redis_cache_store
+```   
+
+3. Set environment variables prior to invoking the server. For now, you will need to re-export these variables in every new terminal window you open.
 ```sh
 export REDIS_HOST=localhost
 export REDIS_PORT=6379
