@@ -50,7 +50,7 @@ class GenerateFullDumpJob < ApplicationJob
   def human_readable_filename(base_name, file_type)
     as = case file_type
          when :deletes
-           'deletes.del'
+           'deletes.del.txt'
          when :marc21
            'marc21.mrc.gz'
          when :marcxml

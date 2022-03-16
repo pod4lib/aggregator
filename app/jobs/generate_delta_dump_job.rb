@@ -41,7 +41,8 @@ class GenerateDeltaDumpJob < ApplicationJob
       writer.finalize
 
       writer.files.each do |as, file|
-        delta_dump.public_send(as).attach(io: File.open(file), filename: as)
+        delta_dump.public_send(as).attach(io: File.open(file),
+                                          filename: human_readable_filename(as))
       end
 
       delta_dump.save!
@@ -63,5 +64,22 @@ class GenerateDeltaDumpJob < ApplicationJob
     end
 
     hash
+  end
+
+  private
+
+  def human_readable_filename(file_type)
+    case file_type
+    when :deletes
+      'deletes.del.txt'
+    when :marc21
+      'marc21.mrc.gz'
+    when :marcxml
+      'marcxml.xml.gz'
+    when :errata
+      'errata.gz'
+    else
+      file_type
+    end
   end
 end
