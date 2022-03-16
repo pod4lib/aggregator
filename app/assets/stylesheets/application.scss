@@ -123,3 +123,45 @@ input[type=file][data-direct-upload-url][disabled] {
 .bg-local-practice {
   background-color: lighten($warning, 40%) !important;
 }
+
+.devise-wrap {
+  padding-top: $spacer;
+
+  h1 {
+    text-align: center;
+    padding: $spacer 0;
+  }
+
+  // the main form elements
+  form > .form-group {
+    padding-bottom: $spacer * 2;
+  }
+
+  form > .form-group:last-child {
+    border-bottom: 2px #000 solid;
+  }
+
+  form > .form-group > label {
+    padding-bottom: $spacer / 2;
+  }
+
+  .form-check {
+    margin-bottom: 0;
+    padding-left: 0;
+  }
+
+  .form-check .form-check-input {
+    // override negative margin-left from BS
+    margin-left: 0;
+    margin-right: 5px;
+  }
+
+  // additional links below main form
+  > .links-list > li {
+    padding-top: $spacer;
+  }
+
+  > .links-list > li > a {
+    text-decoration: none;
+  }
+}

@@ -31,3 +31,7 @@
 
 en:
   hello: "Hello world"
+  helpers:
+    label:
+      user:
+        email: Email address
