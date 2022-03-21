@@ -27,6 +27,13 @@ class Stream < ApplicationRecord
     uploads.find_each(&:archive)
   end
 
+  def job_tracker_status_groups
+    {
+      active: job_trackers.select { |jt| !jt.in_retry_set? && !jt.in_dead_set? },
+      needs_attention: job_trackers.select { |jt| jt.in_retry_set? || jt.in_dead_set? }
+    }
+  end
+
   def marc_profile
     any = false
     profile = MarcProfile.new(count: 0, histogram_frequency: {}, record_frequency: {}, sampled_values: {})

@@ -1,20 +1,50 @@
-<% if stream.job_trackers.any? %>
-  <div class="alert alert-info">
-    <h3>Processing...</h3>
-
-    <% stream.job_trackers.order(:created_at).each do |t| %>
-      <div>
-        <%= t.label %>
-
-        <%= content_tag :div, class: 'progress', title: t.progress_label do %>
-          <%= content_tag 'div', t.progress_label, title: t.progress_label, id: "status-#{t.job_id}", class: "progress-bar #{'progress-bar-striped' unless t.total?}", aria: { valuenow: t.progress, valuemin: 0, valuemax: t.total } %>
-
-          <%= javascript_tag nonce: true do -%>
-            // hack to get around the CSP policy denying inline styles...
-            document.getElementById('<%= "status-#{t.job_id}" %>').style.width = "<%= t.percent || 0 %>%";
-          <% end %>
-        <% end %>
+<div class="mb-5">
+  <h3><%= t('job_tracker.title') %></h3>
+  <div class="accordion" id="jobStatusAccordian">
+    <% stream.job_tracker_status_groups.each do |status_group, jobs| %>
+      <div class="accordion-item">
+        <h4 class="accordion-header" id="heading<%= status_group.to_s.classify %>">
+          <button class="accordion-button collapsed" type="button"
+                  data-bs-toggle="collapse" data-bs-target="#collapse<%= status_group.to_s.classify %>"
+                  aria-expanded="false" aria-controls="collapse<%= status_group.to_s.classify %>">
+            <span class="fw-bold"><%= t("job_tracker.status_group.#{status_group}") %></span>&nbsp;
+            <span class="badge <%= jobs.count > 0 ? Settings.job_status_group[status_group].badge_class : 'bg-secondary' %>">
+              <%= jobs.count %>
+            </span>
+          </button>
+        </h4>
+        <div id="collapse<%= status_group.to_s.classify %>" class="accordion-collapse collapse"
+             aria-labelledby="heading<%= status_group.to_s.classify %>" data-bs-parent="#jobStatusAccordian">
+          <div class="accordion-body">
+            <% if status_group == :needs_attention %>
+              <%= link_to('How to get help', 'https://github.com/pod4lib/aggregator/wiki#getting-help') %>
+            <% end %>
+            <table class="table table-striped mt-4">
+              <thead>
+                <tr>
+                  <th class="text-right"><%= t('job_tracker.table_heading.status') %></th>
+                  <th class="text-right"><%= t('job_tracker.table_heading.resource') %></th>
+                  <th class="text-right"><%= t('job_tracker.table_heading.job_type') %></th>
+                  <th class="text-right"><%= t('job_tracker.table_heading.progress') %></th>
+                  <th class="text-right"><%= t('job_tracker.table_heading.created_at') %></th>
+                </tr>
+              </thead>
+              <% jobs.each do |job| %>
+                <tr class="<%= "status-#{job.job_id}" %>">
+                  <td class="text-center">
+                    <%= bootstrap_icon(Settings.job_status_group[status_group].icon_class,
+                                       class: "pod-job-tracker-status #{job.sidekiq_status}")%>
+                  </td>
+                  <td class="text-right"><%= job.resource_label %></td>
+                  <td class="text-right"><%= job.job_class.titleize %></td>
+                  <td class="text-right"><%= job.progress_label %></td>
+                  <td class="text-right"><%= job.created_at %></td>
+                </tr>
+              <% end %>
+            </table>
+          </div>
+        </div>
       </div>
     <% end %>
   </div>
-<% end %>
+</div>

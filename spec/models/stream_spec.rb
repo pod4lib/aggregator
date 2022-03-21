@@ -36,4 +36,10 @@ RSpec.describe Stream, type: :model do
       expect { stream_with_upload.archive }.to change { stream_with_upload.uploads.archived.count }.by(1)
     end
   end
+
+  describe '#job_tracker_status_groups' do
+    it 'groups the job trackers by status' do
+      expect(stream.job_tracker_status_groups).to eq({ active: [], needs_attention: [] })
+    end
+  end
 end

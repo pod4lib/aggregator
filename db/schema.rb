@@ -130,7 +130,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_07_195048) do
     t.string "job_class"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "provider_job_id"
     t.index ["job_id"], name: "index_job_trackers_on_job_id"
+    t.index ["provider_job_id"], name: "index_job_trackers_on_provider_job_id"
     t.index ["reports_on_type", "reports_on_id"], name: "index_job_trackers_on_reports_on_type_and_reports_on_id"
     t.index ["resource_type", "resource_id"], name: "index_job_trackers_on_resource_type_and_resource_id"
   end

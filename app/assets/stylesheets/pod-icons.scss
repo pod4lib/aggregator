@@ -1,9 +1,23 @@
 // Access bootstrap color utility variables
 @import 'bootstrap';
 
-.pod-icon > svg, .pod-metadata-status > svg {
+.pod-icon > svg, .pod-metadata-status > svg, .pod-job-tracker-status > svg {
   height: 25px;
   width: 25px;
+}
+
+.pod-job-tracker-status {
+  &.active {
+    color: $info
+  }
+
+  &.retry {
+    color: $warning
+  }
+
+  &.dead {
+    color: $danger
+  }
 }
 
 .pod-metadata-status {
