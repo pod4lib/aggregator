@@ -32,8 +32,8 @@
               <li class='nav-item'>
                 <%= link_to 'Manage users', site_users_url, class: 'nav-link' %>
               </li>
+              <li><hr class="dropdown-divider"></li>
             <% end %>
-            <li><hr class="dropdown-divider"></li>
             <li class="nav-item">
               <%= link_to 'Logout', destroy_user_session_path, class: 'nav-link', data: { method: :delete } %>
             </li>
