@@ -43,6 +43,9 @@ config/master.key
 *.bowerrc
 bower.json
 
+# Ignore direnv settings
+.envrc
+
 # Ignore pow environment settings
 .powenv
 
