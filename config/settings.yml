@@ -4,9 +4,6 @@ jwt:
 sidekiq:
   logger_level: 'Logger::INFO' # The default from Sidekiq
 
-recaptcha:
-  enabled: false
-
 action_mailer:
   default_options:
     from: 'test@example.com'
