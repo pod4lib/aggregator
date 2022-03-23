@@ -8,7 +8,7 @@ The POD Aggregator project is a Ruby on Rails application that receives and tran
 ## Developing
 
 ### Pre-requisites
-This project is tested on ruby 3 and nodeJS 16. **Other versions may work but are unsupported.** JavaScript package management is done via [yarn](https://yarnpkg.com/). 
+This project is tested on ruby 3 and nodeJS 16. **Other versions may work but are unsupported.** JavaScript package management is done via [yarn](https://yarnpkg.com/).
 
 ### Getting started
 Pull down the code and enter the project directory:
@@ -29,9 +29,14 @@ bin/rails agg:create_admin
 POD Aggregator has several configuration settings many of which are available using the [config](https://github.com/rubyconfig/config) gem at `config/settings.yml`.
 
 ### Adding data
-While adding MARC data locally is perfectly fine for many development use cases, you may want to more broadly populate the database. You can do this using the configurable `db:seed` task.
+While adding MARC data locally is perfectly fine for many development use cases, if you want to populate your local development instance with an organization and a small amount of data to get started, use the `rake db:seed` task:
 ```sh
 bundle exec rake db:seed
+```
+
+You might want to more broadly populate the database. You can do this using the configurable `agg:seed_from_api` task that will enable you to fetch data from a running aggregator instance (production by default). You will need to add a valid API token to `config/settings.yml`. Depending on the data available, this task might load a large amount of data and take a long time:
+```sh
+bundle exec rake agg:seed_from_api
 ```
 
 ### Manually triggering normalization jobs
