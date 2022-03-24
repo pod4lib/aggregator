@@ -19,3 +19,21 @@ marc_fixture_seeds:
     - Cornell
     - Princeton
     - Stanford
+
+# refer to https://icons.getbootstrap.com/ for icon class names
+metadata_status:
+  success:
+    icon_class: 'file-earmark-fill'
+    label: 'Valid MARC'
+  deletes:
+    icon_class: 'file-earmark-excel-fill'
+    label: 'Deletes'
+  invalid:
+    icon_class: 'exclamation-circle-fill'
+    label: 'Invalid MARC'
+  not_marc:
+    icon_class: 'exclamation-triangle-fill'
+    label: 'Neither MARC nor Deletes'
+  unknown:
+    icon_class: 'question-circle-fill'
+    label: 'Unknown'
