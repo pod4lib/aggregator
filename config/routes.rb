@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
-  devise_for :users, controllers: { invitations: 'organization_invitations', registrations: 'registrations' }
+  # Disable default Devise user registration ("Sign Up"), but support editing user profile when logged in, which is controlled by Devise's RegistrationsController
+  devise_for :users, controllers: { invitations: 'organization_invitations' }, :skip => [:registrations]
+    as :user do
+      get 'users/edit' => 'devise/registrations#edit', as: 'edit_user_registration'
+      put 'users' => 'devise/registrations#update', as: 'user_registration'
+    end
 
   root to: 'pages#home'
   get '/documentation/:id', to: 'pages#show', as: :pages
