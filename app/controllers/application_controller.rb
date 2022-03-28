@@ -18,6 +18,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  rescue_from JWT::DecodeError, JWT::VerificationError do |_exception|
+    head :unauthorized
+  end
+
   protected
 
   def configure_permitted_parameters
