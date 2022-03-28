@@ -64,10 +64,11 @@ development:
   channel_prefix: aggregator_development
 ```
 
-2. Copy the following config setting from production into `config/environments/development.rb`:
-```ruby
- config.cache_store = :redis_cache_store
-```   
+2.  Add the following to `development.rb`:
+   ```ruby
+  # Use a real queuing backend for Active Job (and separate queues per environment).
+  config.active_job.queue_adapter     = :sidekiq
+  ```
 
 3. Set environment variables prior to invoking the server. For now, you will need to re-export these variables in every new terminal window you open.
 ```sh
