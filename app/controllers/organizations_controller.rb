@@ -10,7 +10,9 @@ class OrganizationsController < ApplicationController
 
   # GET /organizations/1
   # GET /organizations/1.json
-  def show; end
+  def show
+    @uploads = @organization.default_stream.uploads.active.order(created_at: :desc).page(params[:page])
+  end
 
   # GET /organizations/new
   def new

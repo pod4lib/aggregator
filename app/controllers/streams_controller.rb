@@ -7,7 +7,9 @@ class StreamsController < ApplicationController
   skip_authorize_resource only: %i[normalized_dump removed_since_previous_stream]
   protect_from_forgery with: :null_session, if: :jwt_token
 
-  def show; end
+  def show
+    @uploads = @stream.uploads.active.order(created_at: :desc).page(params[:page])
+  end
 
   def new; end
 

@@ -12,10 +12,12 @@
         <% end %>
       </td>
     </tr>
-    <% stream.uploads.active.sort_by(&:created_at).each do |upload| %>
+    <% uploads.each do |upload| %>
       <%= render 'uploads/file_rows', upload: upload %>
     <% end %>
   </tbody>
 </table>
+
+<%= paginate uploads %>
 
 <%= render 'streams/normalized_dump', normalized_dump: stream.normalized_dumps.full_dumps.last %>
