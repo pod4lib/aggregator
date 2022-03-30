@@ -13,9 +13,9 @@
 
   <%= f.text_field :title, label: 'Job title' %>
 
-  <%= f.password_field :password, autocomplete: "new-password", help: "#{"#{@minimum_password_length} characters minimum" if @minimum_password_length } (leave blank if you don't want to change it)" %>
+  <%= f.password_field :password, label: 'New password', autocomplete: "new-password", help: "#{"#{@minimum_password_length} characters minimum" if @minimum_password_length } (leave blank if you don't want to change it)" %>
 
-  <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+  <%= f.password_field :password_confirmation, label: 'New password confirmation', autocomplete: "new-password" %>
 
   <%= f.password_field :current_password, autocomplete: "current-password", help: '(we need your current password to confirm your changes)' %>
 
