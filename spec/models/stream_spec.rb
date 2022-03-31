@@ -36,8 +36,4 @@ RSpec.describe Stream, type: :model do
       expect { stream_with_upload.archive }.to change { stream_with_upload.uploads.archived.count }.by(1)
     end
   end
-
-  describe '#removed_since_previous_stream' do
-    pending 'returns a list of marc001 fields that have appeared in other organization streams except this one'
-  end
 end
