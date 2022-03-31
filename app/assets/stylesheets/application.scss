@@ -118,6 +118,10 @@ input[type=file][data-direct-upload-url][disabled] {
   height: $footer-height;
   position: absolute;
   width: 100%;
+
+  .copyright-date {
+    margin-left: 2rem;
+  }
 }
 
 .bg-local-practice {
