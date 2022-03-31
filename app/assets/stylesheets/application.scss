@@ -137,15 +137,16 @@ input[type=file][data-direct-upload-url][disabled] {
   }
 
   // the main form elements
-  form > .form-group {
-    padding-bottom: $spacer * 2;
+  .form-group {
+    padding-top: $spacer * 2;
   }
 
-  form > .form-group:last-child {
+  .form-group:last-child {
+    padding-bottom: $spacer * 2;
     border-bottom: 2px #000 solid;
   }
 
-  form > .form-group > label {
+  .form-group > label {
     padding-bottom: $spacer / 2;
   }
 
@@ -167,5 +168,20 @@ input[type=file][data-direct-upload-url][disabled] {
 
   > .links-list > li > a {
     text-decoration: none;
+  }
+}
+
+.user-profile-section {
+  margin-top: $spacer * 2;
+
+  .actions > span {
+    margin-right: $spacer * 2;
+    a {
+      text-decoration: none;
+    }
+  }
+
+  #cancel_form {
+    margin-top: $spacer * 2;
   }
 }
