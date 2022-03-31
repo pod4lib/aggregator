@@ -9,9 +9,6 @@ xml.urlset(
 ) do
   xml.tag!('rs:ln', rel: 'up', href: resourcelist_organizations_url)
   xml.tag!('rs:md', capability: 'resourcelist', at: @stream.updated_at.iso8601)
-  xml.url do
-    xml.loc(removed_since_previous_stream_organization_stream_url(@organization, @stream))
-  end
 
   @stream.files.sort_by(&:created_at).each do |file|
     xml.url do

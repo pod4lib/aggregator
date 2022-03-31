@@ -27,14 +27,6 @@ class Stream < ApplicationRecord
     uploads.find_each(&:archive)
   end
 
-  def removed_since_previous_stream
-    all_other_marc_records = organization.marc_records.select(:marc001).where.not(streams: { id: id })
-    this_stream_marc_records = marc_records.select(:marc001)
-    except_stream = all_other_marc_records.arel.except(this_stream_marc_records.arel)
-
-    MarcRecord.from(MarcRecord.arel_table.create_table_alias(except_stream, :marc_records)).pluck(:marc001)
-  end
-
   def marc_profile
     any = false
     profile = MarcProfile.new(count: 0, histogram_frequency: {}, record_frequency: {}, sampled_values: {})

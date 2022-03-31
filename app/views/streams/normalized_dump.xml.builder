@@ -11,10 +11,6 @@ xml.urlset(
   xml.tag!('rs:md', capability: 'resourcelist', at: @normalized_dump.updated_at&.iso8601)
 
   if @normalized_dump.persisted?
-    xml.url do
-      xml.loc(removed_since_previous_stream_organization_stream_url(@organization, @stream))
-    end
-
     full = if params[:flavor] == 'marc21'
              @normalized_dump.marc21.attachment
            else
