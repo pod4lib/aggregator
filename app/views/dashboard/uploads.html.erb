@@ -1,18 +1,6 @@
 <div class="container index-page">
   <h1 class="mb-4">Uploads</h1>
 
-  <% unless params[:page] %>
-    <div class="row mb-5">
-      <div class="col">
-        <h2 class="text-center h6">Files</h2>
-        <%= line_chart uploads_chart_path %>
-      </div>
-      <div class="col">
-        <h2 class="text-center h6">Records</h2>
-        <%= line_chart records_chart_path %>
-      </div>
-    </div>
-  <% end %>
   <table class="table">
     <thead>
       <tr>
