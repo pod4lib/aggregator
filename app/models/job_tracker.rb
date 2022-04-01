@@ -24,15 +24,11 @@ class JobTracker < ApplicationRecord
   end
 
   def in_retry_set?
-    @in_retry_set ||= sidekiq_set(Sidekiq::RetrySet).map(&:item).any? do |j|
-      j['jid'] == provider_job_id
-    end
+    @in_retry_set ||= in_sidekiq_set?(Sidekiq::RetrySet)
   end
 
   def in_dead_set?
-    @in_dead_set ||= sidekiq_set(Sidekiq::DeadSet).map(&:item).any? do |j|
-      j['jid'] == provider_job_id
-    end
+    @in_dead_set ||= in_sidekiq_set?(Sidekiq::DeadSet)
   end
 
   def progress_label
@@ -65,11 +61,11 @@ class JobTracker < ApplicationRecord
     ActiveSupport::NumberHelper.number_to_delimited(*args)
   end
 
-  def sidekiq_set(set)
-    set.new
+  def in_sidekiq_set?(set)
+    set.new.map(&:item).any? { |j| j['jid'] == provider_job_id }
   rescue Redis::CannotConnectError => e
     Rails.logger.info(e)
     Honeybadger.notify(e)
-    []
+    false
   end
 end
