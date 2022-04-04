@@ -1,15 +1,34 @@
 <div class="container index-page">
-  <h1>Organizations</h1>
+  <h1 class="visually-hidden"">Provider statistics</h1>
+  <h2>Aggregated uploads from providers</h2>
 
+
+  <% unless params[:page] %>
+    <div class="row mb-5">
+      <div class="col">
+        <h2 class="text-center h6">Files</h2>
+        <%= line_chart uploads_chart_path %>
+      </div>
+      <div class="col">
+        <h2 class="text-center h6">Records</h2>
+        <%= line_chart records_chart_path %>
+      </div>
+    </div>
+  <% end %>
+
+
+
+  <h2>Upload statistics by provider</h2>
+  
   <table class="table table-striped organizations mt-4">
     <thead>
       <tr>
-        <th colspan="2">Name</th>
-        <th class="text-right files-column">Files</th>
-        <th class="text-right">Size</th>
-        <th class="text-right">Unique records</th>
-        <th class="text-right">Total records</th>
-        <th>Last updated</th>
+        <th colspan="2">Provider</th>
+        <th class="text-end files-column">Files</th>
+        <th class="text-end">Size</th>
+        <th class="text-end">Unique records</th>
+        <th class="text-end">Total records</th>
+        <th>Last update</th>
         <th colspan="2"></th>
       </tr>
     </thead>
@@ -25,44 +44,25 @@
           <td>
             <%= link_to organization.name, organization %>
           </td>
-          <td class="text-right files-column"><%= organization.default_stream.files.size %></td>
-          <td class="text-right"><%= number_to_human_size organization.default_stream.files.sum(:byte_size) %></td>
-          <td class="text-right"><%= number_with_delimiter organization.latest_statistics.unique_record_count %></td>
-          <td class="text-right"><%= number_with_delimiter organization.latest_statistics.record_count %></td>
+          <td class="text-end files-column"><%= organization.default_stream.files.size %></td>
+          <td class="text-end"><%= number_to_human_size organization.default_stream.files.sum(:byte_size) %></td>
+          <td class="text-end"><%= number_with_delimiter organization.latest_statistics.unique_record_count %></td>
+          <td class="text-end"><%= number_with_delimiter organization.latest_statistics.record_count %></td>
           <td><%= organization.default_stream.uploads.last&.updated_at %></td>
-          <td><%= link_to 'Edit', edit_organization_path(organization), class: 'btn btn-secondary btn-sm' if can? :edit, organization %></td>
-          <td><%= link_to 'Destroy', organization, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' if can? :delete, organization %></td>
+
+          <% if can? :manage, Organization %>
+            <td><%= link_to 'Edit', edit_organization_path(organization), class: 'btn btn-secondary btn-sm' if can? :edit, organization %></td>
+            <td><%= link_to 'Destroy', organization, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' if can? :delete, organization %></td>
+          <% end %>
+     
         </tr>
       <% end %>
-      <tr class="table-info">
-        <td></td>
-        <td></td>
-        <td class="text-right files-column"><%= number_with_delimiter(@organizations.sum {|org| org.default_stream.files.size }) %></td>
-        <td class="text-right"><%= number_to_human_size @organizations.sum {|org| org.default_stream.files.sum(:byte_size)} %></td>
-        <td class="text-right"><%= number_with_delimiter(@organizations.sum { |org| org.latest_statistics.unique_record_count }) %></td>
-        <td class="text-right"><%= number_with_delimiter(@organizations.sum { |org| org.latest_statistics.record_count })%></td>
-        <td></td>
-        <td colspan="2"></td>
-      </tr>
     </tbody>
   </table>
 
   <br>
+  <% if can? :manage, Organization %>
+    <%= link_to 'New Organization', new_organization_path, class: 'btn btn-primary' if can? :create, Organization.new %>
+  <% end %>
 
-  <%= link_to 'New Organization', new_organization_path, class: 'btn btn-primary' if can? :create, Organization.new %>
-
-  <hr />
-
-  <h1>Harvesting</h1>
-
-  <div class="card w-50">
-    <div class="card-header d-flex justify-content-between">
-      <h2 class="h6">ResourceSync sitemaps</h2>
-    </div>
-    <ul class="list-group list-group-flush">
-      <li class="list-group-item"><%= link_to 'Original uploads', resourcelist_organizations_url %> (real-time)</li>
-      <li class="list-group-item"><%= link_to 'Normalized uploads as MARCXML', normalized_resourcelist_organizations_url(flavor: 'marcxml') %> (updated nightly)</li>
-      <li class="list-group-item"><%= link_to 'Normalized uploads as MARC21', normalized_resourcelist_organizations_url(flavor: 'marc21') %> (updated nightly)</li>
-    </ul>
-  </div>
 </div>

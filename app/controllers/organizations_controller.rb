@@ -4,6 +4,11 @@
 class OrganizationsController < ApplicationController
   load_and_authorize_resource
 
+  content_security_policy do |policy|
+    policy.style_src :self, :unsafe_inline
+    policy.script_src :self, :unsafe_inline
+  end
+
   # GET /organizations
   # GET /organizations.json
   def index; end
