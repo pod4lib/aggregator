@@ -3,11 +3,15 @@ Rails.application.routes.draw do
   # Disable default Devise user registration ("Sign Up"), but support editing user profile when logged in, which is controlled by Devise's RegistrationsController
   devise_for :users, controllers: { invitations: 'organization_invitations' }, :skip => [:registrations]
     as :user do
+      # Since we skip registration above, explicity specify registration routes we need
       get 'users/edit' => 'devise/registrations#edit', as: 'edit_user_registration'
-      put 'users' => 'devise/registrations#update', as: 'user_registration'
+      delete 'users' => 'devise/registrations#destroy', as: 'delete_user'
+      # Use custom registrations controller for updating profile
+      put 'users' => 'registrations#update', as: 'user_registration'
     end
 
   root to: 'pages#home'
+
   get '/documentation/:id', to: 'pages#show', as: :pages
   get '/api', to: 'pages#api'
 

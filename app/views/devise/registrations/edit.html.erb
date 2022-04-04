@@ -1,31 +1,54 @@
-<h2>Edit <%= resource_name.to_s.humanize %></h2>
+<h1>User Profile</h1>
 
-<%= bootstrap_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+<%= bootstrap_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, id: 'user_form', class: 'user-profile-section'}) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
-
-  <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+  <div class="form-group">
+    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+    <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+      <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+    <% end %>
+  </div>
 
   <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
     <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
   <% end %>
 
-  <%= f.text_field :name %>
+  <div class="form-group">
+    <%= f.text_field :name %>
+  </div>
 
-  <%= f.text_field :title, label: 'Job title' %>
+  <div class="form-group">
+    <%= f.text_field :title, label: 'Job title' %>
+  </div>
 
-  <%= f.password_field :password, label: 'New password', autocomplete: "new-password", help: "#{"#{@minimum_password_length} characters minimum" if @minimum_password_length } (leave blank if you don't want to change it)" %>
-
-  <%= f.password_field :password_confirmation, label: 'New password confirmation', autocomplete: "new-password" %>
-
-  <%= f.password_field :current_password, autocomplete: "current-password", help: '(we need your current password to confirm your changes)' %>
-
-  <div class="actions">
-    <%= f.primary "Update" %>
+  <div class="actions d-flex align-items-center">
+    <span><%= f.submit "Update", class: 'btn btn-primary' %></span>
+    <span><%= link_to "Cancel", :back %></span>
   </div>
 <% end %>
 
-<h3 class="mt-3">Cancel my account</h3>
 
-<p><%= button_to "Cancel my account", registration_path(resource_name), class: 'btn btn-secondary', data: { confirm: "Are you sure?" }, method: :delete %></p>
+<%= bootstrap_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, id: 'password_form', class: 'user-profile-section'}) do |f| %>
+  <h2>Change Password</h2>
 
-<%= link_to "Back", :back %>
+  <div class="form-group">
+    <%= f.password_field :current_password,vautocomplete: "current-password", help: '(We need your current password to confirm password changes)' %>
+  </div>
+
+  <div class="form-group">
+    <%= f.password_field :password, label: "New password", autocomplete: "new-password", help: "#{"#{@minimum_password_length} characters minimum" if @minimum_password_length }" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.password_field :password_confirmation, label: "New password confirmation", autocomplete: "new-password" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Change Password" %>
+  </div>
+<% end %>
+
+<div class='user-profile-section'>
+  <h2>Cancel Account</h2>
+  <%= button_to "Cancel my account", registration_path(resource_name), id: 'cancel_form', class: 'btn btn-danger', data: { confirm: "Are you sure you want to delete your account?" }, method: :delete %>
+</div>
