@@ -1,0 +1,29 @@
+// Access bootstrap color utility variables
+@import 'bootstrap';
+
+.pod-icon > svg, .pod-metadata-status > svg {
+  height: 25px;
+  width: 25px;
+}
+
+.pod-metadata-status {
+  &.deletes {
+    color: $success;
+  }
+
+  &.invalid {
+    color: $danger;
+  }
+
+  &.not_marc {
+    color: $warning;
+  }
+
+  &.success {
+    color: $success;
+  }
+
+  &.unknown {
+    color: $info;
+  }
+}

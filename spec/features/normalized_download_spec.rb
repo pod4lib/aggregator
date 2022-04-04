@@ -20,12 +20,6 @@ RSpec.describe 'Downloading normalized files from POD', type: :feature do
       GenerateFullDumpJob.perform_now(organization)
     end
 
-    it 'generates a deletes file and provides a link to it' do
-      visit organization_url(organization)
-
-      expect(page).to have_link 'deleted-records.txt'
-    end
-
     it 'generates binary & xml full dump files and provides a link to them' do
       visit organization_url(organization)
 

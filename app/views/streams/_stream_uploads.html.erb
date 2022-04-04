@@ -1,3 +1,11 @@
+<ul class="table-key list-unstyled list-inline pt-2">
+  <% Settings.metadata_status.each do |status, values| %>
+    <li class="list-inline-item">
+      <%= bootstrap_icon(values.icon_class, class: "pod-metadata-status #{status}") %>
+      <span class="fw-bold"><%= values.label %></span>
+    </li>
+  <% end %>
+</ul>
 <table class="table table-striped mb-3">
   <thead><th>Status</th><th>File</th><th>Date created</th><th class="text-right">Size</th><th>Content type</th><th class="text-right">Records</th><th><span class="visually-hidden">Actions</span></th></thead>
   <tbody>
@@ -8,7 +16,8 @@
       <td class="text-right" colspan="2">Total: <%= number_with_delimiter stream.statistic&.record_count || 0 %><br />Unique: <%= number_with_delimiter stream.statistic&.unique_record_count || 0 %></td>
       <td>
         <%= link_to profile_organization_stream_path(stream.organization, stream), class: 'btn btn-primary' do %>
-          <span class="visually-hidden">View profile</span> 🔎
+          <%= bootstrap_icon("search", class: "pod-icon") %>
+          <span class="visually-hidden">View profile</span>
         <% end %>
       </td>
     </tr>
