@@ -42,4 +42,10 @@ RSpec.describe Organization do
       expect(organization.normalization_steps).to eq({})
     end
   end
+
+  describe '#provider' do
+    it 'defaults to true' do
+      expect(organization.provider?).to be true
+    end
+  end
 end

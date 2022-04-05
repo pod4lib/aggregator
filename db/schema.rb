@@ -183,6 +183,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_03_07_195048) do
     t.string "code"
     t.json "normalization_steps"
     t.boolean "public", default: true
+    t.boolean "provider", default: true
     t.index ["slug"], name: "index_organizations_on_slug", unique: true
   end
 
