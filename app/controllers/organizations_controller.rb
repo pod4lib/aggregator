@@ -4,9 +4,10 @@
 class OrganizationsController < ApplicationController
   load_and_authorize_resource
 
-  content_security_policy do |policy|
+  # We need unsafe_inline for Chartkick style_src (despite the nonce for script_src)
+  # See https://github.com/ankane/chartkick/blob/master/guides/Content-Security-Policy.md
+  content_security_policy only: :index do |policy|
     policy.style_src :self, :unsafe_inline
-    policy.script_src :self, :unsafe_inline
   end
 
   # GET /organizations
