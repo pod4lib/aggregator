@@ -1,0 +1,55 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: bundle exec rails s
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      DATABASE_URL: postgres://pod4lib:pod4lib@postgres:5432/aggregator
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - db
+      - cache
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: bundle exec sidekiq
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      DATABASE_URL: postgres://pod4lib:pod4lib@postgres:5432/aggregator
+      RAILS_MAX_THREADS: 5
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - db
+      - cache
+
+  db:
+    image: postgres:12.8
+    environment:
+      POSTGRES_USER: pod4lib
+      POSTGRES_PASSWORD: pod4lib
+      POSTGRES_DB: aggregator
+    ports:
+      - "5432:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  cache:
+    image: redis:6.2
+    ports:
+      - "6379:6379"
+    volumes:
+      - cache:/data
+
+volumes:
+  db:
+  cache:
