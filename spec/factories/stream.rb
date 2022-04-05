@@ -7,5 +7,9 @@ FactoryBot.define do
         create_list(:upload, options[:count], :binary_marc, stream: stream)
       end
     end
+
+    trait :default do
+      default { true }
+    end
   end
 end

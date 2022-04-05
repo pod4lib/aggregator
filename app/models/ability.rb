@@ -46,6 +46,7 @@ class Ability
     end
 
     can :manage, :all if user.has_role?(:admin)
+    cannot :delete, Stream, default: true
     can :read, Organization, public: true
 
     owned_orgs = Organization.with_role(:owner, user).pluck(:id)
