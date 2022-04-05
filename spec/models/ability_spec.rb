@@ -16,6 +16,7 @@ RSpec.describe Ability do
   describe 'with a token' do
     let(:org1) { create(:organization) }
     let(:org2) { create(:organization) }
+    let(:default_stream) { create(:stream, :default) }
     let(:token) { { 'jti' => 'anything' } }
     let(:token_attributes) { {} }
 
@@ -49,10 +50,16 @@ RSpec.describe Ability do
   end
 
   describe 'with a user' do
+    let(:organization) { create(:organization) }
+    let(:default_stream) do
+      create(:stream, :default, organization: organization)
+    end
+
     context 'with an admin' do
       let(:user) { create(:admin) }
 
       it { is_expected.to be_able_to(:manage, :all) }
+      it { is_expected.not_to be_able_to(:delete, default_stream) }
     end
 
     context 'when a non-admin user' do
@@ -61,10 +68,20 @@ RSpec.describe Ability do
       it { is_expected.to be_able_to(:read, create(:organization)) }
       it { is_expected.not_to be_able_to(:read, Upload.new) }
       it { is_expected.not_to be_able_to(:read, Stream.new) }
+      it { is_expected.not_to be_able_to(:delete, default_stream) }
+    end
+
+    context 'with an owner of an org' do
+      let(:user) { create(:user) }
+
+      before do
+        user.add_role :owner, organization
+      end
+
+      it { is_expected.not_to be_able_to(:delete, default_stream) }
     end
 
     context 'with a member of an org' do
-      let(:organization) { create(:organization) }
       let(:user) { create(:user) }
 
       before do
@@ -74,6 +91,7 @@ RSpec.describe Ability do
       it { is_expected.to be_able_to(:create, Upload.new(organization: organization)) }
       it { is_expected.to be_able_to(:create, Stream.new(organization: organization)) }
       it { is_expected.to be_able_to(:create, AllowlistedJwt.new(resource: organization)) }
+      it { is_expected.not_to be_able_to(:delete, default_stream) }
     end
   end
 end
