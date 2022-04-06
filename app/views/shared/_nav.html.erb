@@ -1,49 +1,51 @@
-<nav class="navbar navbar-dark navbar-expand bg-dark" role="navigation">
-  <div class="container px-3">
+<nav class="navbar navbar-dark navbar-expand-md bg-dark" role="navigation">
+  <div class="container">
     <%= link_to root_url, class: 'navbar-brand' do %>
-      <%= inline_svg_pack_tag 'media/packs/images/pod_logo.svg', height: 30, width: 80 %> Aggregator
+    <%= inline_svg_pack_tag 'media/packs/images/pod_logo.svg', height: 24, width: '', alt: '', class: 'd-inline-block align-text-top' %>
+    <span class="ms-1"><%= t('.brand') %></span>
     <% end %>
-    <div class="collapse navbar-collapse">
-    <ul class="navbar-nav">
-      <li class='nav-item'>
-        <%= link_to 'Providers', organizations_url, class: 'nav-link' %>
-      </li>
-      <li class='nav-item'>
-        <%= link_to 'Activity', activity_url, class: 'nav-link', data: { turbolinks: false } %>
-      </li>
-    </ul>
-    </div>
-
-    <ul class="navbar-nav ml-auto">
-      <% if current_user %>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-md-5">
+        <li class='nav-item'><%= link_to t('.providers'), organizations_url, class: 'nav-link' %></li>
+        <li class='nav-item'><%= link_to t('.activity'), activity_url, class: 'nav-link', data: { turbolinks: false } %></li>
+        <% if can? :manage, User %>
+        <li class='nav-item'><%= link_to t('.users'), site_users_url, class: 'nav-link' %></li>
+        <% end %>
+      </ul>
+      <ul class="navbar-nav ms-md-auto">
+        <% if current_user %>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
             <%= current_user.email %>
           </a>
-          <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarDropdown">
-              <% current_user.organizations.each do | organization | %>
-                <li class="nav-item"><%= link_to "#{organization.name} POD", organization, class: 'nav-link' %></li>
-              <% end %>
-             <li class="nav-item">
-              <%= link_to 'Edit profile', edit_user_registration_path, class: 'nav-link' %>
-            </li>
-            <li><hr class="dropdown-divider"></li>
-            <% if can? :manage, User %>
-              <li class='nav-item'>
-                <%= link_to 'Manage users', site_users_url, class: 'nav-link' %>
-              </li>
-              <li><hr class="dropdown-divider"></li>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+            <% current_user.organizations.each do | organization | %>
+            <li><%= link_to t('.view_org_page', org: organization.name), organization, class: 'dropdown-item' %></li>
             <% end %>
-            <li class="nav-item">
-              <%= link_to 'Logout', destroy_user_session_path, class: 'nav-link', data: { method: :delete } %>
+            <li><%= link_to t('.edit_profile'), edit_user_registration_path, class: 'dropdown-item' %></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <% if can? :manage, User %>
+            <li><%= link_to t('.manage_users'), site_users_url, class: 'dropdown-item' %></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <% end %>
+            <li>
+              <%= link_to t('.logout'), destroy_user_session_path, class: 'dropdown-item', data: { method: :delete } %>
             </li>
           </ul>
         </li>
-      <% else %>
-        <li class="nav-item">
-          <%= link_to 'Login', new_user_session_path, class: 'nav-link' %>
-        </li>
-      <% end %>
-    </ul>
+        <% else %>
+        <li><%= link_to t('.login'), new_user_session_path, class: 'dropdown-item' %></li>
+        <% end %>
+      </ul>
+    </div>
   </div>
 </nav>

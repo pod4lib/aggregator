@@ -33,6 +33,18 @@ en:
   layouts:
     application:
       title: POD Aggregator
+  shared:
+    nav:
+      brand: Aggregator
+      providers: Providers
+      data: Data
+      activity: Activity
+      users: Users
+      view_org_page: '%{org} POD'
+      edit_profile: Edit profile
+      manage_users: Manage users
+      logout: Logout
+      login: Login
   helpers:
     label:
       user:
