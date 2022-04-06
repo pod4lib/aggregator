@@ -1,36 +1,38 @@
-<footer class="footer p-4">
+<footer class="bg-light border-top py-3 py-md-4">
   <div class="container">
     <div class="row">
-      <div class="col-12 col-md text-muted">
-        <%= inline_svg_pack_tag 'media/packs/images/pod_small.svg', width: 30, height: 30, aria_hidden: true, class: 'pod-logo-small' %>
-        <span>POD Aggregator</span>
-        <small class="d-block mb-3 copyright-date">&copy; 2020-2022</small>
+      <div class="col-md my-3 my-md-0">
+        <%= inline_svg_pack_tag 'media/packs/images/pod_small.svg', width: '48', height: '48', aria_hidden: true, class: 'pod-logo-small float-start' %>
+        <div class="text-muted float-start ms-2">
+          <span class="d-block"><%= t('.title') %></span>
+          <span class="d-block"><%= t('.copyright_html', current_year: Time.current.year) %></span>
+        </div>
       </div>
-      <div class="col-6 col-md">
-        <h5>Documentation</h5>
-        <ul class="list-unstyled text-small">
+      <div class="col-md my-3 my-md-0">
+        <h5><%= t('.docs.heading') %></h5>
+        <ul class="list-unstyled mb-1">
           <li>
-            <%= link_to 'POD API', 'https://github.com/pod4lib/aggregator/wiki/Uploading-data-using-the-API', class: 'text-muted' %>
+            <%= link_to t('.docs.api'), 'https://github.com/pod4lib/aggregator/wiki/Uploading-data-using-the-API', class: 'text-muted text-decoration-none' %>
           </li>
           <li>
-            <%= link_to 'Data documentation', 'https://github.com/pod4lib/aggregator/wiki/Data-requirements', class: 'text-muted' %>
+            <%= link_to t('.docs.data'), 'https://github.com/pod4lib/aggregator/wiki/Data-requirements', class: 'text-muted text-decoration-none' %>
           </li>
           <li>
-            <%= link_to 'Data retention policy', 'https://github.com/pod4lib/aggregator/wiki/Retention-policy', class: 'text-muted' %>
+            <%= link_to t('.docs.retention_policy'), 'https://github.com/pod4lib/aggregator/wiki/Retention-policy', class: 'text-muted text-decoration-none' %>
           </li>
         </ul>
       </div>
-      <div class="col-6 col-md">
-        <h5>Other Resources</h5>
-        <ul class="list-unstyled text-small">
+      <div class="col-md my-3 my-md-0">
+        <h5><%= t('.resources.heading') %></h5>
+        <ul class="list-unstyled mb-1">
           <li>
-            <%= link_to 'Help with contributing or using POD data', 'https://github.com/pod4lib/aggregator/wiki#getting-help', class: 'text-muted' %>
+            <%= link_to t('.resources.contributing'), 'https://github.com/pod4lib/aggregator/wiki#getting-help', class: 'text-muted text-decoration-none' %>
           </li>
           <li>
-            <%= link_to 'Data provider and usage framework', 'https://docs.google.com/document/d/1EZG7z_A13jxPfHbYhT7Ae4Ays10fhecqfoGJhqrcjD8/edit', class: 'text-muted' %>
+            <%= link_to t('.resources.framework'), 'https://docs.google.com/document/d/1EZG7z_A13jxPfHbYhT7Ae4Ays10fhecqfoGJhqrcjD8/edit', class: 'text-muted text-decoration-none' %>
           </li>
           <li>
-            <%= link_to 'Github repository', 'https://github.com/pod4lib/aggregator', class: 'text-muted' %>
+            <%= link_to t('.resources.github'), 'https://github.com/pod4lib/aggregator', class: 'text-muted text-decoration-none' %>
           </li>
         </ul>
       </div>

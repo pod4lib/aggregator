@@ -45,6 +45,19 @@ en:
       manage_users: Manage users
       logout: Logout
       login: Login
+    footer:
+      title: POD Aggregator
+      copyright_html: '&copy; 2020-%{current_year}'
+      docs:
+        heading: Documentation
+        api: POD API
+        data: Data documentation
+        retention_policy: Data retention policy
+      resources:
+        heading: Other Resources
+        contributing: Help with contributing or using POD data
+        framework: Data provider and usage framework
+        github: GitHub repository
   helpers:
     label:
       user:

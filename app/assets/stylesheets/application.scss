@@ -96,19 +96,6 @@ input[type=file][data-direct-upload-url][disabled] {
   margin-top: 2rem;
 }
 
-.footer {
-  background-color: #f8f9fa;
-  border-top: 1px solid darken(#f8f9fa, 10%);
-  bottom: 0;
-  height: $footer-height;
-  position: absolute;
-  width: 100%;
-
-  .copyright-date {
-    margin-left: 2rem;
-  }
-}
-
 .bg-local-practice {
   background-color: lighten($warning, 40%) !important;
 }
