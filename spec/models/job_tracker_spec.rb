@@ -13,13 +13,17 @@ RSpec.describe JobTracker, type: :model do
   let(:status_attributes) { { progress: 50, total: 100 } }
   let(:job_id) { 'job_id' }
   let(:provider_job_id) { 'jid' }
-  let(:retry_set) { [] }
-  let(:dead_set) { [] }
+  let(:job) { instance_double('job', find_job: 'a job') }
+  let(:no_job) { instance_double('job', find_job: nil) }
+  let(:retry_set) { no_job }
+  let(:dead_set) { no_job }
 
   before do
     allow(ActiveJob::Status).to receive(:get).with(job_id).and_return(status_attributes)
     allow(Sidekiq::RetrySet).to receive(:new).and_return(retry_set)
     allow(Sidekiq::DeadSet).to receive(:new).and_return(dead_set)
+    allow(job).to receive(:size).and_return(1)
+    allow(no_job).to receive(:size).and_return(1)
   end
 
   describe '#status' do
@@ -30,7 +34,7 @@ RSpec.describe JobTracker, type: :model do
 
   describe '#sidekiq_status' do
     context 'when job is in the retry set' do
-      let(:retry_set) { [instance_double('job', item: { 'jid' => 'jid' })] }
+      let(:retry_set) { job }
 
       it 'returns retry' do
         expect(job_tracker.sidekiq_status).to eq 'retry'
@@ -38,7 +42,7 @@ RSpec.describe JobTracker, type: :model do
     end
 
     context 'when job is in the dead set' do
-      let(:dead_set) { [instance_double('job', item: { 'jid' => 'jid' })] }
+      let(:dead_set) { job }
 
       it 'returns dead' do
         expect(job_tracker.sidekiq_status).to eq 'dead'
@@ -53,32 +57,46 @@ RSpec.describe JobTracker, type: :model do
   end
 
   describe '#in_retry_set?' do
-    let(:retry_set) { [instance_double('job', item: { 'jid' => 'jid' })] }
+    let(:retry_set) { job }
 
     it 'returns true when the job is in the retry set' do
       expect(job_tracker.in_retry_set?).to be true
     end
 
     context 'when the job is not in the retry set' do
-      let(:retry_set) { [instance_double('job', item: { 'jid' => 'someotherid' })] }
+      let(:retry_set) { no_job }
 
       it 'returns false' do
         expect(job_tracker.in_retry_set?).to be false
       end
     end
+
+    context 'when there are too many jobs in the set' do
+      it 'returns false' do
+        allow(job).to receive(:size).and_return(1001)
+        expect(job_tracker.in_dead_set?).to be false
+      end
+    end
   end
 
   describe '#in_dead_set?' do
-    let(:dead_set) { [instance_double('job', item: { 'jid' => 'jid' })] }
+    let(:dead_set) { job }
 
     it 'returns true when the job is in the dead set' do
       expect(job_tracker.in_dead_set?).to be true
     end
 
     context 'when the job is not in the dead set' do
-      let(:dead_set) { [instance_double('job', item: { 'jid' => 'someotherid' })] }
+      let(:dead_set) { no_job }
 
       it 'returns false' do
+        expect(job_tracker.in_dead_set?).to be false
+      end
+    end
+
+    context 'when there are too many jobs in the set' do
+      it 'returns false' do
+        allow(job).to receive(:size).and_return(1001)
         expect(job_tracker.in_dead_set?).to be false
       end
     end
