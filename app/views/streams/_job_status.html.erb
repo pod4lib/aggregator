@@ -29,7 +29,7 @@
                   <th><%= t('job_tracker.table_heading.created_at') %></th>
                 </tr>
               </thead>
-              <% jobs.each do |job| %>
+              <% jobs.sort_by(&:created_at).reverse.each do |job| %>
                 <tr class="<%= "status-#{job.job_id}" %>">
                   <td class="text-center">
                     <%= bootstrap_icon(Settings.job_status_group[status_group].icon_class, class: "pod-icon pod-job-tracker-status #{job.sidekiq_status}")%>
