@@ -35,3 +35,14 @@ en:
     label:
       user:
         email: Email address
+  job_tracker:
+    title: Processing status of recent background jobs
+    table_heading:
+      status: Status
+      resource: Resource
+      job_type: Job type
+      progress: Completed records
+      created_at: Created at
+    status_group:
+      active: Active
+      needs_attention: Needs attention

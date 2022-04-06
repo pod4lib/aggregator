@@ -5,10 +5,6 @@ class JobTracker < ApplicationRecord
   belongs_to :reports_on, polymorphic: true
   belongs_to :resource, polymorphic: true
 
-  def label
-    "[#{job_class.titleize}] #{resource_label}"
-  end
-
   def resource_label
     return resource.filename if resource.is_a? ActiveStorage::Blob
     return resource.name if resource.is_a? Upload
@@ -20,10 +16,25 @@ class JobTracker < ApplicationRecord
     @status ||= ActiveJob::Status.get(job_id)
   end
 
+  def sidekiq_status
+    return 'retry' if in_retry_set?
+    return 'dead' if in_dead_set?
+
+    'active'
+  end
+
+  def in_retry_set?
+    @in_retry_set ||= in_sidekiq_set?(Sidekiq::RetrySet)
+  end
+
+  def in_dead_set?
+    @in_dead_set ||= in_sidekiq_set?(Sidekiq::DeadSet)
+  end
+
   def progress_label
     return number_with_delimiter(progress) unless total?
 
-    "#{number_with_delimiter(progress)} / #{number_with_delimiter(total)}"
+    "#{number_with_delimiter(progress)} of #{number_with_delimiter(total)}"
   end
 
   def progress
@@ -44,15 +55,17 @@ class JobTracker < ApplicationRecord
     status[:total]&.positive?
   end
 
-  def percent
-    return nil unless total?
-
-    (100.0 * progress) / total
-  end
-
   private
 
   def number_with_delimiter(*args)
     ActiveSupport::NumberHelper.number_to_delimited(*args)
+  end
+
+  def in_sidekiq_set?(set)
+    set.new.map(&:item).any? { |j| j['jid'] == provider_job_id }
+  rescue Redis::CannotConnectError => e
+    Rails.logger.info(e)
+    Honeybadger.notify(e)
+    false
   end
 end

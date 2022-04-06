@@ -17,6 +17,14 @@ marc_fixture_seeds:
     - Princeton
     - Stanford
 
+job_status_group:
+  active:
+    icon_class: 'arrow-repeat'
+    badge_class: 'bg-primary'
+  needs_attention:
+    icon_class: 'exclamation-triangle-fill'
+    badge_class: 'bg-warning'
+
 # refer to https://icons.getbootstrap.com/ for icon class names
 metadata_status:
   success:
