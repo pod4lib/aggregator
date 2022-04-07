@@ -84,6 +84,8 @@ Deployment is setup using Capistrano using standard [Stanford Digital Library Sy
 ## Getting Stated with Docker
 
 1. `docker-compose -f docker-compose.yml up`
-2. Exec into the running container: `docker exec -it aggworker bash`
-3. Inside the container, run: `./bin/setup`
-4. Navigate to localhost:3000 in your browser
+2. Exec into the running worker container: `docker exec -it aggworker bash`
+3. Inside the worker container, run: `./bin/setup`
+4. Exec into the running app conatiner: `docker exec -it aggapp bash`
+5. Inside the app container, run: `./bin/rails db:migrate` 
+6. Navigate to localhost:3000 in your browser
