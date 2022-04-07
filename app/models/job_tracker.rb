@@ -62,7 +62,13 @@ class JobTracker < ApplicationRecord
   end
 
   def in_sidekiq_set?(set)
-    set.new.map(&:item).any? { |j| j['jid'] == provider_job_id }
+    set_instance = set.new
+    # NOTE: Guard against sequential scan of a set that is too large.
+    return false if set_instance.size > 1000
+
+    # NOTE: This does not scale and we might need to find an alternate approach:
+    #       https://github.com/mperham/sidekiq/blob/main/lib/sidekiq/api.rb#L279-L286
+    set_instance.find_job(provider_job_id).present?
   rescue Redis::CannotConnectError => e
     Rails.logger.info(e)
     Honeybadger.notify(e)
