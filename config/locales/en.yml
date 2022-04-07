@@ -30,7 +30,33 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  layouts:
+    application:
+      title: POD Aggregator
+  shared:
+    nav:
+      brand: Aggregator
+      providers: Providers
+      data: Data
+      activity: Activity
+      users: Users
+      view_org_page: '%{org} POD'
+      edit_profile: Edit profile
+      manage_users: Manage users
+      logout: Logout
+      login: Login
+    footer:
+      copyright_html: '&copy; 2020-%{current_year}'
+      docs:
+        heading: Documentation
+        api: POD API
+        data: Data documentation
+        retention_policy: Data retention policy
+      resources:
+        heading: Other Resources
+        contributing: Help with contributing or using POD data
+        framework: Data provider and usage framework
+        github: GitHub repository
   helpers:
     label:
       user:

@@ -1,24 +1,36 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Aggregator</title>
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
+<html lang="<%= I18n.locale %>">
 
-    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload', nonce: true %>
-    <%= favicon_link_tag 'favicon.svg' %>
-    <%= content_for(:head) %>
-  </head>
+<head>
+  <title><%= t('.title') %></title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
 
-  <body>
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload', nonce: true %>
+  <%= favicon_link_tag 'favicon.svg' %>
+  <%= content_for(:head) %>
+</head>
+
+<body class="min-vh-100 d-flex flex-column">
+  <!-- header -->
+  <header>
     <%= render 'shared/nav' %>
     <div class="container">
       <%= render partial: '/shared/flash_msg', layout: nil %>
     </div>
+  </header>
 
+  <!-- main content -->
+  <main class="flex-fill">
     <%= content_for?(:content) ? yield(:content) : yield %>
+  </main>
 
-    <%= render 'shared/footer' %>
-  </body>
+  <!-- footer -->
+  <%= render 'shared/footer' %>
+</body>
+
 </html>
