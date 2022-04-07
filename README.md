@@ -80,3 +80,10 @@ bundle exec rails server  # or other commands
 
 ## Deployment
 Deployment is setup using Capistrano using standard [Stanford Digital Library Systems and Services practices](https://github.com/sul-dlss/DeveloperPlaybook/blob/master/best-practices/deployment.md#ruby-applications).
+
+## Getting Stated with Docker
+
+1. `docker-compose -f docker-compose.yml up`
+2. Exec into the running container: `docker exec -it aggworker bash`
+3. Inside the container, run: `./bin/setup`
+4. Navigate to localhost:3000 in your browser
