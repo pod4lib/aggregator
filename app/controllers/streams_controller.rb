@@ -11,6 +11,11 @@ class StreamsController < ApplicationController
     @uploads = @stream.uploads.active.order(created_at: :desc).page(params[:page])
   end
 
+  def resourcelist
+    show
+    render 'show'
+  end
+
   def new; end
 
   # POST /streams
