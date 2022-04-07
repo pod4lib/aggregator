@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'rubygems/package'
+
 ##
 # Job to extract tar.gz files in the background
 class ExtractFilesJob < ApplicationJob
