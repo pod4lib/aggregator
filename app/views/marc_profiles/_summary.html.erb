@@ -12,19 +12,21 @@
       <tr>
         <td></td>
         <td>001</td>
-        <td><%= marc_profile.record_frequency["001"] %> of <%= marc_profile.count %></td>
+        <td><%= number_with_delimiter(marc_profile.record_frequency['001']) %> of
+            <%= number_with_delimiter(marc_profile.count) %>
+        </td>
       </tr>
       <tr>
-        <td>MHLD information</td>
-        <td>85x, 86x, 87x</td>
-        <td>85x: <%= marc_profile.record_frequency.keys.any? {|field| field.start_with?("85")} %><br>
-        86x: <%= marc_profile.record_frequency.keys.any? {|field| field.start_with?("86")} %><br>
-        87x: <%= marc_profile.record_frequency.keys.any? {|field| field.start_with?("87")} %></td>
+        <td>Holdings data</td>
+        <td>85X, 86X, 87X</td>
+        <td>85X: <%= marc_profile.record_frequency.keys.any? { |field| field.start_with?('85') } %><br>
+        86X: <%= marc_profile.record_frequency.keys.any? { |field| field.start_with?('86') } %><br>
+        87X: <%= marc_profile.record_frequency.keys.any? { |field| field.start_with?('87') } %></td>
       </tr>
       <tr>
-        <td>Mutilingual data</td>
-        <td>88x</td>
-        <td><%= marc_profile.record_frequency.keys.any? {|field| field.start_with?("88")} %></td>
+        <td>Multiscript data</td>
+        <td>88X</td>
+        <td><%= marc_profile.record_frequency.keys.any? { |field| field.start_with?('88') } %></td>
       </tr>
   </tbody>
 </table>
