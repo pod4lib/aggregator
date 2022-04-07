@@ -1,38 +1,41 @@
+version: "3.9"
 services:
-  app:
+  aggapp:
+    container_name: aggapp
     build:
       context: .
       dockerfile: Dockerfile
     command: bundle exec rails s
     environment:
-      REDIS_HOST: redis
+      REDIS_HOST: aggcache
       REDIS_PORT: 6379
-      DATABASE_URL: postgres://pod4lib:pod4lib@postgres:5432/aggregator
+      DATABASE_URL: postgres://pod4lib:pod4lib@aggdb:5432/aggregator
     ports:
       - "3000:3000"
     volumes:
       - .:/usr/src/app
     depends_on:
-      - db
-      - cache
+      - aggdb
+      - aggcache
 
-  worker:
+  aggworker:
+    container_name: aggworker
     build:
       context: .
       dockerfile: Dockerfile
     command: bundle exec sidekiq
     environment:
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      DATABASE_URL: postgres://pod4lib:pod4lib@postgres:5432/aggregator
+      REDIS_URL: redis://aggcache:6379
+      DATABASE_URL: postgres://pod4lib:pod4lib@aggdb:5432/aggregator
       RAILS_MAX_THREADS: 5
     volumes:
       - .:/usr/src/app
     depends_on:
-      - db
-      - cache
+      - aggdb
+      - aggcache
 
-  db:
+  aggdb:
+    container_name: aggdb
     image: postgres:12.8
     environment:
       POSTGRES_USER: pod4lib
@@ -43,7 +46,8 @@ services:
     volumes:
       - db:/var/lib/postgresql/data
 
-  cache:
+  aggcache:
+    container_name: aggcache
     image: redis:6.2
     ports:
       - "6379:6379"
