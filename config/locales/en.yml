@@ -46,7 +46,6 @@ en:
       logout: Logout
       login: Login
     footer:
-      title: POD Aggregator
       copyright_html: '&copy; 2020-%{current_year}'
       docs:
         heading: Documentation
