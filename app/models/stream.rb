@@ -34,6 +34,10 @@ class Stream < ApplicationRecord
     }
   end
 
+  def active_jobs?
+    job_tracker_status_groups.values.flatten.any?
+  end
+
   def marc_profile
     any = false
     profile = MarcProfile.new(count: 0, histogram_frequency: {}, record_frequency: {}, sampled_values: {})

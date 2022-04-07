@@ -1,71 +1,136 @@
-<div id="hero" class="position-relative overflow-hidden p-3 p-md-5 text-center bg-dark text-light">
+<!-- hero section -->
+<div id="hero" class="position-relative overflow-hidden p-3 p-md-5 bg-dark text-light">
   <div class="bg-image"></div>
-  <div class="hero-text position-relative col-md-7 p-lr-3 mx-auto my-4">
-    <h1 class="display-4 font-weight-normal mb-5">POD Data Lake</h1>
-    <p class="lead font-weight-normal">
-      The POD Data Lake MVP is an openly developed aggregator to receive and transmit MARC bibliographic and holdings data from multiple institutions.
-    </p>
+  <div class="container">
+    <div class="position-relative text-center mx-auto col-md-7">
+      <h1 class="display-4 font-weight-normal mb-2 mb-md-4">
+        <%= t('layouts.application.title') %>
+      </h1>
+      <p class="lead font-weight-normal">
+        <%= t('.hero') %>
+      </p>
+    </div>
   </div>
 </div>
-
-<!-- <div class="container">
-  <div class="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3">
-    <div class="mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
-      <div class="my-3 py-3">
-        <h2 class="display-5">MVP Goal</h2>
-        <p class="lead">Support receiving and transmitting both full dumps and delta change sets</p>
-      </div>
+<div class="container-fluid">
+  <!-- stats section -->
+  <div class="row bg-light">
+    <div class="col-md p-3 p-md-5 text-center border">
+      <h2 class="mb-2 mb-md-4">
+        <%= t('.providers.heading') %>
+      </h2>
+      <p>
+        <%= t('.providers.providers_html', count: @providers) %>
+        <% if @last_upload.present? %>
+        <%= t('.providers.uploaders_html', upload_time: time_ago_in_words(@last_upload.created_at), uploader: @last_upload.organization.name) %>
+        <% end %>
+      </p>
     </div>
-    <div class="mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
-      <div class="my-3 p-3">
-        <h2 class="display-5">MVP Goal</h2>
-        <p class="lead">Enable external normalization, analysis, and discovery indexing, and basic reporting and data reconciliation</p>
-      </div>
+    <div class="col-md p-3 p-md-5 text-center border">
+      <h2 class="mb-2 mb-md-4">
+        <%= t('.data.heading') %>
+      </h2>
+      <p>
+        <%= t('.data.body_html', count: @total_records, total_records: number_with_delimiter(@total_records), unique_records: number_with_delimiter(@unique_records)) %>
+      </p>
     </div>
-    <div class="mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
-      <div class="my-3 p-3">
-        <h2 class="display-5">MVP Goal</h2>
-        <p class="lead">Help POD refine and develop operational models for a service based on the MVP</p>
-      </div>
+  </div>
+  <% if @organization %>
+  <!-- organization section -->
+  <div class="row p-3 p-md-5">
+    <div class="row text-center">
+      <h2 class="d-flex justify-content-center align-items-center">
+        <% if @organization.icon.attached? %>
+          <%= image_tag(@organization.icon, height: 32, class:'me-2') %>
+        <% end %>
+        <%= @organization.name %>
+      </h2>
+      <% if @last_org_files.present? %>
+      <p>
+        <%= t('.organization.last_upload.one', upload_time: time_ago_in_words(@last_org_files.last.created_at.to_time)) %>
+      </p>
+      <% elsif @organization.provider? %>
+      <p>
+        <%= t('.organization.last_upload.zero') %>
+      </p>
+      <% end %>
     </div>
-  </div> -->
-
-
-  <div class="row rows-cols-2 w-100 my-md-3 pl-md-3 border-top">
-    <div class="col pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
-      <div class="my-3 py-3">
-        <h2 class="display-5">Read the documentation</h2>
-        <ul class="list-group lead align-left">
-          <li class="list-group-item border-0">
-            <%= link_to 'Creating and managing API tokens', 'https://github.com/pod4lib/aggregator/wiki/Creating-and-managing-API-tokens', class: 'text-muted' %>
+    <div class="mt-3 mt-md-5 d-md-flex justify-content-md-around">
+      <% unless @last_org_files.empty? %>
+      <div class="my-2 my-md-0">
+        <h3>
+          <%= t('.organization.uploads.heading') %>
+        </h3>
+        <ul class="list-unstyled">
+          <% @last_org_files.each do |file| %>
+          <li class="my-3">
+            <%= bootstrap_icon(Settings.metadata_status[file.pod_metadata_status].icon_class, class: "pod-metadata-status #{file.pod_metadata_status} me-2") %>
+            <%= file.filename %>
           </li>
-          <li class="list-group-item border-0">
-            <%= link_to 'Data requirements', 'https://github.com/pod4lib/aggregator/wiki/Data-requirements', class: 'text-muted' %>
+          <% end %>
+          <li class="my-3"><%= link_to t('.organization.uploads.all'), organization_stream_path(@organization, @organization.default_stream) %></li>
+        </ul>
+      </div>
+      <% end %>
+      <% if @organization.provider? %>
+      <div class="my-2 my-md-0">
+        <h3>
+          <%= t('.organization.jobs.heading') %>
+        </h3>
+        <ul class="list-unstyled">
+          <% if @organization.default_stream.active_jobs? %>
+          <% @organization.default_stream.job_tracker_status_groups.each do |status, jobs| %>
+          <% if jobs.any? %>
+          <li class="my-3">
+            <%= bootstrap_icon(Settings.job_status_group[status].icon_class, class: "pod-icon pod-job-tracker-status #{status} me-2")%>
+            <%= t('.organization.jobs.status_html', count: jobs.count, status: t("job_tracker.status_group.#{status}").downcase) %>
           </li>
-          <li class="list-group-item border-0">
-            <%= link_to 'Uploading data using the API', 'https://github.com/pod4lib/aggregator/wiki/Uploading-data-using-the-API', class: 'text-muted' %>
+          <% end %>
+          <% end %>
+          <% else %>
+          <li class="my-3">
+            <%= bootstrap_icon(Settings.job_status_group['completed'].icon_class, class: "pod-icon pod-job-tracker-status completed me-2")%>
+            <%= t('.organization.jobs.status_html.zero') %>
           </li>
-          <li class="list-group-item border-0">
-            <%= link_to 'More documentation (wiki)', 'https://github.com/pod4lib/aggregator/wiki', class: 'text-muted' %>
-          </li>
+          <% end %>
+          <li class="my-3"><%= link_to t('.organization.jobs.all'), organization_path(@organization) %></li>
+        </ul>
+      </div>
+      <% end %>
+      <div class="my-2 my-md-0">
+        <h3>
+          <%= t('.organization.actions.heading') %>
+        </h3>
+        <ul class="list-unstyled">
+          <% if @organization.provider? %>
+          <li class="my-3"><%= link_to t('.organization.actions.upload_file'), new_organization_upload_path(@organization) %></li>
+          <li class="my-3"><%= link_to t('.organization.actions.view_default_stream'), organization_stream_path(@organization, @organization.default_stream) %></li>
+          <% else %>
+          <li class="my-3"><%= link_to t('.organization.actions.harvest_data'), organization_path(@organization) %></li>
+          <li class="my-3"><%= link_to t('.organization.actions.data_docs'), 'https://github.com/pod4lib/aggregator/wiki/Harvesting-using-ResourceSync' %></li>
+          <% end %>
+          <% if can? :manage, @organization %>
+          <li class="my-3"><%= link_to t('.organization.actions.edit_org'), edit_organization_path(@organization) %></li>
+          <% else %>
+          <li class="my-3"><%= link_to t('.organization.actions.view_org_details'), organization_path(@organization) %></li>
+          <% end %>
         </ul>
       </div>
     </div>
-    <div class="col pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
-      <% if current_user %>
-        <div class="my-3 p-3">
-          <h2 class="display-5">My organizations</h2>
-          <ul class="list-group lead align-left">
-            <% organizations = Organization.with_roles([:member, :owner], current_user) %>
-
-            <% organizations.each do |org| %>
-              <li class="list-group-item border-0">
-                <%= link_to org.name, org, class: 'text-muted' %>
-              </li>
-            <% end %>
-          </ul>
-        </div>
-      <% end %>
-    </div>
   </div>
+  <% else %>
+  <!-- login section -->
+  <div class="p-3 p-md-5 text-center">
+    <h2>
+      <%= t('.login.heading') %>
+    </h2>
+    <%= link_to t('.login.button'), new_user_session_path, class: 'btn btn-primary mt-2' %>
+    <h2 class="mt-3 mt-md-5">
+      <%= t('.login.contact_heading') %>
+    </h2>
+    <p class="fs-5">
+      <%= t('.login.contact_html', wiki_url: 'https://github.com/pod4lib/aggregator/wiki', contact_email: 'pod-support@lists.stanford.edu') %>
+    </p>
+  </div>
+  <% end %>
 </div>

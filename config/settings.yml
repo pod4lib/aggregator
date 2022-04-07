@@ -24,6 +24,9 @@ job_status_group:
   needs_attention:
     icon_class: 'exclamation-triangle-fill'
     badge_class: 'bg-warning'
+  completed:
+    icon_class: 'check-circle-fill'
+    badge_class: 'bg-success'
 
 # refer to https://icons.getbootstrap.com/ for icon class names
 metadata_status:

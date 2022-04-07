@@ -83,6 +83,49 @@ en:
     label:
       user:
         email: Email address
+  pages:
+    home:
+      hero: The POD Aggregator is an open source system to aggregate MARC bibliographic and holdings data for institutions that participate in the Platform for Open Data (POD) initiative.
+      providers:
+        heading: POD Providers
+        providers_html:
+          zero: There are currently no data providers.
+          one: 'There is currently <b>1</b> data provider.'
+          other: 'There are currently <b>%{count}</b> data providers.'
+        uploaders_html: 'The most recent upload was made by <b>%{uploader}</b> %{upload_time} ago.'
+      data:
+        heading: POD Data
+        body_html:
+          zero: 'POD Aggregator currently holds no records.'
+          one: 'POD Aggregator currently holds <b>1 record</b>.'
+          other: 'POD Aggregator currently holds a total of <b>%{total_records} records</b>, of which <b>%{unique_records} are unique</b>.'
+      login:
+        heading: Already a POD user?
+        button: Login
+        contact_heading: Interested in using POD data?
+        contact_html: Check out the <a href='%{wiki_url}'>POD wiki</a> or contact <a href="mailto:%{contact_email}">%{contact_email}</a>
+      organization:
+        last_upload:
+          zero: No recent uploads
+          one: 'Most recent upload was %{upload_time} ago'
+        uploads:
+          heading: Latest uploads
+          all: View all stream files ...
+        jobs:
+          heading: Processing status
+          status_html:
+            zero: 'No active jobs'
+            one: '<b>1</b> job %{status}'
+            other: '<b>%{count}</b> jobs %{status}'
+          all: View status details ...
+        actions:
+          heading: Quick actions
+          upload_file: Upload file
+          view_default_stream: View default stream
+          view_org_details: View organization details
+          edit_org: Manage organization
+          harvest_data: Harvest data
+          data_docs: Data consumer documentation
   job_tracker:
     title: Processing status of recent background jobs
     table_heading:

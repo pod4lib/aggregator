@@ -18,6 +18,10 @@
   &.dead {
     color: $danger
   }
+
+  &.completed {
+    color: $success
+  }
 }
 
 .pod-metadata-status {
