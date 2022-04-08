@@ -1,5 +1,11 @@
 development:
+  <% if ENV.include? "REDIS_URL" %>
+  adapter: redis
+  url: <%= ENV.fetch("REDIS_URL") { "redis://localhost:6379/1" } %>
+  channel_prefix: aggregator_production
+  <% else %>
   adapter: async
+  <% end %>
 
 test:
   adapter: test
