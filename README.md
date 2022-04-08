@@ -107,12 +107,11 @@ You may wish to completely recreate the docker stack, removing all containers an
 docker container prune
 docker volume prune
 ```
-In some cases Docker container versions may get stale and more thorough steps may be required. To completely clear all docker containers, pull new ones, and install packages:
+In some cases Docker container versions may get stale and more thorough steps may be required. To completely clear all docker containers, and pull new ones:
 ```
 docker system prune -a -f --volumes
 docker ps -aq
 docker compose pull
-bin/yarn install
 ```
 
 
