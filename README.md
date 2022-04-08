@@ -81,9 +81,38 @@ bundle exec rails server  # or other commands
 ## Deployment
 Deployment is setup using Capistrano using standard [Stanford Digital Library Systems and Services practices](https://github.com/sul-dlss/DeveloperPlaybook/blob/master/best-practices/deployment.md#ruby-applications).
 
-## Getting Stated with Docker
+## With Docker
 
+### Initial Setup:
+1. `docker compose up`
+2. `docker compose exec aggapp ./bin/setup`
+
+### Stopping and Starting:
+Start the stack with:
 1. `docker compose up`
 
-Run once per container build or database reset:
-2. `docker compose exec aggapp ./bin/setup`
+Stop the stack with:
+2. `docker compose down`
+
+### Managing Data:
+Data for the redis and postgres services are persisted using docker named volumes. You can see what volumes are currently present with:
+`docker volume ls`
+If you want to remove a volume (e.g. to start with a fresh database or redis cache), you can do:
+`docker volume rm aggregator_db`
+`docker volume rm aggregator_cache`
+
+### Resetting Docker
+You may wish to completely recreate the docker stack, removing all containers and volumes. This can be done with:
+```
+docker container prune
+docker volume prune
+```
+In some cases Docker container versions may get stale and more thorough steps may be required. To completely clear all docker containers, pull new ones, and install packages:
+```
+docker system prune -a -f --volumes
+docker ps -aq
+docker compose pull
+bin/yarn install
+```
+
+
