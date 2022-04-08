@@ -1,0 +1,9 @@
+.git
+.dockerignore
+.byebug_history
+.github/
+log/
+tmp/
+storage/
+node_modules/
+coverage/
