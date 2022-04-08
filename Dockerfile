@@ -5,9 +5,6 @@ RUN useradd --create-home poddev
 # throw errors if Gemfile has been modified since Gemfile.lock
 RUN bundle config --global frozen 1
 
-# install js engine
-RUN apt-get update && apt-get install -y nodejs yarn
-
 # Ensure latest packages for Yarn
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
