@@ -86,6 +86,7 @@ Deployment is setup using Capistrano using standard [Stanford Digital Library Sy
 ### Initial Setup:
 1. `docker compose up`
 2. `docker compose exec aggapp ./bin/setup`
+3. Create an admin user: `docker compose exec aggapp ./bin/rails agg:create_admin`
 
 ### Stopping and Starting:
 Start the stack with:
