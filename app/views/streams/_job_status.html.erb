@@ -1,7 +1,9 @@
 <div class="mb-5">
   <h3><%= t('job_tracker.title') %></h3>
   <div class="accordion" id="jobStatusAccordian">
-    <% stream.job_tracker_status_groups.each do |status_group, jobs| %>
+    <% needs_attention = stream.job_tracker_status_groups.select { |sg| sg == :needs_attention } %>
+    <% status_groups_ordered = needs_attention.merge(stream.job_tracker_status_groups) %>
+    <% status_groups_ordered.each do |status_group, jobs| %>
       <div class="accordion-item">
         <h4 class="accordion-header" id="heading<%= status_group.to_s.classify %>">
           <button class="accordion-button collapsed" type="button"
