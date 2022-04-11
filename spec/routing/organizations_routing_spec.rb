@@ -26,10 +26,6 @@ RSpec.describe OrganizationsController, type: :routing do
       expect(get: '/organizations/1').to route_to('organizations#show', id: '1')
     end
 
-    it 'routes to #edit' do
-      expect(get: '/organizations/1/edit').to route_to('organizations#edit', id: '1')
-    end
-
     it 'routes to #create' do
       expect(post: '/organizations').to route_to('organizations#create')
     end
@@ -44,6 +40,19 @@ RSpec.describe OrganizationsController, type: :routing do
 
     it 'routes to #destroy' do
       expect(delete: '/organizations/1').to route_to('organizations#destroy', id: '1')
+    end
+
+    # /edit route was disabled in favor of /provider_details and /organization_details
+    it 'does not route to #edit' do
+      expect(get: '/organizations/1/edit').not_to be_routable
+    end
+
+    it 'routes to #provider_details' do
+      expect(get: '/organizations/1/provider_details').to route_to('organizations#provider_details', id: '1')
+    end
+
+    it 'routes to #organization_details' do
+      expect(get: '/organizations/1/organization_details').to route_to('organizations#organization_details', id: '1')
     end
   end
 end

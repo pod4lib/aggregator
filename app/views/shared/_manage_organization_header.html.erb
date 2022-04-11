@@ -1,0 +1,20 @@
+<div class="d-flex flex-row">
+    <h1>
+        <% if can? :edit, @organization %>
+            <%= 'Manage Organization'%>
+        <% else %>
+            <%='View Organization' %>
+        <% end %>
+    </h1>
+</div>
+<div class="d-flex flex-row justify-content-center">
+    <div class="btn-group manage-organization-tabs" role="group" aria-label="Manage organization tabs">
+        <%= link_to "Users", organization_users_path(@organization), class: "btn btn-outline-primary #{current_page_class(organization_users_path(@organization))}" %>
+
+        <%= link_to "Access tokens", organization_allowlisted_jwts_path(@organization), class: "btn btn-outline-primary #{current_page_class(organization_allowlisted_jwts_path(@organization))}" %>
+
+        <%= link_to "Organization details", organization_details_organization_path(@organization), class: "btn btn-outline-primary #{current_page_class(organization_details_organization_path(@organization))}" %>
+
+        <%= link_to "Provider details", provider_details_organization_path(@organization), class: "btn btn-outline-primary #{current_page_class(provider_details_organization_path(@organization))}" %>
+    </div>
+</div>

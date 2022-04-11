@@ -25,8 +25,10 @@ class OrganizationsController < ApplicationController
     @organization = Organization.new
   end
 
-  # GET /organizations/1/edit
-  def edit; end
+  # GET /organizations/1/provider_details
+  def provider_details; end
+  # GET /organizations/1/organization_details
+  def organization_details; end
 
   # POST /organizations
   # POST /organizations.json
