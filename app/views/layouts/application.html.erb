@@ -19,9 +19,11 @@
   <!-- header -->
   <header>
     <%= render 'shared/nav' %>
-    <div class="container">
-      <%= render partial: '/shared/flash_msg', layout: nil %>
-    </div>
+    <% if !defined? @organization %>
+      <div class="container">
+        <%= render partial: '/shared/flash_msg', layout: nil %>
+      </div>
+    <% end %>
   </header>
 
   <!-- main content -->
