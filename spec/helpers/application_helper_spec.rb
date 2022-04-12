@@ -19,4 +19,11 @@ RSpec.describe ApplicationHelper do
       expect(icon).to be_nil
     end
   end
+  
+  describe '#job_status_tabs_collapse' do
+    it 'applies class to show tab when tab expanded is false and job count is positive' do
+      set_tab_class = helper.job_status_tabs_collapse(false, 3)
+      expect(set_tab_class).to be('show')
+    end
+  end
 end
