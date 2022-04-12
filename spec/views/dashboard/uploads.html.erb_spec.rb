@@ -9,7 +9,7 @@ RSpec.describe 'dashboard/uploads', type: :view do
     [
       create(:upload, :binary_marc, stream: stream),
       create(:upload, :marc_xml, stream: stream),
-      create(:upload, :multple_files, stream: stream)
+      create(:upload, :multiple_files, stream: stream)
     ]
   end
 
