@@ -19,12 +19,10 @@
   <!-- header -->
   <header>
     <%= render 'shared/nav' %>
-    <!-- if an organization header is displayed, flash messages will instead display in _organization_header.html.erb -->
-    <% if !defined? @organization %>
-      <div class="container">
-        <%= render partial: '/shared/flash_msg', layout: nil %>
-      </div>
-    <% end %>
+    <%= content_for :org_header %>
+    <div class="container">
+      <%= render partial: '/shared/flash_msg', layout: nil %>
+    </div>
   </header>
 
   <!-- main content -->

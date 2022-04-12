@@ -1,23 +1,20 @@
-<div class="position-relative overflow-hidden mb-5 pb-2 pt-4 bg-light organization border-bottom">
-  <div class="container">
-    <div class="d-flex justify-content-between">
-      <h1 class="display-5 font-weight-normal mb-3">
-        <% if @organization.icon.attached? %>
-          <%= image_tag(@organization.icon, class: 'organization-icon') %>
-        <% end %>
-
-        <%= link_to_unless controller_name == 'organizations', @organization.name, @organization, class: 'text-body' %>
-      </h1>
-
-      <% if controller_name == 'organizations' %>
-        <%= link_to 'Edit', edit_organization_path(@organization), class: 'align-self-center btn btn-primary' if can? :edit, @organization %>
-      <% end %>
-    </div>
-
+<% content_for :org_header do %>
+  <div class="position-relative overflow-hidden mb-5 pb-2 pt-4 bg-light organization border-bottom">
     <div class="container">
-      <%= render partial: '/shared/flash_msg', layout: nil %>
-    </div>
+      <div class="d-flex justify-content-between">
+        <h1 class="display-5 font-weight-normal mb-3">
+          <% if @organization.icon.attached? %>
+            <%= image_tag(@organization.icon, class: 'organization-icon') %>
+          <% end %>
 
-    <%= yield %>
+          <%= link_to_unless controller_name == 'organizations', @organization.name, @organization, class: 'text-body' %>
+        </h1>
+
+        <% if controller_name == 'organizations' %>
+          <%= link_to 'Edit', edit_organization_path(@organization), class: 'align-self-center btn btn-primary' if can? :edit, @organization %>
+        <% end %>
+      </div>
+      <%= yield %>
+    </div>
   </div>
-</div>
+<% end %>
