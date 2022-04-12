@@ -12,6 +12,7 @@
       <ul class="navbar-nav ms-md-5">
         <li class='nav-item'><%= link_to t('.providers'), organizations_url, class: 'nav-link' %></li>
         <li class='nav-item'><%= link_to t('.activity'), activity_url, class: 'nav-link', data: { turbolinks: false } %></li>
+        <li class='nav-item'><%= link_to t('.data'), data_url, class: 'nav-link', data: { turbolinks: false } %></li>
         <% if can? :manage, User %>
         <li class='nav-item'><%= link_to t('.users'), site_users_url, class: 'nav-link' %></li>
         <% end %>

@@ -1,0 +1,12 @@
+<div class="container index-page">
+  <div class="card w-50">
+      <div class="card-header d-flex justify-content-between">
+        <h2 class="h6">ResourceSync sitemaps</h2>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><%= link_to 'Original uploads', resourcelist_organizations_url %> (real-time)</li>
+        <li class="list-group-item"><%= link_to 'Normalized uploads as MARCXML', normalized_resourcelist_organizations_url(flavor: 'marcxml') %> (updated nightly)</li>
+        <li class="list-group-item"><%= link_to 'Normalized uploads as MARC21', normalized_resourcelist_organizations_url(flavor: 'marc21') %> (updated nightly)</li>
+      </ul>
+  </div>
+</div>
