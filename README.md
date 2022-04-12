@@ -34,7 +34,9 @@ While adding MARC data locally is perfectly fine for many development use cases,
 bundle exec rake db:seed
 ```
 
-You might want to more broadly populate the database. You can do this using the configurable `agg:seed_from_api` task that will enable you to fetch data from a running aggregator instance (production by default). You will need to add a valid API token to `config/settings.yml`. Depending on the data available, this task might load a large amount of data and take a long time:
+To more broadly populate the database, use the configurable `agg:seed_from_api` task. This will enable fetching data from a running aggregator instance (production by default). The configuration file `config/settings.yml` controls what data gets pulled with the agg:seed_from_api task. Add a valid API token to the settings.yml file in the token field under `marc_seed_fixtures` and update the list of organizations to import data from as necessary.
+
+Depending on the data available, this task might load a large amount of data and take a long time:
 ```sh
 bundle exec rake agg:seed_from_api
 ```
