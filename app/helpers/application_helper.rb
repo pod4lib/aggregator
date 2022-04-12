@@ -13,9 +13,8 @@ module ApplicationHelper
     end
   end
 
-  def job_status_tabs_collapse(tab_expanded = false, jobs_count = 0)
-    show_tab = !tab_expanded && jobs_count > 0
+  def job_status_tabs_collapse(tab_expanded: false, jobs_count: 0)
+    show_tab = !tab_expanded && jobs_count.positive?
     class_to_set = show_tab ? 'show' : 'collapsed'
-    return class_to_set
   end
 end
