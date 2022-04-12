@@ -120,5 +120,5 @@ docker compose build --no-cache
 ```
 
 ### Logs:
-To check the log output of a container run the command `docker logs ${conatiner_name}` e.g.:
+To check the log output of a container run the command `docker logs ${container_name}` e.g.:
 `docker logs aggapp`
