@@ -15,11 +15,11 @@
     </thead>
 
     <tbody>
-      <% @allowlisted_jwts.each do |token| %>
+      <% @allowlisted_jwts.each_with_index do |token, index| %>
         <tr>
           <td><%= token.label %> (scope: <%= token.scope %>)</td>
           <td>
-            <%= text_field_tag 'token', token.encoded_token, class: 'text-monospace w-100 custom-copy-text', disabled: true %>
+            <%= text_field_tag 'token', token.encoded_token, class: 'text-monospace w-100 custom-copy-text', disabled: true, id: "copy-token-text-#{index}" %>
             <i class="small text-muted">
               Last used:
               <% if token.last_used %>
@@ -30,7 +30,7 @@
             </i>
           </td>
           <td class="text-end">
-            <button class='custom-copy-button btn btn-primary'><%= bootstrap_icon('files', class: 'pod-icon') %> Copy</button> 
+            <button class='btn btn-primary copy-token-button' id="copy-token-button-<%= index %>"><%= bootstrap_icon('files', class: 'pod-icon') %> Copy</button> 
             <%= link_to 'Revoke', [@organization, token], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' if can? :delete, token %>
           </td>
         </tr>
