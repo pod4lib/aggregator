@@ -1,10 +1,7 @@
 <div class="mb-5">
   <h3><%= t('job_tracker.title') %></h3>
   <div class="accordion" id="jobStatusAccordian">
-    <% needs_attention = stream.job_tracker_status_groups.select { |sg| sg == :needs_attention } %>
-    <% status_groups_ordered = needs_attention.merge(stream.job_tracker_status_groups) %>
-    <% tab_expanded = false %>
-    <% status_groups_ordered.each do |status_group, jobs| %>
+    <% stream.job_tracker_status_groups.each do |status_group, jobs| %>
       <div class="accordion-item">
         <h4 class="accordion-header" id="heading<%= status_group.to_s.classify %>">
           <button class="accordion-button collapsed" type="button"
@@ -16,9 +13,8 @@
             </span>
           </button>
         </h4>
-        <div id="collapse<%= status_group.to_s.classify %>" class="accordion-collapse collapse <%= !tab_expanded && jobs.count > 0 ? 'show' : 'collapsed' %>"
+        <div id="collapse<%= status_group.to_s.classify %>" class="accordion-collapse collapse"
              aria-labelledby="heading<%= status_group.to_s.classify %>" data-bs-parent="#jobStatusAccordian">
-        <% if jobs.count > 0 then tab_expanded = true end %>
           <div class="accordion-body">
             <% if status_group == :needs_attention %>
               <%= link_to('How to get help', 'https://github.com/pod4lib/aggregator/wiki#getting-help') %>
