@@ -19,6 +19,10 @@ class GenerateFullDumpJob < ApplicationJob
     now = Time.zone.now
     uploads = Upload.active.where(stream: organization.default_stream)
 
+    uploads.where.not(status: 'processed').each do |upload|
+      ExtractMarcRecordMetadataJob.perform_now(upload)
+    end
+
     progress.total = uploads.sum(&:marc_records_count)
 
     full_dump = organization.default_stream.normalized_dumps.build(last_full_dump_at: now, last_delta_dump_at: now)

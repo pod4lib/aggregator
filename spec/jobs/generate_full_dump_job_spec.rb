@@ -11,6 +11,12 @@ RSpec.describe GenerateFullDumpJob, type: :job do
     organization.default_stream.uploads << build(:upload, :binary_marc)
   end
 
+  it 'runs the ExtractMarcRecordMetadataJob for each upload if needed' do
+    expect do
+      described_class.perform_now(organization)
+    end.to change(MarcRecord, :count).from(0).to(3)
+  end
+
   it 'creates a new normalized dump' do
     expect do
       described_class.perform_now(organization)

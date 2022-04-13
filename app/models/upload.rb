@@ -12,18 +12,22 @@ class Upload < ApplicationRecord
   validates :url, presence: true, if: proc { |upload| upload.files.blank? }
   validates :files, presence: true, if: proc { |upload| upload.url.blank? }
   validate :valid_url, if: proc { |upload| upload.url.present? }
-  scope :active, -> { where(status: 'active') }
+  scope :active, -> { where(status: %w[active processed]) }
   scope :archived, -> { where(status: 'archived') }
 
   after_create :attach_file_from_url
 
   has_many_attached :files
 
-  after_save_commit :perform_extract_marc_record_metadata_job
+  after_save_commit :perform_extract_marc_record_metadata_job, if: :active?
   after_save_commit :perform_extract_files_job, if: :active?
 
   def active?
     status == 'active'
+  end
+
+  def processed?
+    status == 'processed'
   end
 
   def name

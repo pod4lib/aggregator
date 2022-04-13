@@ -20,6 +20,10 @@ class GenerateDeltaDumpJob < ApplicationJob
 
     return unless uploads.any?
 
+    uploads.where.not(status: 'processed').each do |upload|
+      ExtractMarcRecordMetadataJob.perform_now(upload)
+    end
+
     progress.total = uploads.sum(&:marc_records_count)
 
     delta_dump = full_dump.deltas.create(stream_id: full_dump.stream_id)
