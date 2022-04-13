@@ -70,5 +70,9 @@ en:
       progress: Completed records
       created_at: Created at
     status_group:
-      active: Active
-      needs_attention: Needs attention
+      active:
+        label: Active
+        job_count_zero: There are no active background jobs.
+      needs_attention:
+        label: Needs attention
+        job_count_zero: There are no background jobs that need attention.
