@@ -35,8 +35,8 @@ class Upload < ApplicationRecord
     files.find_each(&:purge_later)
   end
 
-  def each_marc_record_metadata(**options, &block)
-    return to_enum(:each_marc_record_metadata, **options) unless block
+  def read_marc_record_metadata(**options, &block)
+    return to_enum(:read_marc_record_metadata, **options) unless block
 
     files.each do |file|
       service = MarcRecordService.new(file.blob)
