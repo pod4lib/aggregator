@@ -19,6 +19,7 @@
   <!-- header -->
   <header>
     <%= render 'shared/nav' %>
+    <%= content_for :org_header %>
     <div class="container">
       <%= render partial: '/shared/flash_msg', layout: nil %>
     </div>
