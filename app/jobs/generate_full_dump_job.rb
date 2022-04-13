@@ -3,6 +3,8 @@
 ##
 # Background job to create a full dump download for a resource (organization)
 class GenerateFullDumpJob < ApplicationJob
+  with_job_tracking
+
   def self.enqueue_all
     Organization.find_each do |org|
       full_dump = org.default_stream.normalized_dumps.last
@@ -15,6 +17,10 @@ class GenerateFullDumpJob < ApplicationJob
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def perform(organization)
     now = Time.zone.now
+    uploads = Upload.active.where(stream: organization.default_stream)
+
+    progress.total = uploads.sum(&:marc_records_count)
+
     full_dump = organization.default_stream.normalized_dumps.build(last_full_dump_at: now, last_delta_dump_at: now)
 
     base_name = "#{organization.slug}-#{Time.zone.today}-full"

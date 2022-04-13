@@ -3,6 +3,8 @@
 ##
 # Background job to create a delta dump download for a resource (organization)
 class GenerateDeltaDumpJob < ApplicationJob
+  with_job_tracking
+
   def self.enqueue_all
     Organization.find_each { |org| GenerateDeltaDumpJob.perform_later(org) }
   end
@@ -17,6 +19,8 @@ class GenerateDeltaDumpJob < ApplicationJob
     uploads = organization.default_stream.uploads.where(updated_at: from...now)
 
     return unless uploads.any?
+
+    progress.total = uploads.sum(&:marc_records_count)
 
     delta_dump = full_dump.deltas.create(stream_id: full_dump.stream_id)
 
