@@ -70,7 +70,7 @@ FactoryBot.define do
       end
     end
 
-    trait :multple_files do
+    trait :multiple_files do
       after(:build) do |upload|
         upload.files.attach([
                               {
