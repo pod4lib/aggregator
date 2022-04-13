@@ -4,7 +4,9 @@
 # or existing user to an organization
 class OrganizationUsersController < ApplicationController
   load_and_authorize_resource :organization
-  before_action :load_user
+  before_action :load_user, except: [:index]
+
+  def index; end
 
   def destroy
     authorize! :manage, @organization

@@ -1,0 +1,49 @@
+<%= render 'shared/organization_header' %>
+
+<div class="container manage-organization-container">
+    <%= render 'shared/manage_organization_header' %>
+
+    <h2>Provider details</h2>
+
+    <!-- Admin/owner view: -->
+    <% if can? :manage, @organization %>
+        <%= bootstrap_form_with(model: @organization, local: true) do |form| %>
+            <% if @organization.persisted? %>
+                <h3>Item information</h3>
+                <%= form.hidden_field 'normalization_steps[0][destination_tag]', maxlength: 3, value: @organization.normalization_steps.values.dig(0, 'destination_tag') || 998 %>
+                <%= form.text_field 'normalization_steps[0][source_tag]', maxlength: 3, value: @organization.normalization_steps.values.dig(0, 'source_tag'), label: 'What MARC field contains item-level information?' %>
+                <%= form.text_field 'normalization_steps[0][subfields][i]', maxlength: 1, value: @organization.normalization_steps.values.dig(0, 'subfields', 'i'), label: 'Local identifier subfield' %>
+                <%= form.text_field 'normalization_steps[0][subfields][a]', maxlength: 1, value: @organization.normalization_steps.values.dig(0, 'subfields', 'a'), label: 'Call number subfield' %>
+                <%= form.text_field 'normalization_steps[0][subfields][m]', maxlength: 1, value: @organization.normalization_steps.values.dig(0, 'subfields', 'm'), label: 'Local library' %>
+            <% end %>
+
+            <div class="actions">
+                <%= form.primary 'Update provider details' %>
+            </div>
+        <% end %>
+
+    <!-- Member view: -->
+    <% else %>
+    <dl class="organization-details">
+        <dt>
+            <h4>What MARC field contains item-level information?</h4>
+            <p class="<%= @organization.normalization_steps.values.dig(0, 'source_tag').blank? ? 'fst-italic' : '' %>">
+                <%= @organization.normalization_steps.values.dig(0, 'source_tag').blank? ? 'no value provided' : @organization.normalization_steps.values.dig(0, 'source_tag') %>
+            </p>
+        </dt>
+        <dt>
+            <h4>Local identifier subfield</h4>
+            <p class="<%= @organization.normalization_steps.values.dig(0, 'subfields', 'i').blank? ? 'fst-italic' : '' %>"><%= @organization.normalization_steps.values.dig(0, 'subfields', 'i').blank? ? 'no value provided' : @organization.normalization_steps.values.dig(0, 'subfields', 'i') %></p>
+        </dt>
+        <dt>
+            <h4>Call number subfield</h4>
+            <p class="<%= @organization.normalization_steps.values.dig(0, 'subfields', 'a').blank? ? 'fst-italic' : '' %>"><%= @organization.normalization_steps.values.dig(0, 'subfields', 'a').blank? ? 'no value provided' : @organization.normalization_steps.values.dig(0, 'subfields', 'a')%></p>
+        </dt>
+        <dt>
+            <h4>Local library</h4>
+            <p class="<%= @organization.normalization_steps.values.dig(0, 'subfields', 'm').blank? ? 'fst-italic' : '' %>"><%= @organization.normalization_steps.values.dig(0, 'subfields', 'm').blank? ? 'no value provided' : @organization.normalization_steps.values.dig(0, 'subfields', 'm') %></p>
+        </dt>
+    </dl>
+    <% end %>
+
+</div>

@@ -62,7 +62,7 @@ RSpec.describe Ability do
       it { is_expected.not_to be_able_to(:delete, default_stream) }
     end
 
-    context 'when a non-admin user' do
+    context 'when a user without any roles' do
       let(:user) { User.new }
 
       it { is_expected.to be_able_to(:read, create(:organization)) }
@@ -78,6 +78,12 @@ RSpec.describe Ability do
         user.add_role :owner, organization
       end
 
+      it { is_expected.to be_able_to(:read, Upload.new(organization: organization)) }
+      it { is_expected.to be_able_to(:read, Stream.new(organization: organization)) }
+      it { is_expected.to be_able_to(:read, AllowlistedJwt.new(resource: organization)) }
+      it { is_expected.to be_able_to(:create, Upload.new(organization: organization)) }
+      it { is_expected.to be_able_to(:create, Stream.new(organization: organization)) }
+      it { is_expected.to be_able_to(:create, AllowlistedJwt.new(resource: organization)) }
       it { is_expected.not_to be_able_to(:delete, default_stream) }
     end
 
@@ -88,9 +94,12 @@ RSpec.describe Ability do
         user.add_role :member, organization
       end
 
-      it { is_expected.to be_able_to(:create, Upload.new(organization: organization)) }
-      it { is_expected.to be_able_to(:create, Stream.new(organization: organization)) }
-      it { is_expected.to be_able_to(:create, AllowlistedJwt.new(resource: organization)) }
+      it { is_expected.to be_able_to(:read, Upload.new(organization: organization)) }
+      it { is_expected.to be_able_to(:read, Stream.new(organization: organization)) }
+      it { is_expected.to be_able_to(:read, AllowlistedJwt.new(resource: organization)) }
+      it { is_expected.not_to be_able_to(:create, Upload.new(organization: organization)) }
+      it { is_expected.not_to be_able_to(:create, Stream.new(organization: organization)) }
+      it { is_expected.not_to be_able_to(:create, AllowlistedJwt.new(resource: organization)) }
       it { is_expected.not_to be_able_to(:delete, default_stream) }
     end
   end

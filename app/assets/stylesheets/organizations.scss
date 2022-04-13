@@ -16,6 +16,9 @@
   }
 }
 
+// Access bootstrap color utility variables
+@import 'bootstrap';
+
 // Table of all organizations
 .organizations {
   .icon-column {
@@ -24,5 +27,36 @@
 
   .files-column {
     width: 6ch;
+  }
+}
+
+.manage-organization-container {
+  h2 {
+    margin-bottom: $spacer * 2;
+  }
+  margin-bottom: 3em;
+}
+
+.manage-organization-tabs {
+  margin: ($spacer * 3) 0;
+
+  a {
+    &.current {
+      background-color: $primary;
+      color: #fff;
+      text-decoration: none; 
+    }
+    &:hover {
+      color: #fff;
+    }
+  }
+}
+
+dl.organization-details {
+  dt {
+    font-weight: normal;
+  }
+  dt > *:last-child {
+    padding-left: 15px;
   }
 }

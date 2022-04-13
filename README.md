@@ -34,7 +34,9 @@ While adding MARC data locally is perfectly fine for many development use cases,
 bundle exec rake db:seed
 ```
 
-You might want to more broadly populate the database. You can do this using the configurable `agg:seed_from_api` task that will enable you to fetch data from a running aggregator instance (production by default). You will need to add a valid API token to `config/settings.yml`. Depending on the data available, this task might load a large amount of data and take a long time:
+To more broadly populate the database, use the configurable `agg:seed_from_api` task. This will enable fetching data from a running aggregator instance (production by default). The configuration file `config/settings.yml` controls what data gets pulled with the agg:seed_from_api task. Add a valid API token to the settings.yml file in the token field under `marc_seed_fixtures` and update the list of organizations to import data from as necessary.
+
+Depending on the data available, this task might load a large amount of data and take a long time:
 ```sh
 bundle exec rake agg:seed_from_api
 ```
@@ -84,13 +86,13 @@ Deployment is setup using Capistrano using standard [Stanford Digital Library Sy
 ## With Docker
 
 ### Initial Setup:
-1. `docker compose up`
+1. `docker compose up -d`
 2. `docker compose exec aggapp ./bin/setup`
 3. Create an admin user: `docker compose exec aggapp ./bin/rails agg:create_admin`
 
 ### Stopping and Starting:
 Start the stack with:
-1. `docker compose up`
+1. `docker compose up -d`
 
 Stop the stack with:
 2. `docker compose down`
@@ -102,7 +104,7 @@ If you want to remove a volume (e.g. to start with a fresh database or redis cac
 `docker volume rm aggregator_db`
 `docker volume rm aggregator_cache`
 
-### Resetting Docker
+### Resetting Docker:
 You may wish to completely recreate the docker stack, removing all containers and volumes. This can be done with:
 ```
 docker container prune
@@ -114,5 +116,11 @@ docker system prune -a -f --volumes
 docker ps -aq
 docker compose pull
 ```
+To rebuild all images with no cache:
+```
+docker compose build --no-cache
+```
 
-
+### Logs:
+To check the log output of a container run the command `docker logs ${container_name}` e.g.:
+`docker logs aggapp`

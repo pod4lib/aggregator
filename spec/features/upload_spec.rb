@@ -8,11 +8,11 @@ RSpec.describe 'uploading files to POD', type: :feature do
     let(:user) { create(:user) }
 
     before do
-      user.add_role :member, organization
+      user.add_role :owner, organization
       login_as(user, scope: :user)
     end
 
-    it 'allows the user to create a new stream and upload files' do
+    it 'allows an org owner to create a new stream and upload files' do
       visit '/'
 
       click_on 'Best University'

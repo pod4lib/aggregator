@@ -2,10 +2,16 @@
 
 require 'rails_helper'
 
-RSpec.describe OrganizationInvitationsController, type: :routing do
+RSpec.describe OrganizationUsersController, type: :routing do
   describe 'routing' do
+    it 'routes to #index' do
+      expect(get: '/organizations/1/users').to route_to(
+        'organization_users#index', organization_id: '1'
+      )
+    end
+
     it 'routes to #destroy' do
-      expect(delete: '/organizations/1/organization_users/2').to route_to(
+      expect(delete: '/organizations/1/users/2').to route_to(
         'organization_users#destroy', organization_id: '1', id: '2'
       )
     end

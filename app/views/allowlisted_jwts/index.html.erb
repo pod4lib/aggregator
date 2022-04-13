@@ -1,7 +1,9 @@
 <%= render 'shared/organization_header' %>
 
-<div class="container">
-  <h1>Manage tokens</h1>
+<div class="container manage-organization-container">
+    <%= render 'shared/manage_organization_header' %>
+
+    <h2>Organization Users</h2>
 
   <table class="table mt-4">
     <thead>
@@ -13,11 +15,11 @@
     </thead>
 
     <tbody>
-      <% @allowlisted_jwts.each do |token| %>
+      <% @allowlisted_jwts.each_with_index do |token, index| %>
         <tr>
           <td><%= token.label %> (scope: <%= token.scope %>)</td>
           <td>
-            <%= text_field_tag 'token', token.encoded_token, class: 'text-monospace w-100' %>
+            <%= text_field_tag 'token', token.encoded_token, class: 'text-monospace w-100 custom-copy-text', disabled: true, id: "copy-token-text-#{index}" %>
             <i class="small text-muted">
               Last used:
               <% if token.last_used %>
@@ -27,13 +29,14 @@
               <% end %>
             </i>
           </td>
-          <td><%= link_to 'Revoke', [@organization, token], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' if can? :delete, token %></td>
+          <td class="text-end">
+            <button class='btn btn-primary copy-token-button' id="copy-token-button-<%= index %>"><%= bootstrap_icon('files', class: 'pod-icon') %> Copy</button> 
+            <%= link_to 'Revoke', [@organization, token], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' if can? :delete, token %>
+          </td>
         </tr>
       <% end %>
     </tbody>
   </table>
-
-  <br>
 
   <%= link_to 'Create token', new_organization_allowlisted_jwt_path(@organization), class: 'btn btn-primary' if can? :create, @organization.allowlisted_jwts.build %>
 </div>

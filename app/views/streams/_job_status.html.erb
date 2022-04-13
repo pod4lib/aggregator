@@ -1,10 +1,11 @@
 <div class="mb-5">
   <h3><%= t('job_tracker.title') %></h3>
   <div class="accordion" id="jobStatusAccordian">
+    <% tab_expanded = false %>
     <% stream.job_tracker_status_groups.each do |status_group, jobs| %>
       <div class="accordion-item">
         <h4 class="accordion-header" id="heading<%= status_group.to_s.classify %>">
-          <button class="accordion-button collapsed" type="button"
+          <button class="accordion-button <%= job_status_tabs_collapse(tab_expanded, jobs.count) %>" type="button"
                   data-bs-toggle="collapse" data-bs-target="#collapse<%= status_group.to_s.classify %>"
                   aria-expanded="false" aria-controls="collapse<%= status_group.to_s.classify %>">
             <span class="fw-bold"><%= t("job_tracker.status_group.#{status_group}") %></span>&nbsp;
@@ -13,8 +14,9 @@
             </span>
           </button>
         </h4>
-        <div id="collapse<%= status_group.to_s.classify %>" class="accordion-collapse collapse"
+        <div id="collapse<%= status_group.to_s.classify %>" class="accordion-collapse collapse <%= job_status_tabs_collapse(tab_expanded, jobs.count) %>"
              aria-labelledby="heading<%= status_group.to_s.classify %>" data-bs-parent="#jobStatusAccordian">
+             <% if jobs.count > 0 then tab_expanded = true end %>
           <div class="accordion-body">
             <% if status_group == :needs_attention %>
               <%= link_to('How to get help', 'https://github.com/pod4lib/aggregator/wiki#getting-help') %>

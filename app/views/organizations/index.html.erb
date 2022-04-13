@@ -51,7 +51,7 @@
           <td><%= organization.default_stream.uploads.last&.updated_at %></td>
 
           <% if can? :manage, Organization %>
-            <td><%= link_to 'Edit', edit_organization_path(organization), class: 'btn btn-secondary btn-sm' if can? :edit, organization %></td>
+            <td><%= link_to 'Edit', organization_details_organization_path(organization), class: 'btn btn-secondary btn-sm' if can? :edit, organization %></td>
             <td><%= link_to 'Destroy', organization, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' if can? :delete, organization %></td>
           <% end %>
      

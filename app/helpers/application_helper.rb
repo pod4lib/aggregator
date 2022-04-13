@@ -12,4 +12,12 @@ module ApplicationHelper
       file.html_safe # rubocop:disable Rails/OutputSafety
     end
   end
+
+  def job_status_tabs_collapse(tab_expanded, jobs_count)
+    !tab_expanded && jobs_count.positive? ? 'show' : 'collapsed'
+  end
+
+  def current_page_class(path)
+    'current' if current_page?(path)
+  end
 end
