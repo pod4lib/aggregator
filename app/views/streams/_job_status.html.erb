@@ -8,7 +8,7 @@
           <button class="accordion-button <%= job_status_tabs_collapse(tab_expanded, jobs.count) %>" type="button"
                   data-bs-toggle="collapse" data-bs-target="#collapse<%= status_group.to_s.classify %>"
                   aria-expanded="false" aria-controls="collapse<%= status_group.to_s.classify %>">
-            <span class="fw-bold"><%= t("job_tracker.status_group.#{status_group}") %></span>&nbsp;
+            <span class="fw-bold"><%= t("job_tracker.status_group.#{status_group}.label") %></span>&nbsp;
             <span class="badge <%= jobs.count > 0 ? Settings.job_status_group[status_group].badge_class : 'bg-secondary' %>">
               <%= jobs.count %>
             </span>
@@ -18,31 +18,37 @@
              aria-labelledby="heading<%= status_group.to_s.classify %>" data-bs-parent="#jobStatusAccordian">
              <% if jobs.count > 0 then tab_expanded = true end %>
           <div class="accordion-body">
-            <% if status_group == :needs_attention %>
-              <%= link_to('How to get help', 'https://github.com/pod4lib/aggregator/wiki#getting-help') %>
-            <% end %>
-            <table class="table table-striped mt-4">
-              <thead>
-                <tr>
-                  <th class="text-center"><%= t('job_tracker.table_heading.status') %></th>
-                  <th><%= t('job_tracker.table_heading.resource') %></th>
-                  <th><%= t('job_tracker.table_heading.job_type') %></th>
-                  <th class="text-end"><%= t('job_tracker.table_heading.progress') %></th>
-                  <th><%= t('job_tracker.table_heading.created_at') %></th>
-                </tr>
-              </thead>
-              <% jobs.sort_by(&:created_at).reverse.each do |job| %>
-                <tr class="<%= "status-#{job.job_id}" %>">
-                  <td class="text-center">
-                    <%= bootstrap_icon(Settings.job_status_group[status_group].icon_class, class: "pod-icon pod-job-tracker-status #{job.sidekiq_status}")%>
-                  </td>
-                  <td><%= job.resource_label %></td>
-                  <td><%= job.job_class.titleize %></td>
-                  <td class="text-end"><%= job.progress_label %></td>
-                  <td><%= job.created_at %></td>
-                </tr>
+            <% if jobs.count < 1 %>
+              <div class="alert alert-info mt-2">
+                <%= t("job_tracker.status_group.#{status_group}.job_count_zero") %>
+              </div>
+            <% else %>
+              <% if status_group == :needs_attention %>
+                <%= link_to('How to get help', 'https://github.com/pod4lib/aggregator/wiki#getting-help') %>
               <% end %>
-            </table>
+              <table class="table table-striped mt-4">
+                <thead>
+                  <tr>
+                    <th class="text-center"><%= t('job_tracker.table_heading.status') %></th>
+                    <th><%= t('job_tracker.table_heading.resource') %></th>
+                    <th><%= t('job_tracker.table_heading.job_type') %></th>
+                    <th class="text-end"><%= t('job_tracker.table_heading.progress') %></th>
+                    <th><%= t('job_tracker.table_heading.created_at') %></th>
+                  </tr>
+                </thead>
+                <% jobs.sort_by(&:created_at).reverse.each do |job| %>
+                  <tr class="<%= "status-#{job.job_id}" %>">
+                    <td class="text-center">
+                      <%= bootstrap_icon(Settings.job_status_group[status_group].icon_class, class: "pod-icon pod-job-tracker-status #{job.sidekiq_status}")%>
+                    </td>
+                    <td><%= job.resource_label %></td>
+                    <td><%= job.job_class.titleize %></td>
+                    <td class="text-end"><%= job.progress_label %></td>
+                    <td><%= job.created_at %></td>
+                  </tr>
+                <% end %>
+              </table>
+            <% end %>
           </div>
         </div>
       </div>
