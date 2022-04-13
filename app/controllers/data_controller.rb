@@ -2,7 +2,7 @@
 
 # :nodoc:
 class DataController < ApplicationController
-  load_and_authorize_resource :organizations
+  authorize_resource :class => false
 
   def index; end
 end
