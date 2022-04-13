@@ -57,6 +57,25 @@ en:
         contributing: Help with contributing or using POD data
         framework: Data provider and usage framework
         github: GitHub repository
+  data:
+    index:
+      guidelines:
+        header: Guidelines for data consumers
+        body_html: Data in the lake is available to any POD participant to extract and reuse. It is up to the POD participant to consume and reuse the data responsibly. Libraries that seek to use POD data for uses that exceed the Minimum Standard for Data Reuse for Data Providers should exercise caution and investigate whether restrictions may apply to their intended use. This may include informing POD data provider contacts of the intended use.
+        list_items:
+          - See the <a href='https://docs.google.com/document/d/1EZG7z_A13jxPfHbYhT7Ae4Ays10fhecqfoGJhqrcjD8/edit'>Data Provider and Usage Framework for POD</a> document for a description of the "Minimum Standard for Data Reuse for Data Providers" and related context.
+          - You can find a contact link for each POD data provider in the organization banner at the top of their provider page in the POD Aggregator application.
+      harvesting:
+        header: Harvesting aggregated data
+        body_html: Data providers contribute their data to POD Aggregator by uploading data sets, and data consumers download data for downstream use.
+      resource_sync:
+        header: ResourceSync
+        body_html: POD Aggregator uses ResourceSync, an extension of the Sitemaps protocol, to expose aggregated data in three forms. See the <a href='https://github.com/pod4lib/aggregator/wiki/Harvesting-using-ResourceSync'>Harvesting using ResourceSync wiki page</a> for details.
+        sitemaps: ResourceSync sitemaps
+        original_uploads: Original uploads
+        normalized_marcxml: Normalized uploads as MARCXML
+        normalized_marc21: Normalized uploads as MARC21
+        update_cadence: (updated nightly)
   helpers:
     label:
       user:

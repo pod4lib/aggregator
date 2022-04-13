@@ -1,12 +1,34 @@
 <div class="container index-page">
-  <div class="card w-50">
-      <div class="card-header d-flex justify-content-between">
-        <h2 class="h6">ResourceSync sitemaps</h2>
-      </div>
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item"><%= link_to 'Original uploads', resourcelist_organizations_url %> (real-time)</li>
-        <li class="list-group-item"><%= link_to 'Normalized uploads as MARCXML', normalized_resourcelist_organizations_url(flavor: 'marcxml') %> (updated nightly)</li>
-        <li class="list-group-item"><%= link_to 'Normalized uploads as MARC21', normalized_resourcelist_organizations_url(flavor: 'marc21') %> (updated nightly)</li>
-      </ul>
+  <div>
+    <h1><%= t('.guidelines.header') %></h1>
+
+    <p><%= t('.guidelines.body_html') %></p>
+  </div>
+
+  <div>
+    <% t('.guidelines.list_items').each do |item| %>
+      <li><%= sanitize item %></li>
+    <% end %>
+  </div>
+
+  <div>
+    <h1><%= t('.harvesting.header') %></h1>
+    <p><%= t('.harvesting.body_html') %></p>
+  </div>
+
+  <div>
+    <h2><%= t('.resource_sync.header') %></h2>
+    <p><%= t('.resource_sync.body_html') %></p>
+
+    <div class="card w-50">
+        <div class="card-header d-flex justify-content-between">
+          <h2 class="h6"><%= t('.resource_sync.sitemaps') %></h2>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><%= link_to t('.resource_sync.original_uploads'), resourcelist_organizations_url %> (real-time)</li>
+          <li class="list-group-item"><%= link_to t('.resource_sync.normalized_marcxml'), normalized_resourcelist_organizations_url(flavor: 'marcxml') %> <%= t('.resource_sync.update_cadence') %></li>
+          <li class="list-group-item"><%= link_to t('.resource_sync.normalized_marc21'), normalized_resourcelist_organizations_url(flavor: 'marc21') %> <%= t('.resource_sync.update_cadence') %></li>
+        </ul>
+    </div>
   </div>
 </div>
