@@ -7,4 +7,4 @@ RSpec.describe 'data/index', type: :view do
     render
     assert_select 'h2', 'Guidelines for data consumers'
   end
-end 
+end
