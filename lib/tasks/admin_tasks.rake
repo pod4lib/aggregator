@@ -45,28 +45,44 @@ namespace :agg do
     Upload.skip_callback(:commit, :after, :perform_extract_marc_record_metadata_job)
 
     puts "Seeding data from Aggregator @ #{Settings.marc_fixture_seeds.host} (this may take a several minutes)"
-    Settings.marc_fixture_seeds.organizations.each do |org|
-      puts "Fetching data from #{org}"
-      organization = Organization.create(name: org, slug: org.downcase)
+    Settings.marc_fixture_seeds.organizations.each do |org_name|
+      puts "Fetching data from #{org_name}"
+      organization = Organization.find_or_create_by(slug: org_name.downcase) do |org|
+        org.name = org_name
+      end
 
-      file_count = 0
-      MarcFixtureSeedFetcher.fetch_uploads(org.downcase) do |upload, files|
-        upload = organization.default_stream.uploads.build(name: upload['name'])
-        files.map do |file|
-          file_count += 1
+      stream = organization.streams.find_or_create_by(slug: 'seed_from_api')
+      uploads = []
+
+      total_file_count = 0
+      MarcFixtureSeedFetcher.fetch_uploads(organization.slug) do |upload, files|
+        upload_file_count = 0
+        upload = stream.uploads.build(name: upload['name'])
+
+        files.each do |file|
           puts "Uploading file #{file['filename']} (#{file['download_url']})"
           uri = URI.parse(file['download_url'])
           io = uri.open('Authorization' => "Bearer #{Settings.marc_fixture_seeds.token}")
           upload.files.attach(io: io, filename: file['filename'])
+
+          upload_file_count += 1
+          break if upload_file_count >= Settings.marc_fixture_seeds.file_count
         end
+
         upload.save
+        uploads << upload
+
+        total_file_count += upload_file_count
+        break if total_file_count >= Settings.marc_fixture_seeds.file_count
       end
 
-      puts "Extracting metadata from #{file_count} files seeded from #{org}"
+      puts "Extracting metadata from #{total_file_count} files seeded from #{org_name}"
       # Run metadata extraction job serially
-      organization.uploads.each do |upload|
+      uploads.each do |upload|
         ExtractMarcRecordMetadataJob.perform_now(upload)
       end
+
+      stream.make_default
     end
 
     Upload.set_callback(:commit, :after, :perform_extract_marc_record_metadata_job)

@@ -12,6 +12,7 @@ marc_fixture_seeds:
   host: https://pod.stanford.edu
   token: ''
   upload_count: 5
+  file_count: 5
   organizations:
     - Cornell
     - Princeton
