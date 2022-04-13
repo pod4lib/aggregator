@@ -1,0 +1,36 @@
+<%= render 'shared/organization_header' %>
+
+<div class="container manage-organization-container">
+    <%= render 'shared/manage_organization_header' %>
+
+    <h2>Organization Users</h2>
+
+    <%= link_to 'Invite new user to organization', organization_invite_new_path(@organization), class: 'btn btn-sm btn-primary' if can? :manage, @organization %>
+
+    <table class="table table-striped organizations mt-4">
+        <thead>
+        <tr>
+            <th>Email address</th>
+            <th>Name</th>
+            <th>Title</th>
+            <th>Role</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+            <% @organization.roles.each do |role| %>
+                <% role.users.each do |user| %>
+                <tr>
+                    <td><%= user.email %></td>
+                    <td><%= user.name %></td>
+                    <td><%= user.title %></td>
+                    <td><%= role.name.capitalize %></td>
+                    <td>
+                        <%= link_to 'Remove', [@organization, user], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm align-self-center' if can? :manage, @organization %>
+                    </td>
+                </tr>
+                <% end %>
+            <% end %>
+        </tbody>
+    </table>
+</div>

@@ -26,10 +26,15 @@ Rails.application.routes.draw do
   get 'charts/uploads', to: 'charts#uploads', as: :uploads_chart
   get 'charts/records', to: 'charts#records', as: :records_chart
 
-  resources :organizations do
+  # disable default /edit path for organizations in favor of organization_details and provider_details
+  resources :organizations, except: [:edit] do
     collection do
       get 'resourcelist', to: 'organizations#index', defaults: { format: :xml }
       get 'normalized_resourcelist/:flavor', to: 'organizations#index', defaults: { normalized: true, format: :xml }, as: :normalized_resourcelist
+    end
+    member do
+      get 'organization_details'
+      get 'provider_details'
     end
     resources :marc_records, only: [:index, :show] do
       member do
@@ -42,12 +47,16 @@ Rails.application.routes.draw do
         get 'info/:attachment_id', to: 'uploads#info', as: :file_info
       end
     end
-    resources :organization_users, as: 'users', only: :destroy
+
+    # Route in the Manage Organization / View Organization Details tabs
+    resources :organization_users, as: 'users', only: [:index, :destroy], path: 'users'
+    resources :allowlisted_jwts, only: [:index, :new, :create, :destroy]
+
     resources :organization_contact_emails, as: 'contact_emails', only: [:new, :create, :destroy]
 
     get 'invite/new', to: 'organization_invitations#new'
     post 'invite', to: 'organization_invitations#create'
-    resources :allowlisted_jwts, only: [:index, :new, :create, :destroy]
+    
     resources :streams, only: [:index, :destroy, :show, :create, :new] do
       collection do
         post 'make_default'

@@ -64,9 +64,6 @@ RSpec.describe 'Viewing provider information', type: :feature do
       user.add_role :admin
       visit organization_url(organization)
 
-      expect(page).to have_selector 'h2', text: 'Access Tokens'
-      expect(page).to have_selector 'h2', text: 'Users'
-
       expect(page).to have_content '1297245.marc'
       expect(page).to have_link 'Download'
     end
