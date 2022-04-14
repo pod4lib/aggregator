@@ -49,7 +49,7 @@ Rails.application.routes.draw do
     end
 
     # Route in the Manage Organization / View Organization Details tabs
-    resources :organization_users, as: 'users', only: [:index, :destroy], path: 'users'
+    resources :organization_users, as: 'users', only: [:index, :destroy, :update], path: 'users'
     resources :allowlisted_jwts, only: [:index, :new, :create, :destroy]
 
     resources :organization_contact_emails, as: 'contact_emails', only: [:new, :create, :destroy]

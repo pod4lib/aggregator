@@ -1,35 +1,50 @@
 <%= render 'shared/organization_header' %>
-
 <div class="container manage-organization-container">
     <%= render 'shared/manage_organization_header' %>
-
-    <h2>Organization Users</h2>
-
-    <%= link_to 'Invite new user to organization', organization_invite_new_path(@organization), class: 'btn btn-sm btn-primary' if can? :manage, @organization %>
-
+    <h2><%= t('.title') %></h2>
+    <%= link_to t('.invite_user'), organization_invite_new_path(@organization), class: 'btn btn-sm btn-primary' if can? :manage, @organization %>
     <table class="table table-striped organizations mt-4">
         <thead>
-        <tr>
-            <th>Email address</th>
-            <th>Name</th>
-            <th>Title</th>
-            <th>Role</th>
-            <th>Actions</th>
-        </tr>
+            <tr>
+                <th scope="col"><%= t('.email') %></th>
+                <th scope="col"><%= t('.name') %></th>
+                <th scope="col"><%= t('.job_title') %></th>
+                <% if can? :manage, @organization %>
+                <th scope="col" class="text-center"><%= t('.is_owner') %></th>
+                <th scope="col" class="text-center"><%= t('.actions') %></th>
+                <% else %>
+                <th scope="col"><%= t('.role') %></th>
+                <% end %>
+            </tr>
         </thead>
         <tbody>
             <% @organization.roles.each do |role| %>
-                <% role.users.each do |user| %>
-                <tr>
-                    <td><%= user.email %></td>
-                    <td><%= user.name %></td>
-                    <td><%= user.title %></td>
-                    <td><%= role.name.capitalize %></td>
-                    <td>
-                        <%= link_to 'Remove', [@organization, user], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm align-self-center' if can? :manage, @organization %>
-                    </td>
-                </tr>
+            <% role.users.each do |user| %>
+            <tr>
+                <td class="align-middle">
+                    <a href="mailto:<%= user.email %>"><%= user.email %></a>
+                </td>
+                <td class="align-middle"><%= user.name %></td>
+                <td class="align-middle"><%= user.title %></td>
+                <% if can? :manage, @organization %>
+                <td class="text-center align-middle">
+                    <div class="form-check form-switch align-middle d-inline-block">
+                    <% if role.name == 'owner' %>
+                    <%= link_to '', organization_user_path(@organization, user, remove_role: 'owner'), method: :patch, data: { confirm: t('.confirm_action') }, class: 'form-check-input checked', title: t('.remove_owner') %>
+                    <input class="form-check-input pe-none" type="checkbox" aria-hidden="true" checked>
+                    <% else %>
+                    <%= link_to '', organization_user_path(@organization, user, add_role: 'owner'), method: :patch, data: { confirm: t('.confirm_action') }, class: 'form-check-input', title: t('.add_owner') %>
+                    <% end %>
+                    </div>
+                </td>
+                <td class="align-middle text-center">
+                    <%= link_to t('.remove_user'), organization_user_path(@organization, user), method: :delete, data: { confirm: t('.confirm_action') }, class: 'btn btn-danger btn-sm' %>
+                </td>
+                <% else %>
+                <td class="align-middle"><%= role.name.capitalize %></td>
                 <% end %>
+            </tr>
+            <% end %>
             <% end %>
         </tbody>
     </table>

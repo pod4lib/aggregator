@@ -10,15 +10,26 @@ class OrganizationUsersController < ApplicationController
 
   def destroy
     authorize! :manage, @organization
-    @user.roles.where(resource: @organization).each do |role|
-      @user.remove_role role.name, @organization
-    end
+    @user.destroy
 
     respond_to do |format|
-      format.html { redirect_to organization_url(@organization), notice: 'User role was successfully removed.' }
+      format.html { redirect_to organization_users_url(@organization), notice: 'User was successfully removed.' }
       format.json { head :no_content }
     end
   end
+
+  # rubocop:disable Metrics/AbcSize
+  def update
+    authorize! :manage, @organization
+    @user.remove_role(params[:remove_role], @organization) if params[:remove_role].present?
+    @user.add_role(params[:add_role], @organization) if params[:add_role].present?
+
+    respond_to do |format|
+      format.html { redirect_to organization_users_url(@organization), notice: 'User role was successfully updated.' }
+      format.json { head :no_content }
+    end
+  end
+  # rubocop:enable Metrics/AbcSize
 
   def load_user
     @user = User.find(params[:id]) || User.new
