@@ -72,6 +72,13 @@ en:
       add_owner: Add owner role
       remove_owner: Remove owner role
       confirm_action: Are you sure?
+  site_users:
+    index:
+      title: Manage users
+      organization: Organization
+      is_admin: POD Admin?
+      add_admin: Add admin role
+      remove_admin: Remove admin role
   helpers:
     label:
       user:

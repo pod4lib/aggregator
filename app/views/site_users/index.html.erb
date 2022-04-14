@@ -1,33 +1,35 @@
 <div class="container index-page">
-  <h1>Site users</h1>
-
+  <h1><%= t('.title') %></h1>
   <table class="table table-striped mt-4">
     <thead>
       <tr>
-        <th>Email</th>
-        <th colspan="3"></th>
+        <th scope="col"><%= t('organization_users.index.email') %></th>
+        <th scope="col"><%= t('organization_users.index.name') %></th>
+        <th scope="col"><%= t('.organization') %></th>
+        <th scope="col" class="text-center"><%= t('.is_admin') %></th>
       </tr>
     </thead>
-
     <tbody>
       <% @users.each do |user| %>
-        <tr>
-          <td>
-            <%= content_tag :span, title: user do %>
-              <%= mail_to user.email, user.name.presence || user.email %>
-              <% if user.title.present? %>
-                (<%= user.title %>)
-              <% end %>
-            <% end %>
-          </td>
-          <td>
+      <tr>
+        <td class="align-middle"><%= mail_to user.email %></td>
+        <td class="align-middle"><%= user.name %></td>
+        <td class="align-middle">
+          <% if user.organizations.present? %>
+          <%= link_to user.organizations.first.name, organization_users_path(user.organizations.first) %>
+          <% end %>
+        </td>
+        <td class="text-center align-middle">
+          <div class="form-check form-switch align-middle d-inline-block">
             <% if user.has_role? :admin %>
-              <%= link_to 'Remove from admin role', site_user_url(user, remove_role: 'admin'), method: :patch, class: 'btn btn-danger btn-sm' %>
+            <%= link_to '', site_user_path(user, remove_role: 'admin'), method: :patch, data: { confirm: t('organization_users.index.confirm_action') }, class: 'form-check-input checked', title: t('.remove_admin') %>
+            <input class="form-check-input pe-none" type="checkbox" aria-hidden="true" checked>
             <% else %>
-              <%= link_to 'Add admin role', site_user_url(user, add_role: 'admin'), method: :patch, class: 'btn btn-secondary btn-sm' %>
+            <%= link_to '', site_user_path(user, add_role: 'admin'), method: :patch, data: { confirm: t('organization_users.index.confirm_action') }, class: 'form-check-input', title: t('.add_admin') %>
             <% end %>
-          </td>
-        </tr>
+          </div>
+        <td>
+      </tr>
       <% end %>
     </tbody>
   </table>
