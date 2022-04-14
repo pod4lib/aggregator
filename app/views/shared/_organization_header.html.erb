@@ -7,7 +7,7 @@
           <% if @organization.icon.attached? %>
             <%= image_tag(@organization.icon, class: 'organization-icon') %>
           <% end %>
-          <%= link_to_unless controller_name == 'organizations', @organization.name, @organization, class: 'text-body' %>
+          <%= @organization.name %>
         </h1>
 
         <p class="lead p-2">

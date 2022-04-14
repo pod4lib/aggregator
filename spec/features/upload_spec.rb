@@ -12,12 +12,10 @@ RSpec.describe 'uploading files to POD', type: :feature do
       login_as(user, scope: :user)
     end
 
-    it 'allows an org owner to create a new stream and upload files' do
+    it 'allows an org owner to upload a file to the default stream' do
       visit '/'
 
       click_on 'Best University'
-      click_on 'Create'
-      click_on 'Create Stream'
       click_on 'Upload file'
       attach_file('Upload file', Rails.root.join('spec/fixtures/stanford-50.mrc.gz'))
       click_on 'Create Upload'
