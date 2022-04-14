@@ -57,6 +57,20 @@ en:
         contributing: Help with contributing or using POD data
         framework: Data provider and usage framework
         github: GitHub repository
+  organization_users:
+    index:
+      title: Organization users
+      email: Email address
+      name: Name
+      job_title: Title
+      role: Role
+      is_owner: Organization owner?
+      actions: Action
+      invite_user: Invite new user to organization
+      remove_user: Remove user
+      add_owner: Add owner role
+      remove_owner: Remove owner role
+      confirm_action: Are you sure?
   helpers:
     label:
       user:
