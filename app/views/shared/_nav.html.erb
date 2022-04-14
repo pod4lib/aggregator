@@ -20,10 +20,16 @@
       </ul>
       <ul class="navbar-nav ms-md-auto">
         <% if current_user %>
+        <% if current_user.has_role? :admin %>
+        <span class="badge bg-warning text-dark h-100 my-auto d-none d-sm-inline"><%= t('.is_admin') %></span>
+        <% end %>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
             aria-expanded="false">
             <%= current_user.email %>
+            <% if current_user.has_role? :admin %>
+            <span class="badge bg-warning text-dark h-100 my-auto d-inline-block d-md-none"><%= t('.is_admin') %></span>
+            <% end %>
           </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
             <% current_user.organizations.each do | organization | %>

@@ -45,6 +45,7 @@ en:
       manage_users: Manage users
       logout: Logout
       login: Login
+      is_admin: POD Admin
     footer:
       copyright_html: '&copy; 2020-%{current_year}'
       docs:
