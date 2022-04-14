@@ -6,6 +6,7 @@ class Ability
   attr_reader :allowlisted_jwt, :user
 
   # rubocop:disable Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/PerceivedComplexity
   def initialize(user, token = nil)
     alias_action :create, :read, :update, :destroy, to: :crud
 
@@ -65,4 +66,5 @@ class Ability
     can :read, ActiveStorage::Attachment, { record: { organization: { id: member_orgs } } }
   end
   # rubocop:enable Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/PerceivedComplexity
 end
