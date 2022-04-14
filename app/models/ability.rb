@@ -48,6 +48,7 @@ class Ability
     can :manage, :all if user.has_role?(:admin)
     cannot :delete, Stream, default: true
     can :read, Organization, public: true
+    can :manage, :dashboard_controller if user.has_role?(:admin)
 
     owned_orgs = Organization.with_role(:owner, user).pluck(:id)
     can :manage, Organization, id: owned_orgs
