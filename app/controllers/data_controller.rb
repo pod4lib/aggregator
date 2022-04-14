@@ -2,7 +2,7 @@
 
 # :nodoc:
 class DataController < ApplicationController
-  authorize_resource({ class: false })
+  skip_authorization_check
 
   def index; end
 end
