@@ -76,6 +76,20 @@ en:
         normalized_marcxml: Normalized uploads as MARCXML
         normalized_marc21: Normalized uploads as MARC21
         update_cadence: (updated nightly)
+  organization_users:
+    index:
+      title: Organization users
+      email: Email address
+      name: Name
+      job_title: Title
+      role: Role
+      is_owner: Organization owner?
+      actions: Action
+      invite_user: Invite new user to organization
+      remove_user: Remove user
+      add_owner: Add owner role
+      remove_owner: Remove owner role
+      confirm_action: Are you sure?
   helpers:
     label:
       user:
@@ -89,5 +103,9 @@ en:
       progress: Completed records
       created_at: Created at
     status_group:
-      active: Active
-      needs_attention: Needs attention
+      active:
+        label: Active
+        job_count_zero: There are no active background jobs.
+      needs_attention:
+        label: Needs attention
+        job_count_zero: There are no background jobs that need attention.

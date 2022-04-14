@@ -2,7 +2,7 @@
 
 # Some site-wide dashboards
 class DashboardController < ApplicationController
-  skip_authorization_check only: [:uploads]
+  authorize_resource class: :controller
 
   def uploads
     @uploads = Upload.accessible_by(current_ability).order(updated_at: :desc).page(params[:page])
