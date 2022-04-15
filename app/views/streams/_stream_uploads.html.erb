@@ -9,18 +9,6 @@
 <table class="table table-striped mb-3">
   <thead><th>Status</th><th>File</th><th>Date created</th><th class="text-right">Size</th><th>Content type</th><th class="text-right">Records</th><th><span class="visually-hidden">Actions</span></th></thead>
   <tbody>
-    <tr class="font-weight-bold">
-      <td></td>
-      <td>Total: <%= number_with_delimiter stream.files.size %></td>
-      <td class="text-right" colspan="2">Total: <%= number_to_human_size stream.files.sum(:byte_size) %></td>
-      <td class="text-right" colspan="2">Total: <%= number_with_delimiter stream.statistic&.record_count || 0 %><br />Unique: <%= number_with_delimiter stream.statistic&.unique_record_count || 0 %></td>
-      <td>
-        <%= link_to profile_organization_stream_path(stream.organization, stream), class: 'btn btn-primary' do %>
-          <%= bootstrap_icon("search", class: "pod-icon") %>
-          <span class="visually-hidden">View profile</span>
-        <% end %>
-      </td>
-    </tr>
     <% uploads.each do |upload| %>
       <%= render 'uploads/file_rows', upload: upload %>
     <% end %>
@@ -28,5 +16,3 @@
 </table>
 
 <%= paginate uploads %>
-
-<%= render 'streams/normalized_dump', normalized_dump: stream.normalized_dumps.full_dumps.last %>

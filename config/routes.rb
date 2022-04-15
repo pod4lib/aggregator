@@ -35,6 +35,8 @@ Rails.application.routes.draw do
       get 'normalized_resourcelist/:flavor', to: 'organizations#index', defaults: { normalized: true, format: :xml }, as: :normalized_resourcelist
     end
     member do
+      get 'normalized_data'
+      get 'processing_status'
       get 'organization_details'
       get 'provider_details'
     end

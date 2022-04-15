@@ -1,11 +1,10 @@
 <%= render 'shared/organization_header' %>
 
+<div class="container manage-organization-container">
+  <%= render 'streams/header', stream: @organization.default_stream %>
+  <%= render 'shared/provider_page_header'%>
 
-<div class="container mb-5">
-  <%= link_to 'Streams', organization_streams_path %>
-  <div class="d-flex justify-content-between">
-    <h1><%= @stream.display_name %></h1>
-  </div>
+  <h2>Stream profile</h2>
 
   <% if @stream.marc_profile %>
     <%= render 'marc_profiles/summary', marc_profile: @stream.marc_profile %>
