@@ -8,6 +8,7 @@ RSpec.describe 'site_users/index', type: :view do
 
   before do
     assign(:users, [user, admin])
+    sign_in admin
   end
 
   it 'renders a list of users' do
@@ -18,17 +19,11 @@ RSpec.describe 'site_users/index', type: :view do
 
   it 'renders a button to add the admin role to the unprivileged user' do
     render
-    assert_select 'tbody > tr:first-child .btn', text: 'Add admin role' do
-      assert_select '[data-method=?]', 'patch'
-      assert_select '[href=?]', site_user_url(user, add_role: 'admin')
-    end
+    expect(rendered).to have_link('', href: site_user_path(user, add_role: 'admin'))
   end
 
   it 'renders a button to remove the admin role from the admin user' do
     render
-    assert_select 'tbody > tr:last-child .btn', text: 'Remove from admin role' do
-      assert_select '[data-method=?]', 'patch'
-      assert_select '[href=?]', site_user_url(admin, remove_role: 'admin')
-    end
+    expect(rendered).to have_link('', href: site_user_path(admin, remove_role: 'admin'))
   end
 end

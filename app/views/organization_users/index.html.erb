@@ -21,9 +21,7 @@
             <% @organization.roles.each do |role| %>
             <% role.users.each do |user| %>
             <tr>
-                <td class="align-middle">
-                    <a href="mailto:<%= user.email %>"><%= user.email %></a>
-                </td>
+                <td class="align-middle"><%= mail_to user.email %></td>
                 <td class="align-middle"><%= user.name %></td>
                 <td class="align-middle"><%= user.title %></td>
                 <% if can? :manage, @organization %>
