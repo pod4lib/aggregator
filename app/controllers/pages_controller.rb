@@ -12,4 +12,8 @@ class PagesController < ApplicationController
   def show
     render template: "pages/#{params[:id]}"
   end
+
+  def data
+    authorize! :read, :pages_data
+  end
 end

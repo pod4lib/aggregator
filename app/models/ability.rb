@@ -44,6 +44,7 @@ class Ability
       can :read, ActiveStorage::Attachment, { record: { organization: { public: true } } }
       can :read, MarcRecord, upload: { organization: { public: true } }
       can %i[read profile info], [Stream, Upload], organization: { public: true }
+      can :read, :pages_data
     end
 
     can :manage, :all if user.has_role?(:admin)

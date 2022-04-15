@@ -25,6 +25,8 @@ Rails.application.routes.draw do
   get 'dashboard/uploads', to: 'dashboard#uploads', as: :activity
   get 'charts/uploads', to: 'charts#uploads', as: :uploads_chart
   get 'charts/records', to: 'charts#records', as: :records_chart
+  
+  get '/data', to: 'pages#data'
 
   # disable default /edit path for organizations in favor of organization_details and provider_details
   resources :organizations, except: [:edit] do

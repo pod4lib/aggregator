@@ -11,5 +11,9 @@ RSpec.describe PagesController, type: :routing do
     it 'routes to #api' do
       expect(get: '/api').to route_to('pages#api')
     end
+
+    it 'routes to #data' do
+      expect(get: '/data').to route_to('pages#data')
+    end
   end
 end
