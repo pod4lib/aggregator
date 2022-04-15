@@ -101,11 +101,9 @@ class Upload < ApplicationRecord
     service.each_with_metadata do |record, metadata|
       out = MarcRecord.new(
         **metadata,
-        marc001: record['001']&.value,
         file: file,
         marc: record,
-        upload: self,
-        json: Zlib::Deflate.new.deflate(record.to_marchash.to_json, Zlib::FINISH)
+        upload: self
       )
 
       out.checksum ||= Digest::MD5.hexdigest(record.to_xml.to_s) if checksum

@@ -8,17 +8,17 @@ class MarcRecord < ApplicationRecord
   has_one :organization, through: :stream, inverse_of: :marc_records
 
   attr_accessor :marc_bytes
-  attr_writer :marc
 
   # @return [MARC::Record]
   def marc
-    @marc ||= if json
-                load_record_from_json
-              elsif bytecount && length
-                service.at_bytes(bytecount...(bytecount + length), merge: true)
-              elsif index
-                service.at_index(index)
-              end
+    @marc ||= load_record_from_json
+  end
+
+  def marc=(record)
+    @marc = record
+    self.marc001 = record['001']&.value
+
+    self.json = Zlib::Deflate.new.deflate(record.to_marchash.to_json, Zlib::FINISH)
   end
 
   def augmented_marc
@@ -34,6 +34,6 @@ class MarcRecord < ApplicationRecord
   end
 
   def load_record_from_json
-    MARC::Record.new_from_marchash(JSON.parse(Zlib::Inflate.inflate(json)))
+    MARC::Record.new_from_marchash(JSON.parse(Zlib::Inflate.inflate(json))) if json
   end
 end
