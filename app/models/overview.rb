@@ -56,6 +56,6 @@ class Overview
 
   # public organizations that provide data to the aggregator
   def providers
-    Organization.where(provider: true, public: true)
+    @providers ||= Organization.where(provider: true, public: true)
   end
 end
