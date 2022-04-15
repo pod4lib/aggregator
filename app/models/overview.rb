@@ -15,7 +15,8 @@ class Overview
 
   # most recent upload to default stream by any provider organization
   def last_upload
-    Upload.includes(:organization, :stream)
+    @last_upload ||=
+      Upload.includes(:organization, :stream)
           .where(organization: { provider: true, public: true })
           .where(stream: { default: true })
           .order(created_at: :desc)
