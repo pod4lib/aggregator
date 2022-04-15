@@ -24,7 +24,7 @@ RSpec.describe '/data', type: :request do
     end
 
     it 'renders a successful response when logged in' do
-      sign_in create(:user)
+      sign_in create(:admin)
       get data_url
       expect(response).to be_successful
     end
