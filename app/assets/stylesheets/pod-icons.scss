@@ -11,7 +11,8 @@
     color: $info
   }
 
-  &.retry {
+  &.retry,
+  &.needs_attention {
     color: $warning
   }
 
