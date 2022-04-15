@@ -13,6 +13,8 @@
         <li class='nav-item'><%= link_to t('.providers'), organizations_url, class: 'nav-link' %></li>
         <% if can? :manage, :dashboard_controller %>
           <li class='nav-item'><%= link_to t('.activity'), activity_url, class: 'nav-link', data: { turbolinks: false } %></li>
+        <% end %>
+        <% if can? :read, :pages_data %>
           <li class='nav-item'><%= link_to t('.data'), data_url, class: 'nav-link', data: { turbolinks: false } %></li>
         <% end %>
         <% if can? :manage, User %>
