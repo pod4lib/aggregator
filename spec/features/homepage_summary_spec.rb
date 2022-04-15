@@ -16,6 +16,9 @@ RSpec.describe 'homepage summary', type: :feature do
     create(:marc_record, upload: upload2, file: upload2.files.first, marc001: '1')
     create(:marc_record, upload: upload2, file: upload2.files.first, marc001: '2')
 
+    # run the statistics jobs so stats are available
+    UpdateOrganizationStatisticsJob.perform_now(provider)
+
     visit '/'
   end
 

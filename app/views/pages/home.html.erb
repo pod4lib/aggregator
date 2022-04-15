@@ -20,9 +20,9 @@
         <%= t('.providers.heading') %>
       </h2>
       <p>
-        <%= t('.providers.providers_html', count: @providers) %>
-        <% if @last_upload.present? %>
-        <%= t('.providers.uploaders_html', upload_time: time_ago_in_words(@last_upload.created_at), uploader: @last_upload.organization.name) %>
+        <%= t('.providers.providers_html', count: @overview.provider_count) %>
+        <% if @overview.last_upload.present? %>
+        <%= t('.providers.uploaders_html', upload_time: time_ago_in_words(@overview.last_upload.created_at), uploader: @overview.last_upload.organization.name) %>
         <% end %>
       </p>
     </div>
@@ -31,61 +31,59 @@
         <%= t('.data.heading') %>
       </h2>
       <p>
-        <%= t('.data.body_html', count: @total_records, total_records: number_with_delimiter(@total_records), unique_records: number_with_delimiter(@unique_records)) %>
+        <%= t('.data.body_html', count: @overview.total_records, total_records: number_with_delimiter(@overview.total_records), unique_records: number_with_delimiter(@overview.unique_records)) %>
       </p>
     </div>
   </div>
-  <% if @organization %>
+  <% if @overview.organization %>
   <!-- organization section -->
   <div class="row p-3 p-md-5">
     <div class="row text-center">
       <h2 class="d-flex justify-content-center align-items-center">
-        <% if @organization.icon.attached? %>
-          <%= image_tag(@organization.icon, height: 32, class:'me-2') %>
+        <% if @overview.organization.icon.attached? %>
+          <%= image_tag(@overview.organization.icon, height: 32, class:'me-2') %>
         <% end %>
-        <%= @organization.name %>
+        <%= @overview.organization.name %>
       </h2>
-      <% if @last_org_files.present? %>
+      <% if @overview.last_org_files.present? %>
       <p>
-        <%= t('.organization.last_upload.one', upload_time: time_ago_in_words(@last_org_files.last.created_at.to_time)) %>
+        <%= t('.organization.last_upload.one', upload_time: time_ago_in_words(@overview.last_org_files.last.created_at.to_time)) %>
       </p>
-      <% elsif @organization.provider? %>
+      <% elsif @overview.organization.provider? %>
       <p>
         <%= t('.organization.last_upload.zero') %>
       </p>
       <% end %>
     </div>
     <div class="mt-3 mt-md-5 d-md-flex justify-content-md-around">
-      <% unless @last_org_files.empty? %>
+      <% unless @overview.last_org_files.empty? %>
       <div class="my-2 my-md-0">
         <h3>
           <%= t('.organization.uploads.heading') %>
         </h3>
         <ul class="list-unstyled">
-          <% @last_org_files.each do |file| %>
+          <% @overview.last_org_files.each do |file| %>
           <li class="my-3">
             <%= bootstrap_icon(Settings.metadata_status[file.pod_metadata_status].icon_class, class: "pod-metadata-status #{file.pod_metadata_status} me-2") %>
             <%= file.filename %>
           </li>
           <% end %>
-          <li class="my-3"><%= link_to t('.organization.uploads.all'), organization_stream_path(@organization, @organization.default_stream) %></li>
+          <li class="my-3"><%= link_to t('.organization.uploads.all'), organization_stream_path(@overview.organization, @overview.organization.default_stream) %></li>
         </ul>
       </div>
       <% end %>
-      <% if @organization.provider? %>
+      <% if @overview.organization.provider? %>
       <div class="my-2 my-md-0">
         <h3>
           <%= t('.organization.jobs.heading') %>
         </h3>
         <ul class="list-unstyled">
-          <% if @organization.default_stream.active_jobs? %>
-          <% @organization.default_stream.job_tracker_status_groups.each do |status, jobs| %>
-          <% if jobs.any? %>
+          <% if @overview.active_org_jobs.present? %>
+          <% @overview.active_org_jobs.each do |status, jobs| %>
           <li class="my-3">
             <%= bootstrap_icon(Settings.job_status_group[status].icon_class, class: "pod-icon pod-job-tracker-status #{status} me-2")%>
-            <%= t('.organization.jobs.status_html', count: jobs.count, status: t("job_tracker.status_group.#{status}").downcase) %>
+            <%= t('.organization.jobs.status_html', count: jobs.count, status: t("job_tracker.status_group.#{status}.label").downcase) %>
           </li>
-          <% end %>
           <% end %>
           <% else %>
           <li class="my-3">
@@ -93,7 +91,7 @@
             <%= t('.organization.jobs.status_html.zero') %>
           </li>
           <% end %>
-          <li class="my-3"><%= link_to t('.organization.jobs.all'), organization_path(@organization) %></li>
+          <li class="my-3"><%= link_to t('.organization.jobs.all'), organization_path(@overview.organization) %></li>
         </ul>
       </div>
       <% end %>
@@ -102,17 +100,17 @@
           <%= t('.organization.actions.heading') %>
         </h3>
         <ul class="list-unstyled">
-          <% if @organization.provider? %>
-          <li class="my-3"><%= link_to t('.organization.actions.upload_file'), new_organization_upload_path(@organization) %></li>
-          <li class="my-3"><%= link_to t('.organization.actions.view_default_stream'), organization_stream_path(@organization, @organization.default_stream) %></li>
+          <% if @overview.organization.provider? %>
+          <li class="my-3"><%= link_to t('.organization.actions.upload_file'), new_organization_upload_path(@overview.organization) %></li>
+          <li class="my-3"><%= link_to t('.organization.actions.view_default_stream'), organization_stream_path(@overview.organization, @overview.organization.default_stream) %></li>
           <% else %>
-          <li class="my-3"><%= link_to t('.organization.actions.harvest_data'), organization_path(@organization) %></li>
+          <li class="my-3"><%= link_to t('.organization.actions.harvest_data'), organization_path(@overview.organization) %></li>
           <li class="my-3"><%= link_to t('.organization.actions.data_docs'), 'https://github.com/pod4lib/aggregator/wiki/Harvesting-using-ResourceSync' %></li>
           <% end %>
-          <% if can? :manage, @organization %>
-          <li class="my-3"><%= link_to t('.organization.actions.edit_org'), edit_organization_path(@organization) %></li>
+          <% if can? :manage, @overview.organization %>
+          <li class="my-3"><%= link_to t('.organization.actions.edit_org'), organization_users_path(@overview.organization) %></li>
           <% else %>
-          <li class="my-3"><%= link_to t('.organization.actions.view_org_details'), organization_path(@organization) %></li>
+          <li class="my-3"><%= link_to t('.organization.actions.view_org_details'), organization_path(@overview.organization) %></li>
           <% end %>
         </ul>
       </div>
