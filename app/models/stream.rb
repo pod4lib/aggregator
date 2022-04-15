@@ -13,6 +13,7 @@ class Stream < ApplicationRecord
   has_many :normalized_dumps, dependent: :destroy
   has_many :job_trackers, dependent: :delete_all, as: :reports_on
 
+  scope :default, -> { where(default: true) }
   scope :active, -> { where(status: 'active') }
   scope :archived, -> { where(status: 'archived') }
 
@@ -25,6 +26,13 @@ class Stream < ApplicationRecord
   def archive
     update(status: 'archived', default: false)
     uploads.find_each(&:archive)
+  end
+
+  def make_default
+    Stream.transaction do
+      organization.streams.default.each { |stream| stream.update(default: false) }
+      update(default: true)
+    end
   end
 
   def job_tracker_status_groups
