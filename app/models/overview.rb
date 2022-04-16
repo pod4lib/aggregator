@@ -17,10 +17,10 @@ class Overview
   def last_upload
     @last_upload ||=
       Upload.includes(:organization, :stream)
-          .where(organization: { provider: true, public: true })
-          .where(stream: { default: true })
-          .order(created_at: :desc)
-          .first
+            .where(organization: { provider: true, public: true })
+            .where(stream: { default: true })
+            .order(created_at: :desc)
+            .first
   end
 
   # total number of MARC records in provider default streams
