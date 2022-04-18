@@ -51,19 +51,22 @@ RSpec.describe Stream, type: :model do
       expect(org.default_stream_histories.count).to be(1)
     end
 
-    it 'creates new default stream histories and properly updates old ones when the default stream is changed' do
+    it 'creates a new default stream history when stream becomes the default' do
       org = create(:organization)
       first_stream = described_class.create({ organization: org, default: true })
       second_stream = described_class.create({ organization: org, default: false })
       
-      expect(org.default_stream_histories.count).to be(1)
+      second_stream.update(default: true)
+      expect(DefaultStreamHistory.all[1].end_time).to be(nil)
+    end
+
+    it 'updates and appends endtime to prior default stream history when the stream is no longer the default' do
+      org = create(:organization)
+      first_stream = described_class.create({ organization: org, default: true })
+      second_stream = described_class.create({ organization: org, default: false })
 
       first_stream.update(default: false)
-      second_stream.update(default: true)
-
-      expect(DefaultStreamHistory.all.count).to be(2)
-      expect(DefaultStreamHistory.where.not({ end_time: nil }).count).to be(1)
-      expect(DefaultStreamHistory.where({ end_time: nil }).count).to be(1)
+      expect(DefaultStreamHistory.all[0].end_time).not_to be(nil)
     end
   end
 end

@@ -69,6 +69,7 @@ class Stream < ApplicationRecord
 
   def check_for_a_default_stream
     return unless organization.streams.count == 1
+
     DefaultStreamHistory.create(organization: organization, stream: self, start_time: DateTime.now)
   end
 
