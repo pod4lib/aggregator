@@ -42,4 +42,27 @@ RSpec.describe Stream, type: :model do
       expect(stream.job_tracker_status_groups).to eq({ active: [], needs_attention: [] })
     end
   end
+
+  describe '#default_stream_histories' do
+    it 'creates a default stream history when the first stream is created in an organization' do
+      org = create(:organization)
+      Stream.create({organization: org, default: true})
+      expect(org.default_stream_histories.count).to be(1)
+    end
+
+    it 'creates new default stream histories and properly updates old ones when the default stream is changed' do
+      org = create(:organization)
+      first_stream = Stream.create({organization: org, default: true})
+      second_stream = Stream.create({ organization: org, default: false })
+      
+      expect(org.default_stream_histories.count).to be(1)
+
+      first_stream.update(default: false)
+      second_stream.update(default: true)
+
+      expect(DefaultStreamHistory.all.count).to be(2)
+      expect(DefaultStreamHistory.where.not({end_time: nil}).count).to be(1)
+      expect(DefaultStreamHistory.where({end_time: nil}).count).to be(1)
+    end
+  end
 end
