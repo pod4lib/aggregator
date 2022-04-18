@@ -63,6 +63,7 @@ group :development, :test do
   gem 'simplecov'
   gem 'timecop'
   gem 'webmock'
+  gem 'i18n-tasks'
 end
 
 group :development do
