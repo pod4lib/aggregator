@@ -16,6 +16,11 @@ class User < ApplicationRecord
     Organization.with_roles(which_roles, self)
   end
 
+  # FIXME: see https://github.com/pod4lib/aggregator/issues/503
+  def organization
+    organizations.first
+  end
+
   def to_s
     return email if name.blank?
 

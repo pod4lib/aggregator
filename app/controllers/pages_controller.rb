@@ -5,7 +5,9 @@ class PagesController < ApplicationController
   skip_before_action :authenticate_user!
   skip_authorization_check
 
-  def home; end
+  def home
+    @overview = Overview.new(current_user)
+  end
 
   def api; end
 
