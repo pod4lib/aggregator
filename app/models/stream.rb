@@ -7,7 +7,7 @@ class Stream < ApplicationRecord
   friendly_id :name, use: %i[finders slugged scoped], scope: :organization
   belongs_to :organization
   has_many :uploads, dependent: :destroy
-  has_many :default_stream_histories
+  has_many :default_stream_histories, dependent: :destroy
   has_many :marc_records, through: :uploads, inverse_of: :stream
   has_many :files, source: :files_blobs, through: :uploads
   has_one :statistic, dependent: :delete, as: :resource
@@ -68,9 +68,9 @@ class Stream < ApplicationRecord
   end
 
   def check_for_a_default_stream
-    if organization.streams.count == 1
-      DefaultStreamHistory.create(organization: organization, stream: self, start_time: DateTime.now)
-    end
+    return unless organization.streams.count == 1
+    
+    DefaultStreamHistory.create(organization: organization, stream: self, start_time: DateTime.now)
   end
 
   def update_default_stream_history
