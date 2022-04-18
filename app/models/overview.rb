@@ -25,12 +25,12 @@ class Overview
 
   # total number of MARC records in provider default streams
   def total_records
-    providers.joins(:statistics).sum(:record_count)
+    providers.map(&:latest_statistics).sum(&:record_count)
   end
 
   # number of unique MARC records (by 001 field) in provider default streams
   def unique_records
-    providers.joins(:statistics).sum(:unique_record_count)
+    providers.map(&:latest_statistics).sum(&:unique_record_count)
   end
 
   # most recent 3 files uploaded to the user's organization's default stream
