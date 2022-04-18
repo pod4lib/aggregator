@@ -15,9 +15,9 @@
 <div class="container-fluid">
   <!-- stats section -->
   <div class="row bg-light">
-    <div class="col-md p-3 p-md-5 text-center border">
+    <div class="col-md p-3 p-md-5 text-center border position-relative">
       <h2 class="mb-2 mb-md-4">
-        <%= t('.providers.heading') %>
+        <%= link_to t('.providers.heading'), organizations_url, class: 'stretched-link text-decoration-none text-reset' %>
       </h2>
       <p>
         <%= t('.providers.providers_html', count: @overview.provider_count) %>
@@ -26,9 +26,9 @@
         <% end %>
       </p>
     </div>
-    <div class="col-md p-3 p-md-5 text-center border">
+    <div class="col-md p-3 p-md-5 text-center border position-relative">
       <h2 class="mb-2 mb-md-4">
-        <%= t('.data.heading') %>
+        <%= link_to t('.data.heading'), data_url, class: 'stretched-link text-decoration-none text-reset' %>
       </h2>
       <p>
         <%= t('.data.body_html', count: @overview.total_records, total_records: number_with_delimiter(@overview.total_records), unique_records: number_with_delimiter(@overview.unique_records)) %>
