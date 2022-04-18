@@ -1,161 +1,127 @@
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t 'hello'
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t('hello') %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# The following keys must be escaped otherwise they will not be retrieved by
-# the default I18n backend:
-#
-# true, false, on, off, yes, no
-#
-# Instead, surround them with single quotes.
-#
-# en:
-#   'true': 'foo'
-#
-# To learn more, please read the Rails Internationalization guide
-# available at https://guides.rubyonrails.org/i18n.html.
-
+---
 en:
+  job_tracker:
+    status_group:
+      active:
+        job_count_zero: There are no active background jobs.
+        label: Active
+      needs_attention:
+        job_count_zero: There are no background jobs that need attention.
+        label: Needs attention
+    table_heading:
+      created_at: Created at
+      job_type: Job type
+      progress: Completed records
+      resource: Resource
+      status: Status
+    title: Processing status of recent background jobs
   layouts:
     application:
       title: POD Aggregator
-  shared:
-    nav:
-      brand: Aggregator
-      providers: Providers
-      data: Data
-      activity: Activity
-      users: Users
-      view_org_page: '%{org} POD'
-      edit_profile: Edit profile
-      manage_users: Manage users
-      logout: Logout
-      login: Login
-      is_admin: POD Admin
-    footer:
-      copyright_html: '&copy; 2020-%{current_year}'
-      docs:
-        heading: Documentation
-        api: POD API
-        data: Data documentation
-        retention_policy: Data retention policy
-      resources:
-        heading: Other Resources
-        contributing: Help with contributing or using POD data
-        framework: Data provider and usage framework
-        github: GitHub repository
   organization_users:
     index:
-      title: Organization users
-      email: Email address
-      name: Name
-      job_title: Title
-      role: Role
-      is_owner: Organization owner?
       actions: Action
-      invite_user: Invite new user to organization
-      remove_user: Remove user
       add_owner: Add owner role
-      remove_owner: Remove owner role
       confirm_action: Are you sure?
-  site_users:
-    index:
-      title: Manage users
-      organization: Organization
-      is_admin: POD Admin?
-      add_admin: Add admin role
-      remove_admin: Remove admin role
-  helpers:
-    label:
-      user:
-        email: Email address
+      email: Email address
+      invite_user: Invite new user to organization
+      is_owner: Organization owner?
+      job_title: Title
+      name: Name
+      remove_owner: Remove owner role
+      remove_user: Remove user
+      role: Role
+      title: Organization users
   pages:
     data:
       guidelines:
-        header: Guidelines for data consumers
         body_html: Data in the lake is available to any POD participant to extract and reuse. It is up to the POD participant to consume and reuse the data responsibly. Libraries that seek to use POD data for uses that exceed the Minimum Standard for Data Reuse for Data Providers should exercise caution and investigate whether restrictions may apply to their intended use. This may include informing POD data provider contacts of the intended use.
+        header: Guidelines for data consumers
         list_items:
-          - See the <a href='https://docs.google.com/document/d/1EZG7z_A13jxPfHbYhT7Ae4Ays10fhecqfoGJhqrcjD8/edit'>Data Provider and Usage Framework for POD</a> document for a description of the "Minimum Standard for Data Reuse for Data Providers" and related context.
-          - You can find a contact link for each POD data provider in the organization banner at the top of their provider page in the POD Aggregator application.
+        - See the <a href='https://docs.google.com/document/d/1EZG7z_A13jxPfHbYhT7Ae4Ays10fhecqfoGJhqrcjD8/edit'>Data Provider and Usage Framework for POD</a> document for a description of the "Minimum Standard for Data Reuse for Data Providers" and related context.
+        - You can find a contact link for each POD data provider in the organization banner at the top of their provider page in the POD Aggregator application.
       harvesting:
-        header: Harvesting aggregated data
         body_html: Data providers contribute their data to POD Aggregator by uploading data sets, and data consumers download data for downstream use.
+        header: Harvesting aggregated data
       resource_sync:
-        header: ResourceSync
         body_html: POD Aggregator uses ResourceSync, an extension of the Sitemaps protocol, to expose aggregated data in three forms. See the <a href='https://github.com/pod4lib/aggregator/wiki/Harvesting-using-ResourceSync'>Harvesting using ResourceSync wiki page</a> for details.
-        sitemaps: ResourceSync sitemaps
-        original_uploads: Original uploads
-        normalized_marcxml: Normalized uploads as MARCXML
+        header: ResourceSync
         normalized_marc21: Normalized uploads as MARC21
-        update_cadence: (updated nightly)
+        normalized_marcxml: Normalized uploads as MARCXML
+        original_uploads: Original uploads
+        sitemaps: ResourceSync sitemaps
+        update_cadence: "(updated nightly)"
     home:
-      hero: The POD Aggregator is an open source system to aggregate MARC bibliographic and holdings data for institutions that participate in the Platform for Open Data (POD) initiative.
-      providers:
-        heading: POD Providers
-        providers_html:
-          zero: There are currently no data providers.
-          one: 'There is currently <b>1</b> data provider.'
-          other: 'There are currently <b>%{count}</b> data providers.'
-        uploaders_html: 'The most recent upload was made by <b>%{uploader}</b> %{upload_time} ago.'
       data:
-        heading: POD Data
         body_html:
-          zero: 'POD Aggregator currently holds no records.'
-          one: 'POD Aggregator currently holds <b>1 record</b>.'
-          other: 'POD Aggregator currently holds a total of <b>%{total_records} records</b>, of which <b>%{unique_records} are unique</b>.'
+          one: POD Aggregator currently holds <b>1 record</b>.
+          other: POD Aggregator currently holds a total of <b>%{total_records} records</b>, of which <b>%{unique_records} are unique</b>.
+          zero: POD Aggregator currently holds no records.
+        heading: POD Data
+      hero: The POD Aggregator is an open source system to aggregate MARC bibliographic and holdings data for institutions that participate in the Platform for Open Data (POD) initiative.
       login:
-        heading: Already a POD user?
         button: Login
         contact_heading: Interested in using POD data?
         contact_html: Check out the <a href='%{wiki_url}'>POD wiki</a> or contact <a href="mailto:%{contact_email}">%{contact_email}</a>
+        heading: Already a POD user?
       organization:
-        last_upload:
-          zero: No recent uploads
-          one: 'Most recent upload was %{upload_time} ago'
-        uploads:
-          heading: Latest uploads
-          all: View all stream files ...
-        jobs:
-          heading: Processing status
-          status_html:
-            zero: 'No active jobs'
-            one: '<b>1</b> job %{status}'
-            other: '<b>%{count}</b> jobs %{status}'
-          all: View status details ...
         actions:
+          data_docs: Data consumer documentation
+          edit_org: Manage organization
+          harvest_data: Harvest data
           heading: Quick actions
           upload_file: Upload file
           view_default_stream: View default stream
           view_org_details: View organization details
-          edit_org: Manage organization
-          harvest_data: Harvest data
-          data_docs: Data consumer documentation
-  job_tracker:
-    title: Processing status of recent background jobs
-    table_heading:
-      status: Status
-      resource: Resource
-      job_type: Job type
-      progress: Completed records
-      created_at: Created at
-    status_group:
-      active:
-        label: Active
-        job_count_zero: There are no active background jobs.
-      needs_attention:
-        label: Needs attention
-        job_count_zero: There are no background jobs that need attention.
+        jobs:
+          all: View status details ...
+          heading: Processing status
+          status_html:
+            one: "<b>1</b> job %{status}"
+            other: "<b>%{count}</b> jobs %{status}"
+            zero: No active jobs
+        last_upload:
+          one: Most recent upload was %{upload_time} ago
+          zero: No recent uploads
+        uploads:
+          all: View all stream files ...
+          heading: Latest uploads
+      providers:
+        heading: POD Providers
+        providers_html:
+          one: There is currently <b>1</b> data provider.
+          other: There are currently <b>%{count}</b> data providers.
+          zero: There are currently no data providers.
+        uploaders_html: The most recent upload was made by <b>%{uploader}</b> %{upload_time} ago.
+  shared:
+    footer:
+      copyright_html: "&copy; 2020-%{current_year}"
+      docs:
+        api: POD API
+        data: Data documentation
+        heading: Documentation
+        retention_policy: Data retention policy
+      resources:
+        contributing: Help with contributing or using POD data
+        framework: Data provider and usage framework
+        github: GitHub repository
+        heading: Other Resources
+    nav:
+      activity: Activity
+      brand: Aggregator
+      data: Data
+      edit_profile: Edit profile
+      is_admin: POD Admin
+      login: Login
+      logout: Logout
+      manage_users: Manage users
+      providers: Providers
+      users: Users
+      view_org_page: "%{org} POD"
+  site_users:
+    index:
+      add_admin: Add admin role
+      is_admin: POD Admin?
+      organization: Organization
+      remove_admin: Remove admin role
+      title: Manage users
