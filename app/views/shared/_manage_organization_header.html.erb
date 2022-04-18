@@ -11,7 +11,9 @@
     <div class="btn-group manage-organization-tabs" role="group" aria-label="Manage organization tabs">
         <%= link_to "Users", organization_users_path(@organization), class: "btn btn-outline-primary #{current_page_class(organization_users_path(@organization))}" %>
 
-        <%= link_to "Access tokens", organization_allowlisted_jwts_path(@organization), class: "btn btn-outline-primary #{current_page_class(organization_allowlisted_jwts_path(@organization))}" %>
+        <% if can? :read, @allowlisted_jwts %>
+            <%= link_to "Access tokens", organization_allowlisted_jwts_path(@organization), class: "btn btn-outline-primary #{current_page_class(organization_allowlisted_jwts_path(@organization))}" %>
+        <% end %>
 
         <%= link_to "Organization details", organization_details_organization_path(@organization), class: "btn btn-outline-primary #{current_page_class(organization_details_organization_path(@organization))}" %>
 

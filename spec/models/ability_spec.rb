@@ -66,8 +66,10 @@ RSpec.describe Ability do
       let(:user) { User.new }
 
       it { is_expected.to be_able_to(:read, create(:organization)) }
+      it { is_expected.to be_able_to(:normalized_data, create(:organization)) }
       it { is_expected.not_to be_able_to(:read, Upload.new) }
       it { is_expected.not_to be_able_to(:read, Stream.new) }
+      it { is_expected.not_to be_able_to(:read, AllowlistedJwt.new) }
       it { is_expected.not_to be_able_to(:delete, default_stream) }
     end
 
