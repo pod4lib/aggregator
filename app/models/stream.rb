@@ -21,7 +21,6 @@ class Stream < ApplicationRecord
 
   after_create :check_for_a_default_stream
 
-  # maybe this should be after_update?
   before_update :update_default_stream_history, if: :default_changed?
 
   def display_name
@@ -75,10 +74,10 @@ class Stream < ApplicationRecord
   end
 
   def update_default_stream_history
-    puts "****************************************************************"
-    puts "****************************************************************"
-    puts "IS THE DEFAULT CHANGING???"
-    puts "****************************************************************"
-    puts "****************************************************************"
+    if default
+      DefaultStreamHistory.create(organization: organization, stream: self, start_time: DateTime.now)
+    else
+      DefaultStreamHistory.where(organization: organization, end_time: nil).update_all(end_time: DateTime.now)
+    end
   end
 end
