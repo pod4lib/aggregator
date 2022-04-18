@@ -12,6 +12,7 @@ require('chartkick')
 require('chart.js')
 require('../pod_console');
 require('../copy_to_clipboard');
+require('../organizations');
 require('bootstrap');
 
 // Uncomment to copy all static images under ../images to the output folder and reference

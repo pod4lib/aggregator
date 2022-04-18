@@ -9,7 +9,11 @@
     <% if can? :manage, @organization %>
         <%= bootstrap_form_with(model: @organization, local: true) do |form| %>
             <%= form.text_field :name %>
-            <%= form.text_field :slug %>
+            <% if can? :manage, :organization_slug %>
+              <%= form.text_field :slug %>
+            <% else %>
+              Unauthorized: Slug management
+            <% end %>
             <%= form.text_field :code, help: 'LoC MARC Organization Code' %>
             <%= form.check_box :provider %>
 
@@ -36,12 +40,6 @@
             <h4>Name</h4>
             <p class="<%= @organization.name.blank? ? 'fst-italic' : '' %>">
                 <%= @organization.name.blank? ? 'no value provided' : @organization.name %>
-            </p>
-        </dt>
-        <dt>
-            <h4>Slug</h4>
-            <p class="<%= @organization.slug.blank? ? 'fst-italic' : '' %>">
-                <%= @organization.slug.blank? ? 'no value provided' : @organization.slug %>
             </p>
         </dt>
         <dt>
