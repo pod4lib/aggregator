@@ -11,8 +11,6 @@
             <%= form.text_field :name %>
             <% if can? :manage, :organization_slug %>
               <%= form.text_field :slug %>
-            <% else %>
-              Unauthorized: Slug management
             <% end %>
             <%= form.text_field :code, help: 'LoC MARC Organization Code' %>
             <%= form.check_box :provider %>
