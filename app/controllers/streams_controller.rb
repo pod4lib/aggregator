@@ -53,10 +53,7 @@ class StreamsController < ApplicationController
     @stream = @organization.streams.find(params[:stream])
     authorize!(:update, @stream)
 
-    Stream.transaction do
-      @organization.default_stream.update(default: false)
-      @stream.update(default: true)
-    end
+    @stream.make_default
 
     respond_to do |format|
       format.html { redirect_to @organization, notice: 'Stream was successfully updated.' }

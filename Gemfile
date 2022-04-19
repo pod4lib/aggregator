@@ -63,6 +63,7 @@ group :development, :test do
   gem 'simplecov'
   gem 'timecop'
   gem 'webmock'
+  gem 'i18n-tasks'
 end
 
 group :development do
@@ -115,3 +116,4 @@ group :deployment do
   gem 'capistrano-shared_configs'
   gem 'dlss-capistrano'
 end
+gem 'concurrent-ruby'

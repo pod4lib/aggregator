@@ -3,6 +3,8 @@
 ##
 # Background job to create a full dump download for a resource (organization)
 class GenerateFullDumpJob < ApplicationJob
+  with_job_tracking
+
   def self.enqueue_all
     Organization.find_each do |org|
       full_dump = org.default_stream.normalized_dumps.last
@@ -15,20 +17,29 @@ class GenerateFullDumpJob < ApplicationJob
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def perform(organization)
     now = Time.zone.now
+    uploads = Upload.active.where(stream: organization.default_stream)
+
+    uploads.where.not(status: 'processed').each do |upload|
+      ExtractMarcRecordMetadataJob.perform_now(upload)
+    end
+
+    progress.total = uploads.sum(&:marc_records_count)
+
     full_dump = organization.default_stream.normalized_dumps.build(last_full_dump_at: now, last_delta_dump_at: now)
 
     base_name = "#{organization.slug}-#{Time.zone.today}-full"
     writer = MarcRecordWriterService.new(base_name)
 
     begin
-      hash = current_marc_records(organization.default_stream.uploads)
-
-      organization.default_stream.uploads.each do |upload|
-        upload.each_marc_record_metadata(checksum: false).each do |record|
-          next if hash.dig(record.marc001, 'file_id') != record.file_id || hash.dig(record.marc001, 'status') == 'delete'
+      NormalizedMarcRecordReader.new(uploads).each_slice(100) do |records|
+        records.each do |record|
+          # In a full dump, we can omit the deletes
+          next if record.status == 'delete'
 
           writer.write_marc_record(record)
         end
+
+        progress.increment(records.length)
       end
 
       writer.finalize
@@ -62,17 +73,5 @@ class GenerateFullDumpJob < ApplicationJob
          end
 
     "#{base_name}-#{as}"
-  end
-
-  def current_marc_records(uploads)
-    hash = {}
-
-    uploads.each do |upload|
-      upload.each_marc_record_metadata(checksum: false).each do |record|
-        hash[record.marc001] = record.attributes.slice('file_id', 'status')
-      end
-    end
-
-    hash
   end
 end
