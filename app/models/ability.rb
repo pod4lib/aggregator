@@ -44,8 +44,7 @@ class Ability
       can :read, ActiveStorage::Attachment, { record: { organization: { public: true } } }
       can :read, MarcRecord, upload: { organization: { public: true } }
       can %i[read profile info], [Stream, Upload], organization: { public: true }
-      # TODO: adding OVerciew model for clarity?
-      can :read, :pages_data, Overview
+      can :read, :pages_data
       can %i[read users organization_details provider_details normalized_data], Organization, public: true
     end
 
