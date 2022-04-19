@@ -12,7 +12,9 @@
         <% if @organization.provider? && @organization.code.present? %>
         <span class="lead"><%= t('.marc_code', code: @organization.code) %></span>
         <% end %>
-        <span class="lead"><%= t('.contact_html', mailto: mail_to(@organization.contact_emails.first)) %></span>
+        <% if @organization.contact_emails.any? %>
+        <span class="lead"><%= mail_to @organization.contact_emails.first, t('.contact') %></span>
+        <% end %>
       </div>
       <div class="ms-auto">
         <% if current_page?(organization_path(@organization)) %>

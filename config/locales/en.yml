@@ -132,7 +132,7 @@ en:
       users: Users
       view_org_page: "%{org} POD"
     organization_header:
-      contact_html: 'Contact: %{mailto}'
+      contact: POD contact for this organization
       default_stream: Default stream
       manage_org: Manage organization
       marc_code: 'MARC organization code: %{code}'
