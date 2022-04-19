@@ -7,6 +7,7 @@ class Stream < ApplicationRecord
   friendly_id :name, use: %i[finders slugged scoped], scope: :organization
   belongs_to :organization
   has_many :uploads, dependent: :destroy
+  has_many :default_stream_histories, dependent: :destroy
   has_many :marc_records, through: :uploads, inverse_of: :stream
   has_many :files, source: :files_blobs, through: :uploads
   has_one :statistic, dependent: :delete, as: :resource
@@ -18,6 +19,10 @@ class Stream < ApplicationRecord
   scope :archived, -> { where(status: 'archived') }
 
   has_many_attached :snapshots
+
+  after_create :check_for_a_default_stream
+
+  before_update :update_default_stream_history, if: :default_changed?
 
   def display_name
     name.presence || default_name
@@ -72,5 +77,19 @@ class Stream < ApplicationRecord
 
   def default_name
     "#{I18n.l(created_at.to_date)} - #{default? ? '' : I18n.l(updated_at.to_date)}"
+  end
+
+  def check_for_a_default_stream
+    return unless organization.streams.count == 1
+
+    DefaultStreamHistory.create(organization: organization, stream: self, start_time: DateTime.now)
+  end
+
+  def update_default_stream_history
+    if default
+      DefaultStreamHistory.create(organization: organization, stream: self, start_time: DateTime.now)
+    else
+      DefaultStreamHistory.where(organization: organization, end_time: nil).update(end_time: DateTime.now)
+    end
   end
 end

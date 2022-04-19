@@ -45,6 +45,33 @@ RSpec.describe Stream, type: :model do
     end
   end
 
+  describe '#default_stream_histories' do
+    it 'creates a default stream history when the first stream is created in an organization' do
+      org = create(:organization)
+      described_class.create({ organization: org, default: true })
+      described_class.create({ organization: org, default: true })
+      expect(org.default_stream_histories.count).to be(1)
+    end
+
+    it 'creates a new default stream history when stream becomes the default' do
+      org = create(:organization)
+      described_class.create({ organization: org, default: true })
+      second_stream = described_class.create({ organization: org, default: false })
+
+      second_stream.update(default: true)
+      expect(DefaultStreamHistory.all[1].end_time).to be_nil
+    end
+
+    it 'updates and appends endtime to prior default stream history when the stream is no longer the default' do
+      org = create(:organization)
+      first_stream = described_class.create({ organization: org, default: true })
+      described_class.create({ organization: org, default: false })
+
+      first_stream.update(default: false)
+      expect(DefaultStreamHistory.all[0].end_time).not_to be_nil
+    end
+  end
+
   describe '#make_default' do
     let!(:current_default) { create(:stream, organization: organization, default: true) }
 
