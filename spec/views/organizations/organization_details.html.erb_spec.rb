@@ -24,10 +24,10 @@ RSpec.describe 'organizations/organization_details', type: :view do
   end
   # rubocop:enable RSpec/ExampleLength
 
-  it 'renders a <dl> description list with 4 or 5 <dt> description terms' do
+  it 'renders a <dl> description list with 4 <dt> description terms' do
     # this part of the view is seen by org memebers
     render
 
-    assert_select 'dl dt', 5
+    assert_select 'dl dt', 4
   end
 end
