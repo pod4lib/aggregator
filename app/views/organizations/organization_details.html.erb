@@ -7,6 +7,7 @@
 
     <!-- Admin/owner view: -->
     <% if can? :manage, @organization %>
+        <div class="mb-3">
         <%= bootstrap_form_with(model: @organization, local: true) do |form| %>
             <%= form.text_field :name %>
             <% if can? :manage, :organization_slug %>
@@ -30,6 +31,29 @@
                 <%= form.primary 'Update organization details' %>
             </div>
         <% end %>
+        </div>
+
+        <div>
+          <div class="card">
+            <div class="card-header d-flex justify-content-between">
+              <h2 class="h5 align-self-center mb-0">Contact emails</h2>
+              <%= link_to 'Add', new_organization_contact_email_path(@organization), class: 'btn btn-sm btn-primary' if can? :manage, @organization %>
+            </div>
+
+            <ul class="list-group list-group-flush">
+              <% @organization.contact_emails.each do |contact_email| %>
+                <li class="list-group-item d-flex justify-content-between">
+                  <span>
+                    <%= content_tag :span, contact_email.email %>
+                    <%= content_tag :span, 'confirmed ✅', class: 'badge bg-success' if contact_email.confirmed_at.present? %>
+                  </span>
+                  <%= link_to 'Remove', [@organization, contact_email], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm align-self-center' if can? :manage, @organization %>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      </div>
 
     <!-- Member view: -->
     <% else %>
