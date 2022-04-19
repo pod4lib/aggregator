@@ -14,15 +14,21 @@ RSpec.describe Stream, type: :model do
     end
 
     it 'defaults to the time span' do
-      stream.update(created_at: Time.zone.parse('2020-11-01'), updated_at: Time.zone.parse('2020-11-05'))
-
-      expect(stream.display_name).to eq '2020-11-01 - 2020-11-05'
+      # create Stream manually since factory provides display_name value
+      expect(described_class.new(
+        organization: organization,
+        created_at: Time.zone.parse('2020-11-01'),
+        updated_at: Time.zone.parse('2020-11-05')
+      ).display_name).to eq '2020-11-01 - 2020-11-05'
     end
 
     it 'is open-ended if the stream is the default' do
-      stream.update(created_at: Time.zone.parse('2020-11-01'), default: true)
-
-      expect(stream.display_name).to eq '2020-11-01 - '
+      # create Stream manually since factory provides display_name value
+      expect(described_class.new(
+        organization: organization,
+        created_at: Time.zone.parse('2020-11-01'),
+        default: true
+      ).display_name).to eq '2020-11-01 - '
     end
   end
 
