@@ -13,7 +13,7 @@ RSpec.describe 'editing your user profile', type: :feature do
     it 'requires current password to change password' do
       visit '/users/edit'
       fill_in 'user_password', with: '123'
-      click_on 'Change Password'
+      click_on 'Change password'
       expect(page).to have_content "Current password can't be blank"
     end
 
