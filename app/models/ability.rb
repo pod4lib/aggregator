@@ -45,7 +45,7 @@ class Ability
       can :read, MarcRecord, upload: { organization: { public: true } }
       can %i[read profile info], [Stream, Upload], organization: { public: true }
       can :read, :pages_data
-      can %i[read users organization_details provider_details normalized_data], Organization, public: true
+      can %i[read users organization_details provider_details normalized_data processing_status], Organization, public: true
     end
 
     can :manage, :all if user.has_role?(:admin)
