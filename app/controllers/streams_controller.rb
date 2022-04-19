@@ -65,7 +65,7 @@ class StreamsController < ApplicationController
     ReanalyzeJob.perform_later(@stream)
 
     respond_to do |format|
-      format.html { redirect_to [@organization, @stream], notice: 'Reanalyze job was successfully enqueued.' }
+      format.html { redirect_back_or_to([@organization, @stream], notice: 'Reanalyze job was successfully enqueued.') }
       format.json { render :show, status: :ok, location: [@organization, @stream] }
     end
   end

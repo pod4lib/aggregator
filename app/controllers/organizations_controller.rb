@@ -25,6 +25,10 @@ class OrganizationsController < ApplicationController
     @organization = Organization.new
   end
 
+  # GET /organizations/1/normalized_data
+  def normalized_data; end
+  # GET /organizations/1/processing_status
+  def processing_status; end
   # GET /organizations/1/provider_details
   def provider_details; end
   # GET /organizations/1/organization_details

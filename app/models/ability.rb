@@ -45,6 +45,7 @@ class Ability
       can :read, MarcRecord, upload: { organization: { public: true } }
       can %i[read profile info], [Stream, Upload], organization: { public: true }
       can :read, :pages_data
+      can %i[read users organization_details provider_details normalized_data], Organization, public: true
     end
 
     can :manage, :all if user.has_role?(:admin)
@@ -60,8 +61,9 @@ class Ability
     can :read, ActiveStorage::Attachment, { record: { organization: { id: owned_orgs } } }
 
     member_orgs = Organization.with_role(:member, user).pluck(:id)
-    can %i[invite read users organization_details provider_details], Organization, id: member_orgs
+    can %i[invite], Organization, id: member_orgs
     can %i[read profile info], [Stream, Upload], organization: { id: member_orgs }
+    can %i[create], [Upload], organization: { id: member_orgs }
     can :read, MarcRecord, upload: { organization: { id: member_orgs } }
     can :read, AllowlistedJwt, resource_type: 'Organization', resource_id: member_orgs
     can :read, ActiveStorage::Attachment, { record: { organization: { id: member_orgs } } }

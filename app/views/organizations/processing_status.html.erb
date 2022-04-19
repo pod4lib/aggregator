@@ -4,8 +4,8 @@
   <%= render 'streams/header', stream: @organization.default_stream %>
   <%= render 'shared/provider_page_header'%>
 
-  <h2>Stream files</h2>
-  
-  <%= render 'streams/stream_uploads', stream: @organization.default_stream, uploads: @uploads %>
+  <h2><%= t('job_tracker.title') %></h2>
+
+  <%= render 'streams/job_status', stream: @organization.default_stream if can? :update, @organization.default_stream %>
 
 </div>
