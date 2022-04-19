@@ -3,35 +3,21 @@
 require 'rails_helper'
 
 RSpec.describe MarcRecord, type: :model do
-  subject(:marc_record) { described_class.new(file: upload.files.first, upload: upload, **attr) }
+  subject(:marc_record) { described_class.new(marc: record, upload: upload, **attr) }
 
   let(:attr) { {} }
   let(:organization) { create(:organization, code: 'COOlCOdE') }
   let(:upload) { create(:upload, :binary_marc, organization: organization) }
+  let(:record) do
+    MARC::Record.new.tap do |record|
+      record.append(MARC::DataField.new('999', ' ', ' ', %w[a NA737.K4], %w[i 36105032407764], %w[m ART]))
+    end
+  end
 
   describe '#marc' do
-    let(:attr) { { bytecount: 0, length: 1407 } }
-
-    it 'gets the MARC record from the file' do
-      expect(marc_record.marc['001'].value).to eq 'a1297245'
-    end
-
-    context 'with a marcxml file' do
-      let(:upload) { create(:upload, :marc_xml) }
-      let(:attr) { { index: 0 } }
-
-      it 'gets the MARC record from the file by its index' do
-        expect(marc_record.marc['001'].value).to eq 'a12345'
-      end
-    end
-
     context 'with serialized json' do
-      let(:original_record) do
-        MARC::Record.new.tap { |record| record.leader = '123' }
-      end
-
-      before do
-        marc_record.update(json: Zlib::Deflate.new.deflate(original_record.to_marchash.to_json, Zlib::FINISH))
+      let(:attr) do
+        { marc: MARC::Record.new.tap { |record| record.leader = '123' } }
       end
 
       it 'gets the MARC record from the serialized json' do
@@ -41,8 +27,6 @@ RSpec.describe MarcRecord, type: :model do
   end
 
   describe '#augmented_marc' do
-    let(:attr) { { bytecount: 0, length: 1407 } }
-
     before do
       organization.update(normalization_steps: { '0' => {
                             destination_tag: '998',
@@ -62,7 +46,7 @@ RSpec.describe MarcRecord, type: :model do
     it 'applies the organization normalization steps' do
       field = marc_record.augmented_marc.fields('998').first
 
-      expect(field.subfields.map(&:to_s)).to include('$a NA737.K4 A4 1980 ')
+      expect(field.subfields.map(&:to_s)).to include('$a NA737.K4 ')
         .and include('$i 36105032407764 ')
         .and include('$m ART ')
     end

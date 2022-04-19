@@ -517,6 +517,7 @@ DEPENDENCIES
   capistrano-shared_configs
   capybara
   chartkick
+  concurrent-ruby
   config
   debug
   devise

@@ -3,7 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe Stream, type: :model do
-  subject(:stream) { described_class.new }
+  subject(:stream) { create(:stream, organization: organization) }
+
+  let(:organization) { create(:organization) }
 
   describe '#display_name' do
     it 'defaults to the name of the stream' do
@@ -40,6 +42,17 @@ RSpec.describe Stream, type: :model do
   describe '#job_tracker_status_groups' do
     it 'groups the job trackers by status' do
       expect(stream.job_tracker_status_groups).to eq({ active: [], needs_attention: [] })
+    end
+  end
+
+  describe '#make_default' do
+    let!(:current_default) { create(:stream, organization: organization, default: true) }
+
+    it 'makes the current stream the only default' do
+      expect do
+        stream.make_default
+      end.to(change(stream, :default).from(false).to(true)
+         .and((change { current_default.reload.default }).from(true).to(false)))
     end
   end
 end

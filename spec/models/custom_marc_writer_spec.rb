@@ -7,7 +7,7 @@ RSpec.describe CustomMarcWriter do
   let(:split_marc_records) do
     MARC::Reader.new(
       StringIO.new(
-        described_class.encode(long_upload.each_marc_record_metadata.first.marc)
+        described_class.encode(long_upload.read_marc_record_metadata.first.marc)
       )
     ).to_a
   end

@@ -116,3 +116,4 @@ group :deployment do
   gem 'capistrano-shared_configs'
   gem 'dlss-capistrano'
 end
+gem 'concurrent-ruby'
