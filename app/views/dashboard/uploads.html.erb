@@ -1,53 +1,47 @@
 <div class="container index-page">
-  <h1 class="mb-4">Uploads</h1>
-
-  <table class="table">
+  <h1 class="mb-4"><%= t('.title') %></h1>
+  <ul class="table-key list-unstyled list-inline pt-2">
+    <% Settings.metadata_status.each do |status, values| %>
+    <li class="list-inline-item">
+      <%= bootstrap_icon(values.icon_class, class: "pod-metadata-status #{status}") %>
+      <span class="fw-bold"><%= values.label %></span>
+    </li>
+    <% end %>
+  </ul>
+  <table class="table table-striped mb-3">
     <thead>
       <tr>
-        <th colspan="2">Organization</th>
-        <th>Name</th>
-        <th>Updated</th>
-        <th class="text-right">File count</th>
-        <th class="text-right">File size</th>
-        <th class="text-right">Records</th>
-        <th><span class="visually-hidden">File status</span></th>
+        <th class="text-center"><%= t('.table.status') %></th>
+        <th><%= t('.table.upload') %></th>
+        <th><%= t('.table.filename') %></th>
+        <th><%= t('.table.date_created') %></th>
+        <th><%= t('.table.provider') %></th>
+        <th class="text-end"><%= t('.table.size') %></th>
+        <th class="text-end"><%= t('.table.record_count') %></th>
       </tr>
     </thead>
-
     <tbody>
       <% @uploads.each do |upload| %>
-        <tr class="bg-light">
-          <td>
-            <% if upload.organization.icon.attached? %>
-              <%= image_tag(upload.organization.icon, class: 'icon-sm') %>
-            <% end %>
-          </td>
-          <td><%= link_to upload.organization.name, upload.organization %>
-          <td><%= link_to upload.name, [upload.organization, upload] %></td>
-          <td><%= content_tag :span, "#{time_ago_in_words(upload.updated_at)} ago", title: l(upload.updated_at) %></td>
-          <td class="text-right"><%= number_with_delimiter(upload.files.count) %></td>
-          <td class="text-right"><%= number_to_human_size upload.files.sum(&:byte_size) %></td>
-          <td class="text-right"><%= number_with_delimiter upload.files.sum { |file| file.metadata['count'] || 0 } %></td>
-          <td></td>
-        </tr>
-        <% upload.files.each do |file| %>
-          <tr>
-            <td></td>
-            <td></td>
-            <td class="pl-5"><%= link_to file.filename, download_url(file) %></td>
-            <td><%= file.content_type %></td>
-            <td></td>
-            <td class="text-right"><%= number_to_human_size file.byte_size %></td>
-            <td class="text-right"><%= file.metadata['count'] ? number_with_delimiter(file.metadata['count']) : '???' %></td>
-            <td class="text-left">
-              <%= bootstrap_icon(Settings.metadata_status[file.pod_metadata_status].icon_class, class: "pod-metadata-status #{file.pod_metadata_status}") %>
-              <span class="visually-hidden"><%= file.pod_metadata_status %></span>
-            </td>
-          </tr>
-        <% end %>
+      <% upload.files.each do |file| %>
+      <tr>
+        <td class="text-center">
+          <%= bootstrap_icon(Settings.metadata_status[file.pod_metadata_status].icon_class, class: "pod-metadata-status #{file.pod_metadata_status}") %>
+          <span class="visually-hidden"><%= file.pod_metadata_status %></span>
+        </td>
+        <td>
+          <%= link_to_if can?(:read, upload), upload.name, organization_upload_path(upload.organization, upload), title: t('.table.upload_title', name: upload.name) %>
+        </td>
+        <td>
+          <%= link_to_if can?(:read, upload), file.filename, download_url(file), title: t('.table.download_title', filename: file.filename) %>
+        </td>
+        <td><%= l(file.created_at, format: :short) %></td>
+        <td><%= link_to upload.organization.name, organization_path(upload.organization) %></td>
+        <td class="text-end"><%= number_to_human_size file.byte_size %></td>
+        <td class="text-end"><%= file.metadata['count'] ? number_with_delimiter(file.metadata['count']) : '-' %></td>
+      </tr>
+      <% end %>
       <% end %>
     </tbody>
   </table>
-
   <%= paginate @uploads %>
 </div>

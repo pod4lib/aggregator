@@ -1,5 +1,18 @@
 ---
 en:
+  dashboard:
+    uploads:
+      table:
+        date_created: Date created
+        download_title: Download %{filename}
+        filename: File
+        provider: Provider
+        record_count: Records
+        size: Size
+        status: Status
+        upload: Upload
+        upload_title: View upload %{name}
+      title: Recent activity
   job_tracker:
     status_group:
       active:

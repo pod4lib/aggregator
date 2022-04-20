@@ -19,9 +19,9 @@ RSpec.describe 'dashboard/uploads', type: :view do
 
   it 'renders a list of uploads' do
     render
-    expect(rendered).to have_css('tbody > tr', count: 7)
+    expect(rendered).to have_css('tbody > tr', count: 4)
     expect(rendered).to have_css('tbody > tr:first-child > td', text: organization.name)
       .and have_css('tbody > tr:first-child > td', text: uploads.first.name)
-      .and have_css('tbody > tr:nth-child(2) > td', text: uploads.first.files.first.filename)
+      .and have_css('tbody > tr:first-child > td', text: uploads.first.files.first.filename)
   end
 end
