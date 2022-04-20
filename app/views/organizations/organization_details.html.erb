@@ -36,12 +36,12 @@
         <div>
           <div class="card">
             <div class="card-header d-flex justify-content-between">
-              <h2 class="h5 align-self-center mb-0">Contact emails</h2>
+              <h2 class="h5 align-self-center mb-0">Contact email</h2>
               <%= link_to 'Add', new_organization_contact_email_path(@organization), class: 'btn btn-sm btn-primary' if can? :manage, @organization %>
             </div>
-
-            <ul class="list-group list-group-flush">
-              <% @organization.contact_emails.each do |contact_email| %>
+            <% contact_email = @organization.contact_email %>
+            <% if contact_email %>
+              <ul class="list-group list-group-flush">
                 <li class="list-group-item d-flex justify-content-between">
                   <span>
                     <%= content_tag :span, contact_email.email %>
@@ -49,8 +49,8 @@
                   </span>
                   <%= link_to 'Remove', [@organization, contact_email], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm align-self-center' if can? :manage, @organization %>
                 </li>
-              <% end %>
-            </ul>
+              </ul>
+            <% end %>
           </div>
         </div>
       </div>
