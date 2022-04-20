@@ -13,14 +13,18 @@
         <span class="lead"><%= t('.marc_code', code: @organization.code) %></span>
         <% end %>
         <% if @organization.contact_emails.any? %>
-        <span class="lead"><%= mail_to @organization.contact_emails.first, t('.contact') %></span>
+        <span class="lead"><%= mail_to @organization.contact_emails.first.email, t('.contact') %></span>
         <% end %>
       </div>
       <div class="ms-auto">
-        <% if current_page?(organization_path(@organization)) %>
-        <%= link_to can?(:edit, @organization) ? t('.manage_org') : t('.view_org'), organization_users_path(@organization), class: 'align-self-center' %>
+        <% if current_page?(organization_path(@organization)) ||
+              current_page?(normalized_data_organization_path(@organization)) ||
+              current_page?(processing_status_organization_path(@organization)) || 
+              current_page?(profile_organization_stream_path(@organization, @organization.default_stream))
+        %>
+          <%= link_to can?(:edit, @organization) ? t('.manage_org') : t('.view_org'), organization_users_path(@organization), class: 'align-self-center' %>
         <% elsif @organization.provider? %>
-        <%= link_to t('.default_stream'), organization_path(@organization), class: 'align-self-center' %>
+          <%= link_to t('.default_stream'), organization_path(@organization), class: 'align-self-center' %>
         <% end %>
       </div>
     </div>
