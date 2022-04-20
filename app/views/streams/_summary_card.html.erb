@@ -1,0 +1,15 @@
+<div class="card col-md-4 offset-md-4">
+    <div class="card-body bg-light">
+        <div class="row">
+            <div class="col">
+                <p>Files: <span class="fw-bold"><%= number_with_delimiter stream.files.size %></span></p>
+                <p class="mb-0">Total filesize: <span class="fw-bold"><%= number_to_human_size stream.files.sum(:byte_size) %></span></p>
+            </div>
+
+            <div class="col">
+                <p>Records: <span class="fw-bold"><%= number_with_delimiter stream.statistic&.record_count || 0 %></span></p>
+                <p class="mb-0">Unique records: <span class="fw-bold"><%= number_with_delimiter stream.statistic&.unique_record_count || 0 %></span></p>
+            </div>
+        </div>
+    </div>
+</div>
