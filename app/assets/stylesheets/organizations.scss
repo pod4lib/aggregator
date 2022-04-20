@@ -38,7 +38,7 @@
 }
 
 .manage-organization-tabs {
-  margin: ($spacer * 3) 0;
+  margin: $spacer 0 ($spacer * 3);
 
   a {
     &.current {
