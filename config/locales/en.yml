@@ -83,7 +83,7 @@ en:
           edit_org: Manage organization
           harvest_data: Harvest data
           heading: Quick actions
-          upload_file: Upload file
+          upload_file: Upload file to default stream
           view_default_stream: View default stream
           view_org_details: View organization details
         jobs:
