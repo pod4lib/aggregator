@@ -106,7 +106,28 @@ If you want to remove a volume (e.g. to start with a fresh database or redis cac
 
 ### Resetting Docker:
 
-In some cases Docker container image versions may get stale and may need to be rebuilt with no cache. To completely remove all docker images, run the system prune command.
+In some cases Docker container image versions may get stale and may need to be rebuilt with no cache. Attempt the steps in option 1 first before proceeding to option 2.
+
+#### Option 1: Rebuild images
+
+Step 1: Stop and remove all running docker containers for POD
+```
+docker compose stop
+```
+
+Step 2: Rebuild docker images with no cache
+```
+docker compose build --no-cache
+```
+
+Step 3: Restart containers
+```
+docker compose up -d
+```
+
+#### Option 2: System prunne
+
+To completely remove all docker containers and images from the system, run the system prune command.
 
 Step 1: System prune
 
@@ -120,16 +141,6 @@ docker compose pull
 Optionally, to also remove all volumes, the system prune command can be run with the `--volumes` option. Warning: The volumes option will remove all named volumes and all local data will be deleted. The data seeds will need to be run again if the volumes are purged. 
 ```
 docker system prune -a -f --volumes
-```
-
-Step 2: Rebuild images with no cache
-```
-docker compose build --no-cache
-```
-
-Step 3: Restart containers
-```
-docker compose up -d
 ```
 
 ### Logs:
