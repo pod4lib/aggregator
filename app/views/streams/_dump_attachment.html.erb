@@ -4,6 +4,6 @@
     <td class="pl-4"><%= link_to_if can?(:read, stream), attachment.filename, download_url(attachment) %></td>
     <td><%= l(attachment.created_at, format: :short) %></td>
     <td><%= number_to_human_size attachment.byte_size %></td>
-    <td class="pr-4 text-right"><%= attachment.metadata['count'] ? number_with_delimiter(attachment.metadata['count']) : '???' %></td>
+    <td class="pr-4 text-end"><%= attachment.metadata['count'] ? number_with_delimiter(attachment.metadata['count']) : '???' %></td>
   </tr>
 <% end %>

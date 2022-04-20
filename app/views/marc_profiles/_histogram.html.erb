@@ -3,7 +3,7 @@
   <thead>
     <tr>
       <th>Field</th>
-      <th class="text-right">%</th>
+      <th class="text-end">%</th>
       <th class=""></th>
       <th class="text-center">Subfields</th>
     </tr>
@@ -14,7 +14,7 @@
     <% field, *subfields = field_group %>
       <tr class="<%= MarcRules.common_field?(field.first) ? cycle('bg-light', '') : 'bg-local-practice' %>">
         <td class="font-weight-bold"><%= field.first %></td>
-        <td class="text-right"><%= number_to_percentage(100.0 * field.last / marc_profile.count, precision: 2) %></td>
+        <td class="text-end"><%= number_to_percentage(100.0 * field.last / marc_profile.count, precision: 2) %></td>
         <td>
           <% marc_profile.histogram_frequency[field.first].sort_by { |k, _v| k.to_i }.group_by { |k, v| Math.log(k.to_i).round }.each do |group, values| %>
             <% if group < 2 %>
@@ -30,7 +30,7 @@
         </td>
         <td class="text-center">
           <% if subfields.any? %>
-            <button class="btn p-0 m-0 border-0 align-top text-left text-monospace" type="button" data-bs-toggle="collapse" data-bs-target="#histogram-subfields-<%= field.first.parameterize %>" aria-expanded="false" aria-controls="histogram-subfields-<%= field.first.parameterize %>">
+            <button class="btn p-0 m-0 border-0 align-top text-start text-monospace" type="button" data-bs-toggle="collapse" data-bs-target="#histogram-subfields-<%= field.first.parameterize %>" aria-expanded="false" aria-controls="histogram-subfields-<%= field.first.parameterize %>">
               <span class="visually-hidden">Expand</span>
               <%= inline_svg_tag 'bootstrap-icons/icons/chevron-right.svg', height: 20, width: 20 %>
             </button>
