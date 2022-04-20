@@ -2,9 +2,8 @@
   <h1 class="visually-hidden"">Provider statistics</h1>
   <h2>Aggregated uploads from providers</h2>
 
-
   <% unless params[:page] %>
-    <div class="row mb-5">
+    <div class="row mb-5 mt-4">
       <div class="col">
         <h2 class="text-center h6">Files</h2>
         <%= line_chart uploads_chart_path %>
@@ -15,8 +14,6 @@
       </div>
     </div>
   <% end %>
-
-
 
   <h2>Upload statistics by provider</h2>
   

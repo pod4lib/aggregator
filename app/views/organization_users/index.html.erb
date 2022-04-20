@@ -1,8 +1,8 @@
 <%= render 'shared/organization_header' %>
 <div class="container manage-organization-container">
     <%= render 'shared/manage_organization_header' %>
-    <h2><%= t('.title') %></h2>
-    <%= link_to t('.invite_user'), organization_invite_new_path(@organization), class: 'btn btn-sm btn-primary' if can? :manage, @organization %>
+    <h3><%= t('.title') %></h3>
+    <%= link_to t('.invite_user'), organization_invite_new_path(@organization), class: 'btn btn-sm btn-primary mt-3' if can? :manage, @organization %>
     <table class="table table-striped organizations mt-4">
         <thead>
             <tr>

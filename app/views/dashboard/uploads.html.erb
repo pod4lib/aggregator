@@ -1,6 +1,6 @@
 <div class="container index-page">
   <h1 class="mb-4"><%= t('.title') %></h1>
-  <ul class="table-key list-unstyled list-inline pt-2">
+  <ul class="table-key list-unstyled list-inline pt-3">
     <% Settings.metadata_status.each do |status, values| %>
     <li class="list-inline-item">
       <%= bootstrap_icon(values.icon_class, class: "pod-metadata-status #{status}") %>

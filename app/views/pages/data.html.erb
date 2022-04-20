@@ -1,34 +1,27 @@
 <div class="container index-page">
-  <div>
-    <h2><%= t('.guidelines.header') %></h2>
+  <h2><%= t('.guidelines.header') %></h2>
+  <p><%= t('.guidelines.body_html') %></p>
 
-    <p><%= t('.guidelines.body_html') %></p>
-  </div>
-
-  <div>
+  <ul>
     <% t('.guidelines.list_items').each do |item| %>
       <li><%= sanitize item %></li>
     <% end %>
-  </div>
+  </ul>
 
-  <div>
-    <h2><%= t('.harvesting.header') %></h2>
-    <p><%= t('.harvesting.body_html') %></p>
-  </div>
+  <h2><%= t('.harvesting.header') %></h2>
+  <p><%= t('.harvesting.body_html') %></p>
 
-  <div>
-    <h3><%= t('.resource_sync.header') %></h3>
-    <p><%= t('.resource_sync.body_html') %></p>
+  <h3><%= t('.resource_sync.header') %></h3>
+  <p><%= t('.resource_sync.body_html') %></p>
 
-    <div class="card w-50 my-5">
-        <div class="card-header d-flex justify-content-between">
-          <h2 class="h6"><%= t('.resource_sync.sitemaps') %></h2>
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item"><%= link_to t('.resource_sync.original_uploads'), resourcelist_organizations_url %> (real-time)</li>
-          <li class="list-group-item"><%= link_to t('.resource_sync.normalized_marcxml'), normalized_resourcelist_organizations_url(flavor: 'marcxml') %> <%= t('.resource_sync.update_cadence') %></li>
-          <li class="list-group-item"><%= link_to t('.resource_sync.normalized_marc21'), normalized_resourcelist_organizations_url(flavor: 'marc21') %> <%= t('.resource_sync.update_cadence') %></li>
-        </ul>
-    </div>
+  <div class="card w-50 my-4">
+      <div class="card-header d-flex justify-content-between">
+        <h2 class="h6"><%= t('.resource_sync.sitemaps') %></h2>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><%= link_to t('.resource_sync.original_uploads'), resourcelist_organizations_url %> (real-time)</li>
+        <li class="list-group-item"><%= link_to t('.resource_sync.normalized_marcxml'), normalized_resourcelist_organizations_url(flavor: 'marcxml') %> <%= t('.resource_sync.update_cadence') %></li>
+        <li class="list-group-item"><%= link_to t('.resource_sync.normalized_marc21'), normalized_resourcelist_organizations_url(flavor: 'marc21') %> <%= t('.resource_sync.update_cadence') %></li>
+      </ul>
   </div>
 </div>

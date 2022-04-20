@@ -1,9 +1,9 @@
 <% content_for :org_header do %>
-  <div class="position-relative overflow-hidden mb-5 pb-2 pt-4 bg-light organization border-bottom">
+  <div class="position-relative overflow-hidden mb-4 pb-2 pt-4 bg-light organization border-bottom">
     <div class="container">
       <div class="d-flex">
 
-        <h1 class="display-5 font-weight-normal p-2">
+        <h1 class="display-5 font-weight-normal p-2 pe-4">
           <% if @organization.icon.attached? %>
             <%= image_tag(@organization.icon, class: 'organization-icon') %>
           <% end %>

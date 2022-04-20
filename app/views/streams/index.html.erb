@@ -2,7 +2,7 @@
 
 <div class="container">
   <div class="d-flex justify-content-between">
-    <h1>Streams</h1>
+    <h2>Streams</h2>
     <%= link_to 'Create new stream', new_organization_stream_path(@organization), class: 'btn btn-primary align-self-center' if can? :create, @organization.streams.build %>
   </div>
 

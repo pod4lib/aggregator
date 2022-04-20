@@ -30,8 +30,8 @@ RSpec.describe 'organizations/show', type: :view do
     sign_in create(:admin)
   end
 
-  it 'renders attributes in <p>' do
+  it 'renders the stream name' do
     render
-    expect(rendered).to match(/Name/).and(match(/Slug/))
+    expect(rendered).to match(/stream1/)
   end
 end
