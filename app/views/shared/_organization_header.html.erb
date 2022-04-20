@@ -1,31 +1,30 @@
 <% content_for :org_header do %>
-  <div class="position-relative overflow-hidden mb-4 pb-2 pt-4 bg-light organization border-bottom">
-    <div class="container">
-      <div class="d-flex">
-
-        <h1 class="display-5 font-weight-normal p-2 pe-4">
-          <% if @organization.icon.attached? %>
-            <%= image_tag(@organization.icon, class: 'organization-icon') %>
-          <% end %>
-          <%= @organization.name %>
-        </h1>
-
-        <p class="lead p-2">
-          MARC organization code: <%= @organization.code %>
-        </p>
-
-        <div class="ms-auto p-2">
-          <% if current_page?(organization_path(@organization)) %>
-            <%= link_to can?(:edit, @organization) ? 'Manage organization' : 'View organization details', organization_users_path(@organization), class: 'align-self-center' %>
-          <% else %>
-            <%= link_to 'Default stream', organization_path(@organization), class: 'align-self-center' %>
-          <% end %>
-        </div>
+<div class="position-relative overflow-hidden mb-5 py-4 bg-light organization border-bottom">
+  <div class="container">
+    <div class="d-flex align-items-center">
+      <% if @organization.icon.attached? %>
+      <%= image_tag(@organization.icon, class: 'me-2', height: 50) %>
+      <% end %>
+      <h1 class="display-5 font-weight-normal m-0">
+        <%= @organization.name %>
+      </h1>
+      <div class="d-flex flex-column ms-4">
+        <% if @organization.provider? && @organization.code.present? %>
+        <span class="lead"><%= t('.marc_code', code: @organization.code) %></span>
+        <% end %>
+        <% if @organization.contact_emails.any? %>
+        <span class="lead"><%= mail_to @organization.contact_emails.first, t('.contact') %></span>
+        <% end %>
       </div>
-
-
-
-      <%= yield %>
+      <div class="ms-auto">
+        <% if current_page?(organization_path(@organization)) %>
+        <%= link_to can?(:edit, @organization) ? t('.manage_org') : t('.view_org'), organization_users_path(@organization), class: 'align-self-center' %>
+        <% elsif @organization.provider? %>
+        <%= link_to t('.default_stream'), organization_path(@organization), class: 'align-self-center' %>
+        <% end %>
+      </div>
     </div>
+    <%= yield %>
   </div>
+</div>
 <% end %>
