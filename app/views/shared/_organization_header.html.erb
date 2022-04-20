@@ -11,12 +11,12 @@
         </h1>
 
         <p class="lead p-2">
-          MARC Organization Code: <%= @organization.code %>
+          MARC organization code: <%= @organization.code %>
         </p>
 
         <div class="ms-auto p-2">
           <% if current_page?(organization_path(@organization)) %>
-            <%= link_to can?(:edit, @organization) ? 'Manage Organization' : 'View Organization Details', organization_users_path(@organization), class: 'align-self-center' %>
+            <%= link_to can?(:edit, @organization) ? 'Manage organization' : 'View organization details', organization_users_path(@organization), class: 'align-self-center' %>
           <% else %>
             <%= link_to 'Default stream', organization_path(@organization), class: 'align-self-center' %>
           <% end %>

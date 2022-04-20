@@ -48,10 +48,10 @@ en:
   pages:
     data:
       guidelines:
-        body_html: Data in the lake is available to any POD participant to extract and reuse. It is up to the POD participant to consume and reuse the data responsibly. Libraries that seek to use POD data for uses that exceed the Minimum Standard for Data Reuse for Data Providers should exercise caution and investigate whether restrictions may apply to their intended use. This may include informing POD data provider contacts of the intended use.
+        body_html: Data in the lake is available to any POD participant to extract and reuse. It is up to the POD participant to consume and reuse the data responsibly. Libraries that seek to use POD data for uses that exceed the "minimum standard for data reuse for data providers" guidelines should exercise caution and investigate whether restrictions may apply to their intended use. This may include informing POD data provider contacts of the intended use.
         header: Guidelines for data consumers
         list_items:
-        - See the <a href='https://docs.google.com/document/d/1EZG7z_A13jxPfHbYhT7Ae4Ays10fhecqfoGJhqrcjD8/edit'>Data Provider and Usage Framework for POD</a> document for a description of the "Minimum Standard for Data Reuse for Data Providers" and related context.
+        - See the <a href='https://docs.google.com/document/d/1EZG7z_A13jxPfHbYhT7Ae4Ays10fhecqfoGJhqrcjD8/edit'>Data provider and usage framework for POD</a> document for a description of the "Minimum standard for data reuse for data providers" and related context.
         - You can find a contact link for each POD data provider in the organization banner at the top of their provider page in the POD Aggregator application.
       harvesting:
         body_html: Data providers contribute their data to POD Aggregator by uploading data sets, and data consumers download data for downstream use.
@@ -70,7 +70,7 @@ en:
           one: POD Aggregator currently holds <b>1 record</b>.
           other: POD Aggregator currently holds a total of <b>%{total_records} records</b>, of which <b>%{unique_records} are unique</b>.
           zero: POD Aggregator currently holds no records.
-        heading: POD Data
+        heading: POD data
       hero: The POD Aggregator is an open source system to aggregate MARC bibliographic and holdings data for institutions that participate in the Platform for Open Data (POD) initiative.
       login:
         button: Login
@@ -100,7 +100,7 @@ en:
           all: View all stream files ...
           heading: Latest uploads
       providers:
-        heading: POD Providers
+        heading: POD providers
         providers_html:
           one: There is currently <b>1</b> data provider.
           other: There are currently <b>%{count}</b> data providers.
@@ -118,7 +118,7 @@ en:
         contributing: Help with contributing or using POD data
         framework: Data provider and usage framework
         github: GitHub repository
-        heading: Other Resources
+        heading: Other resources
     nav:
       activity: Activity
       brand: Aggregator
@@ -134,7 +134,7 @@ en:
   site_users:
     index:
       add_admin: Add admin role
-      is_admin: POD Admin?
+      is_admin: POD admin?
       organization: Organization
       remove_admin: Remove admin role
       title: Manage users

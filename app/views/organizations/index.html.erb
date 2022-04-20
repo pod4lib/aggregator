@@ -62,7 +62,7 @@
 
   <br>
   <% if can? :manage, Organization %>
-    <%= link_to 'New Organization', new_organization_path, class: 'btn btn-primary' if can? :create, Organization.new %>
+    <%= link_to 'New organization', new_organization_path, class: 'btn btn-primary' if can? :create, Organization.new %>
   <% end %>
 
 </div>
