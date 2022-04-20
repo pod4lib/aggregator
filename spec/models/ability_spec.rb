@@ -104,7 +104,7 @@ RSpec.describe Ability do
       # Non-member organization
       it { is_expected.to be_able_to(:read, not_my_org) }
       it { is_expected.to be_able_to(:normalized_data, not_my_org) }
-      it { is_expected.not_to be_able_to(:processing_status, not_my_org) }
+      it { is_expected.to be_able_to(:processing_status, not_my_org) }
       it { is_expected.to be_able_to(:users, not_my_org) }
       it { is_expected.to be_able_to(:organization_details, not_my_org) }
       it { is_expected.to be_able_to(:provider_details, not_my_org) }
@@ -132,7 +132,7 @@ RSpec.describe Ability do
       # Member organization
       it { is_expected.to be_able_to(:read, organization) }
       it { is_expected.to be_able_to(:normalized_data, organization) }
-      it { is_expected.not_to be_able_to(:processing_status, organization) }
+      it { is_expected.to be_able_to(:processing_status, organization) }
       it { is_expected.to be_able_to(:users, organization) }
       it { is_expected.to be_able_to(:organization_details, organization) }
       it { is_expected.to be_able_to(:provider_details, organization) }
@@ -151,7 +151,7 @@ RSpec.describe Ability do
       # Non-member organization
       it { is_expected.to be_able_to(:read, not_my_org) }
       it { is_expected.to be_able_to(:normalized_data, not_my_org) }
-      it { is_expected.not_to be_able_to(:processing_status, not_my_org) }
+      it { is_expected.to be_able_to(:processing_status, not_my_org) }
       it { is_expected.to be_able_to(:users, not_my_org) }
       it { is_expected.to be_able_to(:organization_details, not_my_org) }
       it { is_expected.to be_able_to(:provider_details, not_my_org) }

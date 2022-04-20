@@ -6,10 +6,8 @@
 
         <%= link_to "Normalized data", normalized_data_organization_path(@organization), class: "btn btn-outline-primary #{current_page_class(normalized_data_organization_path(@organization))}" %>
 
-        <% if can? :update, @organization.default_stream %>
-            <%= link_to "Processing status", processing_status_organization_path(@organization), class: "btn btn-outline-primary #{current_page_class(processing_status_organization_path(@organization))}" %>
-        <% end %>
-       
+        <%= link_to "Processing status", processing_status_organization_path(@organization), class: "btn btn-outline-primary #{current_page_class(processing_status_organization_path(@organization))}" %>
+
         <%= link_to "MARC analysis", profile_organization_stream_path(@organization, @organization.default_stream), class: "btn btn-outline-primary #{current_page_class(profile_organization_stream_path(@organization, @organization.default_stream))}" %>
     </div>
 </div>

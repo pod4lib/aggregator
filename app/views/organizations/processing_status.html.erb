@@ -6,6 +6,6 @@
 
   <h2><%= t('job_tracker.title') %></h2>
 
-  <%= render 'streams/job_status', stream: @organization.default_stream if can? :update, @organization.default_stream %>
+  <%= render 'streams/job_status', stream: @organization.default_stream %>
 
 </div>
