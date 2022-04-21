@@ -13,4 +13,5 @@ class NormalizedDump < ApplicationRecord
   has_one_attached :marcxml
   has_one_attached :deletes
   has_many_attached :errata
+  has_one_attached :interstream_delta_additions
 end

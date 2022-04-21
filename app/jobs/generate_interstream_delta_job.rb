@@ -28,11 +28,8 @@ class GenerateInterstreamDeltaJob < ApplicationJob
 		previous_stream_reader = MarcRecordService.new(previous_stream_dump.marcxml.blob)
 		previous_stream_reader.each_slice(100) do |batch|
 			batch.each do |record|
-				# Rails.logger.info(record.class)
-				# Rails.logger.info(record)
-				# Rails.logger.info(record['001'])
 				# Rails.logger.info(record['001'].value) # This is what I want
-				comparison_hash[record['001'].value] = 'record goes here'
+				comparison_hash[record['001'].value] = record
 			end
 		end
 
@@ -43,13 +40,13 @@ class GenerateInterstreamDeltaJob < ApplicationJob
 					comparison_hash.delete(record['001'].value)
 					Rails.logger.info("Found a record in both: delete from hash")
 				else
-					additions << record['001'].value
+					additions << record
 					Rails.logger.info("Found a record not in comparison hash: new addition")
 				end
 			end
 		end
 
-		deletions = comparison_hash.values
+		deletions = comparison_hash.keys
 
 		#####
 		# first		# second	# to-do
@@ -63,6 +60,47 @@ class GenerateInterstreamDeltaJob < ApplicationJob
 		Rails.logger.info(additions)
 		Rails.logger.info('deletions')
 		Rails.logger.info(deletions)
+
+		base_name = "#{stream.organization.slug}-#{Time.zone.today}-delta-#{previous_stream.id}-#{stream.id}"
+	# 	writer = MarcRecordWriterService.new(base_name)
+	# 	now = Time.zone.now
+	# 	full_dump = stream.normalized_dumps.build(last_full_dump_at: now, last_delta_dump_at: now)
+	# 	begin
+	# 		additions.each do |record|
+	# 			# In a full dump, we can omit the deletes
+	
+	# 			writer.write_marc_record(record)
+	# 		end
+	  
+	# 		writer.finalize
+	  
+	# 		writer.files.each do |as, file|
+	# 		  full_dump.public_send(as).attach(io: File.open(file), filename: human_readable_filename(base_name, as))
+	# 		end
+	  
+	# 		full_dump.save!
+	  
+	# 	ensure
+	# 		writer.close
+	# 		writer.unlink
+	# 	end
+	# end
+
+	# def human_readable_filename(base_name, file_type)
+	# 	as = case file_type
+	# 		 when :deletes
+	# 		   'deletes.del.txt'
+	# 		 when :marc21
+	# 		   'marc21.mrc.gz'
+	# 		 when :marcxml
+	# 		   'marcxml.xml.gz'
+	# 		 when :errata
+	# 		   'errata.gz'
+	# 		 else
+	# 		   as
+	# 		 end
+	
+	# 	"#{base_name}-#{as}"
 	end
-  end
+end
   
