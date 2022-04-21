@@ -4,7 +4,7 @@
 class AllowlistedJwtsController < ApplicationController
   load_and_authorize_resource :organization
   load_and_authorize_resource through: :organization
-  authorize_resource :class => :controller
+  authorize_resource class: :controller
 
   # GET /organizations/1/allowlisted_jwts
   # GET /organizations/1/allowlisted_jwts.json
