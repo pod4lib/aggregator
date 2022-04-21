@@ -59,6 +59,7 @@ class Ability
     can %i[crud profile info], [Stream, Upload], organization: { id: owned_orgs }
     can :read, MarcRecord, upload: { organization: { id: owned_orgs } }
     can :manage, AllowlistedJwt, resource_type: 'Organization', resource_id: owned_orgs
+    can :manage, :allowlisted_jwts_controller, resource_type: 'Organization', resource_id: owned_orgs
     can :read, ActiveStorage::Attachment, { record: { organization: { id: owned_orgs } } }
 
     member_orgs = Organization.with_role(:member, user).pluck(:id)
@@ -66,7 +67,6 @@ class Ability
     can %i[read profile info], [Stream, Upload], organization: { id: member_orgs }
     can %i[create], [Upload], organization: { id: member_orgs }
     can :read, MarcRecord, upload: { organization: { id: member_orgs } }
-    can :read, AllowlistedJwt, resource_type: 'Organization', resource_id: member_orgs
     can :read, ActiveStorage::Attachment, { record: { organization: { id: member_orgs } } }
   end
   # rubocop:enable Metrics/CyclomaticComplexity
