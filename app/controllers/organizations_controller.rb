@@ -67,7 +67,7 @@ class OrganizationsController < ApplicationController
         format.html { redirect_to @organization, notice: 'Organization was successfully updated.' }
         format.json { render :show, status: :ok, location: @organization }
       else
-        format.html { render :edit }
+        format.html { redirect_to @organization, alert: 'Organization could not be updated.' }
         format.json { render json: @organization.errors, status: :unprocessable_entity }
       end
     end
