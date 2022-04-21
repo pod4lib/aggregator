@@ -1,32 +1,17 @@
-<%= bootstrap_form_with(model: organization, local: true) do |form| %>
-  <%= form.text_field :name %>
-  <%= form.text_field :slug %>
-  <%= form.text_field :code, help: 'LoC MARC organization code' %>
-  <%= form.check_box :provider %>
-
-  <div class="custom-file mb-3">
-    <%= form.file_field_without_bootstrap :icon, type: :file, direct_upload: true, id: 'customFile', class: 'custom-file-input', accept: '.svg' %>
-    <label class="custom-file-label" for="customFile">
-      <% if organization&.icon&.attached? %>
-        Replace icon file
-      <% else %>
-        Choose icon file
-      <% end %>
-    </label>
-  </div>
-
-  <% if organization.persisted? %>
-    <hr />
-
-    <h3>Item information</h3>
-    <%= form.hidden_field 'normalization_steps[0][destination_tag]', maxlength: 3, value: organization.normalization_steps.values.dig(0, 'destination_tag') || 998 %>
-    <%= form.text_field 'normalization_steps[0][source_tag]', maxlength: 3, value: organization.normalization_steps.values.dig(0, 'source_tag'), label: 'What MARC field contains item-level information?' %>
-    <%= form.text_field 'normalization_steps[0][subfields][i]', maxlength: 1, value: organization.normalization_steps.values.dig(0, 'subfields', 'i'), label: 'Local identifier subfield' %>
-    <%= form.text_field 'normalization_steps[0][subfields][a]', maxlength: 1, value: organization.normalization_steps.values.dig(0, 'subfields', 'a'), label: 'Call number subfield' %>
-    <%= form.text_field 'normalization_steps[0][subfields][m]', maxlength: 1, value: organization.normalization_steps.values.dig(0, 'subfields', 'm'), label: 'Local library' %>
-  <% end %>
-
-  <div class="actions">
-    <%= form.primary %>
-  </div>
+<%= form.text_field :name %>
+<%= form.text_field :slug %>
+<%= form.text_field :code, help: 'LoC MARC organization code' %>
+<%= form.fields_for :contact_email, (organization.contact_email || organization.build_contact_email) do |contact_form| %>
+<%= contact_form.email_field :email, label: 'POD contact for this organization', help: 'An email address other POD users can use to contact this organization.' %>
 <% end %>
+<%= form.check_box :provider %>
+<div class="custom-file mb-3">
+  <%= form.file_field_without_bootstrap :icon, type: :file, direct_upload: true, id: 'customFile', class: 'custom-file-input', accept: '.svg' %>
+  <label class="custom-file-label" for="customFile">
+    <% if organization&.icon&.attached? %>
+    Replace icon file
+    <% else %>
+    Choose icon file
+    <% end %>
+  </label>
+</div>

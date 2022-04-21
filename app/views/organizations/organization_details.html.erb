@@ -1,87 +1,47 @@
 <%= render 'shared/organization_header' %>
 
 <div class="container manage-organization-container">
-    <%= render 'shared/manage_organization_header' %>
+  <%= render 'shared/manage_organization_header' %>
 
-    <h3>Organization details</h3>
+  <h3>Organization details</h3>
 
-    <!-- Admin/owner view: -->
-    <% if can? :manage, @organization %>
-        <div class="mb-3">
-        <%= bootstrap_form_with(model: @organization, local: true) do |form| %>
-            <%= form.text_field :name %>
-            <% if can? :manage, :organization_slug %>
-              <%= form.text_field :slug %>
-            <% end %>
-            <%= form.text_field :code, help: 'LoC MARC Organization Code' %>
-            <%= form.check_box :provider %>
-
-            <div class="custom-file mb-3">
-                <%= form.file_field_without_bootstrap :icon, type: :file, direct_upload: true, id: 'customFile', class: 'custom-file-input', accept: '.svg' %>
-                <label class="custom-file-label" for="customFile">
-                <% if @organization&.icon&.attached? %>
-                    Replace icon file
-                <% else %>
-                    Choose icon file
-                <% end %>
-                </label>
-            </div>
-
-            <div class="actions">
-                <%= form.primary 'Update organization details' %>
-            </div>
-        <% end %>
-        </div>
-
-        <div>
-          <div class="card">
-            <div class="card-header d-flex justify-content-between">
-              <h2 class="h5 align-self-center mb-0">Contact email</h2>
-              <%= link_to 'Add', new_organization_contact_email_path(@organization), class: 'btn btn-sm btn-primary' if can? :manage, @organization %>
-            </div>
-            <% contact_email = @organization.contact_email %>
-            <% if contact_email %>
-              <ul class="list-group list-group-flush">
-                <li class="list-group-item d-flex justify-content-between">
-                  <span>
-                    <%= content_tag :span, contact_email.email %>
-                    <%= content_tag :span, 'confirmed ✅', class: 'badge bg-success' if contact_email.confirmed_at.present? %>
-                  </span>
-                  <%= link_to 'Remove', [@organization, contact_email], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm align-self-center' if can? :manage, @organization %>
-                </li>
-              </ul>
-            <% end %>
-          </div>
-        </div>
-      </div>
-
-    <!-- Member view: -->
-    <% else %>
-    <dl class="organization-details">
-        <dt>
-            <h4>Name</h4>
-            <p class="<%= @organization.name.blank? ? 'fst-italic' : '' %>">
-                <%= @organization.name.blank? ? 'no value provided' : @organization.name %>
-            </p>
-        </dt>
-        <dt>
-            <h4>Code</h4>
-            <p class="<%= @organization.code.blank? ? 'fst-italic' : '' %>">
-                <%= @organization.code.blank? ? 'no value provided' : @organization.code %>
-            </p>
-        </dt>
-        <dt>
-            <h4>POD contact for this organization</h4>
-            <p>TBD after contact field is added</p>
-        </dt>
-        <dt>
-            <h4>Icon</h4>
-            <% if @organization.icon.attached? %>
-                <%= image_tag(@organization.icon, class: 'organization-icon') %>
-            <% end %>
-        </dt>
-    </dl>
+  <!-- Admin/owner view: -->
+  <% if can? :manage, @organization %>
+  <div class="mb-3">
+    <%= bootstrap_form_with(model: @organization, local: true) do |form| %>
+    <%= render 'form', organization: @organization, form: form %>
+    <div class="actions">
+      <%= form.primary 'Update organization details' %>
+    </div>
     <% end %>
+  </div>
+
+  <!-- Member view: -->
+  <% else %>
+  <dl class="organization-details">
+    <dt>
+      <h4>Name</h4>
+      <p class="<%= @organization.name.blank? ? 'fst-italic' : '' %>">
+        <%= @organization.name.blank? ? 'no value provided' : @organization.name %>
+      </p>
+    </dt>
+    <dt>
+      <h4>Code</h4>
+      <p class="<%= @organization.code.blank? ? 'fst-italic' : '' %>">
+        <%= @organization.code.blank? ? 'no value provided' : @organization.code %>
+      </p>
+    </dt>
+    <dt>
+      <h4>POD contact for this organization</h4>
+      <p>TBD after contact field is added</p>
+    </dt>
+    <dt>
+      <h4>Icon</h4>
+      <% if @organization.icon.attached? %>
+      <%= image_tag(@organization.icon, class: 'organization-icon') %>
+      <% end %>
+    </dt>
+  </dl>
+  <% end %>
 
 </div>
-

@@ -1,0 +1,8 @@
+<% if organization.persisted? %>
+<h4 class="mt-4">Item information</h4>
+<%= form.hidden_field 'normalization_steps[0][destination_tag]', maxlength: 3, value: organization.normalization_steps.values.dig(0, 'destination_tag') || 998 %>
+<%= form.text_field 'normalization_steps[0][source_tag]', maxlength: 3, value: organization.normalization_steps.values.dig(0, 'source_tag'), label: 'What MARC field contains item-level information?' %>
+<%= form.text_field 'normalization_steps[0][subfields][i]', maxlength: 1, value: organization.normalization_steps.values.dig(0, 'subfields', 'i'), label: 'Local identifier subfield' %>
+<%= form.text_field 'normalization_steps[0][subfields][a]', maxlength: 1, value: organization.normalization_steps.values.dig(0, 'subfields', 'a'), label: 'Call number subfield' %>
+<%= form.text_field 'normalization_steps[0][subfields][m]', maxlength: 1, value: organization.normalization_steps.values.dig(0, 'subfields', 'm'), label: 'Local library' %>
+<% end %>
