@@ -90,6 +90,7 @@ class OrganizationsController < ApplicationController
     params.require(:organization)
           .permit(
             :name, :slug, :icon, :code, :provider,
+            contact_email_attributes: %i[email],
             normalization_steps: [[:destination_tag, :source_tag, { subfields: %i[i a m] }]]
           )
   end
