@@ -17,6 +17,10 @@ class OrganizationsController < ApplicationController
   # GET /organizations/1
   # GET /organizations/1.json
   def show
+    # make the org homepage for consumer orgs point to their org details default tab
+    # see https://github.com/pod4lib/aggregator/issues/535#issuecomment-1103234114
+    redirect_to organization_users_path(@organization) unless @organization.provider?
+
     @uploads = @organization.default_stream.uploads.active.order(created_at: :desc).page(params[:page])
   end
 
@@ -29,8 +33,13 @@ class OrganizationsController < ApplicationController
   def normalized_data; end
   # GET /organizations/1/processing_status
   def processing_status; end
+
   # GET /organizations/1/provider_details
-  def provider_details; end
+  def provider_details
+    # consumer orgs don't have provider details; redirect to org details instead
+    redirect_to organization_details_organization_path(@organization) unless @organization.provider?
+  end
+
   # GET /organizations/1/organization_details
   def organization_details; end
 
