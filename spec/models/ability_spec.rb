@@ -145,7 +145,7 @@ RSpec.describe Ability do
       it { is_expected.not_to be_able_to(:create, Stream.new(organization: organization)) }
       it { is_expected.not_to be_able_to(:reanalyze, Stream.new(organization: organization)) }
 
-      it { is_expected.to be_able_to(:read, AllowlistedJwt.new(resource: organization)) }
+      it { is_expected.not_to be_able_to(:read, AllowlistedJwt.new(resource: organization)) }
       it { is_expected.not_to be_able_to(:create, AllowlistedJwt.new(resource: organization)) }
 
       # Non-member organization
