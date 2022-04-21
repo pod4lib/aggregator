@@ -3,18 +3,20 @@ window.addEventListener('load', function () {
   let organization_name = this.document.getElementById('organization_name');
   let organization_slug = this.document.getElementById('organization_slug');
 
-  organization_name.addEventListener("keyup", function (e) {
-    const nameVal = e.target.value;
-    organization_slug.setAttribute('placeholder', URLify(nameVal, nameVal.length));
-  });
-
-  organization_slug.addEventListener("focus", function (e) {
-    const slugVal = e.target.value;
-    if (slugVal === '') {
-      const placeholderVal = organization_slug.getAttribute('placeholder');
-      organization_slug.value = placeholderVal;
-    }
-  });
+  if (organization_name && organization_slug) {
+    organization_name.addEventListener("keyup", function (e) {
+      const nameVal = e.target.value;
+      organization_slug.setAttribute('placeholder', URLify(nameVal, nameVal.length));
+    });
+  
+    organization_slug.addEventListener("focus", function (e) {
+      const slugVal = e.target.value;
+      if (slugVal === '') {
+        const placeholderVal = organization_slug.getAttribute('placeholder');
+        organization_slug.value = placeholderVal;
+      }
+    });
+  }
 });
 
 /* TODO: Move to a reusable module */
