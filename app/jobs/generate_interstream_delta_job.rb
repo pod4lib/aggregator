@@ -24,7 +24,7 @@ class GenerateInterstreamDeltaJob < ApplicationJob
 		return unless current_stream_dump and previous_stream_dump
 
 		comparison_hash = {}
-		additions = []
+		updates_and_additions = []
 		previous_stream_reader = MarcRecordService.new(previous_stream_dump.marcxml.blob)
 		previous_stream_reader.each_slice(100) do |batch|
 			batch.each do |record|
@@ -33,74 +33,63 @@ class GenerateInterstreamDeltaJob < ApplicationJob
 			end
 		end
 
+		Rails.logger.error('Records in first dump:')
+		Rails.logger.error(comparison_hash.keys.count)
+
 		current_stream_reader = MarcRecordService.new(current_stream_dump.marcxml.blob)
+		records_in_second_dump = 0
 		current_stream_reader.each_slice(100) do |batch|
 			batch.each do |record|
-				if comparison_hash.key?(record['001'].value)
+				records_in_second_dump = records_in_second_dump + 1
+				if comparison_hash.key?(record['001'].value) && comparison_hash[record['001'].value] == record
+					# Matching record that has not been updated
+					# per the code in the marc record class: https://github.com/ruby-marc/ruby-marc/blob/master/lib/marc/record.rb
+					# == appears to be a safe way to compare MARC::Record objects
 					comparison_hash.delete(record['001'].value)
-					Rails.logger.info("Found a record in both: delete from hash")
+					Rails.logger.info("Found an identifcal record in both dumps: delete from hash")
+				elsif comparison_hash.key?(record['001'].value)
+					# Matching records that have been updated, are added to updates_and_additions and removed from comparison
+					updates_and_additions << record
+					comparison_hash.delete(record['001'].value)
+					Rails.logger.info("Found an updated record in new dump: new addition")
 				else
-					additions << record
+					#########
+					#########
+					# This db query doesn't seem reliable as there can be more than one version of the record in the db
+					# I think we need to get the latest one among all uploads for that stream that's are included in the dump
+					# new_record = MarcRecord.where('marc001': record['001'].value)
+					# updates_and_additions << new_record
+					#########
+					#########
+					updates_and_additions << record
 					Rails.logger.info("Found a record not in comparison hash: new addition")
 				end
 			end
 		end
+
+		Rails.logger.error('Records in second dump:')
+		Rails.logger.error(records_in_second_dump)
 
 		deletions = comparison_hash.keys
 
 		#####
 		# first		# second	# to-do
 		# ------------------------------
-		#	yes			yes			nothing
-		#   no			yes			addition
+		#	yes			yes			if updated: add to updates_and_additions
+		#	yes			yes			if not updated: remove from hash
+		#   no			yes			updates_and_additions
 		#	yes			no			deletion
 
-		Rails.logger.info(comparison_hash.to_yaml)
-		Rails.logger.info('additions')
-		Rails.logger.info(additions)
+		# Rails.logger.info(comparison_hash.to_yaml)
+		Rails.logger.info('updates_and_additions')
+		Rails.logger.info(updates_and_additions.count)
+		# Updates/Additions are currently of class MARC::Record
+		# Writer seems to use MarcRecord
 		Rails.logger.info('deletions')
-		Rails.logger.info(deletions)
+		# Deletions are strings
+		Rails.logger.info(deletions.count)
 
 		base_name = "#{stream.organization.slug}-#{Time.zone.today}-delta-#{previous_stream.id}-#{stream.id}"
-	# 	writer = MarcRecordWriterService.new(base_name)
-	# 	now = Time.zone.now
-	# 	full_dump = stream.normalized_dumps.build(last_full_dump_at: now, last_delta_dump_at: now)
-	# 	begin
-	# 		additions.each do |record|
-	# 			# In a full dump, we can omit the deletes
-	
-	# 			writer.write_marc_record(record)
-	# 		end
-	  
-	# 		writer.finalize
-	  
-	# 		writer.files.each do |as, file|
-	# 		  full_dump.public_send(as).attach(io: File.open(file), filename: human_readable_filename(base_name, as))
-	# 		end
-	  
-	# 		full_dump.save!
-	  
-	# 	ensure
-	# 		writer.close
-	# 		writer.unlink
-	# 	end
-	# end
-
-	# def human_readable_filename(base_name, file_type)
-	# 	as = case file_type
-	# 		 when :deletes
-	# 		   'deletes.del.txt'
-	# 		 when :marc21
-	# 		   'marc21.mrc.gz'
-	# 		 when :marcxml
-	# 		   'marcxml.xml.gz'
-	# 		 when :errata
-	# 		   'errata.gz'
-	# 		 else
-	# 		   as
-	# 		 end
-	
-	# 	"#{base_name}-#{as}"
 	end
 end
   
