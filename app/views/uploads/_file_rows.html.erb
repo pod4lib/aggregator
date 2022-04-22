@@ -5,34 +5,33 @@
       <i>Downloading...</i>
     </td>
     <td><%= l(upload.created_at, format: :short) %></td>
-    <td class="text-right">-</td>
+    <td class="text-end">-</td>
     <td>-</td>
-    <td class="text-right">-</td>
+    <td class="text-end">-</td>
     <td><%= link_to 'Source 🔗', upload.url, title: upload.url %></td>
   </tr>
 <% end %>
 <% upload.files.each do |file| %>
   <tr>
-    <td class="text-center">
+    <td class="align-middle text-center">
       <%= bootstrap_icon(Settings.metadata_status[file.pod_metadata_status].icon_class, class: "pod-metadata-status #{file.pod_metadata_status}") %>
       <span class="visually-hidden"><%= file.pod_metadata_status %></span>
     </td> 
-    <td>
+    <td class="align-middle">
       <%= link_to_if can?(:read, upload), file.filename, download_url(file), title: "Download #{file.filename}" %>
     </td>
-    <td><%= l(file.created_at, format: :short) %></td>
-    <td class="text-right"><%= number_to_human_size file.byte_size %></td>
-    <td><%= file.content_type %></td>
-    <td class="text-right"><%= file.metadata['count'] ? number_with_delimiter(file.metadata['count']) : '-' %></td>
-
-    <td>
+    <td class="align-middle"><%= l(file.created_at, format: :short) %></td>
+    <td class="align-middle text-end"><%= number_to_human_size file.byte_size %></td>
+    <td class="align-middle"><%= file.content_type %></td>
+    <td class="align-middle text-end"><%= file.metadata['count'] ? number_with_delimiter(file.metadata['count']) : '-' %></td>
+    <td class="align-middle text-center">
       <% if can? :read, upload %>
-        <%= link_to file_info_organization_upload_path(@organization, upload, file), class: 'btn btn-secondary' do %>
+        <%= link_to file_info_organization_upload_path(@organization, upload, file), class: 'btn btn-sm btn-secondary' do %>
           <%= bootstrap_icon("search", class: "pod-icon") %>
           <span class="visually-hidden">Profile</span>
         <% end %>
         <% if upload.url.present? %>
-          <%= link_to 'Source 🔗', upload.url, title: upload.url, class: 'btn btn-link' %>
+          <%= link_to 'Source 🔗', upload.url, title: upload.url, class: 'btn btn-sm btn-link' %>
         <% end %>
       <% end %>
     </td>

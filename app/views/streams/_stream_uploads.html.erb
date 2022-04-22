@@ -1,16 +1,24 @@
 <ul class="table-key list-unstyled list-inline pt-3">
   <% Settings.metadata_status.each do |status, values| %>
-    <li class="list-inline-item">
-      <%= bootstrap_icon(values.icon_class, class: "pod-metadata-status #{status}") %>
-      <span class="fw-bold"><%= values.label %></span>
-    </li>
+  <li class="list-inline-item">
+    <%= bootstrap_icon(values.icon_class, class: "pod-metadata-status #{status}") %>
+    <span class="fw-bold"><%= values.label %></span>
+  </li>
   <% end %>
 </ul>
 <table class="table table-striped mb-3">
-  <thead><th>Status</th><th>File</th><th>Date created</th><th class="text-right">Size</th><th>Content type</th><th class="text-right">Records</th><th><span class="visually-hidden">Actions</span></th></thead>
+  <thead>
+    <th class="text-center">Status</th>
+    <th>File</th>
+    <th>Date created</th>
+    <th class="text-end">Size</th>
+    <th>Content type</th>
+    <th class="text-end">Records</th>
+    <th><span class="visually-hidden">Actions</span></th>
+  </thead>
   <tbody>
     <% uploads.each do |upload| %>
-      <%= render 'uploads/file_rows', upload: upload %>
+    <%= render 'uploads/file_rows', upload: upload %>
     <% end %>
   </tbody>
 </table>

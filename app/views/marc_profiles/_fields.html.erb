@@ -15,7 +15,7 @@
             <% value, id = values.first %>
             <span class="text-monospace"><%= value %> [<%= id %>]</span>
           <% else %>
-            <button class="btn p-0 m-0 border-0 align-top text-left text-monospace" type="button" data-bs-toggle="collapse" data-bs-target="#profile-<%= field %>" aria-expanded="false" aria-controls="collapseExample">
+            <button class="btn p-0 m-0 border-0 align-top text-start text-monospace" type="button" data-bs-toggle="collapse" data-bs-target="#profile-<%= field %>" aria-expanded="false" aria-controls="collapseExample">
               <% value, id = values.first %>
               <%= value %> [<%= id %>]
               <%= inline_svg_tag 'bootstrap-icons/icons/chevron-right.svg', height: 12, width: 12 %>
@@ -56,7 +56,7 @@
             <% if values.uniq { |(value, id)| value }.length <= 3 %>
               <span class="text-monospace"><%= selected_values.map { |(value,id)| value }.join(', ') %> [<%= selected_values.map { |(value,id)| id }.compact.join(', ') %>]</span>
             <% else %>
-              <button class="btn p-0 m-0 border-0 align-top text-left text-monospace" type="button" data-bs-toggle="collapse" data-bs-target="#profile-<%= field.parameterize %>" aria-expanded="false" aria-controls="collapseExample">
+              <button class="btn p-0 m-0 border-0 align-top text-start text-monospace" type="button" data-bs-toggle="collapse" data-bs-target="#profile-<%= field.parameterize %>" aria-expanded="false" aria-controls="collapseExample">
                 <%= selected_values.map { |(value,id)| value }.join(', ').truncate(100) %> [<%= selected_values.map { |(value,id)| id }.compact.join(', ') %>]
                 <%= inline_svg_tag 'bootstrap-icons/icons/chevron-right.svg', height: 12, width: 12 %>
               </button>

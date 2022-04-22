@@ -33,23 +33,23 @@
     <tbody>
       <% @organizations.each do |organization| %>
         <tr>
-          <td class="text-center icon-column">
+          <td class="align-middle text-center icon-column">
             <% if organization.icon.attached? %>
               <%= image_tag(organization.icon, class: 'icon-sm') %>
             <% end %>
           </td>
-          <td>
+          <td class="align-middle">
             <%= link_to organization.name, organization %>
           </td>
-          <td class="text-end files-column"><%= organization.default_stream.files.size %></td>
-          <td class="text-end"><%= number_to_human_size organization.default_stream.files.sum(:byte_size) %></td>
-          <td class="text-end"><%= number_with_delimiter organization.latest_statistics.unique_record_count %></td>
-          <td class="text-end"><%= number_with_delimiter organization.latest_statistics.record_count %></td>
-          <td><%= organization.default_stream.uploads.last&.updated_at %></td>
+          <td class="align-middle text-end files-column"><%= organization.default_stream.files.size %></td>
+          <td class="align-middle text-end"><%= number_to_human_size organization.default_stream.files.sum(:byte_size) %></td>
+          <td class="align-middle text-end"><%= number_with_delimiter organization.latest_statistics.unique_record_count %></td>
+          <td class="align-middle text-end"><%= number_with_delimiter organization.latest_statistics.record_count %></td>
+          <td class="align-middle"><%= organization.default_stream.uploads.last&.updated_at %></td>
 
           <% if can? :manage, Organization %>
-            <td><%= link_to 'Edit', organization_details_organization_path(organization), class: 'btn btn-secondary btn-sm' if can? :edit, organization %></td>
-            <td><%= link_to 'Destroy', organization, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' if can? :delete, organization %></td>
+            <td class="align-middle"><%= link_to 'Edit', organization_details_organization_path(organization), class: 'btn btn-secondary btn-sm' if can? :edit, organization %></td>
+            <td class="align-middle"><%= link_to 'Destroy', organization, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' if can? :delete, organization %></td>
           <% end %>
      
         </tr>
