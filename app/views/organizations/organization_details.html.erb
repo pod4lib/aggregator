@@ -33,7 +33,9 @@
     </dt>
     <dt>
       <h4>POD contact for this organization</h4>
-      <p>TBD after contact field is added</p>
+      <p class="<%= @organization.contact_email.blank? ? 'fst-italic' : '' %>">
+        <%= @organization.contact_email.blank? ? 'no value provided' : @organization.contact_email.email %>
+      </p>
     </dt>
     <dt>
       <h4>Icon</h4>
