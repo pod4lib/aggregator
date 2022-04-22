@@ -67,7 +67,7 @@ class OrganizationsController < ApplicationController
         format.html { redirect_to @organization, notice: 'Organization was successfully updated.' }
         format.json { render :show, status: :ok, location: @organization }
       else
-        format.html { render :edit }
+        format.html { redirect_to @organization, alert: 'Organization could not be updated.' }
         format.json { render json: @organization.errors, status: :unprocessable_entity }
       end
     end
@@ -90,6 +90,7 @@ class OrganizationsController < ApplicationController
     params.require(:organization)
           .permit(
             :name, :slug, :icon, :code, :provider,
+            contact_email_attributes: %i[email],
             normalization_steps: [[:destination_tag, :source_tag, { subfields: %i[i a m] }]]
           )
   end

@@ -13,7 +13,7 @@ class ContactEmailsController < ApplicationController
         format.html { render_or_redirect_with_flash notice: 'Contact email confirmed' }
         format.json { head :no_content }
       else
-        format.html { render_or_redirect_with_flash error: 'Unable to confirmed contact email' }
+        format.html { render_or_redirect_with_flash error: 'Unable to confirm contact email' }
         format.json { render json: @contact_email.errors, status: :unprocessable_entity }
       end
     end

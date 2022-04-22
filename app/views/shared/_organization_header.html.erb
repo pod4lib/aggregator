@@ -12,8 +12,8 @@
         <% if @organization.provider? && @organization.code.present? %>
           <span class="lead"><%= t('.marc_code', code: @organization.code) %></span>
         <% end %>
-        <% if @organization.contact_emails.any? %>
-          <span class="lead"><%= mail_to @organization.contact_emails.first.email, t('.contact') %></span>
+        <% if @organization.contact_email.present? %>
+          <span class="lead"><%= mail_to @organization.contact_email.email, t('.contact') %></span>
         <% end %>
       </div>
       <div class="ms-auto">

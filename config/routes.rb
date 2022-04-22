@@ -56,7 +56,7 @@ Rails.application.routes.draw do
     resources :organization_users, as: 'users', only: [:index, :destroy, :update], path: 'users'
     resources :allowlisted_jwts, only: [:index, :new, :create, :destroy]
 
-    resources :organization_contact_emails, as: 'contact_emails', only: [:new, :create, :destroy]
+    resource :organization_contact_email, as: 'contact_email', only: [:new, :create, :destroy]
 
     get 'invite/new', to: 'organization_invitations#new'
     post 'invite', to: 'organization_invitations#create'

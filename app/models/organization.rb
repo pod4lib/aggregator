@@ -12,9 +12,10 @@ class Organization < ApplicationRecord
   has_many :uploads, through: :streams
   has_many :marc_records, through: :streams, inverse_of: :organization
   has_many :allowlisted_jwts, as: :resource, dependent: :delete_all
-  has_many :contact_emails, dependent: :delete_all
+  has_one :contact_email, dependent: :delete
   has_one_attached :icon
   has_many :statistics, dependent: :delete_all, as: :resource
+  accepts_nested_attributes_for :contact_email, update_only: true
 
   def default_stream
     @default_stream ||= streams.find_or_create_by(default: true)

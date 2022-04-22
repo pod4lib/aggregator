@@ -1,58 +1,45 @@
 <%= render 'shared/layout_manage_organization' do %>
-    <h3>Organization details</h3>
 
-    <!-- Admin/owner view: -->
-    <% if can? :manage, @organization %>
-        <%= bootstrap_form_with(model: @organization, local: true) do |form| %>
-            <%= form.text_field :name %>
-            <% if can? :manage, :organization_slug %>
-              <%= form.text_field :slug %>
-            <% end %>
-            <%= form.text_field :code, help: 'LoC MARC Organization Code' %>
-            <%= form.check_box :provider %>
+  <h3>Organization details</h3>
 
-            <div class="custom-file mb-3">
-                <%= form.file_field_without_bootstrap :icon, type: :file, direct_upload: true, id: 'customFile', class: 'custom-file-input', accept: '.svg' %>
-                <label class="custom-file-label" for="customFile">
-                <% if @organization&.icon&.attached? %>
-                    Replace icon file
-                <% else %>
-                    Choose icon file
-                <% end %>
-                </label>
-            </div>
-
-            <div class="actions">
-                <%= form.primary 'Update organization details' %>
-            </div>
-        <% end %>
-
-    <!-- Member view: -->
-    <% else %>
-    <dl class="organization-details">
-        <dt>
-            <h4>Name</h4>
-            <p class="<%= @organization.name.blank? ? 'fst-italic' : '' %>">
-                <%= @organization.name.blank? ? 'no value provided' : @organization.name %>
-            </p>
-        </dt>
-        <dt>
-            <h4>Code</h4>
-            <p class="<%= @organization.code.blank? ? 'fst-italic' : '' %>">
-                <%= @organization.code.blank? ? 'no value provided' : @organization.code %>
-            </p>
-        </dt>
-        <dt>
-            <h4>POD contact for this organization</h4>
-            <p>TBD after contact field is added</p>
-        </dt>
-        <dt>
-            <h4>Icon</h4>
-            <% if @organization.icon.attached? %>
-                <%= image_tag(@organization.icon, class: 'organization-icon') %>
-            <% end %>
-        </dt>
-    </dl>
+  <!-- Admin/owner view: -->
+  <% if can? :manage, @organization %>
+  <div class="mb-3">
+    <%= bootstrap_form_with(model: @organization, local: true) do |form| %>
+    <%= render 'form', organization: @organization, form: form %>
+    <div class="actions">
+      <%= form.primary 'Update organization details' %>
+    </div>
     <% end %>
-</div>
+  </div>
+
+  <!-- Member view: -->
+  <% else %>
+  <dl class="organization-details">
+    <dt>
+      <h4>Name</h4>
+      <p class="<%= @organization.name.blank? ? 'fst-italic' : '' %>">
+        <%= @organization.name.blank? ? 'no value provided' : @organization.name %>
+      </p>
+    </dt>
+    <dt>
+      <h4>Code</h4>
+      <p class="<%= @organization.code.blank? ? 'fst-italic' : '' %>">
+        <%= @organization.code.blank? ? 'no value provided' : @organization.code %>
+      </p>
+    </dt>
+    <dt>
+      <h4>POD contact for this organization</h4>
+      <p class="<%= @organization.contact_email.blank? ? 'fst-italic' : '' %>">
+        <%= @organization.contact_email.blank? ? 'no value provided' : @organization.contact_email.email %>
+      </p>
+    </dt>
+    <dt>
+      <h4>Icon</h4>
+      <% if @organization.icon.attached? %>
+      <%= image_tag(@organization.icon, class: 'organization-icon') %>
+      <% end %>
+    </dt>
+  </dl>
+  <% end %>
 <% end %>

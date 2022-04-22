@@ -4,6 +4,7 @@
 class ContactEmail < ApplicationRecord
   belongs_to :organization
   has_secure_token :confirmation_token
+  validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
 
   before_validation if: :email_changed? do
     self.confirmation_token = self.class.generate_unique_secure_token
