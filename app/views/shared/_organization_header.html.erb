@@ -3,25 +3,21 @@
   <div class="container">
     <div class="d-flex align-items-center">
       <% if @organization.icon.attached? %>
-      <%= image_tag(@organization.icon, class: 'me-2', height: 50) %>
+        <%= image_tag(@organization.icon, class: 'me-2', height: 50) %>
       <% end %>
       <h1 class="display-5 font-weight-normal m-0">
         <%= @organization.name %>
       </h1>
       <div class="d-flex flex-column ms-4">
         <% if @organization.provider? && @organization.code.present? %>
-        <span class="lead"><%= t('.marc_code', code: @organization.code) %></span>
+          <span class="lead"><%= t('.marc_code', code: @organization.code) %></span>
         <% end %>
         <% if @organization.contact_email.present? %>
-        <span class="lead"><%= mail_to @organization.contact_email.email, t('.contact') %></span>
+          <span class="lead"><%= mail_to @organization.contact_email.email, t('.contact') %></span>
         <% end %>
       </div>
       <div class="ms-auto">
-        <% if current_page?(organization_path(@organization)) %>
-        <%= link_to can?(:edit, @organization) ? t('.manage_org') : t('.view_org'), organization_users_path(@organization), class: 'align-self-center' %>
-        <% elsif @organization.provider? %>
-        <%= link_to t('.default_stream'), organization_path(@organization), class: 'align-self-center' %>
-        <% end %>
+        <%= content_for :org_header_section_link %>
       </div>
     </div>
     <%= yield %>
