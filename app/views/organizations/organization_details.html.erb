@@ -1,8 +1,4 @@
-<%= render 'shared/organization_header' %>
-
-<div class="container manage-organization-container">
-    <%= render 'shared/manage_organization_header' %>
-
+<%= render 'shared/layout_manage_organization' do %>
     <h3>Organization details</h3>
 
     <!-- Admin/owner view: -->
@@ -58,6 +54,5 @@
         </dt>
     </dl>
     <% end %>
-
 </div>
-
+<% end %>

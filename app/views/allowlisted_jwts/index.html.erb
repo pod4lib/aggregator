@@ -1,9 +1,5 @@
-<%= render 'shared/organization_header' %>
-
-<div class="container manage-organization-container">
-    <%= render 'shared/manage_organization_header' %>
-
-    <h3>Access tokens</h3>
+<%= render 'shared/layout_manage_organization' do %>
+  <h3>Access tokens</h3>
 
   <table class="table mt-4">
     <thead>
@@ -39,4 +35,4 @@
   </table>
 
   <%= link_to 'Create token', new_organization_allowlisted_jwt_path(@organization), class: 'btn btn-primary' if can? :create, @organization.allowlisted_jwts.build %>
-</div>
+<% end %>

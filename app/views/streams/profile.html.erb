@@ -1,9 +1,4 @@
-<%= render 'shared/organization_header' %>
-
-<div class="container manage-organization-container">
-  <%= render 'streams/header', stream: @organization.default_stream %>
-  <%= render 'shared/provider_page_header'%>
-
+<%= render 'shared/layout_provider_page' do %>
   <h3>MARC analysis</h3>
 
   <% if @stream.marc_profile %>
@@ -17,4 +12,4 @@
       <%= link_to 'Re-analyze', reanalyze_organization_stream_path(@organization, @stream), method: :post, class: 'btn btn-secondary align-self-center mt-3' if can?(:reanalyze, @stream) %>
     </div>
   <% end %>
-</div>
+<% end %>

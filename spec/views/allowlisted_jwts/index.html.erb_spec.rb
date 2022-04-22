@@ -4,9 +4,11 @@ require 'rails_helper'
 
 RSpec.describe 'allowlisted_jwts/index', type: :view do
   let(:organization) { build(:organization) }
+  let(:stream) { create(:stream_with_uploads, organization: organization, default: true) }
 
   before do
     assign(:organization, organization)
+    assign(:stream, stream)
     assign(:allowlisted_jwts, [
              organization.allowlisted_jwts.build(jti: 'abc'),
              organization.allowlisted_jwts.build(jti: 'xyz')
