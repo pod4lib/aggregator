@@ -1,9 +1,4 @@
-<%= render 'shared/organization_header' %>
-<div class="container manage-organization-container">
-  <% if @organization.provider? %>
-  <%= render 'streams/header', stream: @organization.default_stream %>
-  <%= render 'shared/provider_page_header'%>
+<%= render 'shared/layout_provider_page' do %>
   <h3>Uploaded files</h3>
   <%= render 'streams/stream_uploads', stream: @organization.default_stream, uploads: @uploads %>
-  <% end %>
-</div>
+<% end %>

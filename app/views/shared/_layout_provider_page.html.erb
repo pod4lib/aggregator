@@ -1,0 +1,14 @@
+<% content_for :org_header_section_link do %>
+    <%= link_to can?(:edit, @organization) ? t('.manage_org') : t('.view_org'), organization_users_path(@organization), class: 'align-self-center' %>
+<% end %>
+
+<%= render 'shared/organization_header' %>
+
+<div class="container manage-organization-container">
+  <% if @organization.provider? %>
+    <%= render 'streams/header', stream: @organization.default_stream %>
+    <%= render 'shared/provider_page_header'%>
+    
+    <%= yield %>
+  <% end %>
+</div>

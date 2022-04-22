@@ -8,6 +8,7 @@ RSpec.describe 'shared/_organization_header', type: :view do
            name: 'Best University',
            code: 'Bst')
   end
+
   let(:stream) { create(:stream_with_uploads, organization: organization) }
   let(:user) { create(:user) }
   let(:contact_email) { create(:contact_email, organization: organization) }
@@ -34,26 +35,5 @@ RSpec.describe 'shared/_organization_header', type: :view do
     render
 
     expect(view.content_for(:org_header)).to include(contact_email.email)
-  end
-
-  it 'links to Manage organization on certain pages with privileged user' do
-    allow(view).to receive(:can?).and_return(true)
-    allow(view).to receive(:current_page?).and_return(true)
-    render
-
-    expect(view.content_for(:org_header)).to have_link 'Manage organization'
-  end
-
-  it 'links to View organization on certain pages with unprivileged user' do
-    allow(view).to receive(:current_page?).and_return(true)
-    render
-
-    expect(view.content_for(:org_header)).to have_link 'View organization'
-  end
-
-  it 'otherwise links to Default stream for provider orgs' do
-    render
-
-    expect(view.content_for(:org_header)).to have_link 'Default stream'
   end
 end
