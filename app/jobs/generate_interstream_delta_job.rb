@@ -21,20 +21,42 @@ class GenerateInterstreamDeltaJob < ApplicationJob
 		current_stream_dump = stream.current_full_dump
 		previous_stream_dump = previous_stream.current_full_dump
 
-		return unless current_stream_dump and previous_stream_dump
+		return unless current_stream_dump && previous_stream_dump
 
+		# compare full dump of full stream vs previous stream's full dump + its deltas
+
+		# Get full dump and its records
 		comparison_hash = {}
 		updates_and_additions = []
 		previous_stream_reader = MarcRecordService.new(previous_stream_dump.marcxml.blob)
 		previous_stream_reader.each_slice(100) do |batch|
 			batch.each do |record|
-				# Rails.logger.info(record['001'].value) # This is what I want
 				comparison_hash[record['001'].value] = record
 			end
 		end
 
-		Rails.logger.error('Records in first dump:')
-		Rails.logger.error(comparison_hash.keys.count)
+		# Then one-by-one adjust according to each delta from oldest to newest
+		previous_stream_deltas = previous_stream_dump.deltas.order(created_at: :asc)
+		previous_stream_deltas.each do |delta|
+			if delta.marcxml.blob
+				delta_reader = MarcRecordService.new(delta.marcxml.blob)
+				delta_reader.each_slice(100) do |batch|
+					batch.each do |record|
+						comparison_hash[record['001'].value] = record
+					end
+				end
+			end
+			if delta.deletes.blob
+				delta.deletes.blob.open do |tempfile|
+					delete_ids = tempfile.read.split
+					delete_ids.each do |delete_id|
+						if comparison_hash.key?(delete_id)
+							comparison_hash.delete(delete_id)
+						end
+					end
+				end
+			end
+		end
 
 		current_stream_reader = MarcRecordService.new(current_stream_dump.marcxml.blob)
 		records_in_second_dump = 0
@@ -67,9 +89,6 @@ class GenerateInterstreamDeltaJob < ApplicationJob
 			end
 		end
 
-		Rails.logger.error('Records in second dump:')
-		Rails.logger.error(records_in_second_dump)
-
 		deletions = comparison_hash.keys
 
 		#####
@@ -80,6 +99,7 @@ class GenerateInterstreamDeltaJob < ApplicationJob
 		#   no			yes			updates_and_additions
 		#	yes			no			deletion
 
+		# Rails.logger.info("COMPARISON HASH")
 		# Rails.logger.info(comparison_hash.to_yaml)
 		Rails.logger.info('updates_and_additions')
 		Rails.logger.info(updates_and_additions.count)
@@ -87,9 +107,33 @@ class GenerateInterstreamDeltaJob < ApplicationJob
 		# Writer seems to use MarcRecord
 		Rails.logger.info('deletions')
 		# Deletions are strings
-		Rails.logger.info(deletions.count)
+		Rails.logger.info(deletions)
 
-		base_name = "#{stream.organization.slug}-#{Time.zone.today}-delta-#{previous_stream.id}-#{stream.id}"
+		# base_name = "#{stream.organization.slug}-#{Time.zone.today}-delta-#{previous_stream.id}-#{stream.id}"
+		# writer = MarcRecordWriterService.new(base_name)
+		# begin
+		# 	updates_and_additions.each do |record|
+		# 		# This method expects MarcRecord but additions/updates are currently MARC::Record
+		# 		writer.write_marc_record(record)
+		# 	end
+
+		# 	# writer.finalize
+
+		# 	# writer.files.each do |as, file|
+		# 	# 	full_dump.public_send(as).attach(io: File.open(file), filename: human_readable_filename(base_name, as))
+		# 	# end
+
+		# 	# full_dump.save!
+
+		# 	# GenerateDeltaDumpJob.perform_later(organization)
+		# 	# ensure
+		# 	# writer.close
+		# 	# writer.unlink
+		# 	# end
+		# end
+
+		# WIll need to generate both marcxml and binary
+		# Try using the ruby marc gem to write those ^
 	end
 end
   
