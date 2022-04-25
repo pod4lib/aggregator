@@ -4,14 +4,14 @@
     <table class="table table-striped organizations mt-4">
         <thead>
             <tr>
-                <th scope="col"><%= t('.email') %></th>
-                <th scope="col"><%= t('.name') %></th>
-                <th scope="col"><%= t('.job_title') %></th>
+                <th scope="col"><%= t('organization_users.index.email') %></th>
+                <th scope="col"><%= t('organization_users.index.name') %></th>
+                <th scope="col"><%= t('organization_users.index.job_title') %></th>
                 <% if can? :manage, @organization %>
-                <th scope="col" class="text-center"><%= t('.is_owner') %></th>
-                <th scope="col" class="text-center"><%= t('.actions') %></th>
+                <th scope="col" class="text-center"><%= t('organization_users.index.is_owner') %></th>
+                <th scope="col" class="text-center"><%= t('organization_users.index.actions') %></th>
                 <% else %>
-                <th scope="col"><%= t('.role') %></th>
+                <th scope="col"><%= t('organization_users.index.role') %></th>
                 <% end %>
             </tr>
         </thead>
@@ -26,15 +26,15 @@
                 <td class="text-center align-middle">
                     <div class="form-check form-switch align-middle d-inline-block">
                     <% if role.name == 'owner' %>
-                    <%= link_to '', organization_user_path(@organization, user, remove_role: 'owner'), method: :patch, data: { confirm: t('.confirm_action') }, class: 'form-check-input checked', title: t('.remove_owner') %>
+                    <%= link_to '', organization_user_path(@organization, user, remove_role: 'owner'), method: :patch, data: { confirm: t('organization_users.index.confirm_action') }, class: 'form-check-input checked', title: t('organization_users.index.remove_owner') %>
                     <input class="form-check-input pe-none" type="checkbox" aria-hidden="true" checked>
                     <% else %>
-                    <%= link_to '', organization_user_path(@organization, user, add_role: 'owner'), method: :patch, data: { confirm: t('.confirm_action') }, class: 'form-check-input', title: t('.add_owner') %>
+                    <%= link_to '', organization_user_path(@organization, user, add_role: 'owner'), method: :patch, data: { confirm: t('organization_users.index.confirm_action') }, class: 'form-check-input', title: t('organization_users.index.add_owner') %>
                     <% end %>
                     </div>
                 </td>
                 <td class="align-middle text-center">
-                    <%= link_to t('.remove_user'), organization_user_path(@organization, user), method: :delete, data: { confirm: t('.confirm_action') }, class: 'btn btn-danger btn-sm' %>
+                    <%= link_to t('organization_users.index.remove_user'), organization_user_path(@organization, user), method: :delete, data: { confirm: t('organization_users.index.confirm_action') }, class: 'btn btn-danger btn-sm' %>
                 </td>
                 <% else %>
                 <td class="align-middle"><%= role.name.capitalize %></td>
