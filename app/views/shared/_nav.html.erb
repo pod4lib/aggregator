@@ -11,17 +11,23 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ms-md-5">
         <% if current_user %>
-        <li class='nav-item'><%= link_to t('.providers'), organizations_url, class: 'nav-link' %></li>
+        <li class='nav-item'>
+          <%= link_to t('.providers'), organizations_url, class: class_names('nav-link', { active: current_page?(organizations_url) }) %>
+        </li>
         <% end %>
         <% if can? :manage, :dashboard_controller %>
-        <li class='nav-item'><%= link_to t('.activity'), activity_url, class: 'nav-link', data: { turbolinks: false } %>
+        <li class='nav-item'><%= link_to t('.activity'), activity_url, class: class_names('nav-link', { active: current_page?(activity_url) }), data: { turbolinks: false } %>
         </li>
         <% end %>
         <% if can? :read, :pages_data %>
-        <li class='nav-item'><%= link_to t('.data'), data_url, class: 'nav-link', data: { turbolinks: false } %></li>
+        <li class='nav-item'>
+          <%= link_to t('.data'), data_url, class: class_names('nav-link', { active: current_page?(data_url) }), data: { turbolinks: false } %>
+        </li>
         <% end %>
         <% if can? :manage, User %>
-        <li class='nav-item'><%= link_to t('.users'), site_users_url, class: 'nav-link' %></li>
+        <li class='nav-item'>
+          <%= link_to t('.users'), site_users_url, class: class_names('nav-link', { active: current_page?(site_users_url) }) %>
+        </li>
         <% end %>
       </ul>
       <ul class="navbar-nav ms-md-auto">
