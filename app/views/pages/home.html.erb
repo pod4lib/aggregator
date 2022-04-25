@@ -22,7 +22,7 @@
       <p>
         <%= t('.providers.providers_html', count: @overview.provider_count) %>
         <% if @overview.last_upload.present? %>
-        <%= t('.providers.uploaders_html', upload_time: time_ago_in_words(@overview.last_upload.created_at), uploader: @overview.last_upload.organization.name) %>
+        <%= t('.providers.uploaders_html', upload_time: l(@overview.last_upload.created_at, format: :long), uploader: @overview.last_upload.organization.name) %>
         <% end %>
       </p>
     </div>

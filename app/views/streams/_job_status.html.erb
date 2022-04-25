@@ -43,7 +43,7 @@
                     <td><%= job.resource_label %></td>
                     <td><%= job.job_class.titleize %></td>
                     <td class="text-end"><%= job.progress_label %></td>
-                    <td><%= job.created_at %></td>
+                    <td><%= l(job.created_at, format: :long) %></td>
                   </tr>
                 <% end %>
               </table>
