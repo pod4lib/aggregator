@@ -13,6 +13,8 @@ en:
         upload: Upload
         upload_title: View upload %{name}
       title: Recent activity
+      summary_title: Activity summary
+      upload_title: Upload activity
   job_tracker:
     status_group:
       active:
