@@ -14,6 +14,7 @@ class Upload < ApplicationRecord
   validate :valid_url, if: proc { |upload| upload.url.present? }
   scope :active, -> { where(status: %w[active processed]) }
   scope :archived, -> { where(status: 'archived') }
+  default_scope { order(created_at: :desc) }
 
   after_create :attach_file_from_url
 
