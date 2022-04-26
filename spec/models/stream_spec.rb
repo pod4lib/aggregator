@@ -87,5 +87,9 @@ RSpec.describe Stream, type: :model do
       end.to(change(stream, :default).from(false).to(true)
          .and((change { current_default.reload.default }).from(true).to(false)))
     end
+
+    it 'does not do anything if the stream is already the default' do
+      expect { current_default.make_default }.not_to(change { current_default.reload.default })
+    end
   end
 end
