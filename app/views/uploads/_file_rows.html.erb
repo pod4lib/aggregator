@@ -20,7 +20,7 @@
     <td class="align-middle">
       <%= link_to_if can?(:read, upload), file.filename, download_url(file), title: "Download #{file.filename}" %>
     </td>
-    <td class="align-middle"><%= l(file.created_at, format: :long) %></td>
+    <td class="align-middle"><%= local_time(file.created_at, format: datetime_display_format()) %></td>
     <td class="align-middle text-end"><%= number_to_human_size file.byte_size %></td>
     <td class="align-middle"><%= file.content_type %></td>
     <td class="align-middle text-end"><%= file.metadata['count'] ? number_with_delimiter(file.metadata['count']) : '-' %></td>
