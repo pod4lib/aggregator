@@ -15,19 +15,19 @@ RSpec.describe 'shared/_layout_manage_organization', type: :view do
     assign(:stream, stream)
   end
 
-  it 'links to Default stream for provider orgs' do
+  it 'links to Provider home for provider orgs' do
     render
 
-    expect(view.content_for(:org_header)).to have_link 'Default stream'
+    expect(view.content_for(:org_header)).to have_link 'Provider home'
   end
 
   context 'with a consumer org' do
     let(:is_provider) { false }
 
-    it 'does not link to Default stream for consumer orgs' do
+    it 'does not link toProvider home for consumer orgs' do
       render
 
-      expect(view.content_for(:org_header)).not_to have_link 'Default stream'
+      expect(view.content_for(:org_header)).not_to have_link 'Provider home'
     end
   end
 end
