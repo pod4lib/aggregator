@@ -34,6 +34,8 @@ class Stream < ApplicationRecord
   end
 
   def make_default
+    return if default
+
     Stream.transaction do
       organization.streams.default.each { |stream| stream.update(default: false) }
       update(default: true)
