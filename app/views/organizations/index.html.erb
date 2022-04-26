@@ -47,7 +47,7 @@
           <td class="align-middle text-end"><%= number_with_delimiter organization.latest_statistics.record_count %></td>
           <td class="align-middle">
             <% if organization.default_stream.uploads.last&.updated_at %>
-              <%= l(organization.default_stream.uploads.last&.updated_at, format: :long) %>
+              <%= local_time(organization.default_stream.uploads.last&.updated_at, format: datetime_display_format()) %>
             <% end %>
           </td>
 
