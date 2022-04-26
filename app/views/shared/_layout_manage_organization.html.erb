@@ -1,11 +1,11 @@
 <% content_for :org_header_section_link do %>
-    <%= link_to t('.default_stream'), organization_path(@organization), class: 'align-self-center' if @organization.provider? %>
+    <%= link_to t('.provider_home'), organization_path(@organization), class: 'align-self-center' if @organization.provider? %>
 <% end %>
 
 <%= render 'shared/organization_header' %>
 
 <div class="container manage-organization-container">
-    <%= render 'shared/manage_organization_header' %>
+    <%= render 'shared/manage_organization_header' %>ß
     
     <%= yield %>
 </div>

@@ -24,7 +24,7 @@ RSpec.describe 'shared/_layout_manage_organization', type: :view do
   context 'with a consumer org' do
     let(:is_provider) { false }
 
-    it 'does not link toProvider home for consumer orgs' do
+    it 'does not link to Provider home for consumer orgs' do
       render
 
       expect(view.content_for(:org_header)).not_to have_link 'Provider home'

@@ -123,7 +123,7 @@ en:
         github: GitHub repository
         heading: Other resources
     layout_manage_organization:
-      default_stream: Provider home
+      provider_home: Provider home
     layout_provider_page:
       manage_org: Manage organization
       view_org: View organization details
@@ -151,4 +151,4 @@ en:
       title: Manage users
   streams:
     index:
-      default_stream: Provider home
+      provider_home: Provider home
