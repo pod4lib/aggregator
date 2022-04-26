@@ -84,8 +84,8 @@ en:
           harvest_data: Harvest data
           heading: Quick actions
           upload_file: Upload file to default stream
-          view_default_stream: View default stream
           view_org_details: View organization details
+          view_provider_home: Provider home
         jobs:
           all: View status details ...
           heading: Processing status

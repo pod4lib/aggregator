@@ -104,7 +104,7 @@
           <% if can? :create, @overview.organization.default_stream.uploads.build %>
           <li class="my-3"><%= link_to t('.organization.actions.upload_file'), new_organization_upload_path(@overview.organization) %></li>
           <% end %>
-          <li class="my-3"><%= link_to t('.organization.actions.view_default_stream'), organization_path(@overview.organization) %></li>
+          <li class="my-3"><%= link_to t('.organization.actions.view_provider_home'), organization_path(@overview.organization) %></li>
           <% else %>
           <li class="my-3"><%= link_to t('.organization.actions.harvest_data'), organization_path(@overview.organization) %></li>
           <li class="my-3"><%= link_to t('.organization.actions.data_docs'), 'https://github.com/pod4lib/aggregator/wiki/Harvesting-using-ResourceSync' %></li>
