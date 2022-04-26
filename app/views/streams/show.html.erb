@@ -1,3 +1,7 @@
+<% content_for :org_header_section_link do %>
+    <%= link_to t('streams.index.default_stream'), organization_path(@organization), class: 'align-self-center' if @organization.provider? %>
+<% end %>
+
 <%= render 'shared/organization_header' %>
 
 <div class="container mb-5">
