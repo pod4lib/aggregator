@@ -13,7 +13,7 @@ class User < ApplicationRecord
   has_many :uploads # rubocop:disable Rails/HasManyOrHasOneDependent
 
   def organizations(which_roles = %i[owner member])
-    Organization.with_roles(which_roles, self)
+    Organization.with_roles(which_roles, self).uniq
   end
 
   # FIXME: see https://github.com/pod4lib/aggregator/issues/503

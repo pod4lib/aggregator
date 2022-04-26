@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe 'organization_users/index', type: :view do
   let(:organization) { create(:organization) }
   let(:member) { create(:user) }
-  let(:owner) { create(:admin) }
+  let(:owner) { create(:user) }
 
   before do
     member.add_role :member, organization
@@ -54,6 +54,17 @@ RSpec.describe 'organization_users/index', type: :view do
     it 'renders a link to delete the owner account' do
       render
       expect(rendered).to have_css("a[href='#{organization_user_path(organization, owner)}'][data-method='delete']")
+    end
+  end
+
+  context 'when a user has both member and owner roles' do
+    before do
+      member.add_role :owner, organization
+    end
+
+    it 'only displays user once in the table' do
+      render
+      assert_select 'tr>td', text: member.email, count: 1
     end
   end
 end
