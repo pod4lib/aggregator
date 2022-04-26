@@ -56,4 +56,11 @@ RSpec.describe ApplicationHelper do
       expect(helper.current_page_class('/website')).to be_nil
     end
   end
+
+  describe '#datetime_display_format' do
+    it 'returns datetime display format string configuration option for local_time library' do
+      datetime_display_format_str = helper.datetime_display_format()
+      expect(datetime_display_format_str).to be('%B %e, %Y %l:%M%P %Z')
+    end
+  end
 end
