@@ -109,31 +109,29 @@ class GenerateInterstreamDeltaJob < ApplicationJob
 		# Deletions are strings
 		Rails.logger.info(deletions)
 
-		# base_name = "#{stream.organization.slug}-#{Time.zone.today}-delta-#{previous_stream.id}-#{stream.id}"
-		# writer = MarcRecordWriterService.new(base_name)
-		# begin
-		# 	updates_and_additions.each do |record|
-		# 		# This method expects MarcRecord but additions/updates are currently MARC::Record
-		# 		writer.write_marc_record(record)
-		# 	end
+		base_name = "#{stream.organization.slug}_interstreamdelta_#{previous_stream.id}_#{stream.id}".strip
 
-		# 	# writer.finalize
+		mrc_tempfile = Tempfile.new("#{base_name}.mrc")
+		writer = MARC::Writer.new(mrc_tempfile)
+		updates_and_additions.each do |record|
+			writer.write(record)
+		end
+		writer.close()
 
-		# 	# writer.files.each do |as, file|
-		# 	# 	full_dump.public_send(as).attach(io: File.open(file), filename: human_readable_filename(base_name, as))
-		# 	# end
+		xml_tempfile = Tempfile.new("#{base_name}.xml")
+		xml_writer = MARC::XMLWriter.new(xml_tempfile)
+		updates_and_additions.each do |record|
+			xml_writer.write(record)
+		end
+		xml_writer.close()
 
-		# 	# full_dump.save!
-
-		# 	# GenerateDeltaDumpJob.perform_later(organization)
-		# 	# ensure
-		# 	# writer.close
-		# 	# writer.unlink
-		# 	# end
-		# end
-
-		# WIll need to generate both marcxml and binary
-		# Try using the ruby marc gem to write those ^
+		xml_from_file = File.read(xml_tempfile)
+		File.open(xml_tempfile).each_line do |line|
+			Rails.logger.info(line)
+		end
+		
+		delete_tempfile = Tempfile.new("#{base_name}.del.txt")
+		File.write(delete_tempfile, deletions.join("\n"))
 	end
 end
   
