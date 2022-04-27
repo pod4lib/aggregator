@@ -6,6 +6,7 @@
 require('@rails/ujs').start();
 require('turbolinks').start();
 require('@rails/activestorage').start();
+require('local-time').start();
 require('../channels');
 require('../direct_uploads');
 require('chartkick')

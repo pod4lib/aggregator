@@ -45,7 +45,11 @@
           <td class="align-middle text-end"><%= number_to_human_size organization.default_stream.files.sum(:byte_size) %></td>
           <td class="align-middle text-end"><%= number_with_delimiter organization.latest_statistics.unique_record_count %></td>
           <td class="align-middle text-end"><%= number_with_delimiter organization.latest_statistics.record_count %></td>
-          <td class="align-middle"><%= organization.default_stream.uploads.last&.updated_at %></td>
+          <td class="align-middle">
+            <% if organization.default_stream.uploads.last&.updated_at %>
+              <%= local_time(organization.default_stream.uploads.last&.updated_at, format: datetime_display_format()) %>
+            <% end %>
+          </td>
 
           <% if can? :manage, Organization %>
             <td class="align-middle"><%= link_to 'Edit', organization_details_organization_path(organization), class: 'btn btn-secondary btn-sm' if can? :edit, organization %></td>

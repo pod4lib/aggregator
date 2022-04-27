@@ -28,7 +28,7 @@
       <tr>
         <td class="align-middle"><%= content_tag :span, 'default', class: 'badge bg-info' if stream.default? %></td>
         <td class="align-middle"><%= link_to stream.display_name, organization_stream_path(@organization, stream) %></td>
-        <td class="align-middle"><%= stream.updated_at %></td>
+        <td class="align-middle"><%= local_time(stream.updated_at, format: datetime_display_format()) %></td>
         <td class="align-middle text-end"><%= stream.files.size %></td>
         <td class="align-middle text-end"><%= number_to_human_size stream.files.sum(:byte_size) %></td>
         <td class="align-middle">
