@@ -112,7 +112,7 @@ In some cases Docker container image versions may get stale and may need to be r
 
 Step 1: Stop and remove all running docker containers for POD
 ```
-docker compose stop
+docker compose down
 ```
 
 Step 2: Rebuild docker images with no cache
