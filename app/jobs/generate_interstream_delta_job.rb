@@ -23,12 +23,6 @@ class GenerateInterstreamDeltaJob < ApplicationJob
 
 		return unless current_stream_dump && previous_stream_dump
 
-		# Create an interstream delta model with an one-to-one association
-			# has files similar to NormalizedDump
-			# foreign key attaches to NormalizedDump
-		# If one already exists, delete it
-		# Then create a new one and attach the results of this
-
 		# compare full dump of full stream vs previous stream's full dump + its deltas
 		# Get full dump and its records
 		comparison_hash = {}
@@ -89,6 +83,7 @@ class GenerateInterstreamDeltaJob < ApplicationJob
 
 		deletions = comparison_hash.keys
 
+		# Create Files
 		base_name = "#{stream.organization.slug}_interstreamdelta_#{previous_stream.id}_#{stream.id}".strip
 
 		mrc_tempfile = Tempfile.new("#{base_name}.mrc")
@@ -108,9 +103,13 @@ class GenerateInterstreamDeltaJob < ApplicationJob
 		delete_tempfile = Tempfile.new("#{base_name}.del.txt")
 		File.write(delete_tempfile, deletions.join("\n"))
 
-		interstream_delta_dump = previous_stream_dump.deltas.create(stream_id: previous_stream_dump.stream_id)
-		interstream_delta_dump.public_send(:marc21).attach(io: File.open(mrc_tempfile), filename: "#{base_name}.mrc")
-		interstream_delta_dump.public_send(:marcxml).attach(io: File.open(xml_tempfile), filename: "#{base_name}.xml")
-		interstream_delta_dump.public_send(:deletes).attach(io: File.open(delete_tempfile), filename: "#{base_name}.del.txt")
+		# Attach Files
+		if !current_stream_dump.interstream_delta
+			current_stream_dump.interstream_delta = InterstreamDelta.create(normalized_dump: current_stream_dump)
+		end
+
+		current_stream_dump.interstream_delta.public_send(:marc21).attach(io: File.open(mrc_tempfile), filename: "#{base_name}.mrc")
+		current_stream_dump.interstream_delta.public_send(:marcxml).attach(io: File.open(xml_tempfile), filename: "#{base_name}.xml")
+		current_stream_dump.interstream_delta.public_send(:deletes).attach(io: File.open(delete_tempfile), filename: "#{base_name}.del.txt")
 	end
 end
