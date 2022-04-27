@@ -1,4 +1,9 @@
+<% content_for :org_header_section_link do %>
+    <%= link_to t('uploads.provider_home'), organization_path(@organization), class: 'align-self-center' if @organization.provider? %>
+<% end %>
+
 <%= render 'shared/organization_header' %>
+
 <div class="container">
   <%= link_to 'Stream', [@upload.organization, @upload.stream] %>
 
