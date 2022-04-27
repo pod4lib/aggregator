@@ -266,6 +266,7 @@ GEM
     llhttp-ffi (0.4.0)
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
+    local_time (2.1.0)
     loofah (2.16.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -534,6 +535,7 @@ DEPENDENCIES
   jbuilder (~> 2.7)
   jwt
   kaminari
+  local_time (~> 2.1)
   marc
   okcomputer
   paper_trail

@@ -117,3 +117,5 @@ group :deployment do
   gem 'dlss-capistrano'
 end
 gem 'concurrent-ruby'
+
+gem "local_time", "~> 2.1"

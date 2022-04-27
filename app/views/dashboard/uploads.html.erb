@@ -34,7 +34,7 @@
         <td>
           <%= link_to_if can?(:read, upload), file.filename, download_url(file), title: t('.table.download_title', filename: file.filename) %>
         </td>
-        <td><%= l(file.created_at, format: :short) %></td>
+        <td><%= local_time(file.created_at, format: datetime_display_format()) %></td>
         <td><%= link_to upload.organization.name, organization_path(upload.organization) %></td>
         <td class="text-end"><%= number_to_human_size file.byte_size %></td>
         <td class="text-end"><%= file.metadata['count'] ? number_with_delimiter(file.metadata['count']) : '-' %></td>
