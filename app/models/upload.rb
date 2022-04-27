@@ -14,6 +14,7 @@ class Upload < ApplicationRecord
   validate :valid_url, if: proc { |upload| upload.url.present? }
   scope :active, -> { where(status: %w[active processed]) }
   scope :archived, -> { where(status: 'archived') }
+  default_scope { order(created_at: :desc) }
 
   after_create :attach_file_from_url
 
@@ -57,6 +58,19 @@ class Upload < ApplicationRecord
       end
     rescue StandardError => e
       Honeybadger.notify(e)
+    end
+  end
+
+  # overall status of files in the upload, delegates to Attachment. see:
+  # https://github.com/pod4lib/aggregator/issues/674
+  def files_status
+    case files.map(&:pod_metadata_status).uniq
+    when [:success], [:deletes]
+      'completed'
+    when [:invalid], [:not_marc]
+      'failed'
+    else
+      'needs_attention'
     end
   end
 

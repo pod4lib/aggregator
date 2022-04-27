@@ -12,6 +12,10 @@ en:
         status: Status
         upload: Upload
         upload_title: View upload %{name}
+        last_successful_upload: Last successful upload
+        last_upload: Last upload
+        history: 30 day history
+        recent_success: Success in last 30 days?
       title: Recent activity
       summary_title: Activity summary
       upload_title: Upload activity
