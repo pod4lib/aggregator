@@ -5,7 +5,7 @@ class Overview
   attr_reader :organization
 
   def initialize(user)
-    @organization = user.organization if user.present?
+    @organization = user.organizations.first if user.present?
   end
 
   # total number of public organizations that provide data

@@ -27,27 +27,5 @@ RSpec.describe User, type: :model do
         expect(user.organizations).to match_array([org2])
       end
     end
-
-    context 'when user is org owner and member' do
-      before do
-        user.add_role :member, org1
-        user.add_role :owner, org1
-      end
-
-      it 'returns the organization only once' do
-        expect(user.organizations.count).to eq 1
-      end
-    end
-
-    context 'when filtering for specific org roles' do
-      before do
-        user.add_role :owner, org1
-        user.add_role :member, org2
-      end
-
-      it 'returns only specified orgs' do
-        expect(user.organizations(:owner)).to match_array([org1])
-      end
-    end
   end
 end

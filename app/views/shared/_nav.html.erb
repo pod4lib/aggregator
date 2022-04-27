@@ -44,7 +44,7 @@
             <% end %>
           </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-            <% current_user.organizations.each do | organization | %>
+            <% current_user.organizations.uniq.each do | organization | %>
             <li><%= link_to t('.view_org_page', org: organization.name), organization, class: 'dropdown-item' %></li>
             <% end %>
             <li><%= link_to t('.edit_profile'), edit_user_registration_path, class: 'dropdown-item' %></li>
