@@ -66,10 +66,8 @@ class GenerateFullDumpJob < ApplicationJob
            'marc21.mrc.gz'
          when :marcxml
            'marcxml.xml.gz'
-         when :errata
-           'errata.gz'
          else
-           as
+           "#{file_type}.gz"
          end
 
     "#{base_name}-#{as}"

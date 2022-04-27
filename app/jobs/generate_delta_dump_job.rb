@@ -72,6 +72,8 @@ class GenerateDeltaDumpJob < ApplicationJob
       'marcxml.xml.gz'
     when :errata
       'errata.gz'
+    when :oai_xml
+      'oai.xml.gz'
     else
       file_type
     end
