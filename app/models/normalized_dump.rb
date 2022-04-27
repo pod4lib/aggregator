@@ -13,9 +13,4 @@ class NormalizedDump < ApplicationRecord
   has_one_attached :marcxml
   has_one_attached :deletes
   has_many_attached :errata
-
-  # Seems to make sense to attach these to a full-dump, because 
-  # updating a full-dump will mean they need to be recalculated
-  has_one_attached :interstream_delta_additions
-  has_one_attached :interstream_delta_deletions
 end
