@@ -23,8 +23,13 @@ class GenerateInterstreamDeltaJob < ApplicationJob
 
 		return unless current_stream_dump && previous_stream_dump
 
-		# compare full dump of full stream vs previous stream's full dump + its deltas
+		# Create an interstream delta model with an one-to-one association
+			# has files similar to NormalizedDump
+			# foreign key attaches to NormalizedDump
+		# If one already exists, delete it
+		# Then create a new one and attach the results of this
 
+		# compare full dump of full stream vs previous stream's full dump + its deltas
 		# Get full dump and its records
 		comparison_hash = {}
 		updates_and_additions = []
@@ -75,14 +80,7 @@ class GenerateInterstreamDeltaJob < ApplicationJob
 					comparison_hash.delete(record['001'].value)
 					Rails.logger.info("Found an updated record in new dump: new addition")
 				else
-					#########
-					#########
-					# This db query doesn't seem reliable as there can be more than one version of the record in the db
-					# I think we need to get the latest one among all uploads for that stream that's are included in the dump
-					# new_record = MarcRecord.where('marc001': record['001'].value)
-					# updates_and_additions << new_record
-					#########
-					#########
+					# New records are added to updates_and_additions
 					updates_and_additions << record
 					Rails.logger.info("Found a record not in comparison hash: new addition")
 				end
@@ -90,24 +88,6 @@ class GenerateInterstreamDeltaJob < ApplicationJob
 		end
 
 		deletions = comparison_hash.keys
-
-		#####
-		# first		# second	# to-do
-		# ------------------------------
-		#	yes			yes			if updated: add to updates_and_additions
-		#	yes			yes			if not updated: remove from hash
-		#   no			yes			updates_and_additions
-		#	yes			no			deletion
-
-		# Rails.logger.info("COMPARISON HASH")
-		# Rails.logger.info(comparison_hash.to_yaml)
-		Rails.logger.info('updates_and_additions')
-		Rails.logger.info(updates_and_additions.count)
-		# Updates/Additions are currently of class MARC::Record
-		# Writer seems to use MarcRecord
-		Rails.logger.info('deletions')
-		# Deletions are strings
-		Rails.logger.info(deletions)
 
 		base_name = "#{stream.organization.slug}_interstreamdelta_#{previous_stream.id}_#{stream.id}".strip
 
@@ -124,14 +104,13 @@ class GenerateInterstreamDeltaJob < ApplicationJob
 			xml_writer.write(record)
 		end
 		xml_writer.close()
-
-		xml_from_file = File.read(xml_tempfile)
-		File.open(xml_tempfile).each_line do |line|
-			Rails.logger.info(line)
-		end
 		
 		delete_tempfile = Tempfile.new("#{base_name}.del.txt")
 		File.write(delete_tempfile, deletions.join("\n"))
+
+		interstream_delta_dump = previous_stream_dump.deltas.create(stream_id: previous_stream_dump.stream_id)
+		interstream_delta_dump.public_send(:marc21).attach(io: File.open(mrc_tempfile), filename: "#{base_name}.mrc")
+		interstream_delta_dump.public_send(:marcxml).attach(io: File.open(xml_tempfile), filename: "#{base_name}.xml")
+		interstream_delta_dump.public_send(:deletes).attach(io: File.open(delete_tempfile), filename: "#{base_name}.del.txt")
 	end
 end
-  
