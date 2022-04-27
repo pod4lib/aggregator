@@ -84,8 +84,8 @@ en:
           harvest_data: Harvest data
           heading: Quick actions
           upload_file: Upload file to default stream
-          view_default_stream: View default stream
           view_org_details: View organization details
+          view_provider_home: Provider home
         jobs:
           all: View status details ...
           heading: Processing status
@@ -123,7 +123,7 @@ en:
         github: GitHub repository
         heading: Other resources
     layout_manage_organization:
-      default_stream: Default stream
+      provider_home: Provider home
     layout_provider_page:
       manage_org: Manage organization
       view_org: View organization details
@@ -149,3 +149,6 @@ en:
       organization: Organization
       remove_admin: Remove admin role
       title: Manage users
+  streams:
+    index:
+      provider_home: Provider home
