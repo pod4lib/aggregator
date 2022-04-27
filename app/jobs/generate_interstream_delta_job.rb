@@ -15,7 +15,10 @@ class GenerateInterstreamDeltaJob < ApplicationJob
   
 	# rubocop:disable Metrics/AbcSize, Metrics/MethodLength
 	def perform(stream)
-		previous_stream = stream.default_stream_history.previous_stream_history.stream
+		previous_stream_history = stream.default_stream_history.previous_stream_history
+		return if previous_stream_history.nil?
+
+		previous_stream = previous_stream_history.stream
 		return if previous_stream.nil?
 		
 		current_stream_dump = stream.current_full_dump
