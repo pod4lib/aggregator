@@ -11,15 +11,7 @@ class User < ApplicationRecord
          :invitable, :confirmable
 
   has_many :uploads # rubocop:disable Rails/HasManyOrHasOneDependent
-
-  def organizations(which_roles = %i[owner member])
-    Organization.with_roles(which_roles, self).uniq
-  end
-
-  # FIXME: see https://github.com/pod4lib/aggregator/issues/503
-  def organization
-    organizations.first
-  end
+  has_many :organizations, through: :roles, source: :resource, source_type: :Organization
 
   def to_s
     return email if name.blank?
