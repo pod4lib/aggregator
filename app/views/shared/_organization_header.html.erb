@@ -17,7 +17,11 @@
         <% end %>
       </div>
       <div class="ms-auto">
-        <%= content_for :org_header_section_link %>
+        <% if content_for? :org_header_section_link %>
+          <%= content_for :org_header_section_link %>
+        <% else %>
+          <%= link_to t('shared.organization_header.provider_home'), organization_path(@organization), class: 'align-self-center' if @organization.provider? %>
+        <% end %>
       </div>
     </div>
     <%= yield %>
