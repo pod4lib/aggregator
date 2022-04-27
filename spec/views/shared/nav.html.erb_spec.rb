@@ -32,4 +32,17 @@ RSpec.describe 'shared/_nav', type: :view do
       expect(rendered).to have_link('Edit profile')
     end
   end
+
+  context 'when user has multiple roles' do
+    let(:current_user) { create(:user) }
+    let(:organization) { create(:organization) }
+
+    it 'displays the organization only once' do
+      current_user.add_role :member, organization
+      current_user.add_role :owner, organization
+      render
+
+      assert_select 'a', text: "#{organization.name} POD", count: 1
+    end
+  end
 end

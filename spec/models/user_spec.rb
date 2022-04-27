@@ -28,6 +28,17 @@ RSpec.describe User, type: :model do
       end
     end
 
+    context 'when user is org owner and member' do
+      before do
+        user.add_role :member, org1
+        user.add_role :owner, org1
+      end
+
+      it 'returns the organization only once' do
+        expect(user.organizations.count).to eq 1
+      end
+    end
+
     context 'when filtering for specific org roles' do
       before do
         user.add_role :owner, org1
