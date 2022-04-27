@@ -33,10 +33,10 @@ job_status_group:
 metadata_status:
   success:
     icon_class: 'file-earmark-fill'
-    label: 'Valid MARC'
+    label: 'Valid MARC (adds, updates, or deletes)'
   deletes:
     icon_class: 'file-earmark-excel-fill'
-    label: 'Deletes'
+    label: 'Deletes (text file)'
   invalid:
     icon_class: 'exclamation-circle-fill'
     label: 'Invalid MARC'
