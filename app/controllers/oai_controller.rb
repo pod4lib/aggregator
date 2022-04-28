@@ -4,11 +4,6 @@
 class OaiController < ApplicationController
   load_and_authorize_resource :organization
 
-  before_action do
-    @stream = @organization.default_stream
-    authorize! :read, @stream
-  end
-
   def show
     if params[:verb] == 'ListRecords'
       render_list_records
@@ -45,8 +40,8 @@ class OaiController < ApplicationController
 
   def build_request
     builder = Nokogiri::XML::Builder.new do |xml|
-      xml.request(oai_params) do
-        organization_oai_url(@organization)
+      xml.request(oai_params.to_hash) do
+        xml.text oai_url
       end
     end
 
@@ -76,15 +71,15 @@ class OaiController < ApplicationController
   # rubocop:disable Metrics/MethodLength
   def build_list_records_response(dump, next_dump = nil)
     Enumerator.new do |yielder|
-      yielder << <<-EOXML
-      <?xml version="1.0" encoding="UTF-8"?>
-      <OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/"
-              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
-              http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
-        <responseDate>#{Time.zone.now.strftime('%F')}</responseDate>
-        #{build_request.to_xml}
-        <ListRecords>
+      yielder << <<~EOXML
+        <?xml version="1.0" encoding="UTF-8"?>
+        <OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
+                http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+          <responseDate>#{Time.zone.now.iso8601}</responseDate>
+          #{build_request.to_xml}
+          <ListRecords>
       EOXML
 
       read_oai_xml(dump).each do |chunk|
@@ -93,9 +88,9 @@ class OaiController < ApplicationController
 
       yielder << "<resumptionToken>#{next_dump.id}</resumptionToken>" if next_dump
 
-      yielder << <<-EOXML
-        </ListRecords>
-      </OAI-PMH>
+      yielder << <<~EOXML
+          </ListRecords>
+        </OAI-PMH>
       EOXML
     end
   end

@@ -14,7 +14,7 @@ Rails.application.routes.draw do
 
   get '/documentation/:id', to: 'pages#show', as: :pages
   get '/api', to: 'pages#api'
-
+  get '/oai', to: 'oai#show'
 
   get 'contact_emails/confirm/:token', to: 'contact_emails#confirm', as: :contact_email_confirmation
 
@@ -34,7 +34,6 @@ Rails.application.routes.draw do
       get 'resourcelist', to: 'organizations#index', defaults: { format: :xml }
       get 'normalized_resourcelist/:flavor', to: 'organizations#index', defaults: { normalized: true, format: :xml }, as: :normalized_resourcelist
     end
-    get 'oai', to: 'oai#show'
 
     member do
       get 'normalized_data'
