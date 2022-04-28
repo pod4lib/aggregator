@@ -15,7 +15,7 @@ class Organization < ApplicationRecord
   has_one :contact_email, dependent: :delete
   has_one_attached :icon
   has_many :statistics, dependent: :delete_all, as: :resource
-  accepts_nested_attributes_for :contact_email, update_only: true
+  accepts_nested_attributes_for :contact_email, update_only: true, reject_if: proc { |att| att['email'].blank? }
   has_many :users, -> { distinct }, through: :roles, class_name: 'User', source: :users
 
   def default_stream
