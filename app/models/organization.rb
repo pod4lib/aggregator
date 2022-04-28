@@ -3,6 +3,7 @@
 # :nodoc:
 class Organization < ApplicationRecord
   default_scope { order(name: :asc) }
+  scope :providers, -> { where(provider: true) }
   resourcify
   extend FriendlyId
   friendly_id :name, use: %i[finders slugged]

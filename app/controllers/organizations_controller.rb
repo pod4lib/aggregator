@@ -12,7 +12,9 @@ class OrganizationsController < ApplicationController
 
   # GET /organizations
   # GET /organizations.json
-  def index; end
+  def index
+    @organizations = Organization.providers
+  end
 
   # GET /organizations/1
   # GET /organizations/1.json
