@@ -4,15 +4,16 @@
 # Background job to generate interstream delta between a stream and its predecessor
 class GenerateInterstreamDeltaJob < ApplicationJob
   with_job_tracking
-  
+
   def self.generate_interstream_delta_for_stream(stream)
     if (stream.is_a? Integer)
-      stream = Stream.find_by_id(stream)
+      stream = Stream.find_by(stream)
     end
     return if stream.nil?
+
     GenerateInterstreamDeltaJob.perform_later(stream)
   end
-  
+
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def perform(stream)
     previous_stream_history = stream.default_stream_history.previous_stream_history
@@ -114,4 +115,5 @@ class GenerateInterstreamDeltaJob < ApplicationJob
     current_stream_dump.interstream_delta.public_send(:marcxml).attach(io: File.open(xml_tempfile), filename: "#{base_name}.xml")
     current_stream_dump.interstream_delta.public_send(:deletes).attach(io: File.open(delete_tempfile), filename: "#{base_name}.del.txt")
   end
+  # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
 end
