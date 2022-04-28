@@ -51,9 +51,7 @@ class GenerateInterstreamDeltaJob < ApplicationJob
         delta.deletes.blob.open do |tempfile|
           delete_ids = tempfile.read.split
           delete_ids.each do |delete_id|
-            if comparison_hash.key?(delete_id)
-              comparison_hash.delete(delete_id)
-            end
+            comparison_hash.delete(delete_id) if comparison_hash.key?(delete_id)
           end
         end
       end
@@ -108,7 +106,8 @@ class GenerateInterstreamDeltaJob < ApplicationJob
 
     current_stream_dump.interstream_delta.public_send(:marc21).attach(io: File.open(mrc_tempfile), filename: "#{base_name}.mrc")
     current_stream_dump.interstream_delta.public_send(:marcxml).attach(io: File.open(xml_tempfile), filename: "#{base_name}.xml")
-    current_stream_dump.interstream_delta.public_send(:deletes).attach(io: File.open(delete_tempfile), filename: "#{base_name}.del.txt")
+    current_stream_dump.interstream_delta
+      .public_send(:deletes).attach(io: File.open(delete_tempfile), filename: "#{base_name}.del.txt")
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 end
