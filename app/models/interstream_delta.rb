@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# :nodoc:
 class InterstreamDelta < ApplicationRecord
   belongs_to :normalized_dump
 

@@ -102,7 +102,7 @@ class GenerateInterstreamDeltaJob < ApplicationJob
     File.write(delete_tempfile, deletions.join("\n"))
 
     # Attach Files
-    if !current_stream_dump.interstream_delta
+    unless current_stream_dump.interstream_delta
       current_stream_dump.interstream_delta = InterstreamDelta.create(normalized_dump: current_stream_dump)
     end
 
