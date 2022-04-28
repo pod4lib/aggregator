@@ -6,7 +6,7 @@ class GenerateInterstreamDeltaJob < ApplicationJob
   with_job_tracking
 
   def self.generate_interstream_delta_for_stream(stream)
-    if (stream.is_a? Integer)
+    if stream.is_a? Integer
       stream = Stream.find_by(stream)
     end
     return if stream.nil?
@@ -20,7 +20,7 @@ class GenerateInterstreamDeltaJob < ApplicationJob
     return if previous_stream_history.nil?
 
     previous_stream = previous_stream_history.stream
-    
+
     current_stream_dump = stream.current_full_dump
     previous_stream_dump = previous_stream.current_full_dump
 
@@ -61,25 +61,20 @@ class GenerateInterstreamDeltaJob < ApplicationJob
     end
 
     current_stream_reader = MarcRecordService.new(current_stream_dump.marcxml.blob)
-    records_in_second_dump = 0
     current_stream_reader.each_slice(100) do |batch|
       batch.each do |record|
-        records_in_second_dump = records_in_second_dump + 1
         if comparison_hash.key?(record['001'].value) && comparison_hash[record['001'].value] == record
           # Matching record that has not been updated
           # per the code in the marc record class: https://github.com/ruby-marc/ruby-marc/blob/master/lib/marc/record.rb
           # == appears to be a safe way to compare MARC::Record objects
           comparison_hash.delete(record['001'].value)
-          Rails.logger.info("Found an identifcal record in both dumps: delete from hash")
         elsif comparison_hash.key?(record['001'].value)
           # Matching records that have been updated, are added to updates_and_additions and removed from comparison
           updates_and_additions << record
           comparison_hash.delete(record['001'].value)
-          Rails.logger.info("Found an updated record in new dump: new addition")
         else
           # New records are added to updates_and_additions
           updates_and_additions << record
-          Rails.logger.info("Found a record not in comparison hash: new addition")
         end
       end
     end
@@ -94,15 +89,15 @@ class GenerateInterstreamDeltaJob < ApplicationJob
     updates_and_additions.each do |record|
       writer.write(record)
     end
-    writer.close()
+    writer.close
 
     xml_tempfile = Tempfile.new("#{base_name}.xml")
     xml_writer = MARC::XMLWriter.new(xml_tempfile)
     updates_and_additions.each do |record|
       xml_writer.write(record)
     end
-    xml_writer.close()
-    
+    xml_writer.close
+
     delete_tempfile = Tempfile.new("#{base_name}.del.txt")
     File.write(delete_tempfile, deletions.join("\n"))
 
@@ -115,5 +110,5 @@ class GenerateInterstreamDeltaJob < ApplicationJob
     current_stream_dump.interstream_delta.public_send(:marcxml).attach(io: File.open(xml_tempfile), filename: "#{base_name}.xml")
     current_stream_dump.interstream_delta.public_send(:deletes).attach(io: File.open(delete_tempfile), filename: "#{base_name}.del.txt")
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 end
