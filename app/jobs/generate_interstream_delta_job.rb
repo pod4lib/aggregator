@@ -19,7 +19,6 @@ class GenerateInterstreamDeltaJob < ApplicationJob
 		return if previous_stream_history.nil?
 
 		previous_stream = previous_stream_history.stream
-		return if previous_stream.nil?
 		
 		current_stream_dump = stream.current_full_dump
 		previous_stream_dump = previous_stream.current_full_dump
