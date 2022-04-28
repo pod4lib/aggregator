@@ -122,8 +122,6 @@ en:
         framework: Data provider and usage framework
         github: GitHub repository
         heading: Other resources
-    layout_manage_organization:
-      provider_home: Provider home
     layout_provider_page:
       manage_org: Manage organization
       view_org: View organization details
@@ -142,6 +140,7 @@ en:
     organization_header:
       contact: POD contact for this organization
       marc_code: 'MARC organization code: %{code}'
+      provider_home: Provider home
   site_users:
     index:
       add_admin: Add admin role
@@ -149,8 +148,3 @@ en:
       organization: Organization
       remove_admin: Remove admin role
       title: Manage users
-  streams:
-    index:
-      provider_home: Provider home
-  uploads:
-    provider_home: Provider home
