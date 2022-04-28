@@ -103,7 +103,7 @@ class GenerateInterstreamDeltaJob < ApplicationJob
 
     # Attach Files
     unless current_stream_dump.interstream_delta
-      current_stream_dump.interstream_delta = InterstreamDelta.create(normalized_dump: current_stream_dump)
+      current_stream_dump.interstream_delta = InterstreamDelta.create(normalized_dump: current_stream_dump, stream: stream)
     end
 
     current_stream_dump.interstream_delta.public_send(:marc21).attach(io: File.open(mrc_tempfile), filename: "#{base_name}.mrc")
