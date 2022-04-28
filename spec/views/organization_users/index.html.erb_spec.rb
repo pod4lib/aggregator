@@ -55,6 +55,11 @@ RSpec.describe 'organization_users/index', type: :view do
       render
       expect(rendered).to have_css("a[href='#{organization_user_path(organization, owner)}'][data-method='delete']")
     end
+
+    it 'renders a link to invite new user' do
+      render
+      expect(rendered).to have_link 'Invite new user to organization'
+    end
   end
 
   context 'when a user has both member and owner roles' do

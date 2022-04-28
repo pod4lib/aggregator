@@ -83,25 +83,24 @@ RSpec.describe Ability do
       it { is_expected.not_to be_able_to(:delete, default_stream) }
 
       # Owner organization
-      it { is_expected.to be_able_to(:read, organization) }
+      it { is_expected.to be_able_to(:manage, organization) }
       it { is_expected.to be_able_to(:normalized_data, organization) }
       it { is_expected.to be_able_to(:processing_status, organization) }
       it { is_expected.to be_able_to(:users, organization) }
       it { is_expected.to be_able_to(:organization_details, organization) }
       it { is_expected.to be_able_to(:provider_details, organization) }
 
-      it { is_expected.to be_able_to(:read, Upload.new(organization: organization)) }
-      it { is_expected.to be_able_to(:create, Upload.new(organization: organization)) }
+      it { is_expected.to be_able_to(:crud, Upload.new(organization: organization)) }
 
-      it { is_expected.to be_able_to(:read, Stream.new(organization: organization)) }
+      it { is_expected.to be_able_to(:crud, Stream.new(organization: organization)) }
       it { is_expected.to be_able_to(:profile, Stream.new(organization: organization)) }
-      it { is_expected.to be_able_to(:create, Stream.new(organization: organization)) }
+      it { is_expected.to be_able_to(:info, Stream.new(organization: organization)) }
       it { is_expected.not_to be_able_to(:reanalyze, Stream.new(organization: organization)) }
 
-      it { is_expected.to be_able_to(:read, AllowlistedJwt.new(resource: organization)) }
-      it { is_expected.to be_able_to(:create, AllowlistedJwt.new(resource: organization)) }
+      it { is_expected.to be_able_to(:crud, AllowlistedJwt.new(resource: organization)) }
 
       # Non-member organization
+      it { is_expected.not_to be_able_to(:manage, not_my_org) }
       it { is_expected.to be_able_to(:read, not_my_org) }
       it { is_expected.to be_able_to(:normalized_data, not_my_org) }
       it { is_expected.to be_able_to(:processing_status, not_my_org) }
@@ -114,10 +113,11 @@ RSpec.describe Ability do
 
       it { is_expected.to be_able_to(:read, Stream.new(organization: not_my_org)) }
       it { is_expected.to be_able_to(:profile, Stream.new(organization: not_my_org)) }
+      it { is_expected.to be_able_to(:info, Stream.new(organization: not_my_org)) }
       it { is_expected.not_to be_able_to(:create, Stream.new(organization: not_my_org)) }
+      it { is_expected.not_to be_able_to(:reanalyze, Stream.new(organization: not_my_org)) }
 
-      it { is_expected.not_to be_able_to(:read, AllowlistedJwt.new(resource: not_my_org)) }
-      it { is_expected.not_to be_able_to(:create, AllowlistedJwt.new(resource: not_my_org)) }
+      it { is_expected.not_to be_able_to(:crud, AllowlistedJwt.new(resource: not_my_org)) }
     end
 
     context 'with a member of an org' do
@@ -130,6 +130,7 @@ RSpec.describe Ability do
       it { is_expected.not_to be_able_to(:delete, default_stream) }
 
       # Member organization
+      it { is_expected.not_to be_able_to(:manage, organization) }
       it { is_expected.to be_able_to(:read, organization) }
       it { is_expected.to be_able_to(:normalized_data, organization) }
       it { is_expected.to be_able_to(:processing_status, organization) }
@@ -147,8 +148,11 @@ RSpec.describe Ability do
 
       it { is_expected.to be_able_to(:read, AllowlistedJwt.new(resource: organization)) }
       it { is_expected.not_to be_able_to(:create, AllowlistedJwt.new(resource: organization)) }
+      it { is_expected.not_to be_able_to(:update, AllowlistedJwt.new(resource: organization)) }
+      it { is_expected.not_to be_able_to(:destroy, AllowlistedJwt.new(resource: organization)) }
 
       # Non-member organization
+      it { is_expected.not_to be_able_to(:manage, not_my_org) }
       it { is_expected.to be_able_to(:read, not_my_org) }
       it { is_expected.to be_able_to(:normalized_data, not_my_org) }
       it { is_expected.to be_able_to(:processing_status, not_my_org) }
@@ -163,8 +167,7 @@ RSpec.describe Ability do
       it { is_expected.to be_able_to(:profile, Stream.new(organization: not_my_org)) }
       it { is_expected.not_to be_able_to(:create, Stream.new(organization: not_my_org)) }
 
-      it { is_expected.not_to be_able_to(:read, AllowlistedJwt.new(resource: not_my_org)) }
-      it { is_expected.not_to be_able_to(:create, AllowlistedJwt.new(resource: not_my_org)) }
+      it { is_expected.not_to be_able_to(:crud, AllowlistedJwt.new(resource: not_my_org)) }
     end
   end
 end

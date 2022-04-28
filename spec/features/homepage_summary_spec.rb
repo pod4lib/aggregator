@@ -55,5 +55,25 @@ RSpec.describe 'homepage summary', type: :feature do
     it 'displays the processing status of any active jobs' do
       expect(page).to have_content '2 jobs active'
     end
+
+    it 'displays the Provider home link' do
+      expect(page).to have_link 'Provider home'
+    end
+  end
+
+  context 'when not logged in' do
+    before do
+      visit '/'
+    end
+
+    it 'displays info for logging in' do
+      expect(page).to have_content 'Already a POD user?'
+      expect(page).to have_link 'Login'
+      expect(page).to have_css('a.btn')
+    end
+
+    it 'displays links to docs' do
+      expect(page).to have_content 'Check out the POD wiki or contact pod-support@lists.stanford.edu'
+    end
   end
 end
