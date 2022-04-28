@@ -7,7 +7,7 @@ class GenerateInterstreamDeltaJob < ApplicationJob
 
   def self.generate_interstream_delta_for_stream(stream)
     if stream.is_a? Integer
-      stream = Stream.find_by(stream)
+      stream = Stream.find(stream)
     end
     return if stream.nil?
 
