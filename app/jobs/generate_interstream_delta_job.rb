@@ -50,6 +50,7 @@ class GenerateInterstreamDeltaJob < ApplicationJob
       if delta.deletes.blob
         delta.deletes.blob.open do |tempfile|
           delete_ids = tempfile.read.split
+          delete_ids.each do |delete_id|
             if comparison_hash.key?(delete_id)
               comparison_hash.delete(delete_id)
             end
