@@ -6,15 +6,13 @@ class GenerateInterstreamDeltaJob < ApplicationJob
   with_job_tracking
 
   def self.generate_interstream_delta_for_stream(stream)
-    if stream.is_a? Integer
-      stream = Stream.find(stream)
-    end
+    stream = Stream.find(stream) if stream.is_a? Integer
     return if stream.nil?
 
     GenerateInterstreamDeltaJob.perform_later(stream)
   end
 
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def perform(stream)
     previous_stream_history = stream.default_stream_history.previous_stream_history
     return if previous_stream_history.nil?
@@ -40,6 +38,7 @@ class GenerateInterstreamDeltaJob < ApplicationJob
     # Then one-by-one adjust according to each delta from oldest to newest
     previous_stream_deltas = previous_stream_dump.deltas.order(created_at: :asc)
     previous_stream_deltas.each do |delta|
+      # rubocop:disable Style/Next, Style/SafeNavigation
       if delta.marcxml.blob
         delta_reader = MarcRecordService.new(delta.marcxml.blob)
         delta_reader.each_slice(100) do |batch|
@@ -51,13 +50,13 @@ class GenerateInterstreamDeltaJob < ApplicationJob
       if delta.deletes.blob
         delta.deletes.blob.open do |tempfile|
           delete_ids = tempfile.read.split
-          delete_ids.each do |delete_id|
             if comparison_hash.key?(delete_id)
               comparison_hash.delete(delete_id)
             end
           end
         end
       end
+      # rubocop:enable Style/Next, Style/SafeNavigation
     end
 
     current_stream_reader = MarcRecordService.new(current_stream_dump.marcxml.blob)
@@ -110,5 +109,5 @@ class GenerateInterstreamDeltaJob < ApplicationJob
     current_stream_dump.interstream_delta.public_send(:marcxml).attach(io: File.open(xml_tempfile), filename: "#{base_name}.xml")
     current_stream_dump.interstream_delta.public_send(:deletes).attach(io: File.open(delete_tempfile), filename: "#{base_name}.del.txt")
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 end
