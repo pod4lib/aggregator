@@ -5,10 +5,9 @@ require 'rails_helper'
 RSpec.describe 'organizations/index', type: :view do
   let(:org1) { create(:organization, name: 'Organization 1') }
   let(:org2) { create(:organization, name: 'Organization 2') }
-  let(:org3) { create(:organization, name: 'Organization 3', provider: false) }
 
   before do
-    assign(:organizations, [org1, org2, org3])
+    assign(:organizations, [org1, org2])
   end
 
   it 'renders a list of organizations' do
@@ -16,7 +15,6 @@ RSpec.describe 'organizations/index', type: :view do
 
     assert_select 'tr>td', text: 'Organization 1'
     assert_select 'tr>td', text: 'Organization 2'
-    assert_select 'tr>td', text: 'Organization 3'
   end
 
   it 'renders 2 charts' do
