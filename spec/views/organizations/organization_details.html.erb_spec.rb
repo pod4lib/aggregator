@@ -4,10 +4,11 @@ require 'rails_helper'
 
 RSpec.describe 'organizations/organization_details', type: :view do
   let(:organization) { create(:organization, name: 'Best University') }
-  let(:admin) { create(:admin) }
+  let(:contact_email) { create(:contact_email, organization: organization) }
 
   before do
     assign(:organization, organization)
+    assign(:contact_email, contact_email)
   end
 
   # rubocop:disable RSpec/ExampleLength
@@ -20,6 +21,7 @@ RSpec.describe 'organizations/organization_details', type: :view do
       assert_select 'input[name=?]', 'organization[slug]'
       assert_select 'input[name=?]', 'organization[code]'
       assert_select 'input[name=?]', 'organization[provider]'
+      assert_select 'input[name=?]', 'organization[contact_email_attributes][email]'
     end
   end
   # rubocop:enable RSpec/ExampleLength
