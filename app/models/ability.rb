@@ -49,25 +49,29 @@ class Ability
     end
 
     can :manage, :all if user.has_role?(:admin)
-    cannot :delete, Stream, default: true
     can :read, Organization, public: true
     can :manage, :dashboard_controller if user.has_role?(:admin)
     can :manage, :organization_slug if user.has_role?(:admin)
 
     owned_orgs = Organization.with_role(:owner, user).pluck(:id)
     can :manage, Organization, id: owned_orgs
-    can %i[crud profile info], [Stream, Upload], organization: { id: owned_orgs }
+    can %i[crud profile], [Stream], organization: { id: owned_orgs }
+    can %i[crud info], [Upload], organization: { id: owned_orgs }
     can :read, MarcRecord, upload: { organization: { id: owned_orgs } }
     can :manage, AllowlistedJwt, resource_type: 'Organization', resource_id: owned_orgs
     can :read, ActiveStorage::Attachment, { record: { organization: { id: owned_orgs } } }
 
     member_orgs = Organization.with_role(:member, user).pluck(:id)
     can %i[invite], Organization, id: member_orgs
-    can %i[read profile info], [Stream, Upload], organization: { id: member_orgs }
+    can %i[read profile], [Stream], organization: { id: member_orgs }
+    can %i[read info], [Upload], organization: { id: member_orgs }
     can %i[create], [Upload], organization: { id: member_orgs }
     can :read, MarcRecord, upload: { organization: { id: member_orgs } }
     can :read, AllowlistedJwt, resource_type: 'Organization', resource_id: member_orgs
     can :read, ActiveStorage::Attachment, { record: { organization: { id: member_orgs } } }
+
+    # Must be last line
+    cannot :destroy, Stream, default: true
   end
   # rubocop:enable Metrics/CyclomaticComplexity
   # rubocop:enable Metrics/PerceivedComplexity
