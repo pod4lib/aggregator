@@ -21,11 +21,14 @@ RSpec.describe ContactEmail, type: :model do
     end
   end
 
+  # rubocop:disable RSpec/SubjectStub
   it 'sends a confirmation email' do
+    allow(contact_email).to receive(:saved_change_to_attribute?).with(:email).and_return(true)
     expect do
-      contact_email.save
+      contact_email.update(email: 'someone@example.com')
     end.to have_enqueued_mail(ContactEmailsMailer, :confirm_email)
   end
+  # rubocop:enable RSpec/SubjectStub
 
   describe '#confirm!' do
     before { contact_email.save }

@@ -13,7 +13,9 @@ class ContactEmail < ApplicationRecord
   end
 
   after_commit do
-    ContactEmailsMailer.with(contact_email: self).confirm_email.deliver_later if confirmation_sent_at.blank?
+    if confirmation_sent_at.blank? && saved_change_to_attribute?(:email)
+      ContactEmailsMailer.with(contact_email: self).confirm_email.deliver_later
+    end
   end
 
   def confirm!
