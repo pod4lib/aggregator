@@ -4,12 +4,22 @@ require 'rails_helper'
 
 RSpec.describe 'OAI-PMH', type: :feature do
   let(:organization) { create(:organization, name: 'My Org', slug: 'my-org') }
+  let(:test_stream) { create(:stream, organization: organization, name: 'Test') }
   let(:user) { create(:user) }
 
   # NOTE: capybara matchers don't always seem to work on returned XML documents;
   # parsing the response using Nokogiri is required for some assertions
 
   before do
+    travel_to Time.zone.local(2020, 5, 6) do
+      create(:upload, :marc_xml, stream: organization.default_stream)
+      GenerateFullDumpJob.perform_now(organization)
+    end
+
+    create(:upload, :marc_xml, stream: organization.default_stream)
+    create(:upload, :marc_xml, stream: test_stream)
+    GenerateDeltaDumpJob.perform_now(organization)
+
     user.add_role :member, organization
     login_as(user, scope: :user)
   end
@@ -51,8 +61,6 @@ RSpec.describe 'OAI-PMH', type: :feature do
 
   context 'when the verb is Identify' do
     before do
-      create(:upload, :marc_xml, stream: organization.default_stream, created_at: Date.new(2000, 10, 11))
-      create(:upload, :marc_xml, stream: organization.default_stream, created_at: Date.new(2020, 5, 6))
       visit oai_url(verb: 'Identify')
     end
 
@@ -70,10 +78,10 @@ RSpec.describe 'OAI-PMH', type: :feature do
       doc = Nokogiri::XML(page.body)
       expect(doc.at_css('Identify > protocolVersion').text).to eq('2.0')
     end
-    
-    it 'renders the datestamp of the earliest item in the repository' do
+
+    it 'renders the datestamp of the earliest item uploaded to a default stream' do
       doc = Nokogiri::XML(page.body)
-      expect(doc.at_css('Identify > earliestDatestamp').text).to eq('2000-10-11')
+      expect(doc.at_css('Identify > earliestDatestamp').text).to eq('2020-05-06')
     end
 
     it 'renders the type of support for deleted records' do

@@ -47,7 +47,12 @@ class OaiController < ApplicationController
     headers['Last-Modified'] = Time.current.httpdate
     headers['X-Accel-Buffering'] = 'no'
 
-    render xml: build_identify_response(Upload.order(:created_at).first.created_at)
+    earliest_oai = Stream.default.joins(normalized_dumps: :oai_xml_attachment)
+                         .order('normalized_dumps.created_at ASC')
+                         .limit(1)
+                         .pick('normalized_dumps.created_at')
+
+    render xml: build_identify_response(earliest_oai)
   end
 
   def render_error(code)
