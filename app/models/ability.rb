@@ -55,6 +55,7 @@ class Ability
 
     owned_orgs = Organization.with_role(:owner, user).pluck(:id)
     can :manage, Organization, id: owned_orgs
+    cannot :destroy, Organization, id: owned_orgs
     can %i[crud profile], [Stream], organization: { id: owned_orgs }
     can %i[crud info], [Upload], organization: { id: owned_orgs }
     can :read, MarcRecord, upload: { organization: { id: owned_orgs } }

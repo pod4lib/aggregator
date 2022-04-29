@@ -84,6 +84,7 @@ RSpec.describe Ability do
 
       # Owner organization
       it { is_expected.to be_able_to(:manage, organization) }
+      it { is_expected.not_to be_able_to(:destroy, organization) }
       it { is_expected.to be_able_to(:normalized_data, organization) }
       it { is_expected.to be_able_to(:processing_status, organization) }
       it { is_expected.to be_able_to(:users, organization) }
