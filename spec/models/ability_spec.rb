@@ -60,7 +60,7 @@ RSpec.describe Ability do
       let(:user) { create(:admin) }
 
       it { is_expected.to be_able_to(:manage, :all) }
-      it { is_expected.not_to be_able_to(:delete, default_stream) }
+      it { is_expected.not_to be_able_to(:destroy, default_stream) }
     end
 
     context 'when a user without any roles' do
@@ -70,7 +70,7 @@ RSpec.describe Ability do
       it { is_expected.not_to be_able_to(:read, Upload.new) }
       it { is_expected.not_to be_able_to(:read, Stream.new) }
       it { is_expected.not_to be_able_to(:read, AllowlistedJwt.new) }
-      it { is_expected.not_to be_able_to(:delete, default_stream) }
+      it { is_expected.not_to be_able_to(:destroy, default_stream) }
     end
 
     context 'with an owner of an org' do
@@ -80,10 +80,11 @@ RSpec.describe Ability do
         user.add_role :owner, organization
       end
 
-      it { is_expected.not_to be_able_to(:delete, default_stream) }
+      it { is_expected.not_to be_able_to(:destroy, default_stream) }
 
       # Owner organization
       it { is_expected.to be_able_to(:manage, organization) }
+      it { is_expected.not_to be_able_to(:destroy, organization) }
       it { is_expected.to be_able_to(:normalized_data, organization) }
       it { is_expected.to be_able_to(:processing_status, organization) }
       it { is_expected.to be_able_to(:users, organization) }
@@ -127,7 +128,7 @@ RSpec.describe Ability do
         user.add_role :member, organization
       end
 
-      it { is_expected.not_to be_able_to(:delete, default_stream) }
+      it { is_expected.not_to be_able_to(:destroy, default_stream) }
 
       # Member organization
       it { is_expected.not_to be_able_to(:manage, organization) }

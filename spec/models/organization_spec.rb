@@ -48,4 +48,16 @@ RSpec.describe Organization do
       expect(organization.provider?).to be true
     end
   end
+
+  describe '#providers' do
+    it 'includes providers in scope' do
+      org = described_class.create!(provider: true)
+      expect(described_class.providers).to include(org)
+    end
+
+    it 'excludes non-providers in scope' do
+      org = described_class.create!(provider: false)
+      expect(described_class.providers).not_to include(org)
+    end
+  end
 end
