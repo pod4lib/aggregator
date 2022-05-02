@@ -57,6 +57,8 @@ class MarcRecordService
 
   # Identify what type of MARC is in the blob by reading just a little bit of it
   def identify_by_content
+    return unless file_preview
+
     if file_preview.bytes[0] == 0x1F && file_preview.bytes[1] == 0x8B # gzip magic bytes
       identify_gzip
     elsif ['<?xml', '<reco', '<coll'].any? { |x| file_preview.match? x } # xml preamble
