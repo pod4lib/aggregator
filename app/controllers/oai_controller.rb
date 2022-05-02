@@ -32,7 +32,6 @@ class OaiController < ApplicationController
 
     render xml: build_list_records_response(*list_record_normalized_dump_candidates.first(2))
   end
-  # rubocop:enable Metrics/AbcSize
 
   def render_list_sets
     headers['Cache-Control'] = 'no-cache'
@@ -52,8 +51,9 @@ class OaiController < ApplicationController
                          .limit(1)
                          .pick('normalized_dumps.created_at')
 
-    render xml: build_identify_response(earliest_oai)
+    render xml: build_identify_response(earliest_oai || Time.now.utc)
   end
+  # rubocop:enable Metrics/AbcSize
 
   def render_error(code)
     error = <<~XML
