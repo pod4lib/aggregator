@@ -70,6 +70,8 @@ class ExtractFilesJob < ApplicationJob
     blob = attachment.blob
     chunk = blob.service.download_chunk(blob.key, 0..(2.kilobytes))
 
+    return false unless chunk
+
     # tar.gz magic bytes
     if chunk.bytes[0] == 0x1F && chunk.bytes[1] == 0x8B
       reader = Zlib::GzipReader.new(StringIO.new(chunk))
