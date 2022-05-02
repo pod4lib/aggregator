@@ -26,19 +26,18 @@ class MarcRecordService
     @blob = blob
   end
 
-  # Identify what type of MARC is in the blob by reading just a little bit of it
+  # Identify what type of MARC is in the blob
   def identify
-    @identify ||= identify_by_file || identify_by_content || :unknown
+    @identify ||= identify_by_file_name || identify_by_content || :unknown
   end
 
-  def identify_by_file
+  # Identify what type of MARC is in the blob by the mime type or file name
+  def identify_by_file_name
     content_types_to_identity = {
       'text/plain' => :delete,
       'application/marc' => :marc21,
       'application/marcxml+xml' => :marcxml
     }
-
-    return content_types_to_identity[blob.content_type] if content_types_to_identity[blob.content_type]
 
     extensions_to_identity = {
       'del' => :delete,
@@ -48,19 +47,27 @@ class MarcRecordService
       'xml' => :marcxml
     }
 
-    extensions_to_identity[blob.filename.extension]
+    presumed_content_type = content_types_to_identity[blob.content_type] || extensions_to_identity[blob.filename.extension]
+
+    # delete identification is the most sketchy, so we want to verify it isn't MARC-ish:
+    return presumed_content_type unless presumed_content_type == :delete
+
+    identify_by_content || :delete
   end
 
+  # Identify what type of MARC is in the blob by reading just a little bit of it
   def identify_by_content
-    start = download_chunk(0...5)
-
-    if start.bytes[0] == 0x1F && start.bytes[1] == 0x8B # gzip magic bytes
+    if file_preview.bytes[0] == 0x1F && file_preview.bytes[1] == 0x8B # gzip magic bytes
       identify_gzip
-    elsif ['<?xml', '<reco', '<coll'].include? start # xml preamble
+    elsif ['<?xml', '<reco', '<coll'].any? { |x| file_preview.match? x } # xml preamble
       :marcxml
-    elsif start.match?(/^\d+$/) # kinda looks like a MARC21 leader...
+    elsif file_preview.match?(/^\d{4}[a-z ]{5}22\d{5}[a-z0-9 ][a-z ]{2}4500/) # kinda like a MARC21 leader...
       :marc21
     end
+  end
+
+  def file_preview
+    @file_preview ||= download_chunk(0...32)
   end
 
   def marc21?(type = identify)
