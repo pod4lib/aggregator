@@ -11,6 +11,8 @@ class OaiController < ApplicationController
       render_list_records
     when 'ListSets'
       render_list_sets
+    when 'Identify'
+      render_identify
     else
       render_error('badVerb')
     end
@@ -38,6 +40,19 @@ class OaiController < ApplicationController
     headers['X-Accel-Buffering'] = 'no'
 
     render xml: build_list_sets_response(Organization.providers)
+  end
+
+  def render_identify
+    headers['Cache-Control'] = 'no-cache'
+    headers['Last-Modified'] = Time.current.httpdate
+    headers['X-Accel-Buffering'] = 'no'
+
+    earliest_oai = Stream.default.joins(normalized_dumps: :oai_xml_attachment)
+                         .order('normalized_dumps.created_at ASC')
+                         .limit(1)
+                         .pick('normalized_dumps.created_at')
+
+    render xml: build_identify_response(earliest_oai)
   end
 
   def render_error(code)
@@ -86,7 +101,9 @@ class OaiController < ApplicationController
   end
   # rubocop:enable Metrics/AbcSize
 
+  # rubocop:disable Metrics/AbcSize
   # rubocop:disable Metrics/MethodLength
+  # See https://www.openarchives.org/OAI/openarchivesprotocol.html#ListRecords
   def build_list_records_response(dump, next_dump = nil)
     Enumerator.new do |yielder|
       yielder << <<~EOXML
@@ -112,10 +129,8 @@ class OaiController < ApplicationController
       EOXML
     end
   end
-  # rubocop:enable Metrics/MethodLength
 
-  # rubocop:disable Metrics/AbcSize
-  # rubocop:disable Metrics/MethodLength
+  # See https://www.openarchives.org/OAI/openarchivesprotocol.html#ListSets
   def build_list_sets_response(organizations)
     Nokogiri::XML::Builder.new do |xml|
       xml.send :'OAI-PMH', oai_xmlns do
@@ -130,6 +145,27 @@ class OaiController < ApplicationController
               xml.setName organization.name
             end
           end
+        end
+      end
+    end.to_xml
+  end
+
+  # See https://www.openarchives.org/OAI/openarchivesprotocol.html#Identify
+  def build_identify_response(earliest_date)
+    Nokogiri::XML::Builder.new do |xml|
+      xml.send :'OAI-PMH', oai_xmlns do
+        xml.responseDate Time.zone.now.iso8601
+        xml.request(oai_params.to_hash) do
+          xml.text oai_url
+        end
+        xml.Identify do
+          xml.repositoryName t('layouts.application.title')
+          xml.baseURL oai_url
+          xml.protocolVersion '2.0'
+          xml.earliestDatestamp earliest_date.strftime('%F')
+          xml.deletedRecord 'transient'
+          xml.granularity 'YYYY-MM-DD'
+          xml.adminEmail Settings.contact_email
         end
       end
     end.to_xml
