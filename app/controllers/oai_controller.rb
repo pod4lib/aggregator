@@ -112,6 +112,7 @@ class OaiController < ApplicationController
   # rubocop:enable Metrics/AbcSize
 
   # Wrap the provided Nokogiri::XML::Builder block in an OAI-PMH response
+  # See http://www.openarchives.org/OAI/openarchivesprotocol.html#XMLResponse
   def build_oai_response(xml, params)
     xml.send :'OAI-PMH', oai_xmlns do
       xml.responseDate Time.zone.now.iso8601
@@ -149,6 +150,7 @@ class OaiController < ApplicationController
       EOXML
     end
   end
+  # rubocop:enable Metrics/MethodLength
 
   # See https://www.openarchives.org/OAI/openarchivesprotocol.html#ListSets
   def build_list_sets_response(organizations)
@@ -182,8 +184,23 @@ class OaiController < ApplicationController
       end
     end.to_xml
   end
-  # rubocop:enable Metrics/MethodLength
 
+  # See http://www.openarchives.org/OAI/openarchivesprotocol.html#ListMetadataFormats
+  def build_list_metadata_formats_response
+    Nokogiri::XML::Builder.new do |xml|
+      build_oai_response xml, list_metadata_formats_params do
+        xml.ListMetadataFormats do
+          xml.metadataFormat do
+            xml.metadataPrefix 'marc21'
+            xml.schema 'http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd'
+            xml.metadataNamespace 'http://www.loc.gov/MARC21/slim'
+          end
+        end
+      end
+    end.to_xml
+  end
+
+  # See http://www.openarchives.org/OAI/openarchivesprotocol.html#ErrorConditions
   def build_error_response(code, message, params = {})
     Nokogiri::XML::Builder.new do |xml|
       build_oai_response xml, params do
