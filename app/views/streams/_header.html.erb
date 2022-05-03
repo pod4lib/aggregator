@@ -14,7 +14,7 @@
 </div>
 
 <p class="lead">
-<%= stream_updated = stream.uploads.last&.updated_at || stream.updated_at %>
+  <% stream_updated = stream.uploads.last&.updated_at || stream.updated_at %>
   Last updated: <%= content_tag :span, "#{time_ago_in_words(stream_updated)} ago", title: local_time(stream_updated, format: datetime_display_format()) %>
 </p>
 
