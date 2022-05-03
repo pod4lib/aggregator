@@ -122,7 +122,7 @@ en:
         framework: Data provider and usage framework
         github: GitHub repository
         heading: Other resources
-    layout_provider_page:
+    layout_stream_page:
       manage_org: Manage organization
       view_org: View organization details
     nav:

@@ -1,9 +1,4 @@
-<%= render 'shared/organization_header' %>
-
-<div class="container mb-5">
-  <%= render 'header', stream: @stream %>
-
-  <%= render 'job_status', stream: @stream %>
-
-  <%= render 'stream_uploads', stream: @stream, uploads: @uploads %>
-</div>
+<%= render 'shared/layout_stream_page' do %>
+  <h3>Uploaded files</h3>
+  <%= render 'streams/stream_uploads', stream: @stream, uploads: @uploads %>
+<% end %>

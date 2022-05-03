@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'shared/_layout_provider_page', type: :view do
+RSpec.describe 'shared/_layout_stream_page', type: :view do
   let(:organization) do
     create(:organization, name: 'Best University')
   end

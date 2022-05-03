@@ -26,6 +26,7 @@ RSpec.describe 'organizations/show', type: :view do
                    ])
 
     assign(:uploads, stream.uploads.active.order(created_at: :desc).page(params[:page]))
+    assign(:stream, stream)
 
     sign_in create(:admin)
   end

@@ -91,7 +91,7 @@
             <%= t('.organization.jobs.status_html.zero') %>
           </li>
           <% end %>
-          <li class="my-3"><%= link_to t('.organization.jobs.all'), processing_status_organization_path(@overview.organization) %></li>
+          <li class="my-3"><%= link_to t('.organization.jobs.all'), processing_status_organization_stream_path(@overview.organization, @overview.organization.default_stream) %></li>
         </ul>
       </div>
       <% end %>

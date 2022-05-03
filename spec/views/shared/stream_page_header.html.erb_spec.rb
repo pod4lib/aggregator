@@ -2,12 +2,13 @@
 
 require 'rails_helper'
 
-RSpec.describe 'shared/_provider_page_header', type: :view do
+RSpec.describe 'shared/_stream_page_header', type: :view do
   let(:organization) { create(:organization, name: 'Best University') }
-  let(:admin) { create(:admin) }
+  let(:stream) { create(:stream, organization: organization) }
 
   before do
     assign(:organization, organization)
+    assign(:stream, stream)
   end
 
   # rubocop:disable RSpec/MultipleExpectations

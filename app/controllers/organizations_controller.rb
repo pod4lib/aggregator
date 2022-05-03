@@ -23,6 +23,7 @@ class OrganizationsController < ApplicationController
     # see https://github.com/pod4lib/aggregator/issues/535#issuecomment-1103234114
     redirect_to organization_users_path(@organization) unless @organization.provider?
 
+    @stream = @organization.default_stream if @organization.provider?
     @uploads = @organization.default_stream.uploads.active.order(created_at: :desc).page(params[:page])
   end
 
@@ -30,11 +31,6 @@ class OrganizationsController < ApplicationController
   def new
     @organization = Organization.new
   end
-
-  # GET /organizations/1/normalized_data
-  def normalized_data; end
-  # GET /organizations/1/processing_status
-  def processing_status; end
 
   # GET /organizations/1/provider_details
   def provider_details

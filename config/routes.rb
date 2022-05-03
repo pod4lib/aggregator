@@ -36,8 +36,6 @@ Rails.application.routes.draw do
     end
 
     member do
-      get 'normalized_data'
-      get 'processing_status'
       get 'organization_details'
       get 'provider_details'
     end
@@ -68,6 +66,8 @@ Rails.application.routes.draw do
       end
 
       member do
+        get 'normalized_data', to: 'streams#normalized_data'
+        get 'processing_status', to: 'streams#processing_status'
         get 'profile', to: 'streams#profile'
         post 'reanalyze', to: 'streams#reanalyze'
         get 'resourcelist', to: 'streams#resourcelist', defaults: { format: :xml }
