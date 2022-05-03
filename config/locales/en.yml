@@ -133,10 +133,10 @@ en:
       is_admin: POD Admin
       login: Login
       logout: Logout
-      manage_users: Manage users
+      manage_org_page: Manage %{org}
       providers: Providers
       users: Users
-      view_org_page: "%{org} POD"
+      view_org_page: "%{org} home"
     organization_header:
       contact: POD contact for this organization
       marc_code: 'MARC organization code: %{code}'
