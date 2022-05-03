@@ -10,10 +10,10 @@ class ContactEmailsController < ApplicationController
 
     respond_to do |format|
       if @contact_email.confirm!
-        format.html { render_or_redirect_with_flash notice: 'Contact email confirmed' }
+        format.html { render_or_redirect_with_flash notice: 'The POD contact for this organization has been confirmed.' }
         format.json { head :no_content }
       else
-        format.html { render_or_redirect_with_flash error: 'Unable to confirm contact email' }
+        format.html { render_or_redirect_with_flash error: 'Unable to confirm contact email.' }
         format.json { render json: @contact_email.errors, status: :unprocessable_entity }
       end
     end
@@ -21,7 +21,7 @@ class ContactEmailsController < ApplicationController
 
   def render_or_redirect_with_flash(**messages)
     messages.each do |key, value|
-      flash.now[key] = value
+      flash.keep[key] = value
     end
 
     if can? :read, @contact_email.organization
