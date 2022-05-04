@@ -3,13 +3,13 @@
 
   <div class="p-2">
     <%= content_tag :span, 'Default', class: 'badge bg-info me-3' if stream.default? %>
-    <%= link_to can?(:edit, stream) ? 'Manage streams' : 'View streams', organization_streams_path(stream.organization) %>
+    <%= link_to can?(:edit, stream) ? t('.manage_streams') : t('.view_streams'), organization_streams_path(stream.organization) %>
     <span class="badge bg-secondary"><%= stream.organization.streams.active.count %></span>
   </div>
 
   <div class="ms-auto p-2">
-    <%= link_to 'Upload file', new_organization_upload_path(stream.organization, stream: (stream.default? ? nil : stream.friendly_id)), class: 'btn btn-primary' if can? :create, stream.uploads.build %>
-    <%= link_to 'Re-analyze', reanalyze_organization_stream_path(stream.organization, stream), method: :post, class: 'btn btn-secondary align-self-center' if can?(:manage, stream) %>
+    <%= link_to t('.upload'), new_organization_upload_path(stream.organization, stream: (stream.default? ? nil : stream.friendly_id)), class: 'btn btn-primary' if can? :create, stream.uploads.build %>
+    <%= link_to t('.reanalyze'), reanalyze_organization_stream_path(stream.organization, stream), method: :post, class: 'btn btn-secondary align-self-center' if can?(:manage, stream) %>
   </div>
 </div>
 
@@ -20,6 +20,6 @@
 
 <div class="mb-3">
   <% unless stream.default? %>
-    <%= link_to 'Make default', make_default_organization_streams_path(stream.organization, stream: stream.slug), method: :post, class: 'btn btn-secondary align-self-center' if can?(:update, stream) %>
+    <%= link_to t('.make_default'), make_default_organization_streams_path(stream.organization, stream: stream.slug), method: :post, class: 'btn btn-secondary align-self-center' if can?(:update, stream) %>
   <% end %>
 </div>

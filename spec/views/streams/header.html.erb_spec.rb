@@ -26,11 +26,11 @@ RSpec.describe 'streams/header', type: :view do
     expect(rendered).to have_link 'Manage streams'
   end
 
-  it 'displays the Upload file button' do
+  it 'displays the New upload button' do
     allow(view).to receive(:can?).and_return(true)
     render subject, stream: stream # rubocop:disable RSpec/NamedSubject
 
-    expect(rendered).to have_link 'Upload file'
+    expect(rendered).to have_link 'New upload'
   end
 
   it 'displays the Re-analyze button' do
