@@ -6,20 +6,68 @@ RSpec.describe 'Using the dropdown menu in the navbar', type: :feature do
   let(:organization) { create(:organization, name: 'Best University') }
   let(:user) { create(:user) }
 
-  before do
-    user.add_role :member, organization
-    user.add_role :admin
-    login_as(user, scope: :user)
-    visit '/'
-  end
-
-  describe 'Dropdown menu links' do
-    it 'Shows affiliated organization links' do
-      expect(page).to have_link 'Best University POD'
+  describe 'Menu links for admin user' do
+    before do
+      user.add_role :member, organization
+      user.add_role :admin
+      login_as(user, scope: :user)
+      visit '/'
     end
 
-    it 'Shows the manage users link' do
-      expect(page).to have_link 'Manage users'
+    it 'Shows affiliated organization manage link' do
+      expect(page).to have_link 'Manage Best University'
+    end
+
+    it 'Shows affiliated organization home link' do
+      expect(page).to have_link 'Best University home'
+    end
+
+    it 'Shows the edit profile link' do
+      expect(page).to have_link 'Edit profile'
+    end
+
+    it 'Shows the logout link' do
+      expect(page).to have_link 'Logout'
+    end
+  end
+
+  describe 'Menu links for owner user' do
+    before do
+      user.add_role :owner, organization
+      login_as(user, scope: :user)
+      visit '/'
+    end
+
+    it 'Shows affiliated organization manage link' do
+      expect(page).to have_link 'Manage Best University'
+    end
+
+    it 'Shows affiliated organization home link' do
+      expect(page).to have_link 'Best University home'
+    end
+
+    it 'Shows the edit profile link' do
+      expect(page).to have_link 'Edit profile'
+    end
+
+    it 'Shows the logout link' do
+      expect(page).to have_link 'Logout'
+    end
+  end
+
+  describe 'Menu links for member user' do
+    before do
+      user.add_role :member, organization
+      login_as(user, scope: :user)
+      visit '/'
+    end
+
+    it 'Does not show affiliated organization manage link' do
+      expect(page).not_to have_link 'Manage Best University'
+    end
+
+    it 'Shows affiliated organization home link' do
+      expect(page).to have_link 'Best University home'
     end
 
     it 'Shows the edit profile link' do

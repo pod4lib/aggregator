@@ -25,12 +25,6 @@ RSpec.describe 'shared/_nav', type: :view do
 
       expect(rendered).to have_link('Logout')
     end
-
-    it 'displays the edit profile link' do
-      render
-
-      expect(rendered).to have_link('Edit profile')
-    end
   end
 
   context 'when user has multiple roles' do
@@ -42,7 +36,7 @@ RSpec.describe 'shared/_nav', type: :view do
       current_user.add_role :owner, organization
       render
 
-      assert_select 'a', text: "#{organization.name} POD", count: 1
+      assert_select 'a', text: "#{organization.name} home", count: 1
     end
   end
 end

@@ -15,7 +15,7 @@ RSpec.describe 'uploading files to POD', type: :feature do
     it 'allows an org owner to upload a file to the default stream' do
       visit '/'
 
-      click_on 'Best University'
+      click_on 'Best University home'
       click_on 'Upload file'
       attach_file('Upload file', Rails.root.join('spec/fixtures/stanford-50.mrc.gz'))
       click_on 'Create upload'
