@@ -123,34 +123,23 @@ class OaiController < ApplicationController
     end
   end
 
-  # rubocop:disable Metrics/MethodLength
   # See https://www.openarchives.org/OAI/openarchivesprotocol.html#ListRecords
   def build_list_records_response(dump, next_dump = nil)
-    Enumerator.new do |yielder|
-      yielder << <<~EOXML
-        <?xml version="1.0" encoding="UTF-8"?>
-        <OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
-                http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
-          <responseDate>#{Time.zone.now.iso8601}</responseDate>
-          #{build_request.to_xml}
-          <ListRecords>
-      EOXML
-
-      read_oai_xml(dump).each do |chunk|
-        yielder << chunk
+    Nokogiri::XML::Builder.new do |xml|
+      build_oai_response xml, list_records_params do
+        xml.ListRecords do
+          read_oai_xml(dump).each do |chunk|
+            xml << chunk
+          end
+          if next_dump
+            xml.resumptionToken do
+              xml.text next_dump.id
+            end
+          end
+        end
       end
-
-      yielder << "<resumptionToken>#{next_dump.id}</resumptionToken>" if next_dump
-
-      yielder << <<~EOXML
-          </ListRecords>
-        </OAI-PMH>
-      EOXML
-    end
+    end.to_xml
   end
-  # rubocop:enable Metrics/MethodLength
 
   # See https://www.openarchives.org/OAI/openarchivesprotocol.html#ListSets
   def build_list_sets_response(organizations)
