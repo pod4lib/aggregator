@@ -13,7 +13,6 @@ class Stream < ApplicationRecord
   has_one :statistic, dependent: :delete, as: :resource
   has_many :normalized_dumps, dependent: :destroy
   has_many :job_trackers, dependent: :delete_all, as: :reports_on
-  has_many :interstream_deltas, dependent: :destroy
 
   scope :default, -> { where(default: true) }
   scope :active, -> { where(status: 'active') }
