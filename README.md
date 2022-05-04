@@ -146,3 +146,17 @@ docker system prune -a -f --volumes
 ### Logs:
 To check the log output of a container run the command `docker logs ${container_name}` e.g.:
 `docker logs aggapp`
+
+## Development Standards
+
+### Display dates
+
+Dates are displayed in a standard format on all UI pages across the application. The `local_time` library accepts a date in UTC and automatically detects the user's timezone on the client side and displays the equivalent date in the local timezone. Also there is a customer helper method `datetime_display_format()` that returns the standard date format. That way the date format can be managed centrally.
+
+To display a date in the UI, use the `local_time` library with the `datetime_display_format` helper method.
+
+```
+<%= local_time(uploads.last.created_at, format: datetime_display_format()) %>
+```
+
+
