@@ -14,7 +14,9 @@ class UploadsController < ApplicationController
 
   # GET /uploads/1
   # GET /uploads/1.json
-  def show; end
+  def show
+    @stream = current_stream
+  end
 
   # GET /uploads/new
   def new; end
