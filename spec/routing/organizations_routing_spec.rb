@@ -54,13 +54,5 @@ RSpec.describe OrganizationsController, type: :routing do
     it 'routes to #organization_details' do
       expect(get: '/organizations/1/organization_details').to route_to('organizations#organization_details', id: '1')
     end
-
-    it 'routes to #normalized_data' do
-      expect(get: '/organizations/1/normalized_data').to route_to('organizations#normalized_data', id: '1')
-    end
-
-    it 'routes to #processing_status' do
-      expect(get: '/organizations/1/processing_status').to route_to('organizations#processing_status', id: '1')
-    end
   end
 end

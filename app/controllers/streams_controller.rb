@@ -18,6 +18,12 @@ class StreamsController < ApplicationController
 
   def new; end
 
+  # GET /organizations/1/streams/2/normalized_data
+  def normalized_data; end
+
+  # GET /organizations/1/streams/2/processing_status
+  def processing_status; end
+
   # POST /streams
   # POST /streams.json
   def create

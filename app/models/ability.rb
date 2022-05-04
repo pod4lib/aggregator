@@ -43,9 +43,10 @@ class Ability
     if user.roles.any?
       can :read, ActiveStorage::Attachment, { record: { organization: { public: true } } }
       can :read, MarcRecord, upload: { organization: { public: true } }
-      can %i[read profile info], [Stream, Upload], organization: { public: true }
+      can %i[read profile normalized_data processing_status], Stream, organization: { public: true }
+      can %i[read info], Upload, organization: { public: true }
       can :read, :pages_data
-      can %i[read users organization_details provider_details normalized_data processing_status], Organization, public: true
+      can %i[read users organization_details provider_details], Organization, public: true
     end
 
     can :manage, :all if user.has_role?(:admin)
@@ -56,16 +57,14 @@ class Ability
     owned_orgs = Organization.with_role(:owner, user).pluck(:id)
     can :manage, Organization, id: owned_orgs
     cannot :destroy, Organization, id: owned_orgs
-    can %i[crud profile], [Stream], organization: { id: owned_orgs }
-    can %i[crud info], [Upload], organization: { id: owned_orgs }
+    can :crud, Stream, organization: { id: owned_orgs }
+    can :crud, Upload, organization: { id: owned_orgs }
     can :read, MarcRecord, upload: { organization: { id: owned_orgs } }
     can :manage, AllowlistedJwt, resource_type: 'Organization', resource_id: owned_orgs
     can :read, ActiveStorage::Attachment, { record: { organization: { id: owned_orgs } } }
 
     member_orgs = Organization.with_role(:member, user).pluck(:id)
     can %i[invite], Organization, id: member_orgs
-    can %i[read profile], [Stream], organization: { id: member_orgs }
-    can %i[read info], [Upload], organization: { id: member_orgs }
     can %i[create], [Upload], organization: { id: member_orgs }
     can :read, MarcRecord, upload: { organization: { id: member_orgs } }
     can :read, AllowlistedJwt, resource_type: 'Organization', resource_id: member_orgs

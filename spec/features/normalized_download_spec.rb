@@ -4,14 +4,15 @@ require 'rails_helper'
 
 RSpec.describe 'Downloading normalized files from POD', type: :feature do
   let(:organization) { create(:organization, code: 'best-org') }
+  let(:stream) { create(:stream, organization: organization, default: true) }
   let(:user) { create(:user) }
 
   before do
     user.add_role :member, organization
     login_as(user, scope: :user)
 
-    create_list(:upload, 2, :binary_marc, organization: organization, stream: organization.default_stream)
-    create_list(:upload, 2, :binary_marc_gz, organization: organization, stream: organization.default_stream)
+    create_list(:upload, 2, :binary_marc, organization: organization, stream: stream)
+    create_list(:upload, 2, :binary_marc_gz, organization: organization, stream: stream)
   end
 
   describe 'Full dumps' do
@@ -21,14 +22,14 @@ RSpec.describe 'Downloading normalized files from POD', type: :feature do
     end
 
     it 'generates binary & xml full dump files and provides a link to them' do
-      visit normalized_data_organization_path(organization)
+      visit normalized_data_organization_stream_path(organization, stream)
 
       expect(page).to have_link "#{organization.slug}-2020-01-01-full-marc21.mrc.gz"
       expect(page).to have_link "#{organization.slug}-2020-01-01-full-marcxml.xml.gz"
     end
 
     it 'provides all MARC records that have been uploaded to the default stream gzipped into one dump file' do
-      visit normalized_data_organization_path(organization)
+      visit normalized_data_organization_stream_path(organization, stream)
 
       # Note, this won't work in a driver other that Rack::Test w/o some other magic
       click_link "#{organization.slug}-2020-01-01-full-marc21.mrc.gz"
@@ -39,7 +40,7 @@ RSpec.describe 'Downloading normalized files from POD', type: :feature do
     end
 
     it 'provides augmented MARC records with POD and Organizational provenance' do
-      visit normalized_data_organization_path(organization)
+      visit normalized_data_organization_stream_path(organization, stream)
 
       # Note, this won't work in a driver other that Rack::Test w/o some other magic
       click_link "#{organization.slug}-2020-01-01-full-marc21.mrc.gz"
@@ -52,7 +53,7 @@ RSpec.describe 'Downloading normalized files from POD', type: :feature do
     end
 
     it 'tracks the download' do
-      visit normalized_data_organization_path(organization)
+      visit normalized_data_organization_stream_path(organization, stream)
 
       expect do
         # Note, this won't work in a driver other that Rack::Test w/o some other magic
