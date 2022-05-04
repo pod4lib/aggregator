@@ -138,8 +138,8 @@ en:
       users: Users
       view_org_page: "%{org} home"
     organization_header:
-      contact: POD contact for this organization
-      marc_code: 'MARC organization code: %{code}'
+      contact: POD contact
+      marc_code: 'MARC code: %{code}'
       provider_home: Provider home
   site_users:
     index:
