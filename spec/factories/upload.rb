@@ -37,6 +37,17 @@ FactoryBot.define do
       end
     end
 
+    trait :marc_xml2 do
+      after(:build) do |upload|
+        upload.files.attach(
+          io: File.open(
+            Rails.root.join('spec/fixtures/67890.marcxml')
+          ),
+          filename: '67890.marcxml', content_type: 'application/marcxml+xml'
+        )
+      end
+    end
+
     trait :deleted_binary_marc do
       after(:build) do |upload|
         upload.files.attach(
