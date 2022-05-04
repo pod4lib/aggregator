@@ -57,6 +57,11 @@ RSpec.describe 'OAI-PMH', type: :feature do
       expect(doc.at_css('ListSets > set > setName').text).to eq('My Org')
       expect(doc.at_css('ListSets > set > setSpec').text).to eq('my-org')
     end
+
+    it 'renders an error if unknown params are supplied' do
+      visit oai_url(verb: 'ListSets', foo: 'bar')
+      expect(page).to have_selector('error[code="badArgument"]')
+    end
   end
 
   context 'when the verb is Identify' do
@@ -79,7 +84,7 @@ RSpec.describe 'OAI-PMH', type: :feature do
       expect(doc.at_css('Identify > protocolVersion').text).to eq('2.0')
     end
 
-    it 'renders the datestamp of the earliest item uploaded to a default stream' do
+    it 'renders the datestamp of the earliest OAI-XML dump' do
       doc = Nokogiri::XML(page.body)
       expect(doc.at_css('Identify > earliestDatestamp').text).to eq('2020-05-06')
     end
@@ -97,6 +102,32 @@ RSpec.describe 'OAI-PMH', type: :feature do
     it 'renders the repository administrative email' do
       doc = Nokogiri::XML(page.body)
       expect(doc.at_css('Identify > adminEmail').text).to eq('pod-support@lists.stanford.edu')
+    end
+
+    it 'renders an error if unknown params are supplied' do
+      visit oai_url(verb: 'Identify', foo: 'bar')
+      expect(page).to have_selector('error[code="badArgument"]')
+    end
+  end
+
+  context 'when the verb is ListMetadataFormats' do
+    it 'renders all metadata formats supported by the repository' do
+      visit oai_url(verb: 'ListMetadataFormats')
+      doc = Nokogiri::XML(page.body)
+      expect(doc.at_css('ListMetadataFormats > metadataFormat > metadataPrefix').text).to eq('marc21')
+      expect(doc.at_css('ListMetadataFormats > metadataFormat > schema').text).to eq('http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd')
+      expect(doc.at_css('ListMetadataFormats > metadataFormat > metadataNamespace').text).to eq('http://www.loc.gov/MARC21/slim')
+    end
+
+    it 'renders the metadata formats available for a single item'
+
+    it 'renders an error if an unknown identifier is supplied'
+
+    it 'renders an error if no metadata formats are available for the item'
+
+    it 'renders an error if unknown params are supplied' do
+      visit oai_url(verb: 'ListMetadataFormats', foo: 'bar')
+      expect(page).to have_selector('error[code="badArgument"]')
     end
   end
 end
