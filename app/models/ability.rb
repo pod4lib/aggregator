@@ -43,8 +43,8 @@ class Ability
     if user.roles.any?
       can :read, ActiveStorage::Attachment, { record: { organization: { public: true } } }
       can :read, MarcRecord, upload: { organization: { public: true } }
-      can %i[read profile normalized_data processing_status], [Stream], organization: { public: true }
-      can %i[read info], [Upload], organization: { public: true }
+      can %i[read profile normalized_data processing_status], Stream, organization: { public: true }
+      can %i[read info], Upload, organization: { public: true }
       can :read, :pages_data
       can %i[read users organization_details provider_details], Organization, public: true
     end
@@ -57,8 +57,8 @@ class Ability
     owned_orgs = Organization.with_role(:owner, user).pluck(:id)
     can :manage, Organization, id: owned_orgs
     cannot :destroy, Organization, id: owned_orgs
-    can %i[crud], [Stream], organization: { id: owned_orgs }
-    can %i[crud], [Upload], organization: { id: owned_orgs }
+    can :crud, Stream, organization: { id: owned_orgs }
+    can :crud, Upload, organization: { id: owned_orgs }
     can :read, MarcRecord, upload: { organization: { id: owned_orgs } }
     can :manage, AllowlistedJwt, resource_type: 'Organization', resource_id: owned_orgs
     can :read, ActiveStorage::Attachment, { record: { organization: { id: owned_orgs } } }
