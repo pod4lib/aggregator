@@ -83,7 +83,7 @@ en:
           edit_org: Manage organization
           harvest_data: Harvest data
           heading: Quick actions
-          upload_file: Upload file to default stream
+          upload_file: Create new upload in default stream
           view_org_details: View organization details
           view_provider_home: Provider home
         jobs:
@@ -148,3 +148,10 @@ en:
       organization: Organization
       remove_admin: Remove admin role
       title: Manage users
+  streams:
+    header:
+      make_default: Make default
+      manage_streams: Manage streams
+      reanalyze: Re-analyze
+      upload: New upload
+      view_streams: View streams

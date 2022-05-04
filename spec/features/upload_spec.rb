@@ -17,8 +17,8 @@ RSpec.describe 'uploading files to POD', type: :feature do
       visit '/'
 
       click_on 'Best University home'
-      click_on 'Upload file'
-      attach_file('Upload file', Rails.root.join('spec/fixtures/stanford-50.mrc.gz'))
+      click_on 'New upload'
+      attach_file('file', Rails.root.join('spec/fixtures/stanford-50.mrc.gz'))
       click_on 'Create upload'
 
       expect(page).to have_content 'stanford-50.mrc.gz'
