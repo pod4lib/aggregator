@@ -10,8 +10,13 @@ RSpec.describe MarcRecord, type: :model do
   let(:upload) { create(:upload, :binary_marc, organization: organization) }
   let(:record) do
     MARC::Record.new.tap do |record|
+      record.append(MARC::ControlField.new('001', '12345'))
       record.append(MARC::DataField.new('999', ' ', ' ', %w[a NA737.K4], %w[i 36105032407764], %w[m ART]))
     end
+  end
+
+  it 'has a unique OAI identifier' do
+    expect(marc_record.oai_id).to eq('oai:pod.stanford.edu:org-1:12345')
   end
 
   describe '#marc' do

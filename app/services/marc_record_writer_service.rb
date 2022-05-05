@@ -19,7 +19,7 @@ class MarcRecordWriterService
 
   def write_delete(record)
     deletes_writer.puts(record.marc001)
-    oai_writer.write_delete(record.marc001, record.upload.created_at)
+    oai_writer.write_delete(record.oai_id, record.organization.slug, record.upload.created_at)
   end
 
   def write_errata(message)
@@ -53,7 +53,7 @@ class MarcRecordWriterService
   end
 
   def write_oai_record(record)
-    oai_writer.write(record.augmented_marc, record.marc001, record.upload.created_at)
+    oai_writer.write(record.augmented_marc, record.oai_id, record.organization.slug, record.upload.created_at)
   rescue StandardError => e
     write_errata("#{record['001']}: #{e}")
   end
@@ -102,12 +102,13 @@ class MarcRecordWriterService
       @io = io
     end
 
-    def write(record, identifier, datestamp = Time.zone.now)
+    def write(record, identifier, set, datestamp = Time.zone.now)
       @io.write <<-EOXML
         <record>
           <header>
             <identifier>#{identifier}</identifier>
             <datestamp>#{datestamp.strftime('%F')}</datestamp>
+            <setSpec>#{set}</setSpec>
           </header>
           <metadata>
             #{MARC::XMLWriter.encode(record, include_namespace: true)}
@@ -116,12 +117,13 @@ class MarcRecordWriterService
       EOXML
     end
 
-    def write_delete(identifier, datestamp = Time.zone.now)
+    def write_delete(identifier, set, datestamp = Time.zone.now)
       @io.write <<-EOXML
         <record>
           <header status="deleted">
             <identifier>#{identifier}</identifier>
             <datestamp>#{datestamp.strftime('%F')}</datestamp>
+            <setSpec>#{set}</setSpec>
           </header>
         </record>
       EOXML
