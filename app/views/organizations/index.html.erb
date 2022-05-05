@@ -41,8 +41,8 @@
           <td class="align-middle">
             <%= link_to organization.name, organization %>
           </td>
-          <td class="align-middle text-end files-column"><%= organization.default_stream.files.size %></td>
-          <td class="align-middle text-end"><%= number_to_human_size organization.default_stream.files.sum(:byte_size) %></td>
+          <td class="align-middle text-end files-column"><%= organization.latest_statistics.file_count %></td>
+          <td class="align-middle text-end"><%= number_to_human_size organization.latest_statistics.file_size %></td>
           <td class="align-middle text-end"><%= number_with_delimiter organization.latest_statistics.unique_record_count %></td>
           <td class="align-middle text-end"><%= number_with_delimiter organization.latest_statistics.record_count %></td>
           <td class="align-middle">
