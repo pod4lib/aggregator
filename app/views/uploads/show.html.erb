@@ -11,7 +11,7 @@
   </div>
 
   <p class="lead">
-    Part of stream: <%= link_to @stream.display_name, organization_stream_path(@stream.organization, @stream) %>
+    Part of stream: <%= link_to @upload.stream.display_name, organization_stream_path(@upload.stream.organization, @upload.stream) %>
   </p>
 
   <h3 class="mb-0 pt-4 pb-3">Files</h3>
