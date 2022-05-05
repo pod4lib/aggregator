@@ -21,6 +21,10 @@ class UpdateOrganizationStatisticsJob < ApplicationJob
     stream_statistics = stream.statistic || stream.create_statistic
     stream_statistics.update(date: Time.zone.today, **calculate_stream_statistics(stream))
 
+    # We need to reload the resource so that the organization stats
+    # include the latest calculated default_stream.statistics.
+    organization.reload
+
     org_statistics = organization.statistics.find_or_create_by(date: Time.zone.today)
 
     org_statistics.update(
