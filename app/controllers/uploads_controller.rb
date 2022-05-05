@@ -10,7 +10,9 @@ class UploadsController < ApplicationController
 
   # GET /uploads
   # GET /uploads.json
-  def index; end
+  def index
+    @stream = current_stream
+  end
 
   # GET /uploads/1
   # GET /uploads/1.json
