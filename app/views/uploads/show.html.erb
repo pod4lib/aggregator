@@ -1,26 +1,23 @@
-<div class="position-relative overflow-hidden mb-3 bg-light">
-  <div class="container">
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb bg-transparent row">
-        <li class="breadcrumb-item"><%= link_to @organization.name, @organization %></li>
-        <li class="breadcrumb-item"><%= link_to @upload.stream.display_name, [@organization, @upload.stream] if @upload.stream %></li>
-        <li class="breadcrumb-item active" aria-current="page"><%= @upload.name %></li>
-      </ol>
-    </nav>
+<%= render 'shared/layout_upload_page' do %>
 
-    <div class="d-flex justify-content-between">
-      <h1><%= @upload.name %></h1>
+  <div class="d-flex align-items-center">
+    <h2 class="font-weight-normal mb-0">Upload: <%= @upload.name %></h2>
+
+    <div class="ms-auto p-2">
+      <span><%= link_to 'View all uploads', organization_uploads_path(@upload.organization), class: 'pr-4' %></span>
+      <span class="ms-4"><%= link_to 'New upload', new_organization_upload_path(@stream.organization, stream: (@stream.default? ? nil : @stream.friendly_id)), class: 'btn btn-primary' if can? :create, @stream.uploads.build %></span>
     </div>
+
   </div>
-</div>
 
-<div class="container">
-  <h2>Files</h2>
+  <p class="lead">
+    Part of stream: <%= link_to @stream.display_name, organization_stream_path(@stream.organization, @stream) %>
+  </p>
 
-  <table class="table table-striped mb-0 mt-4">
-    <thead><th class="pl-4">File</th><th>Date created</th><th class="text-end">Size</th><th>Content type</th><th class="text-end">Records</th><th>File status</th></thead>
-    <tbody>
-      <%= render 'uploads/file_rows', upload: @upload %>
-    </tbody>
-  </table>
-</div>
+  <h3 class="mb-0 pt-4 pb-3">Files</h3>
+
+  <%= render 'uploads/file_table' do %>
+    <%= render 'uploads/file_rows', upload: @upload %>
+  <% end %>
+
+<% end %>
