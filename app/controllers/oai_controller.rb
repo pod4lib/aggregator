@@ -28,25 +28,52 @@ class OaiController < ApplicationController
   private
 
   # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/PerceivedComplexity
   def render_list_records
     headers['Cache-Control'] = 'no-cache'
     headers['Last-Modified'] = Time.current.httpdate
     headers['X-Accel-Buffering'] = 'no'
 
-    @organization = Organization.find_by(slug: list_records_params[:set])
-    @stream = @organization.default_stream
-    authorize! :read, @stream
+    # error if metadataPrefix is anything other than marc21 or empty; per spec
+    begin
+      md_prefix = list_records_params.require(:metadataPrefix)
+      raise OaiConcern::CannotDisseminateFormat unless md_prefix == 'marc21'
+    rescue ActionController::ParameterMissing
+      raise OaiConcern::BadArgument
+    end
 
-    render xml: build_list_records_response(*list_record_normalized_dump_candidates.first(2))
+    # parse other params
+    # TODO: error if dates aren't well-formed?
+    from_date = Time.zone.parse(list_records_params[:from]) if list_records_params[:from]
+    until_date = Time.zone.parse(list_records_params[:until]) if list_records_params[:until]
+    set = list_records_params[:set]
+    token = list_records_params[:resumptionToken]
+
+    # token is exclusive; specifying anything else is an error. see the spec
+    raise OaiConcern::BadArgument if token && (md_prefix || from_date || until_date || set)
+
+    # if we didn't get a token, generate one based on other arguments
+    # NOTE: this way, we can always call next_record_page the same way.
+    # ultimately, a token is just a pointer to somewhere in a list of records,
+    # and the filters needed to construct that list of records
+    token ||= OaiConcern::ResumptionToken.encode(set, nil, from_date, until_date)
+
+    # render the first page of records along with token for the next one
+    render xml: build_list_records_response(next_record_page(token))
   end
   # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/PerceivedComplexity
 
   def render_list_sets
     render xml: build_list_sets_response(Organization.providers)
   end
 
   def render_identify
-    earliest_oai = Stream.default.joins(normalized_dumps: :oai_xml_attachment)
+    earliest_oai = Stream.default.joins(normalized_dumps: :oai_xml_attachments)
                          .order('normalized_dumps.created_at ASC')
                          .limit(1)
                          .pick('normalized_dumps.created_at')
@@ -93,23 +120,50 @@ class OaiController < ApplicationController
     oai_params(:verb)
   end
 
-  # rubocop:disable Metrics/AbcSize
-  def list_record_normalized_dump_candidates
-    @list_record_normalized_dump_candidates ||= begin
-      current_full_dump = @stream.current_full_dump
+  # Get a page of OAI-XML records and a token pointing to the next page
+  def next_record_page(token = nil)
+    # parse the token if we were provided one
+    set, page, from_date, until_date = *OaiConcern::ResumptionToken.decode(token) if token
 
-      dumps = @stream.normalized_dumps.where(id: current_full_dump.id).or(current_full_dump.deltas).order(:created_at)
+    # filter normalized dumps and get the corresponding OAI-XML pages
+    # NOTE: each page is guaranteed to have < OAIPMHWriter::max_records_per_file,
+    # but some pages will have exactly that number and others won't. The sequence
+    # isn't predictable; the only thing we promise is that all pages are less than
+    # that size.
+    pages = normalized_dumps(set, from_date, until_date).flat_map(&:oai_xml_attachments)
 
-      if list_records_params[:from]
-        dumps = dumps.where(created_at: (Time.zone.parse(list_records_params[:from]).beginning_of_day)...)
-      end
-      dumps = dumps.where(created_at: ...(Time.zone.parse(list_records_params[:until]).end_of_day)) if list_records_params[:until]
-      dumps = dumps.where(id: list_records_params[:resumptionToken]...) if list_records_params[:resumptionToken]
+    # generate a token for the next page, if there is one
+    token = case page
+            when 0...pages.count then OaiConcern::ResumptionToken.encode(set, page + 1, from_date, until_date)
+            when pages.count then nil
+            else raise OaiConcern::BadResumptionToken
+            end
 
-      dumps
-    end
+    # return the relevant page and the token for the next page, if any
+    [pages.offset(page).limit(1), token]
   end
-  # rubocop:enable Metrics/AbcSize
+
+  # Get all NormalizedDumps from a particular org or created between two dates
+  # NOTE: this likely needs work to memoize/tune, but it should be called 
+  # repeatedly by next_record_page with the same arguments
+  def normalized_dumps(set, from_date, until_date)
+    # get candidate streams (all defaults or single org default)
+    streams = set ? Stream.default.joins(:organization).where(organization: { slug: set }) : Stream.default
+
+    # get candidate dumps (the current full dump and its deltas for each stream)
+    # TODO sort by created date and convert this back to ActiveRecord query
+    dumps = streams.flat_map(&:current_dumps)
+
+    # filter candidate dumps (by from date and until date)
+    # TODO this doesn't work because dumps isn't a query, it's an array
+    dumps = dumps.where('normalized_dump.created_at >= ?', from_date.beginning_of_day) if from_date
+    dumps = dumps.where('normalized_dump.created_at <= ?', until_date.end_of_day) if until_date
+
+    # error if no dumps match the filters
+    raise OaiConcern::NoRecordsMatch if dumps.empty?
+
+    dumps
+  end
 
   # Wrap the provided Nokogiri::XML::Builder block in an OAI-PMH response
   # See http://www.openarchives.org/OAI/openarchivesprotocol.html#XMLResponse
@@ -124,16 +178,18 @@ class OaiController < ApplicationController
   end
 
   # See https://www.openarchives.org/OAI/openarchivesprotocol.html#ListRecords
-  def build_list_records_response(dump, next_dump = nil)
+  def build_list_records_response(page, token = nil)
     Nokogiri::XML::Builder.new do |xml|
       build_oai_response xml, list_records_params do
         xml.ListRecords do
-          read_oai_xml(dump).each do |chunk|
+          read_oai_xml(page).each do |chunk|
             xml << chunk
           end
-          if next_dump
+          if token
             xml.resumptionToken do
               xml.text next_dump.id
+              # NOTE: consider adding completeListSize and cursor (page) here
+              # see https://www.openarchives.org/OAI/openarchivesprotocol.html#FlowControl
             end
           end
         end
@@ -200,10 +256,11 @@ class OaiController < ApplicationController
     end.to_xml
   end
 
-  def read_oai_xml(dump, chunk_size: 1.megabyte)
-    return to_enum(:read_oai_xml, dump, chunk_size: chunk_size) unless block_given?
+  # Stream an OAI-XML file 1M at a time
+  def read_oai_xml(file, chunk_size: 1.megabyte)
+    return to_enum(:read_oai_xml, file, chunk_size: chunk_size) unless block_given?
 
-    dump.oai_xml.attachment.blob.open do |tmpfile|
+    file.blob.open do |tmpfile|
       io = Zlib::GzipReader.new(tmpfile)
 
       while (data = io.read(chunk_size))
