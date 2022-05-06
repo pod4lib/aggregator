@@ -52,6 +52,8 @@ class MarcRecordWriterService
     write_errata("#{record['001']}: #{e}")
   end
 
+  # TODO: make this write multiple files per record if necessary, broken up by
+  # OAIPMHWriter::max_records_per_file
   def write_oai_record(record)
     oai_writer.write(record.augmented_marc, record.oai_id, record.organization.slug, record.upload.created_at)
   rescue StandardError => e
@@ -100,6 +102,10 @@ class MarcRecordWriterService
   class OAIPMHWriter
     def initialize(io)
       @io = io
+    end
+
+    def max_records_per_file
+      1000
     end
 
     def write(record, identifier, set, datestamp = Time.zone.now)
