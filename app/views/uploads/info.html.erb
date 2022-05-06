@@ -10,6 +10,7 @@
       <div>
         <%= link_to 'Download', download_url(@blob), class: 'btn btn-secondary' %>
         <%= link_to 'Source 🔗', @upload.url, title: @upload.url, class: 'btn btn-secondary' if @upload.url %>
+        <%= link_to 'Source 🔗', @upload.url, title: @upload.url, class: 'btn btn-secondary' if @upload.url.present? %>
       </div>
     <% end %>
   </div>
