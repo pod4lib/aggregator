@@ -5,7 +5,9 @@
 
     <div class="ms-auto p-2">
       <span><%= link_to 'View all uploads', organization_uploads_path(@upload.organization), class: 'pr-4' %></span>
-      <span class="ms-4"><%= link_to 'New upload', new_organization_upload_path(@stream.organization, stream: (@stream.default? ? nil : @stream.friendly_id)), class: 'btn btn-primary' if can? :create, @stream.uploads.build %></span>
+      <% if @upload.stream.default? %>
+        <span class="ms-4"><%= link_to 'New upload', new_organization_upload_path(@upload.stream.organization), class: 'btn btn-primary' if can? :create, @upload.stream.uploads.build %></span>
+      <% end %>
     </div>
 
   </div>
