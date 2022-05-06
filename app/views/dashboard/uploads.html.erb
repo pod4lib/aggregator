@@ -4,7 +4,7 @@
     <% Settings.metadata_status.each do |status, values| %>
     <li class="list-inline-item">
       <%= bootstrap_icon(values.icon_class, class: "pod-metadata-status #{status}") %>
-      <span class="fw-bold"><%= values.label %></span>
+      <span><%= values.label %></span>
     </li>
     <% end %>
   </ul>

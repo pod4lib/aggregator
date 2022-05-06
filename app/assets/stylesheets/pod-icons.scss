@@ -26,6 +26,8 @@
 }
 
 .pod-metadata-status {
+  vertical-align: text-bottom;
+
   &.deletes {
     color: $success;
   }
@@ -45,4 +47,8 @@
   &.unknown {
     color: $info;
   }
+}
+
+.table-key li {
+  margin-bottom: 0.33rem;
 }
