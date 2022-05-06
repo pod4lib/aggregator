@@ -51,6 +51,19 @@ module OaiConcern
     end
   end
 
+  # Token for requesting records: base64-encoded combo of filters & page cursor
+  # A token lets you construct a list of records and point to somewhere in that
+  # list.
+  class ResumptionToken
+    def self.encode(set, page, from_date, until_date)
+      Base64.urlsafe_encode64([set, page, from_date, until_date].join(';'))
+    end
+
+    def self.decode(token)
+      Base64.urlsafe_decode64(token).split(';')
+    end
+  end
+
   included do
     # XML namespace values for OAI-PMH, see:
     # https://www.openarchives.org/OAI/openarchivesprotocol.html#XMLResponse
