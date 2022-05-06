@@ -170,3 +170,18 @@ input[type=file][data-direct-upload-url][disabled] {
   background-color: $warning;
   max-width: 100vw;
 }
+
+.info-box {
+  margin-bottom: 1.5rem;
+  margin-top: 1rem;
+
+  .card-header {
+    padding-bottom: 0.25rem;
+    padding-top: 0.25rem;
+
+    .text-info {
+      margin-right: 0.25rem;
+      vertical-align: text-bottom;
+    }
+  }
+}
