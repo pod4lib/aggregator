@@ -4,22 +4,26 @@ require 'rails_helper'
 
 RSpec.describe 'OAI-PMH', type: :feature do
   let(:organization) { create(:organization, name: 'My Org', slug: 'my-org') }
-  let(:test_stream) { create(:stream, organization: organization, name: 'Test') }
   let(:user) { create(:user) }
 
   # NOTE: capybara matchers don't always seem to work on returned XML documents;
   # parsing the response using Nokogiri is required for some assertions
 
   before do
+    # first full dump: two records, 2020-05-06
     travel_to Time.zone.local(2020, 5, 6) do
       create(:upload, :marc_xml, stream: organization.default_stream)
+      create(:upload, :binary_marc, stream: organization.default_stream)
       GenerateFullDumpJob.perform_now(organization)
     end
 
-    create(:upload, :marc_xml, stream: organization.default_stream)
-    create(:upload, :marc_xml, stream: test_stream)
-    GenerateDeltaDumpJob.perform_now(organization)
+    # delta dump from the next day, with one of the records deleted
+    travel_to Time.zone.local(2020, 5, 7) do
+      create(:upload, :deleted_marc_xml, stream: organization.default_stream)
+      GenerateDeltaDumpJob.perform_now(organization)
+    end
 
+    # required for API access
     user.add_role :member, organization
     login_as(user, scope: :user)
   end
@@ -128,6 +132,72 @@ RSpec.describe 'OAI-PMH', type: :feature do
     it 'renders an error if unknown params are supplied' do
       visit oai_url(verb: 'ListMetadataFormats', foo: 'bar')
       expect(page).to have_selector('error[code="badArgument"]')
+    end
+  end
+
+  context 'when the verb is ListRecords' do
+    it 'renders the identifier of each item' do
+      visit oai_url(verb: 'ListRecords', metadataPrefix: 'marc21')
+      doc = Nokogiri::XML(page.body)
+      expect(doc.at_css('ListRecords > record > header > identifier').text).to eq('oai:pod.stanford.edu:my-org:a12345')
+    end
+
+    it 'renders the datestamp of each item' do
+      visit oai_url(verb: 'ListRecords', metadataPrefix: 'marc21')
+      doc = Nokogiri::XML(page.body)
+      expect(doc.at_css('ListRecords > record > header > datestamp').text).to eq('2020-05-06')
+    end
+
+    it 'renders a header indicating records are deleted' do
+      visit oai_url(verb: 'ListRecords', metadataPrefix: 'marc21')
+      expect(page).to have_selector('header[status="deleted"]')
+    end
+
+    it 'renders the set membership of each item' do
+      visit oai_url(verb: 'ListRecords', metadataPrefix: 'marc21')
+      doc = Nokogiri::XML(page.body)
+      expect(doc.at_css('ListRecords > record > header > setSpec').text).to eq('my-org')
+    end
+
+    it 'renders records in the requested set'
+
+    it 'renders a resumption token to continue requesting records'
+
+    # NOTE: mock OAIPMHWriter::max_records_per_file to a very low number,
+    # then run the GenerateFullDump/GenerateDeltaDump jobs so that we
+    # generate many (very small) OAI-XML files. This will make it easier
+    # to test that the paging/resumption tokens work as expected
+
+    it 'renders records after a supplied lower bound datestamp'
+
+    it 'renders records before a supplied upper bound datestamp'
+
+    it 'renders an error if unknown params are supplied' do
+      visit oai_url(verb: 'ListRecords', metadataPrefix: 'marc21', foo: 'bar')
+      expect(page).to have_selector('error[code="badArgument"]')
+    end
+
+    it 'renders an error if no metadata prefix is supplied' do
+      visit oai_url(verb: 'ListRecords')
+      expect(page).to have_selector('error[code="badArgument"]')
+    end
+
+    it 'renders an error if an unsupported metadata prefix is supplied' do
+      visit oai_url(verb: 'ListRecords', metadataPrefix: 'foo')
+      expect(page).to have_selector('error[code="cannotDisseminateFormat"]')
+    end
+
+    context 'when a resumption token is supplied' do
+      it 'renders the next page of records'
+      it 'renders an error if any other argument is also supplied' do
+        visit oai_url(verb: 'ListRecords', from: '2020-01-01', resumptionToken: 'foo')
+        expect(page).to have_selector('error[code="badArgument"]')
+      end
+
+      it 'renders an error if the resumption token is not valid' do
+        visit oai_url(verb: 'ListRecords', resumptionToken: 'foo')
+        expect(page).to have_selector('error[code="badResumptionToken"]')
+      end
     end
   end
 end
