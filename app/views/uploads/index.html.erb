@@ -4,6 +4,10 @@
 
     <h2 class="font-weight-normal mb-0">Uploads</h2>
 
+    <div class="ms-auto p-2">
+      <span class="ms-4"><%= link_to 'New upload to default stream', new_organization_upload_path(@organization), class: 'btn btn-primary' if can? :create, @organization.default_stream.uploads.build %></span>
+    </div>
+
   </div>
 
   <table class="table table-striped mt-5">
