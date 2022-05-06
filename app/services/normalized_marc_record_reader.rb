@@ -18,7 +18,7 @@ class NormalizedMarcRecordReader
   def each(&block)
     pool = Concurrent::FixedThreadPool.new(thread_pool_size)
 
-    current_marc_record_ids.each_slice(1000) do |slice|
+    current_marc_record_ids.each_slice(200) do |slice|
       records = MarcRecord.find(slice)
 
       # do a little pre-processing to pre-generated the augmented MARC.
