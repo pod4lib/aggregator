@@ -84,8 +84,48 @@ RSpec.describe Stream, type: :model do
       end
     end
 
-    it 'does not do anything if the stream is already the default' do
-      expect { current_default.make_default }.not_to(change { current_default.reload.default })
+    it 'raises CannotBeMadeDefault if the stream cannot be made default' do
+      expect { current_default.make_default }.to raise_error(Stream::CannotBeMadeDefault)
+    end
+  end
+
+  describe '#can_be_destroyed?' do
+    let!(:stream_without_upload) { create(:stream, organization: organization) }
+    let!(:never_default_stream) { create(:stream_with_uploads, organization: organization) }
+    let!(:stream_with_upload) { create(:stream_with_uploads, organization: organization) }
+
+    before do
+      stream_with_upload.make_default
+    end
+
+    it 'returns false if the stream was ever the default' do
+      expect(stream_with_upload.can_be_destroyed?).to be false
+    end
+
+    it 'returns true if the stream was never the default' do
+      expect(never_default_stream.can_be_destroyed?).to be true
+    end
+
+    it 'returns true if it was previously the default but there are no uploads or normalized dumps' do
+      expect(stream_without_upload.can_be_destroyed?).to be true
+    end
+
+    it 'returns true if the stream is archived' do
+      stream_with_upload.archive
+      expect(stream_with_upload.can_be_destroyed?).to be true
+    end
+  end
+
+  describe '#can_be_made_default?' do
+    let!(:default_stream) { create(:stream_with_uploads, organization: organization) }
+    let!(:never_default_stream) { create(:stream_with_uploads, organization: organization) }
+
+    it 'returns false if the stream was ever the default' do
+      expect(default_stream.can_be_made_default?).to be false
+    end
+
+    it 'returns true if the stream was never the default' do
+      expect(never_default_stream.can_be_made_default?).to be true
     end
   end
 

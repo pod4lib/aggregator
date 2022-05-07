@@ -20,6 +20,21 @@ class Stream < ApplicationRecord
   has_many_attached :snapshots
 
   after_create :check_for_a_default_stream
+  before_destroy :preserve_default_streams
+
+  # :nodoc:
+  class CannotBeMadeDefault < StandardError
+    def message
+      'Current and former default streams cannot be made the default.'
+    end
+  end
+
+  # :nodoc:
+  class CannotBeDestroyed < StandardError
+    def message
+      'Current and former default streams cannot be deleted.'
+    end
+  end
 
   def display_name
     name.presence || default_name
@@ -31,7 +46,7 @@ class Stream < ApplicationRecord
   end
 
   def make_default
-    return if default
+    raise(CannotBeMadeDefault) unless can_be_made_default?
 
     Stream.transaction do
       organization.streams.default.each do |stream|
@@ -44,6 +59,16 @@ class Stream < ApplicationRecord
 
   def previous_default
     organization.streams.order(default_end_time: :desc).where('default_end_time < ?', default_start_time).first
+  end
+
+  def can_be_made_default?
+    default.blank? && default_start_time.blank? && default_end_time.blank?
+  end
+
+  def can_be_destroyed?
+    (default.blank? && default_start_time.blank? && default_end_time.blank?) ||
+      (normalized_dumps.blank? && uploads.blank?) ||
+      (status == 'archived')
   end
 
   def job_tracker_status_groups
@@ -89,5 +114,9 @@ class Stream < ApplicationRecord
     return unless organization.streams.count == 1
 
     update(default_start_time: DateTime.now)
+  end
+
+  def preserve_default_streams
+    raise(CannotBeDestroyed) unless can_be_destroyed? || destroyed_by_association
   end
 end

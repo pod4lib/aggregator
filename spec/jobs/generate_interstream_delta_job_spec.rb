@@ -20,7 +20,7 @@ RSpec.describe GenerateInterstreamDeltaJob, type: :job do
   it 'Does not create an interstream delta if the current stream is missing a full dump' do
     GenerateFullDumpJob.perform_now(organization)
 
-    stream = create(:stream, organization: organization, default: true)
+    stream = create(:stream, organization: organization, default: false)
     stream.make_default
 
     described_class.perform_now(organization.default_stream)
