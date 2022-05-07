@@ -32,11 +32,7 @@ RSpec.describe GenerateInterstreamDeltaJob, type: :job do
     GenerateFullDumpJob.perform_now(organization)
 
     stream = create(:stream, organization: organization, default: false)
-    organization.default_stream.default = false
-    organization.default_stream.save
-
     stream.make_default
-
     stream.uploads << build(:upload, :marc_xml2)
     # Organization.find is used because it is loading an older version of the organization with the wrong
     # default stream. Unsure of the best way to 'refresh' so it's pulling the correct default

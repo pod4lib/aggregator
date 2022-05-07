@@ -51,33 +51,6 @@ RSpec.describe Stream, type: :model do
     end
   end
 
-  describe '#default_stream_histories' do
-    it 'creates a default stream history when the first stream is created in an organization' do
-      org = create(:organization)
-      described_class.create({ organization: org, default: true })
-      described_class.create({ organization: org, default: true })
-      expect(org.default_stream_histories.count).to be(1)
-    end
-
-    it 'creates a new default stream history when stream becomes the default' do
-      org = create(:organization)
-      described_class.create({ organization: org, default: true })
-      second_stream = described_class.create({ organization: org, default: false })
-
-      second_stream.update(default: true)
-      expect(DefaultStreamHistory.all[1].end_time).to be_nil
-    end
-
-    it 'updates and appends endtime to prior default stream history when the stream is no longer the default' do
-      org = create(:organization)
-      first_stream = described_class.create({ organization: org, default: true })
-      described_class.create({ organization: org, default: false })
-
-      first_stream.update(default: false)
-      expect(DefaultStreamHistory.all[0].end_time).not_to be_nil
-    end
-  end
-
   describe '#make_default' do
     let!(:current_default) { create(:stream, organization: organization, default: true) }
 
@@ -88,8 +61,45 @@ RSpec.describe Stream, type: :model do
          .and((change { current_default.reload.default }).from(true).to(false)))
     end
 
+    describe 'setting the default start and end times' do
+      before do
+        stream.make_default
+        current_default.reload
+      end
+
+      it 'the new default stream has a start time' do
+        expect(stream.default_start_time).to be_truthy
+      end
+
+      it 'the new default stream does not have an end time' do
+        expect(stream.default_end_time).to be_nil
+      end
+
+      it 'the previous default stream has a start time' do
+        expect(current_default.default_start_time).to be_truthy
+      end
+
+      it 'the previous default stream has an end time' do
+        expect(current_default.default_end_time).to be_truthy
+      end
+    end
+
     it 'does not do anything if the stream is already the default' do
       expect { current_default.make_default }.not_to(change { current_default.reload.default })
+    end
+  end
+
+  describe '#previous_default' do
+    let!(:first_default) { create(:stream, organization: organization, default: true) }
+
+    it 'returns nil if there is not a previous default stream' do
+      expect(first_default.previous_default).to be_nil
+    end
+
+    it 'returns the previous default stream if it exists' do
+      stream.make_default
+
+      expect(stream.previous_default).to eq(first_default)
     end
   end
 end

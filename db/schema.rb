@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_04_13_204319) do
+ActiveRecord::Schema[7.0].define(version: 2022_05_07_194259) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -222,6 +222,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_13_204319) do
     t.datetime "updated_at", null: false
     t.string "slug"
     t.string "status", default: "active"
+    t.datetime "default_start_time", precision: nil
+    t.datetime "default_end_time", precision: nil
     t.index ["organization_id"], name: "index_streams_on_organization_id"
     t.index ["slug"], name: "index_streams_on_slug", unique: true
     t.index ["status"], name: "index_streams_on_status"
