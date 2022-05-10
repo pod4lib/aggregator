@@ -7,7 +7,7 @@ class Stream < ApplicationRecord
   friendly_id :name, use: %i[finders slugged scoped], scope: :organization
   belongs_to :organization
   has_many :uploads, dependent: :destroy
-  has_one :default_stream_history, dependent: :destroy
+  has_many :default_stream_histories, dependent: :destroy
   has_many :marc_records, through: :uploads, inverse_of: :stream
   has_many :files, source: :files_blobs, through: :uploads
   has_one :statistic, dependent: :delete, as: :resource
@@ -75,7 +75,39 @@ class Stream < ApplicationRecord
                            normalized_dumps.full_dumps.create(last_delta_dump_at: Time.zone.at(0))
   end
 
+  # If no datetime is provided then assume we want the previous DefaultStreamHistory
+  # object for the most recent period when self.stream was the default.
+  #
+  # If a datetime is provided then return the previous DefaultStreamHistory object
+  # for when self.stream was the default for the supplied datetime.
+  #
+  # If self.stream was not the default for the datetime supplied return nil
+  def previous_default_stream_history(datetime = nil)
+    default_stream_history = if datetime
+                               select_default_stream_history_by_date(datetime)
+                             else
+                               default_stream_histories.order(start_time: :desc).first
+                             end
+
+    return if default_stream_history.blank?
+
+    organization.default_stream_histories
+                .order(end_time: :desc)
+                .where('end_time < ?', default_stream_history.start_time)
+                .first
+  end
+
   private
+
+  # Returns the DefaultStreamHistory object for self.stream
+  # with a start_time and end_time between the supplied datetime.
+  def select_default_stream_history_by_date(datetime)
+    default_stream_histories.order(start_time: :desc)
+                            .where('start_time <= ? AND ((end_time >= ?) OR (end_time IS ?))',
+                                   Time.zone.parse(datetime),
+                                   Time.zone.parse(datetime),
+                                   nil).first
+  end
 
   def default_name
     "#{I18n.l(created_at.to_date)} - #{default? ? '' : I18n.l(updated_at.to_date)}"
@@ -84,14 +116,14 @@ class Stream < ApplicationRecord
   def check_for_a_default_stream
     return unless organization.streams.count == 1
 
-    DefaultStreamHistory.create(organization: organization, stream: self, start_time: DateTime.now)
+    DefaultStreamHistory.create(stream: self, start_time: DateTime.now)
   end
 
   def update_default_stream_history
     if default
-      DefaultStreamHistory.create(organization: organization, stream: self, start_time: DateTime.now)
+      DefaultStreamHistory.create(stream: self, start_time: DateTime.now)
     else
-      DefaultStreamHistory.where(organization: organization, end_time: nil).update(end_time: DateTime.now)
+      organization.default_stream_histories.where(end_time: nil).update(end_time: DateTime.now)
     end
   end
 end

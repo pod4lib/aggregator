@@ -11,6 +11,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2022_04_13_204319) do
+ActiveRecord::Schema[7.0].define(version: 2022_05_09_160015) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -108,6 +109,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_13_204319) do
     t.datetime "updated_at", null: false
     t.index ["confirmation_token"], name: "index_contact_emails_on_confirmation_token", unique: true
     t.index ["organization_id"], name: "index_contact_emails_on_organization_id"
+  end
+
+  create_table "default_stream_histories", force: :cascade do |t|
+    t.bigint "stream_id", null: false
+    t.datetime "start_time", precision: nil, null: false
+    t.datetime "end_time", precision: nil
+    t.index ["stream_id"], name: "index_default_stream_histories_on_stream_id"
   end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
@@ -290,6 +298,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_13_204319) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "contact_emails", "organizations"
+  add_foreign_key "default_stream_histories", "streams"
   add_foreign_key "marc_profiles", "uploads"
   add_foreign_key "normalized_dumps", "streams"
 end
