@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_04_13_204319) do
-ActiveRecord::Schema[7.0].define(version: 2022_05_09_160015) do
+ActiveRecord::Schema[7.0].define(version: 2022_05_10_151030) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -127,6 +126,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_09_160015) do
     t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true
     t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type"
     t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
+  end
+
+  create_table "interstream_deltas", force: :cascade do |t|
+    t.bigint "normalized_dump_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["normalized_dump_id"], name: "index_interstream_deltas_on_normalized_dump_id"
   end
 
   create_table "job_trackers", force: :cascade do |t|
@@ -299,6 +305,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_09_160015) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "contact_emails", "organizations"
   add_foreign_key "default_stream_histories", "streams"
+  add_foreign_key "interstream_deltas", "normalized_dumps"
   add_foreign_key "marc_profiles", "uploads"
   add_foreign_key "normalized_dumps", "streams"
 end

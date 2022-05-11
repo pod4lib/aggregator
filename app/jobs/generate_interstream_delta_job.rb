@@ -99,9 +99,7 @@ class GenerateInterstreamDeltaJob < ApplicationJob
     File.write(delete_tempfile, deletions.join("\n"))
 
     # Attach Files
-    unless current_stream_dump.interstream_delta
-      current_stream_dump.interstream_delta = InterstreamDelta.create(normalized_dump: current_stream_dump, stream: stream)
-    end
+    current_stream_dump.create_interstream_delta unless current_stream_dump.interstream_delta
 
     current_stream_dump.interstream_delta.public_send(:marc21).attach(io: File.open(mrc_tempfile), filename: "#{base_name}.mrc")
     current_stream_dump.interstream_delta.public_send(:marcxml).attach(io: File.open(xml_tempfile), filename: "#{base_name}.xml")
