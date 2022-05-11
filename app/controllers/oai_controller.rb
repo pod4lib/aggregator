@@ -140,7 +140,7 @@ class OaiController < ApplicationController
             end
 
     # return the relevant page and the token for the next page, if any
-    [pages.offset(page).limit(1), token]
+    [pages[page], token]
   end
 
   # Get all NormalizedDumps from a particular org or created between two dates
