@@ -61,7 +61,7 @@ class OaiController < ApplicationController
     token ||= OaiConcern::ResumptionToken.encode(set, nil, from_date, until_date)
 
     # render the first page of records along with token for the next one
-    render xml: build_list_records_response(next_record_page(token))
+    render xml: build_list_records_response(*next_record_page(token))
   end
   # rubocop:enable Metrics/AbcSize
   # rubocop:enable Metrics/MethodLength
