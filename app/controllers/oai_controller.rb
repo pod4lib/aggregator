@@ -192,12 +192,10 @@ class OaiController < ApplicationController
           read_oai_xml(page).each do |chunk|
             xml << chunk
           end
-          if token
-            xml.resumptionToken do
-              xml.text token
-              # NOTE: consider adding completeListSize and cursor (page) here
-              # see https://www.openarchives.org/OAI/openarchivesprotocol.html#FlowControl
-            end
+          xml.resumptionToken do
+            xml.text token if token
+            # NOTE: consider adding completeListSize and cursor (page) here
+            # see https://www.openarchives.org/OAI/openarchivesprotocol.html#FlowControl
           end
         end
       end
