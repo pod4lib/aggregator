@@ -127,6 +127,7 @@ class OaiController < ApplicationController
   def next_record_page(token = nil)
     # parse the token if we were provided one
     set, page, from_date, until_date = *OaiConcern::ResumptionToken.decode(token) if token
+    page = page.to_i
 
     # filter normalized dumps and get the corresponding OAI-XML pages
     # NOTE: each page is guaranteed to have < OAIPMHWriter::max_records_per_file,
@@ -137,9 +138,12 @@ class OaiController < ApplicationController
 
     # generate a token for the next page, if there is one
     token = case page
-            when 0...pages.count then OaiConcern::ResumptionToken.encode(set, page + 1, from_date, until_date)
-            when pages.count then nil
-            else raise OaiConcern::BadResumptionToken
+            when (0...pages.count - 1)
+              OaiConcern::ResumptionToken.encode(set, page + 1, from_date, until_date)
+            when (pages.count - 1)
+              nil
+            else
+              raise OaiConcern::BadResumptionToken
             end
 
     # return the relevant page and the token for the next page, if any
