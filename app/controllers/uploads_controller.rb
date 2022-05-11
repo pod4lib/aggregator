@@ -58,7 +58,8 @@ class UploadsController < ApplicationController
   end
 
   def info
-    @blob = @upload.files.find(params[:attachment_id]).blob
+    @attachment = @upload.files.find(params[:attachment_id])
+    @blob = @attachment.blob
     @marc_profile = @upload.marc_profiles.find_by(blob_id: @blob.id) if @blob.id
   end
 
