@@ -187,7 +187,7 @@ class OaiController < ApplicationController
           end
           if token
             xml.resumptionToken do
-              xml.text next_dump.id
+              xml.text token
               # NOTE: consider adding completeListSize and cursor (page) here
               # see https://www.openarchives.org/OAI/openarchivesprotocol.html#FlowControl
             end
