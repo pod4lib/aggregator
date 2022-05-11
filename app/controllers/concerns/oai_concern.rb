@@ -56,11 +56,13 @@ module OaiConcern
   # list.
   class ResumptionToken
     def self.encode(set, page, from_date, until_date)
-      Base64.urlsafe_encode64([set, page, from_date, until_date].join(';'))
+      # Base64.urlsafe_encode64([set, page, from_date, until_date].join(';'))
+      [set, page, from_date, until_date].join('|')
     end
 
     def self.decode(token)
-      Base64.urlsafe_decode64(token).split(';')
+      # Base64.urlsafe_decode64(token).split(';')
+      token.split('|')
     end
   end
 
