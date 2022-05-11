@@ -29,15 +29,15 @@ RSpec.describe 'streams/summary_card', type: :view do
     # pass local variable to partial
     render subject, stream: stream # rubocop:disable RSpec/NamedSubject
 
-    expect(rendered).to include(number_with_delimiter(stream.files.size))
+    expect(rendered).to include(number_with_delimiter(stream.statistic&.file_count || 0))
     expect(rendered).to include('Files')
   end
 
   it 'displays Total file size info' do
     render subject, stream: stream # rubocop:disable RSpec/NamedSubject
 
-    expect(rendered).to include(number_to_human_size(stream.files.sum(:byte_size)))
-    expect(rendered).to include('Total filesize')
+    expect(rendered).to include(number_to_human_size(stream.statistic&.file_size || 0))
+    expect(rendered).to include('Total file size')
   end
 
   it 'displays Records info' do

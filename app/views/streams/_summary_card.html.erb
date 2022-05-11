@@ -2,8 +2,8 @@
     <div class="card-body bg-light">
         <div class="row">
             <div class="col">
-                <p>Files: <span class="fw-bold"><%= number_with_delimiter stream.files.size %></span></p>
-                <p class="mb-0">Total filesize: <span class="fw-bold"><%= number_to_human_size stream.files.sum(:byte_size) %></span></p>
+                <p>Files: <span class="fw-bold"><%= number_with_delimiter stream.statistic&.file_count || 0 %></span></p>
+                <p class="mb-0">Total file size: <span class="fw-bold"><%= number_to_human_size stream.statistic&.file_size || 0 %></span></p>
             </div>
 
             <div class="col">
