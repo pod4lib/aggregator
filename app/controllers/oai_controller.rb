@@ -28,9 +28,6 @@ class OaiController < ApplicationController
   private
 
   # rubocop:disable Metrics/AbcSize
-  # rubocop:disable Metrics/MethodLength
-  # rubocop:disable Metrics/CyclomaticComplexity
-  # rubocop:disable Metrics/PerceivedComplexity
   def render_list_records
     headers['Cache-Control'] = 'no-cache'
     headers['Last-Modified'] = Time.current.httpdate
@@ -67,9 +64,6 @@ class OaiController < ApplicationController
     render xml: build_list_records_response(*next_record_page(token))
   end
   # rubocop:enable Metrics/AbcSize
-  # rubocop:enable Metrics/MethodLength
-  # rubocop:enable Metrics/CyclomaticComplexity
-  # rubocop:enable Metrics/PerceivedComplexity
 
   def render_list_sets
     render xml: build_list_sets_response(Organization.providers)
@@ -151,7 +145,7 @@ class OaiController < ApplicationController
   end
 
   # Get all NormalizedDumps from a particular org or created between two dates
-  # NOTE: this likely needs work to memoize/tune, but it should be called 
+  # NOTE: this likely needs work to memoize/tune, but it should be called
   # repeatedly by next_record_page with the same arguments
   def normalized_dumps(set, from_date, until_date)
     # get candidate streams (all defaults or single org default)
