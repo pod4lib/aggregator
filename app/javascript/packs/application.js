@@ -9,12 +9,15 @@ require('@rails/activestorage').start();
 require('local-time').start();
 require('../channels');
 require('../direct_uploads');
-require('chartkick')
-require('chart.js')
+require('chartkick');
+require('popper.js');
+require('chart.js');
 require('../pod_console');
 require('../copy_to_clipboard');
 require('../organizations');
-require('bootstrap');
+window.bootstrap = require('bootstrap');
+require('../tooltips')
+
 
 // Uncomment to copy all static images under ../images to the output folder and reference
 // them with the image_pack_tag helper in views (e.g <%= image_pack_tag 'rails.png' %>)

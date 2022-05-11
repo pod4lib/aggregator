@@ -9,29 +9,33 @@
   <table class="table table-striped organizations mt-4">
     <thead>
       <tr>
-        <th></th>
         <th>Name</th>
+        <th>Status</th>
         <th>Last updated</th>
         <th class="text-end">Files</th>
         <th class="text-end">Size</th>
-        <th></th>
-        <th></th>
+        <th class="text-center">Actions</th>
       </tr>
     </thead>
-
     <tbody>
-      <% @streams.active.each do |stream| %>
+      <% @streams.active.sort_by(&:updated_at).reverse.each do |stream| %>
       <tr>
-        <td class="align-middle"><%= content_tag :span, 'default', class: 'badge bg-info' if stream.default? %></td>
-        <td class="align-middle"><%= link_to stream.display_name, organization_stream_path(@organization, stream) %></td>
-        <td class="align-middle"><%= local_time(stream.updated_at, format: datetime_display_format()) %></td>
-        <td class="align-middle text-end"><%= stream.files.size %></td>
-        <td class="align-middle text-end"><%= number_to_human_size stream.files.sum(:byte_size) %></td>
-        <td class="align-middle">
-          <%= link_to 'Destroy', [@organization, stream], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger' if can? :destroy, stream %>
+        <td><%= link_to stream.display_name, organization_stream_path(@organization, stream) %></td>
+        <td>
+          <% if stream.default? %>
+            <%= default_stream_status_badge(stream) %>
+          <% end %>
+
+          <% if stream.default_stream_histories.any? && stream.default == false %>
+            <%= previous_default_stream_status_badge(stream) %>
+          <% end %>
         </td>
-        <td class="align-middle">
-          <%= link_to 'Make default', make_default_organization_streams_path(@organization, stream: stream.slug), method: :post, class: 'btn btn-sm btn-info' if !stream.default? && can?(:update, stream) %>
+        <td class=""><%= local_time(stream.updated_at, format: datetime_display_format()) %></td>
+        <td class="text-end"><%= stream.files.size %></td>
+        <td class="text-end"><%= number_to_human_size stream.files.sum(:byte_size) %></td>
+        <td class="text-end">
+          <%= link_to 'Make default', make_default_organization_streams_path(@organization, stream: stream.slug), method: :post, class: 'btn btn-sm btn-secondary' if !stream.default? && can?(:update, stream) %>
+          <%= link_to 'Delete', [@organization, stream], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger' if can? :destroy, stream %>
         </td>
       </tr>
       <% end %>

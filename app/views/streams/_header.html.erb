@@ -2,7 +2,10 @@
   <h2 class="font-weight-normal mb-0">Stream: <%= stream.display_name %></h2>
 
   <div class="p-2">
-    <%= content_tag :span, 'Default', class: 'badge bg-info me-3' if stream.default? %>
+    <%= default_stream_status_badge(stream) if stream.default? %>
+    <% if stream.default_stream_histories.any? && stream.default == false %>
+      <%= previous_default_stream_status_badge(stream) %>
+      <% end %>
     <%= link_to can?(:edit, stream) ? t('.manage_streams') : t('.view_streams'), organization_streams_path(stream.organization) %>
     <span class="badge bg-secondary"><%= stream.organization.streams.active.count %></span>
   </div>
@@ -12,11 +15,6 @@
     <%= link_to t('.reanalyze'), reanalyze_organization_stream_path(stream.organization, stream), method: :post, class: 'btn btn-secondary align-self-center' if can?(:manage, stream) %>
   </div>
 </div>
-
-<p class="lead">
-  <% stream_updated = stream.uploads.last&.updated_at || stream.updated_at %>
-  Last updated: <%= content_tag :span, "#{time_ago_in_words(stream_updated)} ago", title: local_time(stream_updated, format: datetime_display_format()) %>
-</p>
 
 <div class="mb-3">
   <% unless stream.default? %>
