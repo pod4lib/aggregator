@@ -36,10 +36,13 @@ class OaiController < ApplicationController
     headers['Last-Modified'] = Time.current.httpdate
     headers['X-Accel-Buffering'] = 'no'
 
-    # error if metadataPrefix is anything other than marc21 or empty; per spec
+    # unless a resumptionToken is supplied, error if metadataPrefix
+    # is anything other than marc21 or empty; per spec
     begin
-      md_prefix = list_records_params.require(:metadataPrefix)
-      raise OaiConcern::CannotDisseminateFormat unless md_prefix == 'marc21'
+      unless list_records_params.include?(:resumptionToken)
+        md_prefix = list_records_params.require(:metadataPrefix)
+        raise OaiConcern::CannotDisseminateFormat unless md_prefix == 'marc21'
+      end
     rescue ActionController::ParameterMissing
       raise OaiConcern::BadArgument
     end
