@@ -80,7 +80,7 @@ class Stream < ApplicationRecord
   def current_dumps
     [current_full_dump, *current_full_dump.deltas]
   end
-  
+
   # If no datetime is provided then assume we want the previous DefaultStreamHistory
   # object for the most recent period when self.stream was the default.
   #
