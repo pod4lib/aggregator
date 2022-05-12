@@ -157,17 +157,21 @@ class OaiController < ApplicationController
     # get candidate streams (all defaults or single org default)
     streams = set ? Stream.default.joins(:organization).where(organization: { slug: set }) : Stream.default
 
-    # get candidate dumps (the current full dump and its deltas for each stream)
-    # TODO sort by created date and convert this back to ActiveRecord query
-    dumps = streams.flat_map(&:current_dumps)
-
-    # filter candidate dumps (by from date and until date)
-    # TODO this doesn't work because dumps isn't a query, it's an array
-    dumps = dumps.where('normalized_dump.created_at >= ?', from_date.beginning_of_day) if from_date
-    dumps = dumps.where('normalized_dump.created_at <= ?', until_date.end_of_day) if until_date
+    dumps = filter_dumps(streams, from_date, until_date)
 
     # error if no dumps match the filters
     raise OaiConcern::NoRecordsMatch if dumps.empty?
+
+    dumps
+  end
+
+  def filter_dumps(streams, from_date, until_date)
+    # get candidate dumps (the current full dump and its deltas for each stream)
+    dumps = streams.flat_map(&:current_dumps).sort_by(&:created_at)
+
+    # filter candidate dumps (by from date and until date)
+    dumps = dumps.select { |dump| dump.created_at >= Time.zone.parse(from_date).beginning_of_day } if from_date
+    dumps = dumps.select { |dump| dump.created_at <= Time.zone.parse(until_date).end_of_day } if until_date
 
     dumps
   end
