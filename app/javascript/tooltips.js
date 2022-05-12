@@ -3,13 +3,13 @@ document.addEventListener('turbolinks:load', function() {
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {        
         // Find any hidden time DOM elements within this tooltip
-        var times = [].slice.call(tooltipTriggerEl.querySelectorAll('.hidden-tooltip-time[data-localized]') )
+        var times = [].slice.call(tooltipTriggerEl.querySelectorAll('.hidden-tooltip-time[data-localized]'))
         var text = ""
         // Construct the tooltip text
         // See application_helper.js
         times.forEach(function (timeEl) { 
             if (timeEl.classList.contains('default')) {
-                text = text + ("Default since " + timeEl.innerHTML)
+                text = text + ("Default since " + timeEl.innerHTML + "<br/>")
             }
             if (timeEl.classList.contains('start')) {
                 text = text + (timeEl.innerHTML + " to ")

@@ -22,13 +22,7 @@
       <tr>
         <td><%= link_to stream.display_name, organization_stream_path(@organization, stream) %></td>
         <td>
-          <% if stream.default? %>
-            <%= default_stream_status_badge(stream) %>
-          <% end %>
-
-          <% if stream.default_stream_histories.any? && stream.default == false %>
-            <%= previous_default_stream_status_badge(stream) %>
-          <% end %>
+          <%= default_stream_status_badge(stream) if stream.default_stream_histories.any? %>
         </td>
         <td class=""><%= local_time(stream.updated_at, format: datetime_display_format()) %></td>
         <td class="text-end"><%= stream.files.size %></td>
