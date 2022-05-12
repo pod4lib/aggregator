@@ -1,13 +1,13 @@
 <div class="card col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3 col-xxl-4 offset-xxl-4 mb-3">
     <div class="card-body bg-light">
         <div class="row text-center">
-            <p class="lead mb-0">
+            <p class="lead mb-1">
                 <% stream_updated = stream.uploads.last&.updated_at || stream.updated_at %>
                 Last updated: <%= content_tag :span, "#{time_ago_in_words(stream_updated)} ago", title: local_time(stream_updated, format: datetime_display_format()) %>
             </p>
             <span class="border-bottom mt-1 mb-3"></span>
           </div>
-        <div class="row">
+        <div class="row mt-3">
             <div class="col">
                 <p>Files: <span class="fw-bold"><%= number_with_delimiter stream.statistic&.file_count || 0 %></span></p>
                 <p class="mb-0">Total file size: <span class="fw-bold"><%= number_to_human_size stream.statistic&.file_size || 0 %></span></p>
