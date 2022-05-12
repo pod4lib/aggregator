@@ -155,7 +155,7 @@ class OaiController < ApplicationController
   # repeatedly by next_record_page with the same arguments
   def normalized_dumps(set, from_date, until_date)
     # get candidate streams (all defaults or single org default)
-    streams = set ? Stream.default.joins(:organization).where(organization: { slug: set }) : Stream.default
+    streams = set.present? ? Stream.default.joins(:organization).where(organization: { slug: set }) : Stream.default
 
     dumps = filter_dumps(streams, from_date, until_date)
 
@@ -170,8 +170,8 @@ class OaiController < ApplicationController
     dumps = streams.flat_map(&:current_dumps).sort_by(&:created_at)
 
     # filter candidate dumps (by from date and until date)
-    dumps = dumps.select { |dump| dump.created_at >= Time.zone.parse(from_date).beginning_of_day } if from_date
-    dumps = dumps.select { |dump| dump.created_at <= Time.zone.parse(until_date).end_of_day } if until_date
+    dumps = dumps.select { |dump| dump.created_at >= Time.zone.parse(from_date).beginning_of_day } if from_date.present?
+    dumps = dumps.select { |dump| dump.created_at <= Time.zone.parse(until_date).end_of_day } if until_date.present?
 
     dumps
   end
