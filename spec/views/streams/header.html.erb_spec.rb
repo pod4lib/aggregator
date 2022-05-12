@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'streams/header', type: :view do
   let(:organization) { create(:organization, name: 'Best University') }
-  let(:stream) { create(:stream_with_uploads, organization: organization) }
+  let(:stream) { create(:stream_with_uploads, organization: organization, default: true) }
   let(:user) { create(:user) }
 
   before do

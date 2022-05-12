@@ -54,6 +54,8 @@ module ApplicationHelper
       concat(bootstrap_icon('info-circle-fill', class: 'text-dark'))
       # Add hidden time elements. See application.js
       stream.default_stream_histories.recent.collect do |history|
+        next unless history.start_time && history.end_time
+
         concat(hidden_time(history.start_time, 'start'))
         concat(hidden_time(history.end_time, 'end'))
       end
