@@ -14,12 +14,10 @@ class MarcRecordWriterService
   def write_marc_record(record)
     write_marc21_record(record)
     write_marcxml_record(record)
-    write_oai_record(record)
   end
 
   def write_delete(record)
     deletes_writer.puts(record.marc001)
-    oai_writer.write_delete(record.oai_id, record.organization.slug, record.upload.created_at)
   end
 
   def write_errata(message)
@@ -48,14 +46,6 @@ class MarcRecordWriterService
 
   def write_marcxml_record(record)
     marcxml_writer.write(record.augmented_marc)
-  rescue StandardError => e
-    write_errata("#{record['001']}: #{e}")
-  end
-
-  # TODO: make this write multiple files per record if necessary, broken up by
-  # OAIPMHWriter::max_records_per_file
-  def write_oai_record(record)
-    oai_writer.write(record.augmented_marc, record.oai_id, record.organization.slug, record.upload.created_at)
   rescue StandardError => e
     write_errata("#{record['001']}: #{e}")
   end
@@ -96,47 +86,5 @@ class MarcRecordWriterService
     return CustomMarcWriter.encode(marc) if e.message.include? "Can't write MARC record in binary format, as a length/offset"
 
     raise e
-  end
-
-  # Special logic for writing OAI-PMH-style record responses
-  class OAIPMHWriter
-    def initialize(io)
-      @io = io
-    end
-
-    def max_records_per_file
-      1000
-    end
-
-    def write(record, identifier, set, datestamp = Time.zone.now)
-      @io.write <<-EOXML
-        <record>
-          <header>
-            <identifier>#{identifier}</identifier>
-            <datestamp>#{datestamp.strftime('%F')}</datestamp>
-            <setSpec>#{set}</setSpec>
-          </header>
-          <metadata>
-            #{MARC::XMLWriter.encode(record, include_namespace: true)}
-          </metadata>
-        </record>
-      EOXML
-    end
-
-    def write_delete(identifier, set, datestamp = Time.zone.now)
-      @io.write <<-EOXML
-        <record>
-          <header status="deleted">
-            <identifier>#{identifier}</identifier>
-            <datestamp>#{datestamp.strftime('%F')}</datestamp>
-            <setSpec>#{set}</setSpec>
-          </header>
-        </record>
-      EOXML
-    end
-
-    def close
-      @io.close
-    end
   end
 end

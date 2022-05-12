@@ -72,7 +72,7 @@ class OaiController < ApplicationController
   # rubocop:enable Metrics/PerceivedComplexity
 
   def render_list_sets
-    render xml: build_list_sets_response(Organization.providers)
+    render xml: build_list_sets_response(Organization.providers.where(public: true))
   end
 
   def render_identify

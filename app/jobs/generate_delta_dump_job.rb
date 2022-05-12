@@ -28,17 +28,28 @@ class GenerateDeltaDumpJob < ApplicationJob
     progress.total = uploads.sum(&:marc_records_count)
 
     delta_dump = full_dump.deltas.create(stream_id: full_dump.stream_id)
-
-    writer = MarcRecordWriterService.new("#{organization.slug}-#{Time.zone.today}-delta")
+    base_name = "#{organization.slug}-#{Time.zone.today}-delta"
+    writer = MarcRecordWriterService.new(base_name)
+    oai_file_counter = 0
 
     begin
       NormalizedMarcRecordReader.new(uploads).each_slice(100) do |records|
-        records.each do |record|
-          if record.status == 'delete'
-            writer.write_delete(record)
-          else
-            writer.write_marc_record(record)
+        records.each_slice(10) do |record_chunk|
+          oai_writer = OaiMarcRecordWriterService.new(base_name)
+          record_chunk.each do |record|
+            if record.status == 'delete'
+              writer.write_delete(record)
+              oai_writer.write_delete(record)
+            else
+              writer.write_marc_record(record)
+              oai_writer.write_marc_record(record)
+            end
           end
+          oai_writer.finalize
+          delta_dump.public_send(:oai_xml).attach(io: File.open(oai_writer.oai_file),
+                                                  filename: human_readable_filename(:oai_xml, oai_file_counter))
+
+          oai_file_counter += 1
         end
 
         progress.increment(records.length)
@@ -62,7 +73,7 @@ class GenerateDeltaDumpJob < ApplicationJob
 
   private
 
-  def human_readable_filename(file_type)
+  def human_readable_filename(file_type, counter = nil)
     case file_type
     when :deletes
       'deletes.del.txt'
@@ -73,7 +84,7 @@ class GenerateDeltaDumpJob < ApplicationJob
     when :errata
       'errata.gz'
     when :oai_xml
-      'oai.xml.gz'
+      "oai-#{"-#{format('%010d', counter)}"}.xml.gz"
     else
       file_type
     end

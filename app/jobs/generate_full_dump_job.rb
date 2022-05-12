@@ -14,7 +14,7 @@ class GenerateFullDumpJob < ApplicationJob
     end
   end
 
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
   def perform(organization)
     now = Time.zone.now
     uploads = Upload.active.where(stream: organization.default_stream)
@@ -29,17 +29,28 @@ class GenerateFullDumpJob < ApplicationJob
 
     base_name = "#{organization.slug}-#{Time.zone.today}-full"
     writer = MarcRecordWriterService.new(base_name)
+    oai_file_counter = 0
 
     begin
       NormalizedMarcRecordReader.new(uploads).each_slice(100) do |records|
-        records.each do |record|
-          # In a full dump, we can omit the deletes
-          next if record.status == 'delete'
+        records.each_slice(10) do |record_chunk|
+          oai_writer = OaiMarcRecordWriterService.new(base_name)
+          record_chunk.each do |record|
+            # In a full dump, we can omit the deletes
+            next if record.status == 'delete'
 
-          writer.write_marc_record(record)
+            writer.write_marc_record(record)
+            oai_writer.write_marc_record(record)
+          end
+          oai_writer.finalize
+          full_dump.public_send(:oai_xml).attach(io: File.open(oai_writer.oai_file),
+                                                 filename: human_readable_filename(
+                                                   base_name, "oai_xml-#{format('%010d', oai_file_counter)}"
+                                                 ))
+
+          oai_file_counter += 1
+          progress.increment(records.length)
         end
-
-        progress.increment(records.length)
       end
 
       writer.finalize
@@ -56,7 +67,7 @@ class GenerateFullDumpJob < ApplicationJob
       writer.unlink
     end
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
 
   def human_readable_filename(base_name, file_type)
     as = case file_type
