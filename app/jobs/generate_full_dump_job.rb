@@ -33,7 +33,7 @@ class GenerateFullDumpJob < ApplicationJob
 
     begin
       NormalizedMarcRecordReader.new(uploads).each_slice(100) do |records|
-        records.each_slice(10) do |record_chunk|
+        records.each_slice(Settings.oai_records_per_file) do |record_chunk|
           oai_writer = OaiMarcRecordWriterService.new(base_name)
           record_chunk.each do |record|
             # In a full dump, we can omit the deletes
