@@ -61,19 +61,6 @@ class Upload < ApplicationRecord
     end
   end
 
-  # overall status of files in the upload, delegates to Attachment. see:
-  # https://github.com/pod4lib/aggregator/issues/674
-  def files_status
-    case files.map(&:pod_metadata_status).uniq
-    when [:success], [:deletes]
-      'completed'
-    when [:invalid], [:not_marc]
-      'failed'
-    else
-      'needs_attention'
-    end
-  end
-
   private
 
   def perform_extract_marc_record_metadata_job
