@@ -1,22 +1,17 @@
-<%= render 'shared/organization_header' %>
+<%= render 'shared/layout_upload_page' do %>
 
-<div class="container">
-  <%= link_to 'Stream', [@upload.organization, @upload.stream] %>
+  <div class="d-flex align-items-center">
+    <h2 class="font-weight-normal mb-0">File: <%= @blob.filename %></h2>
 
-  <div class="d-flex justify-content-between">
-    <h2><%= @blob.filename %></h2>
-
-    <% if can? :read, @upload %>
-      <div>
-        <%= link_to 'Download', download_url(@attachment), class: 'btn btn-secondary' %>
-        <%= link_to 'Source 🔗', @upload.url, title: @upload.url, class: 'btn btn-secondary' if @upload.url.present? %>
-      </div>
-    <% end %>
+    <div class="ms-auto p-2">
+      <% if can? :read, @upload %>
+          <%= link_to 'Download', download_url(@attachment), class: 'btn btn-primary' %>
+          <%= link_to 'Source 🔗', @upload.url, title: @upload.url, class: 'btn btn-primary' if @upload.url.present? %>
+      <% end %>
+    </div>
   </div>
 
-  <p class="lead">Size: <%= number_to_human_size @blob.byte_size %></p>
-  <p class="lead">Records: <%= number_with_delimiter @blob.metadata['count'] || 0 %></p>
-
+  <%= render 'uploads/summary_card', upload: @upload %>
 
   <% if @marc_profile %>
     <%= render 'marc_profiles/summary', marc_profile: @marc_profile %>
@@ -25,4 +20,6 @@
   <% else %>
     <div class="alert alert-info">No MARC profiling data found</div>
   <% end %>
-</div>
+
+<% end %>
+
