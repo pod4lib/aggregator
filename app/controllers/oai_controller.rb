@@ -72,11 +72,14 @@ class OaiController < ApplicationController
   # rubocop:enable Metrics/PerceivedComplexity
 
   def render_list_sets
-    render xml: build_list_sets_response(Organization.providers.where(public: true))
+    streams = Stream.joins(:default_stream_histories).joins(normalized_dumps: :oai_xml_attachments).distinct
+    render xml: build_list_sets_response(streams)
   end
 
   def render_identify
-    earliest_oai = Stream.default.joins(normalized_dumps: :oai_xml_attachments)
+    earliest_oai = Stream.joins(:default_stream_histories)
+                         .joins(normalized_dumps: :oai_xml_attachments)
+                         .distinct
                          .order('normalized_dumps.created_at ASC')
                          .limit(1)
                          .pick('normalized_dumps.created_at')
@@ -150,12 +153,16 @@ class OaiController < ApplicationController
     [pages[page], token]
   end
 
-  # Get all NormalizedDumps from a particular org or created between two dates
+  # Get NormalizedDumps from a particular stream or created between two dates
   # NOTE: this likely needs work to memoize/tune, but it should be called
   # repeatedly by next_record_page with the same arguments
   def normalized_dumps(set, from_date, until_date)
     # get candidate streams (all defaults or single org default)
-    streams = set.present? ? Stream.default.joins(:organization).where(organization: { slug: set }) : Stream.default
+    streams = if set.present?
+                [Stream.find(set)]
+              else
+                Stream.joins(:default_stream_histories).joins(normalized_dumps: :oai_xml_attachments).distinct
+              end
 
     dumps = filter_dumps(streams, from_date, until_date)
 
@@ -207,20 +214,29 @@ class OaiController < ApplicationController
   end
 
   # See https://www.openarchives.org/OAI/openarchivesprotocol.html#ListSets
-  def build_list_sets_response(organizations)
+  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/MethodLength
+  def build_list_sets_response(streams)
     Nokogiri::XML::Builder.new do |xml|
       build_oai_response xml, list_sets_params do
         xml.ListSets do
-          organizations.each do |organization|
+          streams.each do |stream|
             xml.set do
-              xml.setSpec organization.slug
-              xml.setName organization.name
+              xml.setSpec stream.id
+              xml.setName "#{stream.organization.slug}, stream #{stream.display_name}"
+              xml.setDescription do
+                xml[:oai_dc].dc(oai_dc_xmlns) do
+                  xml[:dc].description list_sets_description(stream)
+                end
+              end
             end
           end
         end
       end
     end.to_xml
   end
+  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/MethodLength
 
   # See https://www.openarchives.org/OAI/openarchivesprotocol.html#Identify
   def build_identify_response(earliest_date)

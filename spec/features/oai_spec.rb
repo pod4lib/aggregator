@@ -58,8 +58,11 @@ RSpec.describe 'OAI-PMH', type: :feature do
     it 'renders a set element for each organization' do
       visit oai_url(verb: 'ListSets')
       doc = Nokogiri::XML(page.body)
-      expect(doc.at_css('ListSets > set > setName').text).to eq('My Org')
-      expect(doc.at_css('ListSets > set > setSpec').text).to eq('my-org')
+      expect(doc.at_css('ListSets > set > setName').text).to eq('my-org, stream 2020-05-06 - ')
+      expect(doc.at_css('ListSets > set > setSpec').text).to eq(organization.default_stream.id.to_s)
+      expect(doc.at_css('ListSets > set > setDescription').text).to(
+        include('Current default stream for my-org, 2020-05-06 00:00:00 UTC to present')
+      )
     end
 
     it 'renders an error if unknown params are supplied' do
@@ -139,7 +142,9 @@ RSpec.describe 'OAI-PMH', type: :feature do
     it 'renders the identifier of each item' do
       visit oai_url(verb: 'ListRecords', metadataPrefix: 'marc21')
       doc = Nokogiri::XML(page.body)
-      expect(doc.at_css('ListRecords > record > header > identifier').text).to eq('oai:pod.stanford.edu:my-org:a12345')
+      expect(doc.at_css('ListRecords > record > header > identifier').text).to(
+        eq("oai:pod.stanford.edu:my-org:#{organization.default_stream.id}:a12345")
+      )
     end
 
     it 'renders the datestamp of each item' do

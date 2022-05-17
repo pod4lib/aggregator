@@ -56,17 +56,18 @@ module OaiConcern
   # list.
   class ResumptionToken
     def self.encode(set, page, from_date, until_date)
-      # Base64.urlsafe_encode64([set, page, from_date, until_date].join(';'))
-      [set, page, from_date, until_date].join('|')
+      Base64.urlsafe_encode64([set, page, from_date, until_date].join(';'))
     end
 
     def self.decode(token)
-      # Base64.urlsafe_decode64(token).split(';')
-      token.split('|')
+      Base64.urlsafe_decode64(token).split(';')
     end
   end
 
+  # rubocop:disable Metrics/BlockLength
   included do
+    private
+
     # XML namespace values for OAI-PMH, see:
     # https://www.openarchives.org/OAI/openarchivesprotocol.html#XMLResponse
     def oai_xmlns
@@ -76,5 +77,38 @@ module OaiConcern
         'xsi:schemaLocation' => 'http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd'
       }
     end
+
+    # XML namespace values for OAI-PMH Dublin Core containers
+    # Used for the ListSets description, see:
+    # http://www.openarchives.org/OAI/openarchivesprotocol.html#ListSets
+    def oai_dc_xmlns
+      {
+        'xmlns:oai_dc' => 'http://www.openarchives.org/OAI/2.0/oai_dc/',
+        'xmlns:dc' => 'http://purl.org/dc/elements/1.1/',
+        'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+        'xsi:schemaLocation' => 'http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd'
+      }
+    end
+
+    def list_sets_description(stream)
+      [[list_sets_default_status(stream),
+        list_sets_stream_info(stream)].join(' '),
+       list_sets_date_ranges(stream)].join(', ')
+    end
+
+    def list_sets_default_status(stream)
+      stream.default? ? 'Current default stream' : 'Former default stream'
+    end
+
+    def list_sets_stream_info(stream)
+      "for #{stream.organization.slug}"
+    end
+
+    def list_sets_date_ranges(stream)
+      stream.default_stream_histories.recent.map do |history|
+        "#{history.start_time} to #{history.end_time.presence || 'present'}"
+      end
+    end
   end
+  # rubocop:enable Metrics/BlockLength
 end
