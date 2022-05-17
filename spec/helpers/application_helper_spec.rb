@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe ApplicationHelper do
   let(:org1) { create(:organization) }
   let(:user) { create(:user) }
+  let(:stream) { create(:stream) }
 
   describe '#bootstrap_icon' do
     it 'renders an icon given a valid Bootstrap icon class' do
