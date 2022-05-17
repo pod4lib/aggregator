@@ -4,7 +4,7 @@
 <%= form.fields_for :contact_email, (organization.contact_email || organization.build_contact_email) do |contact_form| %>
 <%= contact_form.email_field :email, label: 'POD contact for this organization', help: 'An email address other POD users can use to contact this organization.' %>
 <% end %>
-<%= form.check_box :provider %>
+<%= form.check_box :provider if organization.new_record? %>
 <div class="custom-file mb-3">
   <%= form.file_field_without_bootstrap :icon, type: :file, direct_upload: true, id: 'customFile', class: 'custom-file-input', accept: '.svg' %>
   <label class="custom-file-label" for="customFile">
