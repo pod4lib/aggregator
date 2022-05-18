@@ -4,16 +4,16 @@
 module DashboardHelper
   # Return the last successful upload given a set up uploads, otherwise nil
   def last_successful_upload_date(uploads)
-    uploads.find { |upload| files_status(upload) == 'completed' }&.created_at
+    uploads.find { |upload| files_status(upload) == :completed }&.created_at
   end
 
   # Return the most successful status level given a set up uploads
   def best_status(uploads)
     statuses = uploads.map { |upload| files_status(upload) }.uniq
 
-    return 'completed' if statuses.include? 'completed'
-    return 'needs_attention' if statuses.include? 'needs_attention'
-    return 'failed' if statuses.include? 'failed'
+    return :completed if statuses.include? :completed
+    return :needs_attention if statuses.include? :needs_attention
+    return :failed if statuses.include? :failed
   end
 
   # Status criteria outlined in https://github.com/pod4lib/aggregator/issues/674
@@ -24,11 +24,11 @@ module DashboardHelper
     statuses = upload.files.map(&:pod_metadata_status).uniq
 
     if any_successes?(statuses) && any_failures?(statuses)
-      'needs_attention'
+      :needs_attention
     elsif any_successes?(statuses)
-      'completed'
+      :completed
     else
-      'failed'
+      :failed
     end
   end
 
