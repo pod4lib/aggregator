@@ -45,8 +45,8 @@ class Stream < ApplicationRecord
 
   def job_tracker_status_groups
     {
-      needs_attention: job_trackers.select { |jt| jt.in_retry_set? || jt.in_dead_set? },
-      active: job_trackers.select { |jt| !jt.in_retry_set? && !jt.in_dead_set? }
+      needs_attention: job_trackers.order(created_at: :desc).select { |jt| jt.in_retry_set? || jt.in_dead_set? },
+      active: job_trackers.order(created_at: :desc).select { |jt| !jt.in_retry_set? && !jt.in_dead_set? }
     }
   end
 

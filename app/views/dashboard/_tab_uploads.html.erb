@@ -1,0 +1,48 @@
+<div class="tab-pane fade show active" id="uploads-pane" role="tabpanel" aria-labelledby="uploads-tab">
+    <table class="table table-striped mb-3" id="uploads-table">
+      <thead>
+        <tr>
+          <th><%= t('dashboard.summary.table.provider') %></th>
+          <!-- TODO: Sparkline goes here, see https://github.com/pod4lib/aggregator/issues/679 -->
+          <!-- <th class="text-center"><%= t('dashboard.summary.table.history') %></th> -->
+          <th><%= t('dashboard.summary.table.last_upload') %></th>
+          <th class="text-center"><%= t('dashboard.summary.table.status') %></th>
+          <th><%= t('dashboard.summary.table.last_successful_upload') %></th>
+          <th class="text-center"><%= t('dashboard.summary.table.recent_success') %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @recent_uploads_by_provider.each do |provider, uploads| %>    
+        <tr>
+          <td><%= link_to provider.name, organization_uploads_path(provider) %></td>
+          
+          <!-- TODO: Sparkline goes here, see https://github.com/pod4lib/aggregator/issues/679 -->
+          <!-- <td class="text-center"></td> -->
+
+          <!-- Most recent upload: -->
+          <td>
+            <%= link_to local_time(uploads[0].created_at, format: datetime_display_format()), organization_upload_path(provider, uploads[0]) %>
+          </td>
+          <!-- Most recent upload status: -->
+          <td class="text-center">
+            <%= bootstrap_icon(Settings.job_status_group[files_status(uploads[0])].icon_class, class: "pod-job-tracker-status #{files_status(uploads[0])}") %>
+            <span class="visually-hidden"><%= files_status(uploads[0]) %></span>
+          </td>
+          <!-- Date of successful upload: -->
+          <td>
+            <% if last_successful_upload_date(uploads) %>
+              <%= local_time(last_successful_upload_date(uploads), format: datetime_display_format()) %>
+            <% else %>
+              <p>No prior successful uploads</p>
+            <% end %>
+          </td>
+          <!-- Did any uploads succeed in past 30 days? -->
+          <td class="text-center">
+            <%= bootstrap_icon(Settings.job_status_group[best_status(uploads)].icon_class, class: "pod-job-tracker-status #{best_status(uploads)}") %>
+            <span class="visually-hidden"><%= best_status(uploads) %></span>
+          </td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
