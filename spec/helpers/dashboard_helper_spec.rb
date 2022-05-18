@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-# require 'active_storage_attachment_metadata_status'
 
 RSpec.describe DashboardHelper, type: :helper do
   let(:organization) { create(:organization) }

@@ -19,7 +19,7 @@ RSpec.describe '/dashboard', type: :request do
   describe 'GET /uploads' do
     let(:recent_uploads_by_provider) do
       {
-        organization => uploads
+        organization: uploads
       }
     end
 
