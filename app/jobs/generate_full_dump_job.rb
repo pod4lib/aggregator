@@ -50,6 +50,9 @@ class GenerateFullDumpJob < ApplicationJob
 
           oai_file_counter += 1
           progress.increment(records.length)
+        ensure
+          oai_writer.close
+          oai_writer.unlink
         end
       end
 

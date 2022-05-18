@@ -50,6 +50,9 @@ class GenerateDeltaDumpJob < ApplicationJob
                                                   filename: human_readable_filename(:oai_xml, oai_file_counter))
 
           oai_file_counter += 1
+        ensure
+          oai_writer.close
+          oai_writer.unlink
         end
 
         progress.increment(records.length)
