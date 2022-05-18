@@ -30,6 +30,9 @@ job_status_group:
   completed:
     icon_class: 'check-circle-fill'
     badge_class: 'bg-success'
+  failed:
+    icon_class: 'exclamation-circle-fill'
+    badge_class: 'bg-danger'
 
 # refer to https://icons.getbootstrap.com/ for icon class names
 metadata_status:

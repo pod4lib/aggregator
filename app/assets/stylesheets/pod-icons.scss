@@ -16,7 +16,8 @@
     color: $warning
   }
 
-  &.dead {
+  &.dead,
+  &.failed {
     color: $danger
   }
 

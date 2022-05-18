@@ -2,17 +2,23 @@
 en:
   dashboard:
     uploads:
+      summary_title: Activity summary
       table:
         date_created: Date created
         download_title: Download %{filename}
         filename: File
+        history: 30 day history
+        last_successful_upload: Last successful upload
+        last_upload: Last upload
         provider: Provider
+        recent_success: Success in last 30 days?
         record_count: Records
         size: Size
         status: Status
         upload: Upload
         upload_title: View upload %{name}
       title: Recent activity
+      upload_title: Upload activity
   job_tracker:
     status_group:
       active:
