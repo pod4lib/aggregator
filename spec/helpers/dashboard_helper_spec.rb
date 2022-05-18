@@ -26,22 +26,22 @@ RSpec.describe DashboardHelper, type: :helper do
 
   describe '#files_status' do
     it 'returns completed status for valid uploads' do
-      expect(helper.files_status(uploads[0])).to eq('completed')
+      expect(helper.files_status(uploads[0])).to eq(:completed)
     end
 
     it 'returns needs_attention status for mixed uploads' do
-      expect(helper.files_status(uploads[1])).to eq('needs_attention')
+      expect(helper.files_status(uploads[1])).to eq(:needs_attention)
     end
 
     it 'returns failed status for bad uploads' do
       # we didn't set any metadata for uploads[2] so it defaults to fail
-      expect(helper.files_status(uploads[2])).to eq('failed')
+      expect(helper.files_status(uploads[2])).to eq(:failed)
     end
   end
 
   describe '#best_status' do
     it 'returns the best status out of a group from a given upload' do
-      expect(helper.best_status(uploads)).to eq('completed')
+      expect(helper.best_status(uploads)).to eq(:completed)
     end
   end
 

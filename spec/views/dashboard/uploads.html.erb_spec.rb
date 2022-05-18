@@ -22,7 +22,7 @@ RSpec.describe 'dashboard/uploads', type: :view do
   before do
     assign(:uploads, Kaminari.paginate_array(uploads).page(1))
     assign(:recent_uploads_by_provider, { organization: uploads, org2: uploads2 })
-    allow(view).to receive(:files_status).and_return('completed')
+    allow(view).to receive(:files_status).and_return(:completed)
   end
 
   it 'renders a list of all uploads' do
