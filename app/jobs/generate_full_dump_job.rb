@@ -14,7 +14,7 @@ class GenerateFullDumpJob < ApplicationJob
     end
   end
 
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def perform(organization)
     now = Time.zone.now
     uploads = Upload.active.where(stream: organization.default_stream)
@@ -33,27 +33,25 @@ class GenerateFullDumpJob < ApplicationJob
 
     begin
       NormalizedMarcRecordReader.new(uploads).each_slice(100) do |records|
-        records.each_slice(Settings.oai_records_per_file) do |record_chunk|
-          oai_writer = OaiMarcRecordWriterService.new(base_name)
-          record_chunk.each do |record|
-            # In a full dump, we can omit the deletes
-            next if record.status == 'delete'
+        oai_writer = OaiMarcRecordWriterService.new(base_name)
+        records.each do |record|
+          # In a full dump, we can omit the deletes
+          next if record.status == 'delete'
 
-            writer.write_marc_record(record)
-            oai_writer.write_marc_record(record)
-          end
-          oai_writer.finalize
-          full_dump.public_send(:oai_xml).attach(io: File.open(oai_writer.oai_file),
-                                                 filename: human_readable_filename(
-                                                   base_name, "oai_xml-#{format('%010d', oai_file_counter)}"
-                                                 ))
-
-          oai_file_counter += 1
-          progress.increment(records.length)
-        ensure
-          oai_writer.close
-          oai_writer.unlink
+          writer.write_marc_record(record)
+          oai_writer.write_marc_record(record)
         end
+        oai_writer.finalize
+        full_dump.public_send(:oai_xml).attach(io: File.open(oai_writer.oai_file),
+                                               filename: human_readable_filename(
+                                                 base_name, "oai_xml-#{format('%010d', oai_file_counter)}"
+                                               ))
+
+        oai_file_counter += 1
+        progress.increment(records.length)
+      ensure
+        oai_writer.close
+        oai_writer.unlink
       end
 
       writer.finalize
@@ -70,7 +68,7 @@ class GenerateFullDumpJob < ApplicationJob
       writer.unlink
     end
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   def human_readable_filename(base_name, file_type)
     as = case file_type
@@ -80,6 +78,8 @@ class GenerateFullDumpJob < ApplicationJob
            'marc21.mrc.gz'
          when :marcxml
            'marcxml.xml.gz'
+         when :oai_xml
+           "#{file_type}.xml"
          else
            "#{file_type}.gz"
          end

@@ -34,28 +34,25 @@ class GenerateDeltaDumpJob < ApplicationJob
 
     begin
       NormalizedMarcRecordReader.new(uploads).each_slice(100) do |records|
-        records.each_slice(Settings.oai_records_per_file) do |record_chunk|
-          oai_writer = OaiMarcRecordWriterService.new(base_name)
-          record_chunk.each do |record|
-            if record.status == 'delete'
-              writer.write_delete(record)
-              oai_writer.write_delete(record)
-            else
-              writer.write_marc_record(record)
-              oai_writer.write_marc_record(record)
-            end
+        oai_writer = OaiMarcRecordWriterService.new(base_name)
+        records.each do |record|
+          if record.status == 'delete'
+            writer.write_delete(record)
+            oai_writer.write_delete(record)
+          else
+            writer.write_marc_record(record)
+            oai_writer.write_marc_record(record)
           end
-          oai_writer.finalize
-          delta_dump.public_send(:oai_xml).attach(io: File.open(oai_writer.oai_file),
-                                                  filename: human_readable_filename(:oai_xml, oai_file_counter))
-
-          oai_file_counter += 1
-        ensure
-          oai_writer.close
-          oai_writer.unlink
         end
+        oai_writer.finalize
+        delta_dump.public_send(:oai_xml).attach(io: File.open(oai_writer.oai_file),
+                                                filename: human_readable_filename(:oai_xml, oai_file_counter))
 
+        oai_file_counter += 1
         progress.increment(records.length)
+      ensure
+        oai_writer.close
+        oai_writer.unlink
       end
 
       writer.finalize
@@ -87,7 +84,7 @@ class GenerateDeltaDumpJob < ApplicationJob
     when :errata
       'errata.gz'
     when :oai_xml
-      "oai-#{"-#{format('%010d', counter)}"}.xml.gz"
+      "oai-#{"-#{format('%010d', counter)}"}.xml"
     else
       file_type
     end

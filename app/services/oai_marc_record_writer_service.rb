@@ -39,7 +39,7 @@ class OaiMarcRecordWriterService
   private
 
   def oai_writer
-    @oai_writer ||= OAIPMHWriter.new(Zlib::GzipWriter.new(oai_file))
+    @oai_writer ||= OAIPMHWriter.new(oai_file)
   end
 
   # Special logic for writing OAI-PMH-style record responses
