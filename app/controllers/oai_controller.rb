@@ -138,6 +138,7 @@ class OaiController < ApplicationController
     # isn't predictable; the only thing we promise is that all pages are less than
     # that size.
     pages = normalized_dumps(set, from_date, until_date).flat_map(&:oai_xml_attachments)
+    raise OaiConcern::NoRecordsMatch if pages.empty?
 
     # generate a token for the next page, if there is one
     token = case page
@@ -149,7 +150,7 @@ class OaiController < ApplicationController
               raise OaiConcern::BadResumptionToken
             end
 
-    # return the relevant page and the token for the next page, if any
+    # return the current page and the token for the next page, if any
     [pages[page], token]
   end
 
@@ -157,16 +158,15 @@ class OaiController < ApplicationController
   # NOTE: this likely needs work to memoize/tune, but it should be called
   # repeatedly by next_record_page with the same arguments
   def normalized_dumps(set, from_date, until_date)
-    # get candidate streams (all defaults or single org default)
+    # get stream by id, or all default streams if not specified
     streams = if set.present?
-                [Stream.find(set)]
+                Stream.where(id: set)
               else
                 Stream.joins(:default_stream_histories).joins(normalized_dumps: :oai_xml_attachments).distinct
               end
 
+    # get all dumps in this stream, optionally between two dates; error if none
     dumps = filter_dumps(streams, from_date, until_date)
-
-    # error if no dumps match the filters
     raise OaiConcern::NoRecordsMatch if dumps.empty?
 
     dumps

@@ -193,6 +193,11 @@ RSpec.describe 'OAI-PMH', type: :feature do
       expect(page).to have_selector('error[code="cannotDisseminateFormat"]')
     end
 
+    it 'renders an error if the request results in an empty result set' do
+      visit oai_url(verb: 'ListRecords', metadataPrefix: 'marc21', set: '392487')
+      expect(page).to have_selector('error[code="noRecordsMatch"]')
+    end
+
     context 'when a resumption token is supplied' do
       it 'renders the next page of records'
       it 'renders an error if any other argument is also supplied' do
