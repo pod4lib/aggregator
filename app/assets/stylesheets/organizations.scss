@@ -41,9 +41,15 @@
 
 dl.organization-details {
   dt {
-    font-weight: normal;
+    font-weight: 500;
   }
-  dt > *:last-child {
-    padding-left: 15px;
+
+  dd {
+    margin-bottom: 1rem;
+    margin-left: 1rem;
+
+    img {
+      max-width: 35px;
+    }
   }
 }
