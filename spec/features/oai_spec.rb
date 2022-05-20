@@ -131,11 +131,17 @@ RSpec.describe 'OAI-PMH', type: :feature do
       expect(doc.at_css('ListMetadataFormats > metadataFormat > metadataNamespace').text).to eq('http://www.loc.gov/MARC21/slim')
     end
 
-    it 'renders the metadata formats available for a single item'
+    it 'renders the metadata formats available for a single item' do
+      visit oai_url(verb: 'ListMetadataFormats', identifier: 'oai:pod.stanford.edu:my-org:1:a12345')
+      doc = Nokogiri::XML(page.body)
+      expect(doc.at_css('ListMetadataFormats > metadataFormat > metadataPrefix').text).to eq('marc21')
+    end
 
-    it 'renders an error if an unknown identifier is supplied'
-
-    it 'renders an error if no metadata formats are available for the item'
+    it 'renders an error if an unknown identifier is supplied' do
+      pending 'single item requests are not yet implemented'
+      visit oai_url(verb: 'ListMetadataFormats', identifier: 'fake')
+      expect(page).to have_selector('error[code="idDoesNotExist"]')
+    end
 
     it 'renders an error if unknown params are supplied' do
       visit oai_url(verb: 'ListMetadataFormats', foo: 'bar')
