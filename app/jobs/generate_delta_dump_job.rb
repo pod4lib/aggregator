@@ -33,7 +33,7 @@ class GenerateDeltaDumpJob < ApplicationJob
     oai_file_counter = 0
 
     begin
-      NormalizedMarcRecordReader.new(uploads).each_slice(100) do |records|
+      NormalizedMarcRecordReader.new(uploads).each_slice(Settings.oai_max_page_size) do |records|
         oai_writer = OaiMarcRecordWriterService.new(base_name)
         records.each do |record|
           if record.status == 'delete'
