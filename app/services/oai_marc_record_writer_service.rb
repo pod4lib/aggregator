@@ -9,7 +9,7 @@ class OaiMarcRecordWriterService
   end
 
   def write_marc_record(record)
-    oai_writer.write(record.augmented_marc, record.oai_id, record.organization.slug, record.upload.created_at)
+    oai_writer.write(record.augmented_marc, record.oai_id, record.stream.id, record.upload.created_at)
   rescue StandardError => e
     error = "Error writing MARC OAI file #{record.oai_id}: #{e}"
     Rails.logger.info(error)
@@ -17,7 +17,7 @@ class OaiMarcRecordWriterService
   end
 
   def write_delete(record)
-    oai_writer.write_delete(record.oai_id, record.organization.slug, record.upload.created_at)
+    oai_writer.write_delete(record.oai_id, record.stream.id, record.upload.created_at)
   end
 
   def finalize
@@ -39,7 +39,7 @@ class OaiMarcRecordWriterService
   private
 
   def oai_writer
-    @oai_writer ||= OAIPMHWriter.new(oai_file)
+    @oai_writer ||= OAIPMHWriter.new(Zlib::GzipWriter.new(oai_file))
   end
 
   # Special logic for writing OAI-PMH-style record responses

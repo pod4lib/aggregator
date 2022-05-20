@@ -200,14 +200,7 @@ class OaiController < ApplicationController
     Nokogiri::XML::Builder.new do |xml|
       build_oai_response xml, list_records_params do
         xml.ListRecords do
-          # TODO: Cory: Since these appear to be just plain text files just
-          #             read the content until we create actual gzip files
-          page.blob.open do |tmpfile|
-            xml << tmpfile.read
-          end
-          # read_oai_xml(page).each do |chunk|
-          #   xml << chunk
-          # end
+          read_oai_xml(page) { |data| xml << data }
           xml.resumptionToken do
             xml.text token if token
             # NOTE: consider adding completeListSize and cursor (page) here
@@ -286,18 +279,10 @@ class OaiController < ApplicationController
     end.to_xml
   end
 
-  # Stream an OAI-XML file 1M at a time
-  # TODO: Cory: the OAI-XML file doesn't appear to be a Gzip file?
-  def read_oai_xml(file, chunk_size: 1.megabyte)
-    return to_enum(:read_oai_xml, file, chunk_size: chunk_size) unless block_given?
-
+  def read_oai_xml(file)
     file.blob.open do |tmpfile|
       io = Zlib::GzipReader.new(tmpfile)
-
-      while (data = io.read(chunk_size))
-        yield data
-      end
-
+      yield io.read
       io.close
     end
   end

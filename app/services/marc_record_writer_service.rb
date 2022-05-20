@@ -66,10 +66,6 @@ class MarcRecordWriterService
     @writers[:deletes] ||= file(:deletes)
   end
 
-  def oai_writer
-    @writers[:oai_xml] ||= OAIPMHWriter.new(Zlib::GzipWriter.new(file(:oai_xml)))
-  end
-
   def gzipped_temp_file(name)
     Zlib::GzipWriter.new(temp_file(name))
   end

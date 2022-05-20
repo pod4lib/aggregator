@@ -162,7 +162,7 @@ RSpec.describe 'OAI-PMH', type: :feature do
     it 'renders the set membership of each item' do
       visit oai_url(verb: 'ListRecords', metadataPrefix: 'marc21')
       doc = Nokogiri::XML(page.body)
-      expect(doc.at_css('ListRecords > record > header > setSpec').text).to eq('my-org')
+      expect(doc.at_css('ListRecords > record > header > setSpec').text).to eq(organization.default_stream.id.to_s)
     end
 
     it 'renders records in the requested set'
