@@ -165,8 +165,7 @@ RSpec.describe 'OAI-PMH', type: :feature do
     end
 
     it 'renders a header indicating records are deleted' do
-      pending('There should be a deleted record, but it is not on the first page.')
-      visit oai_url(verb: 'ListRecords', metadataPrefix: 'marc21')
+      visit oai_url(verb: 'ListRecords', resumptionToken: OaiConcern::ResumptionToken.encode(1, 1, nil, nil))
       expect(page).to have_selector('header[status="deleted"]')
     end
 
@@ -176,18 +175,44 @@ RSpec.describe 'OAI-PMH', type: :feature do
       expect(doc.at_css('ListRecords > record > header > setSpec').text).to eq(organization.default_stream.id.to_s)
     end
 
-    it 'renders records in the requested set'
+    it 'renders records in the requested set' do
+      visit oai_url(verb: 'ListRecords', metadataPrefix: 'marc21', set: organization.default_stream.id.to_s)
+      doc = Nokogiri::XML(page.body)
+      doc.css('ListRecords > record > header > setSpec').each do |record_set|
+        expect(record_set.text).to eq(organization.default_stream.id.to_s)
+      end
+    end
 
-    it 'renders a resumption token to continue requesting records'
+    it 'renders a resumption token to continue requesting records if needed' do
+      visit oai_url(verb: 'ListRecords', metadataPrefix: 'marc21', set: organization.default_stream.id.to_s)
+      doc = Nokogiri::XML(page.body)
+      set, page = OaiConcern::ResumptionToken.decode(doc.at_css('ListRecords > resumptionToken').text)
+      expect(set.to_i).to be(organization.default_stream.id)
+      expect(page.to_i).to be(1)
+    end
 
-    # NOTE: mock OAIPMHWriter::max_records_per_file to a very low number,
-    # then run the GenerateFullDump/GenerateDeltaDump jobs so that we
-    # generate many (very small) OAI-XML files. This will make it easier
-    # to test that the paging/resumption tokens work as expected
+    it 'does not render a resumption token if there is only one page of results' do
+      visit oai_url(verb: 'ListRecords', metadataPrefix: 'marc21', from_date: '2020-05-07')
+      doc = Nokogiri::XML(page.body)
+      expect(doc.css('ListRecords > record').size).to eq(1)
+      expect(doc.at_css('ListRecords > resumptionToken')).to be_nil
+    end
 
-    it 'renders records after a supplied lower bound datestamp'
+    it 'renders records after a supplied lower bound datestamp' do
+      visit oai_url(verb: 'ListRecords', metadataPrefix: 'marc21', from_date: '2020-05-07')
+      doc = Nokogiri::XML(page.body)
+      doc.css('ListRecords > record > header > datestamp').each do |record_ds|
+        expect(Time.zone.parse(record_ds.text)).to be_equal_to_or_after(Time.zone.parse('2020-05-07'))
+      end
+    end
 
-    it 'renders records before a supplied upper bound datestamp'
+    it 'renders records before a supplied upper bound datestamp' do
+      visit oai_url(verb: 'ListRecords', metadataPrefix: 'marc21', until_date: '2020-05-06')
+      doc = Nokogiri::XML(page.body)
+      doc.css('ListRecords > record > header > datestamp').each do |record_ds|
+        expect(Time.zone.parse(record_ds.text)).to be_equal_to_or_before(Time.zone.parse('2020-05-06'))
+      end
+    end
 
     it 'renders an error if unknown params are supplied' do
       visit oai_url(verb: 'ListRecords', metadataPrefix: 'marc21', foo: 'bar')
