@@ -23,7 +23,7 @@ RSpec.describe 'Viewing provider information', type: :feature do
 
       # don't confuse "Edit" with "Edit Profile" in header nav
       expect(page).not_to have_link('Edit', exact: true)
-      expect(page).not_to have_link 'Destroy'
+      expect(page).not_to have_link 'Delete'
       expect(page).not_to have_link 'New Organization'
     end
   end
@@ -42,7 +42,7 @@ RSpec.describe 'Viewing provider information', type: :feature do
 
       # don't confuse "Edit" with "Edit Profile" in header nav
       expect(page).to have_link('Edit', exact: true)
-      expect(page).to have_link 'Destroy'
+      expect(page).to have_link 'Delete'
       expect(page).to have_link 'New organization'
     end
   end

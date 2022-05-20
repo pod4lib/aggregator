@@ -36,10 +36,10 @@ RSpec.describe 'uploads/index', type: :view do
     expect(rendered).to have_css('tr>td>a', text: stream.name, count: 2)
   end
 
-  it 'shows Destroy button to privileged users' do
+  it 'shows Delete button to privileged users' do
     allow(view).to receive(:can?).and_return(true)
     render
 
-    assert_select 'a.btn', text: 'Destroy'
+    assert_select 'a.btn', text: 'Delete'
   end
 end
