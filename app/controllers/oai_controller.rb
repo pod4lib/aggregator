@@ -201,10 +201,12 @@ class OaiController < ApplicationController
       build_oai_response xml, list_records_params do
         xml.ListRecords do
           read_oai_xml(page) { |data| xml << data }
-          xml.resumptionToken do
-            xml.text token if token
-            # NOTE: consider adding completeListSize and cursor (page) here
-            # see https://www.openarchives.org/OAI/openarchivesprotocol.html#FlowControl
+          if token
+            xml.resumptionToken do
+              xml.text token
+              # NOTE: consider adding completeListSize and cursor (page) here
+              # see https://www.openarchives.org/OAI/openarchivesprotocol.html#FlowControl
+            end
           end
         end
       end
