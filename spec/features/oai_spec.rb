@@ -10,15 +10,20 @@ RSpec.describe 'OAI-PMH', type: :feature do
   # parsing the response using Nokogiri is required for some assertions
 
   before do
-    # first full dump: two records, 2020-05-06
+    # set a low oai_max_page_size so we get multiple oai-xml files generated
+    allow(Settings).to receive(:oai_max_page_size).and_return(2)
+
+    # first full dump: three records, 2020-05-06
     travel_to Time.zone.local(2020, 5, 6) do
       create(:upload, :marc_xml, stream: organization.default_stream)
+      create(:upload, :marc_xml2, stream: organization.default_stream)
       create(:upload, :binary_marc, stream: organization.default_stream)
       GenerateFullDumpJob.perform_now(organization)
     end
 
-    # delta dump from the next day, with one of the records deleted
+    # delta dump from the next day, add one and delete one record
     travel_to Time.zone.local(2020, 5, 7) do
+      create(:upload, :marc_xml3, stream: organization.default_stream)
       create(:upload, :deleted_marc_xml, stream: organization.default_stream)
       GenerateDeltaDumpJob.perform_now(organization)
     end
