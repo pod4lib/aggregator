@@ -58,7 +58,7 @@
     <div class="mt-3 mt-md-5 d-md-flex justify-content-md-around">
       <% unless @overview.last_org_files.empty? %>
       <div class="my-2 my-md-0">
-        <h3>
+        <h3 class="h4">
           <%= t('.organization.uploads.heading') %>
         </h3>
         <ul class="list-unstyled">
@@ -74,7 +74,7 @@
       <% end %>
       <% if @overview.organization.provider? %>
       <div class="my-2 my-md-0">
-        <h3>
+        <h3 class="h4">
           <%= t('.organization.jobs.heading') %>
         </h3>
         <ul class="list-unstyled">
@@ -96,7 +96,7 @@
       </div>
       <% end %>
       <div class="my-2 my-md-0">
-        <h3>
+        <h3 class="h4">
           <%= t('.organization.actions.heading') %>
         </h3>
         <ul class="list-unstyled">

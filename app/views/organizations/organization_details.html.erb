@@ -16,30 +16,28 @@
   <!-- Member view: -->
   <% else %>
   <dl class="organization-details">
-    <dt>
-      <h4>Name</h4>
-      <p class="<%= @organization.name.blank? ? 'fst-italic' : '' %>">
-        <%= @organization.name.blank? ? 'no value provided' : @organization.name %>
-      </p>
-    </dt>
-    <dt>
-      <h4>Code</h4>
-      <p class="<%= @organization.code.blank? ? 'fst-italic' : '' %>">
+    <dt>Name</dt>
+    <dd class="<%= @organization.name.blank? ? 'fst-italic' : '' %>">
+      <%= @organization.name.blank? ? 'no value provided' : @organization.name %>
+    </dd>
+
+    <dt>Code</dt>
+    <dd class="<%= @organization.code.blank? ? 'fst-italic' : '' %>">
         <%= @organization.code.blank? ? 'no value provided' : @organization.code %>
-      </p>
-    </dt>
-    <dt>
-      <h4>POD contact for this organization</h4>
-      <p class="<%= @organization.contact_email.blank? ? 'fst-italic' : '' %>">
+    </dd>
+
+    <dt>POD contact for this organization</dt>
+    <dd>
+      <direct_upload class="<%= @organization.contact_email.blank? ? 'fst-italic' : '' %>">
         <%= @organization.contact_email.blank? ? 'no value provided' : @organization.contact_email.email %>
-      </p>
-    </dt>
-    <dt>
-      <h4>Icon</h4>
+    </dd>
+
+    <dt>Icon</dt>
+    <dd>
       <% if @organization.icon.attached? %>
-      <%= image_tag(@organization.icon, class: 'organization-icon') %>
+      <%= image_tag(@organization.icon, class: 'organization-icon mt-2') %>
       <% end %>
-    </dt>
+    </dd>
   </dl>
   <% end %>
 <% end %>

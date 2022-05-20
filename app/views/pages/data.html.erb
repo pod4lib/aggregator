@@ -1,4 +1,5 @@
 <div class="container index-page">
+  <h1 class="visually-hidden">Data</h1>
   <h2><%= t('.guidelines.header') %></h2>
   <p><%= t('.guidelines.body_html') %></p>
 
@@ -14,9 +15,9 @@
   <h3><%= t('.resource_sync.header') %></h3>
   <p><%= t('.resource_sync.body_html') %></p>
 
-  <div class="card w-50 my-4">
-      <div class="card-header d-flex justify-content-between">
-        <h2 class="h6"><%= t('.resource_sync.sitemaps') %></h2>
+  <div class="card my-4">
+      <div class="card-header">
+        <h4 class="h6 mb-0"><%= t('.resource_sync.sitemaps') %></h4>
       </div>
       <ul class="list-group list-group-flush">
         <li class="list-group-item"><%= link_to t('.resource_sync.original_uploads'), resourcelist_organizations_url %> (real-time)</li>
