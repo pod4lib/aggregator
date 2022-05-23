@@ -48,7 +48,7 @@ RSpec.describe 'homepage summary', type: :feature do
     end
 
     it 'displays the most recent files that the org uploaded' do
-      expect(page).to have_content '1297245.marcxml'
+      expect(page).to have_content '12345.marcxml'
       expect(page).to have_content '9953670.marc'
     end
 
