@@ -28,9 +28,7 @@ class OaiController < ApplicationController
   private
 
   # rubocop:disable Metrics/AbcSize
-  # rubocop:disable Metrics/CyclomaticComplexity
   # rubocop:disable Metrics/MethodLength
-  # rubocop:disable Metrics/PerceivedComplexity
   def render_list_records
     headers['Cache-Control'] = 'no-cache'
     headers['Last-Modified'] = Time.current.httpdate
@@ -47,30 +45,27 @@ class OaiController < ApplicationController
       raise OaiConcern::BadArgument
     end
 
-    # parse other params
-    # TODO: error if dates aren't well-formed?
-    from_date = Time.zone.parse(list_records_params[:from]) if list_records_params[:from]
-    until_date = Time.zone.parse(list_records_params[:until]) if list_records_params[:until]
-    set = list_records_params[:set]
-    token = list_records_params[:resumptionToken]
-
     # token is exclusive; specifying anything else is an error. see the spec
-    raise OaiConcern::BadArgument if token && (md_prefix || from_date || until_date || set)
+    if list_records_params.include?(:resumptionToken) && !list_records_params.except(:verb, :resumptionToken).empty?
+      raise OaiConcern::BadArgument
+    end
 
     # if we didn't get a token, generate one based on other arguments
     # NOTE: this way, we can always call next_record_page the same way.
     # ultimately, a token is just a pointer to somewhere in a list of records,
     # and the filters needed to construct that list of records
-    token ||= OaiConcern::ResumptionToken.encode(set: set, from_date: from_date, until_date: until_date)
+    token ||= OaiConcern::ResumptionToken.encode(
+      set: list_records_params[:set],
+      from_date: list_records_params[:from],
+      until_date: list_records_params[:until]
+    )
 
     # render the first page of records along with token for the next one
     render xml: build_list_records_response(*next_record_page(token))
   end
-  # rubocop:enable Metrics/AbcSize
-  # rubocop:enable Metrics/CyclomaticComplexity
-  # rubocop:enable Metrics/MethodLength
-  # rubocop:enable Metrics/PerceivedComplexity
 
+  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/MethodLength
   def render_list_sets
     streams = Stream.joins(:default_stream_histories).joins(normalized_dumps: :oai_xml_attachments).distinct
     render xml: build_list_sets_response(streams)

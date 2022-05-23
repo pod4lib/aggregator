@@ -57,19 +57,12 @@ module OaiConcern
   class ResumptionToken
     def self.encode(set: nil, page: nil, from_date: nil, until_date: nil)
       validate(set, page, from_date, until_date)
-
       Base64.urlsafe_encode64([set, page, from_date, until_date].join(';'))
     end
 
     def self.decode(token)
       set, page, from_date, until_date = Base64.urlsafe_decode64(token).split(';')
-
-      begin
-        validate(set, page, from_date, until_date)
-      rescue ArgumentError
-        raise OaiConcern::BadResumptionToken
-      end
-
+      validate(set, page, from_date, until_date)
       [set, page, from_date, until_date]
     end
 
@@ -78,6 +71,8 @@ module OaiConcern
       Integer(page) if page.present?
       Date.parse(from_date) if from_date.present?
       Date.parse(until_date) if until_date.present?
+    rescue ArgumentError
+      raise OaiConcern::BadResumptionToken
     end
   end
 
