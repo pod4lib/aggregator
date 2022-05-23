@@ -84,7 +84,7 @@ class GenerateDeltaDumpJob < ApplicationJob
     when :errata
       'errata.gz'
     when :oai_xml
-      "oai-#{"-#{format('%010d', counter)}"}.xml"
+      "oai-#{"-#{format('%010d', counter)}"}.xml.gz"
     else
       file_type
     end
