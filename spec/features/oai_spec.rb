@@ -14,17 +14,21 @@ RSpec.describe 'OAI-PMH', type: :feature do
     allow(Settings).to receive(:oai_max_page_size).and_return(2)
 
     # first full dump: three records, 2020-05-06
-    travel_to Time.zone.local(2020, 5, 6) do
+    travel_to Time.zone.local(2020, 5, 6).beginning_of_day do
       create(:upload, :marc_xml, stream: organization.default_stream)
       create(:upload, :marc_xml2, stream: organization.default_stream)
       create(:upload, :binary_marc, stream: organization.default_stream)
+    end
+    travel_to Time.zone.local(2020, 5, 6).end_of_day do
       GenerateFullDumpJob.perform_now(organization)
     end
 
     # delta dump from the next day, add one and delete one record
-    travel_to Time.zone.local(2020, 5, 7) do
+    travel_to Time.zone.local(2020, 5, 7).beginning_of_day do
       create(:upload, :marc_xml3, stream: organization.default_stream)
       create(:upload, :deleted_marc_xml, stream: organization.default_stream)
+    end
+    travel_to Time.zone.local(2020, 5, 7).end_of_day do
       GenerateDeltaDumpJob.perform_now(organization)
     end
 
@@ -165,7 +169,8 @@ RSpec.describe 'OAI-PMH', type: :feature do
     end
 
     it 'renders a header indicating records are deleted' do
-      visit oai_url(verb: 'ListRecords', resumptionToken: OaiConcern::ResumptionToken.encode(1, 1, nil, nil))
+      token = OaiConcern::ResumptionToken.encode(set: organization.default_stream.id.to_s, page: '2')
+      visit oai_url(verb: 'ListRecords', resumptionToken: token)
       expect(page).to have_selector('header[status="deleted"]')
     end
 
@@ -192,25 +197,24 @@ RSpec.describe 'OAI-PMH', type: :feature do
     end
 
     it 'does not render a resumption token if there is only one page of results' do
-      visit oai_url(verb: 'ListRecords', metadataPrefix: 'marc21', from_date: '2020-05-07')
+      visit oai_url(verb: 'ListRecords', metadataPrefix: 'marc21', from: '2020-05-07')
       doc = Nokogiri::XML(page.body)
-      expect(doc.css('ListRecords > record').size).to eq(1)
       expect(doc.at_css('ListRecords > resumptionToken')).to be_nil
     end
 
     it 'renders records after a supplied lower bound datestamp' do
-      visit oai_url(verb: 'ListRecords', metadataPrefix: 'marc21', from_date: '2020-05-07')
+      visit oai_url(verb: 'ListRecords', metadataPrefix: 'marc21', from: '2020-05-07')
       doc = Nokogiri::XML(page.body)
       doc.css('ListRecords > record > header > datestamp').each do |record_ds|
-        expect(Time.zone.parse(record_ds.text)).to be_equal_to_or_after(Time.zone.parse('2020-05-07'))
+        expect(record_ds.text).to be >= '2020-05-07'
       end
     end
 
     it 'renders records before a supplied upper bound datestamp' do
-      visit oai_url(verb: 'ListRecords', metadataPrefix: 'marc21', until_date: '2020-05-06')
+      visit oai_url(verb: 'ListRecords', metadataPrefix: 'marc21', until: '2020-05-06')
       doc = Nokogiri::XML(page.body)
       doc.css('ListRecords > record > header > datestamp').each do |record_ds|
-        expect(Time.zone.parse(record_ds.text)).to be_equal_to_or_before(Time.zone.parse('2020-05-06'))
+        expect(record_ds.text).to be <= '2020-05-06'
       end
     end
 
@@ -235,16 +239,23 @@ RSpec.describe 'OAI-PMH', type: :feature do
     end
 
     context 'when a resumption token is supplied' do
-      it 'renders the next page of records'
+      it 'renders the indicated page of records' do
+        visit oai_url(verb: 'ListRecords', resumptionToken: OaiConcern::ResumptionToken.encode(page: '2'))
+        expect(page).to have_text("oai:pod.stanford.edu:my-org:#{organization.default_stream.id}:DUKE000075163")
+      end
+
       it 'renders an error if any other argument is also supplied' do
-        visit oai_url(verb: 'ListRecords', from: '2020-01-01', resumptionToken: 'foo')
+        visit oai_url(verb: 'ListRecords', resumptionToken: OaiConcern::ResumptionToken.encode(set: '1'), from: '2020-01-01')
         expect(page).to have_selector('error[code="badArgument"]')
       end
 
       it 'renders an error if the resumption token is not valid' do
-        pending('badResumptionToken only gets raised if the page count is out of range. ' \
-                'Need to improve token error handling before this test will pass.')
         visit oai_url(verb: 'ListRecords', resumptionToken: 'foo')
+        expect(page).to have_selector('error[code="badResumptionToken"]')
+      end
+
+      it 'renders an error if the requested page of records does not exist' do
+        visit oai_url(verb: 'ListRecords', resumptionToken: OaiConcern::ResumptionToken.encode(page: '999'))
         expect(page).to have_selector('error[code="badResumptionToken"]')
       end
     end
