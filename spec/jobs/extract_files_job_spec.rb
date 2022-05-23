@@ -23,7 +23,7 @@ RSpec.describe ExtractFilesJob, type: :job do
     it 'does nothing' do
       expect do
         described_class.perform_now(upload)
-      end.to change(Upload, :count).by(0)
+      end.not_to change(Upload, :count)
     end
   end
 
