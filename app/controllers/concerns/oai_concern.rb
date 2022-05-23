@@ -60,7 +60,22 @@ module OaiConcern
     end
 
     def self.decode(token)
-      Base64.urlsafe_decode64(token).split(';')
+      set, page, from_date, until_date = Base64.urlsafe_decode64(token).split(';')
+
+      begin
+        validate(set, page, from_date, until_date)
+      rescue ArgumentError
+        raise OaiConcern::BadResumptionToken
+      end
+
+      [set, page, from_date, until_date]
+    end
+
+    def self.validate(set, page, from_date, until_date)
+      Integer(set) if set.present?
+      Integer(page) if page.present?
+      Date.parse(from_date) if from_date.present?
+      Date.parse(until_date) if until_date.present?
     end
   end
 
