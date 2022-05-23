@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<record>
+<record xmlns="http://www.loc.gov/MARC21/slim">
    <leader>01554cam a2200385 4500</leader>
    <controlfield tag="001">DUKE000075163</controlfield>
    <controlfield tag="005">19910502000000.0</controlfield>
