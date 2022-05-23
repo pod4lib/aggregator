@@ -21,15 +21,15 @@ class OaiMarcRecordWriterService
   end
 
   def finalize
-    @oai_writer.close
+    @oai_writer&.close
   end
 
   def close
-    @oai_file.close
+    @oai_file&.close
   end
 
   def unlink
-    @oai_file.unlink
+    @oai_file&.unlink
   end
 
   def oai_file

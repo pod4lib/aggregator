@@ -41,11 +41,15 @@ class GenerateFullDumpJob < ApplicationJob
           writer.write_marc_record(record)
           oai_writer.write_marc_record(record)
         end
-        oai_writer.finalize
-        full_dump.public_send(:oai_xml).attach(io: File.open(oai_writer.oai_file),
-                                               filename: human_readable_filename(
-                                                 base_name, "oai_xml-#{format('%010d', oai_file_counter)}"
-                                               ))
+
+
+        if File.size?(oai_writer.oai_file)
+          oai_writer.finalize
+          full_dump.public_send(:oai_xml).attach(io: File.open(oai_writer.oai_file),
+                                                 filename: human_readable_filename(
+                                                   base_name, "oai_xml-#{format('%010d', oai_file_counter)}"
+                                                 ))
+        end
 
         oai_file_counter += 1
         progress.increment(records.length)
