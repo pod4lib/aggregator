@@ -61,7 +61,7 @@ class OaiController < ApplicationController
     # NOTE: this way, we can always call next_record_page the same way.
     # ultimately, a token is just a pointer to somewhere in a list of records,
     # and the filters needed to construct that list of records
-    token ||= OaiConcern::ResumptionToken.encode(set, nil, from_date, until_date)
+    token ||= OaiConcern::ResumptionToken.encode(set: set, from_date: from_date, until_date: until_date)
 
     # render the first page of records along with token for the next one
     render xml: build_list_records_response(*next_record_page(token))
@@ -129,7 +129,7 @@ class OaiController < ApplicationController
   # Get a page of OAI-XML records and a token pointing to the next page
   def next_record_page(token = nil)
     # parse the token if we were provided one
-    set, page, from_date, until_date = *OaiConcern::ResumptionToken.decode(token) if token
+    set, page, from_date, until_date = OaiConcern::ResumptionToken.decode(token) if token
     page = page.to_i
 
     # filter normalized dumps and get the corresponding OAI-XML pages
@@ -143,7 +143,7 @@ class OaiController < ApplicationController
     # generate a token for the next page, if there is one
     token = case page
             when (0...pages.count - 1)
-              OaiConcern::ResumptionToken.encode(set, page + 1, from_date, until_date)
+              OaiConcern::ResumptionToken.encode(set: set, page: page + 1, from_date: from_date, until_date: until_date)
             when (pages.count - 1)
               nil
             else

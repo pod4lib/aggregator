@@ -55,7 +55,9 @@ module OaiConcern
   # A token lets you construct a list of records and point to somewhere in that
   # list.
   class ResumptionToken
-    def self.encode(set, page, from_date, until_date)
+    def self.encode(set: nil, page: nil, from_date: nil, until_date: nil)
+      validate(set, page, from_date, until_date)
+
       Base64.urlsafe_encode64([set, page, from_date, until_date].join(';'))
     end
 
