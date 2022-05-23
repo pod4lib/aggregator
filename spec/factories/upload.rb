@@ -32,7 +32,7 @@ FactoryBot.define do
           io: File.open(
             Rails.root.join('spec/fixtures/12345.marcxml')
           ),
-          filename: '1297245.marcxml', content_type: 'application/marcxml+xml'
+          filename: '12345.marcxml', content_type: 'application/marcxml+xml'
         )
       end
     end
