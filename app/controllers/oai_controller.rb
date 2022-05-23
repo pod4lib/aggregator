@@ -28,44 +28,31 @@ class OaiController < ApplicationController
   private
 
   # rubocop:disable Metrics/AbcSize
-  # rubocop:disable Metrics/MethodLength
   def render_list_records
     headers['Cache-Control'] = 'no-cache'
     headers['Last-Modified'] = Time.current.httpdate
     headers['X-Accel-Buffering'] = 'no'
 
-    # unless a resumptionToken is supplied, error if metadataPrefix
-    # is anything other than marc21 or empty; per spec
-    begin
-      unless list_records_params.include?(:resumptionToken)
-        md_prefix = list_records_params.require(:metadataPrefix)
-        raise OaiConcern::CannotDisseminateFormat unless md_prefix == 'marc21'
-      end
-    rescue ActionController::ParameterMissing
-      raise OaiConcern::BadArgument
+    # token with any other arguments is an error. without a token, metadataPrefix
+    # is required and must be 'marc21' since it's all we support
+    if list_records_params[:resumptionToken]
+      raise OaiConcern::BadArgument unless list_records_params.except(:verb, :resumptionToken).empty?
+    else
+      raise OaiConcern::BadArgument unless list_records_params[:metadataPrefix]
+      raise OaiConcern::CannotDisseminateFormat unless list_records_params[:metadataPrefix] == 'marc21'
     end
 
-    # token is exclusive; specifying anything else is an error. see the spec
-    if list_records_params.include?(:resumptionToken) && !list_records_params.except(:verb, :resumptionToken).empty?
-      raise OaiConcern::BadArgument
-    end
-
-    # if we didn't get a token, generate one based on other arguments
-    # NOTE: this way, we can always call next_record_page the same way.
-    # ultimately, a token is just a pointer to somewhere in a list of records,
-    # and the filters needed to construct that list of records
-    token ||= OaiConcern::ResumptionToken.encode(
+    # make a token for requesting records if we weren't passed one
+    token = list_records_params[:resumptionToken] || OaiConcern::ResumptionToken.encode(
       set: list_records_params[:set],
       from_date: list_records_params[:from],
       until_date: list_records_params[:until]
     )
 
-    # render the first page of records along with token for the next one
     render xml: build_list_records_response(*next_record_page(token))
   end
 
   # rubocop:enable Metrics/AbcSize
-  # rubocop:enable Metrics/MethodLength
   def render_list_sets
     streams = Stream.joins(:default_stream_histories).joins(normalized_dumps: :oai_xml_attachments).distinct
     render xml: build_list_sets_response(streams)
