@@ -90,7 +90,7 @@ RSpec.describe '/uploads', type: :request do
       it 'does not create a new Upload' do
         expect do
           post organization_uploads_url(organization), params: { upload: invalid_attributes }
-        end.to change(Upload, :count).by(0)
+        end.not_to change(Upload, :count)
       end
 
       it "renders a successful response (i.e. to display the 'new' template)" do

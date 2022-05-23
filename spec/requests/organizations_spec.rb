@@ -100,7 +100,7 @@ RSpec.describe '/organizations', type: :request do
       it 'does not create a new Organization' do
         expect do
           post organizations_url, params: { organization: invalid_attributes }
-        end.to change(Organization, :count).by(0)
+        end.not_to change(Organization, :count)
       end
 
       it "renders a successful response (i.e. to display the 'new' template)" do
