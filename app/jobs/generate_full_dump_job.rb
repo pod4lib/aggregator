@@ -14,7 +14,7 @@ class GenerateFullDumpJob < ApplicationJob
     end
   end
 
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
   def perform(organization)
     now = Time.zone.now
     uploads = Upload.active.where(stream: organization.default_stream)
@@ -42,7 +42,6 @@ class GenerateFullDumpJob < ApplicationJob
           oai_writer.write_marc_record(record)
         end
 
-
         if File.size?(oai_writer.oai_file)
           oai_writer.finalize
           full_dump.public_send(:oai_xml).attach(io: File.open(oai_writer.oai_file),
@@ -54,6 +53,7 @@ class GenerateFullDumpJob < ApplicationJob
         oai_file_counter += 1
         progress.increment(records.length)
       ensure
+        oai_writer.finalize
         oai_writer.close
         oai_writer.unlink
       end
@@ -72,7 +72,7 @@ class GenerateFullDumpJob < ApplicationJob
       writer.unlink
     end
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
 
   def human_readable_filename(base_name, file_type)
     as = case file_type
