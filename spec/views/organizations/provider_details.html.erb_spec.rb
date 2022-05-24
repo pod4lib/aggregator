@@ -16,6 +16,7 @@ RSpec.describe 'organizations/provider_details', type: :view do
     allow(view).to receive(:can?).and_return(true)
     render
     assert_select 'form[action=?][method=?]', organization_path(organization), 'post' do
+      assert_select 'input[name=?]', 'organization[marc_docs_url]'
       assert_select 'input[name=?]', 'organization[normalization_steps[0][subfields][i]]'
       assert_select 'input[name=?]', 'organization[normalization_steps[0][subfields][a]]'
       assert_select 'input[name=?]', 'organization[normalization_steps[0][subfields][m]]'
@@ -27,6 +28,6 @@ RSpec.describe 'organizations/provider_details', type: :view do
     # this part of the view is seen by org memebers
     render
 
-    assert_select 'dl dt', 4
+    assert_select 'dl dt', 5
   end
 end

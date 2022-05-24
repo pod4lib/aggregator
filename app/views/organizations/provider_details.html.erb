@@ -14,6 +14,12 @@
     <!-- Member view: -->
     <% else %>
         <dl class="organization-details mt-4">
+            <dt>Local MARC profile documentation</dt>
+            <dd>
+              <p class="<%= @organization.marc_docs_url.blank? ? 'fst-italic' : '' %>">
+                <%= @organization.marc_docs_url.blank? ? 'no value provided' : link_to(@organization.marc_docs_url, @organization.marc_docs_url) %>
+              </p>
+            </dd>
             <dt>What MARC field contains item-level information?</dt>
             <dd>
                 <p class="<%= @organization.normalization_steps.values.dig(0, 'source_tag').blank? ? 'fst-italic' : '' %>">
