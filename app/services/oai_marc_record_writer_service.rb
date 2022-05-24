@@ -36,6 +36,10 @@ class OaiMarcRecordWriterService
     @oai_file ||= Tempfile.new("#{base_name}-oai_xml", binmode: true)
   end
 
+  def bytes_written?
+    @oai_writer&.bytes_written?
+  end
+
   private
 
   def oai_writer
@@ -44,12 +48,15 @@ class OaiMarcRecordWriterService
 
   # Special logic for writing OAI-PMH-style record responses
   class OAIPMHWriter
+    attr_reader :bytes_written
+
     def initialize(io)
       @io = io
+      @bytes_written = 0
     end
 
     def write(record, identifier, set, datestamp = Time.zone.now)
-      @io.write <<-EOXML
+      @bytes_written += @io.write <<-EOXML
         <record>
           <header>
             <identifier>#{identifier}</identifier>
@@ -64,7 +71,7 @@ class OaiMarcRecordWriterService
     end
 
     def write_delete(identifier, set, datestamp = Time.zone.now)
-      @io.write <<-EOXML
+      @bytes_written += @io.write <<-EOXML
         <record>
           <header status="deleted">
             <identifier>#{identifier}</identifier>
@@ -73,6 +80,10 @@ class OaiMarcRecordWriterService
           </header>
         </record>
       EOXML
+    end
+
+    def bytes_written?
+      @bytes_written.positive?
     end
 
     def close

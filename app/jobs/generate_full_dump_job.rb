@@ -42,11 +42,11 @@ class GenerateFullDumpJob < ApplicationJob
           oai_writer.write_marc_record(record)
         end
 
-        if File.size?(oai_writer.oai_file)
+        if oai_writer.bytes_written?
           oai_writer.finalize
           full_dump.public_send(:oai_xml).attach(io: File.open(oai_writer.oai_file),
                                                  filename: human_readable_filename(
-                                                   base_name, "oai_xml-#{format('%010d', oai_file_counter)}"
+                                                   base_name, :oai_xml, oai_file_counter
                                                  ))
         end
 
@@ -74,7 +74,7 @@ class GenerateFullDumpJob < ApplicationJob
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
 
-  def human_readable_filename(base_name, file_type)
+  def human_readable_filename(base_name, file_type, counter = nil)
     as = case file_type
          when :deletes
            'deletes.del.txt'
@@ -83,7 +83,7 @@ class GenerateFullDumpJob < ApplicationJob
          when :marcxml
            'marcxml.xml.gz'
          when :oai_xml
-           "#{file_type}.xml"
+           "oai-#{format('%010d', counter)}.xml.gz"
          else
            "#{file_type}.gz"
          end
