@@ -14,7 +14,6 @@ module DashboardHelper
     return :completed if statuses.include? :completed
     return :needs_attention if statuses.include? :needs_attention
     return :failed if statuses.include? :failed
-    return :active if statuses.include? :active
   end
 
   # Status criteria outlined in https://github.com/pod4lib/aggregator/issues/674
@@ -28,10 +27,10 @@ module DashboardHelper
       :needs_attention
     elsif any_successes?(statuses)
       :completed
-    elsif any_failures?(statuses)
-      :failed
-    else
+    elsif upload.active?
       :active
+    else
+      :failed
     end
   end
 
