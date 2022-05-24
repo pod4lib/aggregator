@@ -87,7 +87,7 @@ class OrganizationsController < ApplicationController
   def organization_params
     params.require(:organization)
           .permit(
-            :name, :slug, :icon, :code, :provider,
+            :name, :slug, :icon, :code, :provider, :marc_docs_url,
             contact_email_attributes: %i[email],
             normalization_steps: [[:destination_tag, :source_tag, { subfields: %i[i a m] }]]
           )
