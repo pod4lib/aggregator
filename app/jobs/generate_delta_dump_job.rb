@@ -46,7 +46,7 @@ class GenerateDeltaDumpJob < ApplicationJob
         end
         oai_writer.finalize
         delta_dump.public_send(:oai_xml).attach(io: File.open(oai_writer.oai_file),
-                                                filename: human_readable_filename(:oai_xml, oai_file_counter))
+                                                filename: human_readable_filename(base_name, :oai_xml, oai_file_counter))
 
         oai_file_counter += 1
         progress.increment(records.length)
@@ -59,7 +59,7 @@ class GenerateDeltaDumpJob < ApplicationJob
 
       writer.files.each do |as, file|
         delta_dump.public_send(as).attach(io: File.open(file),
-                                          filename: human_readable_filename(as))
+                                          filename: human_readable_filename(base_name, as))
       end
 
       delta_dump.save!
@@ -73,20 +73,20 @@ class GenerateDeltaDumpJob < ApplicationJob
 
   private
 
-  def human_readable_filename(file_type, counter = nil)
-    case file_type
-    when :deletes
-      'deletes.del.txt'
-    when :marc21
-      'marc21.mrc.gz'
-    when :marcxml
-      'marcxml.xml.gz'
-    when :errata
-      'errata.gz'
-    when :oai_xml
-      "oai-#{"-#{format('%010d', counter)}"}.xml.gz"
-    else
-      file_type
-    end
+  def human_readable_filename(base_name, file_type, counter = nil)
+    as = case file_type
+         when :deletes
+           'deletes.del.txt'
+         when :marc21
+           'marc21.mrc.gz'
+         when :marcxml
+           'marcxml.xml.gz'
+         when :oai_xml
+           "oai-#{format('%010d', counter)}.xml.gz"
+         else
+           "#{file_type}.gz"
+         end
+
+    "#{base_name}-#{as}"
   end
 end

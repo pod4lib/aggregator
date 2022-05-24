@@ -47,7 +47,7 @@ RSpec.describe GenerateDeltaDumpJob, type: :job do
     described_class.perform_now(organization)
 
     expect(organization.default_stream.reload.current_full_dump.deltas.last
-                       .marcxml.attachment.blob.filename).to eq 'marcxml.xml.gz'
+                       .marcxml.attachment.blob.filename.to_s).to end_with 'marcxml.xml.gz'
   end
 
   it 'has a content type of application/gzip for compressed marc21' do
@@ -61,7 +61,7 @@ RSpec.describe GenerateDeltaDumpJob, type: :job do
     described_class.perform_now(organization)
 
     expect(organization.default_stream.reload.current_full_dump.deltas.last
-                       .marc21.attachment.blob.filename).to eq 'marc21.mrc.gz'
+                       .marc21.attachment.blob.filename.to_s).to end_with 'marc21.mrc.gz'
   end
 
   context 'with deletes' do
@@ -88,7 +88,7 @@ RSpec.describe GenerateDeltaDumpJob, type: :job do
       described_class.perform_now(organization)
 
       expect(organization.default_stream.reload.current_full_dump.deltas.last
-                         .deletes.attachment.blob.filename).to eq 'deletes.del.txt'
+                         .deletes.attachment.blob.filename.to_s).to end_with 'deletes.del.txt'
     end
 
     it 'does not include MARC records that were deleted' do
