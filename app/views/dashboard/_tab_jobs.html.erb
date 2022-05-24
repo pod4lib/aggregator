@@ -1,0 +1,41 @@
+<div class="tab-pane fade" id="job-status-pane" role="tabpanel" aria-labelledby="job-status-tab">
+    <table class="table table-striped mb-3" id="jobs-table">
+      <thead>
+        <tr>
+          <th><%= t('dashboard.summary.table.provider') %></th>
+          <th><%= t('dashboard.summary.table.active_jobs') %></th>
+          <th><%= t('dashboard.summary.table.last_active_job') %></th>
+          <th><%= t('dashboard.summary.table.jobs_attention') %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @job_status_groups_by_provider.each do |provider, job_statuses| %>
+        <tr>
+          <td><%= provider.name %></td>
+          <!-- Active jobs: -->
+          <td>
+            <% if job_statuses[:active].length > 0 %>
+              <%= link_to job_statuses[:active].length, processing_status_organization_stream_path(provider, provider.default_stream) %>
+            <% else %>
+                0
+            <% end %>
+          </td>
+          <!-- Most recent active job date: -->
+          <td>
+            <% if job_statuses[:active].length > 0 %>
+              <%= link_to job_statuses[:active].first.created_at, processing_status_organization_stream_path(provider, provider.default_stream) %>
+            <% end %>
+          </td>
+          <!-- Jobs needing attention: -->
+          <td>
+            <% if job_statuses[:needs_attention].length > 0 %>
+              <%= link_to job_statuses[:needs_attention].length, processing_status_organization_stream_path(provider, provider.default_stream) %>
+            <% else %>
+                0
+            <% end %>
+          </td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>

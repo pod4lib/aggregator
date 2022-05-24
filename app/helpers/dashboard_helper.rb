@@ -27,6 +27,8 @@ module DashboardHelper
       :needs_attention
     elsif any_successes?(statuses)
       :completed
+    elsif upload.active?
+      :active
     else
       :failed
     end
@@ -37,6 +39,6 @@ module DashboardHelper
   end
 
   def any_failures?(statuses)
-    (%i[invalid not_marc unknown] & statuses).any?
+    (%i[invalid not_marc] & statuses).any?
   end
 end

@@ -27,75 +27,18 @@
     </li>
   </ul>
 
-  <!-- Activity summary tab content -->
+  <!-- Activity summary panes (tab content) -->
   <div class="tab-content pt-3" id="summary-tabs-content">
-    <!-- Pane 1: Uploads -->
-    <div class="tab-pane fade show active" id="uploads-pane" role="tabpanel" aria-labelledby="uploads-tab">
-      <table class="table table-striped mb-3">
-        <thead>
-          <tr>
-            <th><%= t('.table.provider') %></th>
-            <!-- TODO: Sparkline goes here, see https://github.com/pod4lib/aggregator/issues/679 -->
-            <!-- <th class="text-center"><%= t('.table.history') %></th> -->
-            <th><%= t('.table.last_upload') %></th>
-            <th class="text-center"><%= t('.table.status') %></th>
-            <th><%= t('.table.last_successful_upload') %></th>
-            <th class="text-center"><%= t('.table.recent_success') %></th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @recent_uploads_by_provider.each do |provider, uploads| %>
-          <tr>
-            <td><%= link_to provider.name, organization_uploads_path(provider) %></td>
-            
-            <!-- TODO: Sparkline goes here, see https://github.com/pod4lib/aggregator/issues/679 -->
-            <!-- <td class="text-center"></td> -->
-
-            <!-- Most recent upload: -->
-            <td>
-              <%= link_to local_time(uploads[0].created_at, format: datetime_display_format()), organization_upload_path(provider, uploads[0]) %>
-            </td>
-            <!-- Most recent upload status: -->
-            <td class="text-center">
-              <%= bootstrap_icon(Settings.job_status_group[files_status(uploads[0])].icon_class, class: "pod-job-tracker-status #{files_status(uploads[0])}") %>
-              <span class="visually-hidden"><%= files_status(uploads[0]) %></span>
-            </td>
-            <!-- Date of successful upload: -->
-            <td>
-              <% if last_successful_upload_date(uploads) %>
-                <%= local_time(last_successful_upload_date(uploads), format: datetime_display_format()) %>
-              <% else %>
-                <p>No prior successful uploads</p>
-              <% end %>
-            </td>
-            <!-- Did any uploads succeed in past 30 days? -->
-            <td class="text-center">
-              <%= bootstrap_icon(Settings.job_status_group[best_status(uploads)].icon_class, class: "pod-job-tracker-status #{best_status(uploads)}") %>
-              <span class="visually-hidden"><%= best_status(uploads) %></span>
-            </td>
-          </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Pane 2: Job status -->
-    <div class="tab-pane fade" id="job-status-pane" role="tabpanel" aria-labelledby="job-status-tab">
-      Job status content here
-    </div>
-    <!-- Pane 3: Normalized data -->
-    <div class="tab-pane fade" id="normalized-data-pane" role="tabpanel" aria-labelledby="normalized-data-tab">
-      Normalized data here
-    </div>
-    <!-- Pane 4: Files -->
-    <div class="tab-pane fade" id="files-pane" role="tabpanel" aria-labelledby="files-tab">Files go here</div>
-    <!-- Pane 5: Users -->
-    <div class="tab-pane fade" id="users-pane" role="tabpanel" aria-labelledby="users-tab">Users go here</div>
+    <%= render 'dashboard/tab_uploads' %>    
+    <%= render 'dashboard/tab_jobs' %>    
+    <%= render 'dashboard/tab_normalized_data' %>    
+    <%= render 'dashboard/tab_files' %>    
+    <%= render 'dashboard/tab_users' %>    
   </div>
 
-  <!-- Uploads table -->
-  <h2 class="mt-5"><%= t('.upload_title') %></h2>
 
+  <!-- Upload activity table -->
+  <h2 class="mt-5"><%= t('.upload_title') %></h2>
   <ul class="table-key list-unstyled list-inline pt-3">
     <% Settings.metadata_status.each do |status, values| %>
     <li class="list-inline-item">
@@ -105,7 +48,7 @@
     <% end %>
   </ul>
 
-  <table class="table table-striped mb-3">
+  <table class="table table-striped mb-3" id="upload-activity">
     <thead>
       <tr>
         <th class="text-center"><%= t('.table.status') %></th>
