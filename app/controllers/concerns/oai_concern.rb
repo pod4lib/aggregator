@@ -99,7 +99,6 @@ module OaiConcern
     # rubocop:enable Metrics/AbcSize
   end
 
-  # rubocop:disable Metrics/BlockLength
   included do
     private
 
@@ -124,26 +123,5 @@ module OaiConcern
         'xsi:schemaLocation' => 'http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd'
       }
     end
-
-    def list_sets_description(stream)
-      [[list_sets_default_status(stream),
-        list_sets_stream_info(stream)].join(' '),
-       list_sets_date_ranges(stream)].join(', ')
-    end
-
-    def list_sets_default_status(stream)
-      stream.default? ? 'Current default stream' : 'Former default stream'
-    end
-
-    def list_sets_stream_info(stream)
-      "for #{stream.organization.slug}"
-    end
-
-    def list_sets_date_ranges(stream)
-      stream.default_stream_histories.recent.map do |history|
-        "#{history.start_time} to #{history.end_time.presence || 'present'}"
-      end
-    end
   end
-  # rubocop:enable Metrics/BlockLength
 end

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 # :nodoc:
+# rubocop:disable Metrics/ClassLength
 class Stream < ApplicationRecord
   has_paper_trail
   extend FriendlyId
@@ -103,6 +104,33 @@ class Stream < ApplicationRecord
                 .first
   end
 
+  # machine-readable descriptor used in OAI ListSets response that indicates
+  # if the stream is or was a default.
+  def oai_dc_type
+    if default_stream_histories.any?
+      default? ? 'default' : 'former default'
+    else
+      'non-default'
+    end
+  end
+
+  # machine-readable stream active dates used in OAI ListSets response, e.g.
+  # "2012-01-01/2012-01-31". for dublin core format, see:
+  # https://www.dublincore.org/specifications/dublin-core/dcmi-terms/terms/date/
+  def oai_dc_dates
+    return "#{created_at.to_date}/" unless default_stream_histories.any?
+
+    default_stream_histories.recent.map do |history|
+      [history.start_time.to_date, history.end_time&.to_date].join('/')
+    end
+  end
+
+  # human-readable description used in OAI ListSets response that captures
+  # stream type, contributor org, and dates
+  def oai_dc_description
+    "#{oai_dc_type.capitalize} stream for #{organization.name}, #{oai_dc_dates.join(' and ')}"
+  end
+
   private
 
   # Returns the DefaultStreamHistory object for self.stream
@@ -133,3 +161,4 @@ class Stream < ApplicationRecord
     end
   end
 end
+# rubocop:enable Metrics/ClassLength

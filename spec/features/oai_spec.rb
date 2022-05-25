@@ -64,14 +64,21 @@ RSpec.describe 'OAI-PMH', type: :feature do
   end
 
   context 'when the verb is ListSets' do
-    it 'renders a set element for each organization' do
+    it 'renders a name for each set' do
       visit oai_url(verb: 'ListSets')
       doc = Nokogiri::XML(page.body)
-      expect(doc.at_css('ListSets > set > setName').text).to eq('my-org, stream 2020-05-06 - ')
+      expect(doc.at_css('ListSets > set > setName').text).to eq('2020-05-06 - ')
+    end
+
+    it 'renders an identifier (setSpec) for each set' do
+      visit oai_url(verb: 'ListSets')
+      doc = Nokogiri::XML(page.body)
       expect(doc.at_css('ListSets > set > setSpec').text).to eq(organization.default_stream.id.to_s)
-      expect(doc.at_css('ListSets > set > setDescription').text).to(
-        include('Current default stream for my-org, 2020-05-06 00:00:00 UTC to present')
-      )
+    end
+
+    it 'renders a description for each set' do
+      visit oai_url(verb: 'ListSets')
+      expect(page).to have_text('Default stream for My Org, 2020-05-06/')
     end
 
     it 'renders an error if unknown params are supplied' do

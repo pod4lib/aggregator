@@ -212,10 +212,15 @@ class OaiController < ApplicationController
           streams.each do |stream|
             xml.set do
               xml.setSpec stream.id
-              xml.setName "#{stream.organization.slug}, stream #{stream.display_name}"
+              xml.setName stream.display_name
               xml.setDescription do
                 xml[:oai_dc].dc(oai_dc_xmlns) do
-                  xml[:dc].description list_sets_description(stream)
+                  xml[:dc].description stream.oai_dc_description
+                  xml[:dc].contributor stream.organization.slug
+                  xml[:dc].type stream.oai_dc_type
+                  stream.oai_dc_dates.each do |date|
+                    xml[:dc].date date
+                  end
                 end
               end
             end
