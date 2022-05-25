@@ -7,20 +7,21 @@ RSpec.describe 'uploads/index', type: :view do
   let(:stream) { create(:stream, organization: organization) }
 
   before do
-    assign(:uploads, [
-             Upload.create!(
-               name: 'One',
-               files: [fixture_file_upload(Rails.root.join('spec/fixtures/1297245.marc'), 'application/octet-stream')],
-               stream: stream
-             ),
-             Upload.create!(
-               name: 'Two',
-               files: [fixture_file_upload(Rails.root.join('spec/fixtures/1297245.marc'), 'application/octet-stream')],
-               stream: stream
-             )
-           ])
     assign(:organization, organization)
     assign(:stream, stream)
+    Upload.create!([
+                     {
+                       name: 'One',
+                       files: [fixture_file_upload(Rails.root.join('spec/fixtures/1297245.marc'), 'application/octet-stream')],
+                       stream: stream
+                     },
+                     {
+                       name: 'Two',
+                       files: [fixture_file_upload(Rails.root.join('spec/fixtures/1297245.marc'), 'application/octet-stream')],
+                       stream: stream
+                     }
+                   ])
+    assign(:uploads, stream.uploads.page(params[:page]))
   end
 
   it 'renders a list of uploads with links to their show pages' do
