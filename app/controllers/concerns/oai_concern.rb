@@ -55,25 +55,48 @@ module OaiConcern
   # A token lets you construct a list of records and point to somewhere in that
   # list.
   class ResumptionToken
-    def self.encode(set: nil, page: nil, from_date: nil, until_date: nil)
-      validate(set, page, from_date, until_date)
-      Base64.urlsafe_encode64([set, page, from_date, until_date].join(';'))
+    attr_reader :set, :page, :from_date, :until_date, :version
+
+    def initialize(set: nil, page: nil, from_date: nil, until_date: nil)
+      @set = set
+      @page = page
+      @from_date = from_date
+      @until_date = until_date
+      @version = ResumptionToken.version
+      raise BadResumptionToken unless valid?
     end
 
-    def self.decode(token)
-      set, page, from_date, until_date = Base64.urlsafe_decode64(token).split(';')
-      validate(set, page, from_date, until_date)
-      [set, page, from_date, until_date]
+    # Error if the token is invalid or if it is a version other than ours
+    def self.decode(string)
+      set, page, from_date, until_date, version = Base64.urlsafe_decode64(string).split(';')
+      raise BadResumptionToken unless version == ResumptionToken.version
+
+      token = ResumptionToken.new(set: set, page: page, from_date: from_date, until_date: until_date)
+      raise BadResumptionToken unless token.valid?
+
+      token
     end
 
-    def self.validate(set, page, from_date, until_date)
-      Integer(set) if set.present?
-      Integer(page) if page.present?
-      Date.parse(from_date) if from_date.present?
-      Date.parse(until_date) if until_date.present?
+    def self.version
+      'v1.0'
+    end
+
+    def encode
+      Base64.urlsafe_encode64([@set, @page, @from_date, @until_date, @version].join(';'))
+    end
+
+    # rubocop:disable Metrics/AbcSize
+    # valid iff all values can be parsed and set/page are nonnegative integers
+    def valid?
+      Integer(set) if @set.present?
+      Integer(page) if @page.present?
+      Date.parse(from_date) if @from_date.present?
+      Date.parse(until_date) if @until_date.present?
+      !set.to_i.negative? && !page.to_i.negative?
     rescue ArgumentError
-      raise OaiConcern::BadResumptionToken
+      false
     end
+    # rubocop:enable Metrics/AbcSize
   end
 
   # rubocop:disable Metrics/BlockLength

@@ -169,8 +169,8 @@ RSpec.describe 'OAI-PMH', type: :feature do
     end
 
     it 'renders a header indicating records are deleted' do
-      token = OaiConcern::ResumptionToken.encode(set: organization.default_stream.id.to_s, page: '2')
-      visit oai_url(verb: 'ListRecords', resumptionToken: token)
+      token = OaiConcern::ResumptionToken.new(set: organization.default_stream.id.to_s, page: '2')
+      visit oai_url(verb: 'ListRecords', resumptionToken: token.encode)
       expect(page).to have_selector('header[status="deleted"]')
     end
 
@@ -191,9 +191,9 @@ RSpec.describe 'OAI-PMH', type: :feature do
     it 'renders a resumption token to continue requesting records if needed' do
       visit oai_url(verb: 'ListRecords', metadataPrefix: 'marc21', set: organization.default_stream.id.to_s)
       doc = Nokogiri::XML(page.body)
-      set, page = OaiConcern::ResumptionToken.decode(doc.at_css('ListRecords > resumptionToken').text)
-      expect(set.to_i).to be(organization.default_stream.id)
-      expect(page.to_i).to be(1)
+      token = OaiConcern::ResumptionToken.decode(doc.at_css('ListRecords > resumptionToken').text)
+      expect(token.set.to_i).to be(organization.default_stream.id)
+      expect(token.page.to_i).to be(1)
     end
 
     it 'does not render a resumption token if there is only one page of results' do
@@ -240,12 +240,12 @@ RSpec.describe 'OAI-PMH', type: :feature do
 
     context 'when a resumption token is supplied' do
       it 'renders the indicated page of records' do
-        visit oai_url(verb: 'ListRecords', resumptionToken: OaiConcern::ResumptionToken.encode(page: '2'))
+        visit oai_url(verb: 'ListRecords', resumptionToken: OaiConcern::ResumptionToken.new(page: '2').encode)
         expect(page).to have_text("oai:pod.stanford.edu:my-org:#{organization.default_stream.id}:DUKE000075163")
       end
 
       it 'renders an error if any other argument is also supplied' do
-        visit oai_url(verb: 'ListRecords', resumptionToken: OaiConcern::ResumptionToken.encode(set: '1'), from: '2020-01-01')
+        visit oai_url(verb: 'ListRecords', resumptionToken: OaiConcern::ResumptionToken.new(set: '1').encode, from: '2020-01-01')
         expect(page).to have_selector('error[code="badArgument"]')
       end
 
@@ -255,7 +255,7 @@ RSpec.describe 'OAI-PMH', type: :feature do
       end
 
       it 'renders an error if the requested page of records does not exist' do
-        visit oai_url(verb: 'ListRecords', resumptionToken: OaiConcern::ResumptionToken.encode(page: '999'))
+        visit oai_url(verb: 'ListRecords', resumptionToken: OaiConcern::ResumptionToken.new(page: '999').encode)
         expect(page).to have_selector('error[code="badResumptionToken"]')
       end
     end

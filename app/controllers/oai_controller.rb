@@ -28,31 +28,35 @@ class OaiController < ApplicationController
   private
 
   # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/MethodLength
   def render_list_records
     headers['Cache-Control'] = 'no-cache'
     headers['Last-Modified'] = Time.current.httpdate
     headers['X-Accel-Buffering'] = 'no'
 
     # token with any other arguments is an error. without a token, metadataPrefix
-    # is required and must be 'marc21' since it's all we support
+    # is required and must be 'marc21' since it's all we support. if we don't
+    # have a token, construct one to pass to next_record_page.
     if list_records_params[:resumptionToken]
       raise OaiConcern::BadArgument unless list_records_params.except(:verb, :resumptionToken).empty?
+
+      token = OaiConcern::ResumptionToken.decode(list_records_params[:resumptionToken])
     else
       raise OaiConcern::BadArgument unless list_records_params[:metadataPrefix]
       raise OaiConcern::CannotDisseminateFormat unless list_records_params[:metadataPrefix] == 'marc21'
-    end
 
-    # make a token for requesting records if we weren't passed one
-    token = list_records_params[:resumptionToken] || OaiConcern::ResumptionToken.encode(
-      set: list_records_params[:set],
-      from_date: list_records_params[:from],
-      until_date: list_records_params[:until]
-    )
+      token = OaiConcern::ResumptionToken.new(
+        set: list_records_params[:set],
+        from_date: list_records_params[:from],
+        until_date: list_records_params[:until]
+      )
+    end
 
     render xml: build_list_records_response(*next_record_page(token))
   end
 
   # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/MethodLength
   def render_list_sets
     streams = Stream.joins(:default_stream_histories).joins(normalized_dumps: :oai_xml_attachments).distinct
     render xml: build_list_sets_response(streams)
@@ -108,33 +112,36 @@ class OaiController < ApplicationController
     oai_params(:verb)
   end
 
+  # rubocop:disable Metrics/AbcSize
   # Get a page of OAI-XML records and a token pointing to the next page
-  def next_record_page(token = nil)
-    # parse the token if we were provided one
-    set, page, from_date, until_date = OaiConcern::ResumptionToken.decode(token) if token
-    page = page.to_i
-
+  def next_record_page(token)
     # filter normalized dumps and get the corresponding OAI-XML pages
     # NOTE: each page is guaranteed to have < OAIPMHWriter::max_records_per_file,
     # but some pages will have exactly that number and others won't. The sequence
     # isn't predictable; the only thing we promise is that all pages are less than
     # that size.
-    pages = normalized_dumps(set, from_date, until_date).flat_map(&:oai_xml_attachments)
+    pages = normalized_dumps(token.set, token.from_date, token.until_date).flat_map(&:oai_xml_attachments)
     raise OaiConcern::NoRecordsMatch if pages.empty?
 
-    # generate a token for the next page, if there is one
-    token = case page
-            when (0...pages.count - 1)
-              OaiConcern::ResumptionToken.encode(set: set, page: page + 1, from_date: from_date, until_date: until_date)
-            when (pages.count - 1)
+    # generate a token for the next page. no token on the last page, and throw
+    # an error if the page number is invalid.
+    page = token.page.to_i
+    token = if page == pages.length - 1 # last page
               nil
+            elsif page < pages.length - 1
+              OaiConcern::ResumptionToken.new(set: token.set,
+                                              page: page + 1,
+                                              from_date: token.from_date,
+                                              until_date: token.until_date)
+                                         .encode
             else
               raise OaiConcern::BadResumptionToken
             end
 
-    # return the current page and the token for the next page, if any
+    # return the current page and the token for the next page
     [pages[page], token]
   end
+  # rubocop:enable Metrics/AbcSize
 
   # Get NormalizedDumps from a particular stream or created between two dates
   # NOTE: this likely needs work to memoize/tune, but it should be called
