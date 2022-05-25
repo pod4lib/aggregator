@@ -60,4 +60,12 @@ RSpec.describe Organization do
       expect(described_class.providers).not_to include(org)
     end
   end
+
+  describe '#slug=' do
+    it 'converts empty values to nil, so friendly_id can do its thing' do
+      organization.update(name: 'some org title', slug: '')
+
+      expect(organization.slug).to eq 'some-org-title'
+    end
+  end
 end
