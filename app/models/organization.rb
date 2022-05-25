@@ -39,4 +39,8 @@ class Organization < ApplicationRecord
   def augmented_marc_record_service
     @augmented_marc_record_service ||= AugmentMarcRecordService.new(organization: self)
   end
+
+  def slug=(slug)
+    super(slug.presence)
+  end
 end
