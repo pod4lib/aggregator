@@ -12,7 +12,7 @@ class UpdateOrganizationStatisticsJob < ApplicationJob
     stream ||= organization.default_stream
 
     # short-circuit if our statstics job is already obsolete
-    return if upload && stream.uploads.where('created_at > ?', upload.created_at)
+    return if upload && stream.uploads.where('created_at > ?', upload.created_at).any?
 
     generate_statistics!(organization, stream)
   end
