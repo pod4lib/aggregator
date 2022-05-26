@@ -10,7 +10,12 @@ class UploadsController < ApplicationController
 
   # GET /uploads
   # GET /uploads.json
-  def index; end
+  def index
+    respond_to do |format|
+      format.html { @uploads = @uploads.page(index_params[:page]) }
+      format.json
+    end
+  end
 
   # GET /uploads/1
   # GET /uploads/1.json
@@ -84,6 +89,10 @@ class UploadsController < ApplicationController
       allowlisted_jwts_id: current_ability&.allowlisted_jwt&.id,
       ip_address: request.env['HTTP_X_FORWARDED_FOR'] || request.remote_ip
     )
+  end
+
+  def index_params
+    params.permit(:page)
   end
 
   # Only allow a list of trusted parameters through.
