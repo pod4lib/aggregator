@@ -12,7 +12,7 @@
         </tr>
       </thead>
       <tbody>
-        <% @recent_uploads_by_provider.each do |provider, uploads| %>    
+        <% @dashboard.recent_uploads_by_provider.each do |provider, uploads| %>    
         <tr>
           <td><%= link_to provider.name, organization_uploads_path(provider) %></td>
           

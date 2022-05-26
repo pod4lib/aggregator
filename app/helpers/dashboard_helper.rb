@@ -41,4 +41,33 @@ module DashboardHelper
   def any_failures?(statuses)
     (%i[invalid not_marc] & statuses).any?
   end
+
+  def dump_record_count(dump)
+    0 if dump.nil?
+
+    if dump.marcxml&.attachment && dump.marcxml.attachment.metadata
+      # Use marcxml as the source of the record count. marc21 count may differ.
+      dump.marcxml.attachment.metadata['count']
+    else
+      0
+    end
+  end
+
+  def count_roles(users)
+    highest_role_per_user = users.map { |user| highest_role(user) }
+
+    {
+      admin: highest_role_per_user.count(:admin),
+      owner: highest_role_per_user.count(:owner),
+      member: highest_role_per_user.count(:member)
+    }
+  end
+
+  def highest_role(user)
+    roles = user.roles.map(&:name).uniq
+
+    return :admin if roles.include? 'admin'
+    return :owner if roles.include? 'owner'
+    return :member if roles.include? 'member'
+  end
 end
