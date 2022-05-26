@@ -7,12 +7,18 @@ en:
         active_jobs: Active jobs
         date_created: Date created
         download_title: Download %{filename}
+        dump_records: Dump records (marcxml)
         filename: File
         history: 30 day history
         jobs_attention: Jobs needing attention
         last_active_job: Last active job started
+        last_delta: Last delta
+        last_full_dump: Last full dump
         last_successful_upload: Last successful upload
         last_upload: Last upload
+        members: Members
+        owners: Owners
+        pod_admins: POD admins
         provider: Provider
         recent_success: Success in last 30 days?
         record_count: Records
