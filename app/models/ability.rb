@@ -70,7 +70,8 @@ class Ability
     can :read, AllowlistedJwt, resource_type: 'Organization', resource_id: member_orgs
     can :read, ActiveStorage::Attachment, { record: { organization: { id: member_orgs } } }
 
-    # Must be last line
+    # Must be last
+    cannot :destroy, Stream.previous_default, organization: { id: owned_orgs }
     cannot :destroy, Stream, default: true
   end
   # rubocop:enable Metrics/CyclomaticComplexity
