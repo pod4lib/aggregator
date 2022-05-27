@@ -15,4 +15,13 @@ class NormalizedDump < ApplicationRecord
   has_one_attached :oai_xml
   has_one_attached :deletes
   has_many_attached :errata
+
+  def record_count
+    if self.marcxml&.attachment && self.marcxml.attachment.metadata
+      # Use marcxml as the source of the record count. marc21 count may differ.
+      self.marcxml.attachment.metadata['count']
+    else
+      0
+    end
+  end
 end

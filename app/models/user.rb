@@ -18,4 +18,12 @@ class User < ApplicationRecord
 
     "#{name} (#{email})"
   end
+
+  def highest_role
+    roles = self.roles.map(&:name).uniq
+
+    return :admin if roles.include? 'admin'
+    return :owner if roles.include? 'owner'
+    return :member if roles.include? 'member'
+  end
 end
