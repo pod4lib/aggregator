@@ -3,7 +3,7 @@
   <div class="container">
     <div class="d-flex align-items-center">
       <% if @organization.icon.attached? %>
-        <%= image_tag(@organization.icon, class: 'me-2', height: 50) %>
+        <%= image_tag(@organization.icon, alt: '', class: 'me-2', height: 50) %>
       <% end %>
       <h1 class="display-5 font-weight-normal m-0">
         <%= @organization.name %>

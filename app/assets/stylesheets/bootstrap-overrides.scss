@@ -10,3 +10,17 @@
 }
 
 $tooltip-max-width: 600px;
+
+// Overrides for better text/link contrast on Bootstrap
+// colored backgrounds
+footer.bg-light a {
+  color: $text-muted-bg-light;
+}
+
+.bg-light a {
+  color: $link-bg-light;
+}
+
+.alert-info code {
+  color: $code-bg-info;
+}

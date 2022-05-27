@@ -41,7 +41,7 @@
     <div class="row text-center">
       <h2 class="d-flex justify-content-center align-items-center">
         <% if @overview.organization.icon.attached? %>
-          <%= image_tag(@overview.organization.icon, height: 32, class:'me-2') %>
+          <%= image_tag(@overview.organization.icon, height: 32, alt: '', class:'me-2') %>
         <% end %>
         <%= @overview.organization.name %>
       </h2>
