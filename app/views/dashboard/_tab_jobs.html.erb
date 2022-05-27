@@ -3,9 +3,9 @@
       <thead>
         <tr>
           <th><%= t('dashboard.summary.table.provider') %></th>
-          <th><%= t('dashboard.summary.table.active_jobs') %></th>
+          <th class="text-end pe-4"><%= t('dashboard.summary.table.active_jobs') %></th>
           <th><%= t('dashboard.summary.table.last_active_job') %></th>
-          <th><%= t('dashboard.summary.table.jobs_attention') %></th>
+          <th class="text-end pe-4"><%= t('dashboard.summary.table.jobs_attention') %></th>
         </tr>
       </thead>
       <tbody>
@@ -13,7 +13,7 @@
         <tr>
           <td><%= link_to provider.name, processing_status_organization_stream_path(provider, provider.default_stream) %></td>
           <!-- Active jobs: -->
-          <td>
+          <td class="text-end pe-4">
             <% if job_statuses[:active].length > 0 %>
               <%= link_to job_statuses[:active].length, processing_status_organization_stream_path(provider, provider.default_stream) %>
             <% else %>
@@ -27,7 +27,7 @@
             <% end %>
           </td>
           <!-- Jobs needing attention: -->
-          <td>
+          <td class="text-end pe-4">
             <% if job_statuses[:needs_attention].length > 0 %>
               <%= link_to job_statuses[:needs_attention].length, processing_status_organization_stream_path(provider, provider.default_stream) %>
             <% else %>
