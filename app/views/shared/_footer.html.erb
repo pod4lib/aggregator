@@ -4,7 +4,7 @@
     <div class="row">
       <div class="col-md my-3 my-md-0">
         <%= inline_svg_pack_tag 'media/packs/images/pod_small.svg', width: '48', height: '48', aria_hidden: true, class: 'pod-logo-small float-start' %>
-        <div class="text-muted float-start ms-2">
+        <div class="float-start ms-2">
           <span class="d-block"><%= t('layouts.application.title') %></span>
           <span class="d-block"><%= t('.copyright_html', current_year: Time.current.year) %></span>
         </div>
@@ -13,13 +13,13 @@
         <h3 class="h5"><%= t('.docs.heading') %></h3>
         <ul class="list-unstyled mb-1">
           <li>
-            <%= link_to t('.docs.api'), 'https://github.com/pod4lib/aggregator/wiki/Uploading-data-using-the-API', class: 'text-muted text-decoration-none' %>
+            <%= link_to t('.docs.api'), 'https://github.com/pod4lib/aggregator/wiki/Uploading-data-using-the-API', class: 'text-decoration-none' %>
           </li>
           <li>
-            <%= link_to t('.docs.data'), 'https://github.com/pod4lib/aggregator/wiki/Data-requirements', class: 'text-muted text-decoration-none' %>
+            <%= link_to t('.docs.data'), 'https://github.com/pod4lib/aggregator/wiki/Data-requirements', class: 'text-decoration-none' %>
           </li>
           <li>
-            <%= link_to t('.docs.retention_policy'), 'https://github.com/pod4lib/aggregator/wiki/Retention-policy', class: 'text-muted text-decoration-none' %>
+            <%= link_to t('.docs.retention_policy'), 'https://github.com/pod4lib/aggregator/wiki/Retention-policy', class: 'text-decoration-none' %>
           </li>
         </ul>
       </div>
@@ -27,13 +27,13 @@
         <h3 class="h5"><%= t('.resources.heading') %></h3>
         <ul class="list-unstyled mb-1">
           <li>
-            <%= link_to t('.resources.contributing'), 'https://github.com/pod4lib/aggregator/wiki#getting-help', class: 'text-muted text-decoration-none' %>
+            <%= link_to t('.resources.contributing'), 'https://github.com/pod4lib/aggregator/wiki#getting-help', class: 'text-decoration-none' %>
           </li>
           <li>
-            <%= link_to t('.resources.framework'), 'https://docs.google.com/document/d/1EZG7z_A13jxPfHbYhT7Ae4Ays10fhecqfoGJhqrcjD8/edit', class: 'text-muted text-decoration-none' %>
+            <%= link_to t('.resources.framework'), 'https://docs.google.com/document/d/1EZG7z_A13jxPfHbYhT7Ae4Ays10fhecqfoGJhqrcjD8/edit', class: 'text-decoration-none' %>
           </li>
           <li>
-            <%= link_to t('.resources.github'), 'https://github.com/pod4lib/aggregator', class: 'text-muted text-decoration-none' %>
+            <%= link_to t('.resources.github'), 'https://github.com/pod4lib/aggregator', class: 'text-decoration-none' %>
           </li>
         </ul>
       </div>
