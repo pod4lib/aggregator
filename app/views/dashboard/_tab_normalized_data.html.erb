@@ -22,7 +22,11 @@
           </td>
           <!-- Dump records: -->
           <td class="text-end pe-4">
-            <%= number_with_delimiter(dump_record_count(dump)) %>
+            <% if dump %>
+              <%= number_with_delimiter(dump.record_count) %>
+            <% else %>
+              0
+            <% end %>
           </td>
           <!-- Last delta: -->
           <td>
