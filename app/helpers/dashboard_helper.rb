@@ -43,7 +43,7 @@ module DashboardHelper
   end
 
   def count_roles(users)
-    highest_role_per_user = users.map { |user| user.highest_role }
+    highest_role_per_user = users.map(&:highest_role)
 
     {
       admin: highest_role_per_user.count(:admin),
