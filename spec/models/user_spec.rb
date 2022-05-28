@@ -28,4 +28,18 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe '#highest_role' do
+    context 'when user an admin, owner and member' do
+      before do
+        user.add_role :owner, org1
+        user.add_role :member, org1
+        user.add_role :admin, org1
+      end
+
+      it 'returns owner' do
+        expect(user.highest_role).to eq(:admin)
+      end
+    end
+  end
 end
