@@ -32,10 +32,8 @@
         <% end %>
       </ul>
 
-      <% if current_user %>
-        <% if current_user.has_role? :admin %>
-          <span class="badge bg-warning text-dark h-100 my-auto d-none d-md-block"><%= t('.is_admin') %></span>
-        <% end %>
+      <% if current_user && current_user.has_role?(:admin) %>
+        <span class="badge bg-warning text-dark h-100 my-auto d-none d-md-block"><%= t('.is_admin') %></span>
       <% end %>
       
       <ul class="navbar-nav">
