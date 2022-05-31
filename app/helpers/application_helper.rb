@@ -45,6 +45,7 @@ module ApplicationHelper
     # Tooltips are added to <a> elements for accessibility.
     # See https://getbootstrap.com/docs/5.0/components/tooltips/#markup
     content_tag(:a,
+                href: '#',
                 class: "badge text-dark text-decoration-none #{badge_class}",
                 'data-bs-toggle': 'tooltip',
                 'data-bs-placement': 'top',
