@@ -17,6 +17,7 @@ class Stream < ApplicationRecord
   has_many :job_trackers, dependent: :delete_all, as: :reports_on
 
   scope :default, -> { where(default: true) }
+  scope :previous_default, -> { joins(:default_stream_histories).where(default: false).distinct }
   scope :active, -> { where(status: 'active') }
   scope :archived, -> { where(status: 'archived') }
 
