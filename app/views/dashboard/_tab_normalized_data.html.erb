@@ -9,13 +9,16 @@
         </tr>
       </thead>
       <tbody>
-        <% @dashboard.normalized_data_by_provider.sort_by{ |k, _v| _v.updated_at}.reverse.each do |provider, dump| %>
+        <!-- Put organizations with nil dumps at the bottom of the time sorted list -->
+        <% @dashboard.normalized_data_by_provider.sort_by{ |_k, v| v.nil? ? Time.at(0) : v.updated_at}.reverse.each do |provider, dump| %>
         <tr>
           <td><%= link_to provider.name, normalized_data_organization_stream_path(provider, provider.default_stream) %></td>
           <!-- Last full dump: -->
           <td>
               <% if dump %>
-                <%= local_time(dump.last_full_dump_at, format: datetime_display_format()) %>
+                <% if dump.last_full_dump_at %>
+                  <%= local_time(dump.last_full_dump_at, format: datetime_display_format()) %>
+                <% end %>
               <% else %>
                 <%= bootstrap_icon("exclamation-triangle-fill", class: "text-warning") %>
               <% end %>
