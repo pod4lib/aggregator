@@ -51,3 +51,6 @@ metadata_status:
   unknown:
     icon_class: 'question-circle-fill'
     label: 'Unknown'
+
+# max. MARC records per OAI-XML file; also max. size of one page in ListRecords
+oai_max_page_size: 500

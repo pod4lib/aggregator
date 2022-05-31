@@ -12,7 +12,7 @@ class NormalizedDump < ApplicationRecord
 
   has_one_attached :marc21
   has_one_attached :marcxml
-  has_one_attached :oai_xml
+  has_many_attached :oai_xml
   has_one_attached :deletes
   has_many_attached :errata
 end

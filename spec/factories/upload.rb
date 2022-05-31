@@ -32,7 +32,7 @@ FactoryBot.define do
           io: File.open(
             Rails.root.join('spec/fixtures/12345.marcxml')
           ),
-          filename: '1297245.marcxml', content_type: 'application/marcxml+xml'
+          filename: '12345.marcxml', content_type: 'application/marcxml+xml'
         )
       end
     end
@@ -44,6 +44,17 @@ FactoryBot.define do
             Rails.root.join('spec/fixtures/67890.marcxml')
           ),
           filename: '67890.marcxml', content_type: 'application/marcxml+xml'
+        )
+      end
+    end
+
+    trait :marc_xml3 do
+      after(:build) do |upload|
+        upload.files.attach(
+          io: File.open(
+            Rails.root.join('spec/fixtures/75163.marcxml')
+          ),
+          filename: '75163.marcxml', content_type: 'application/marcxml+xml'
         )
       end
     end

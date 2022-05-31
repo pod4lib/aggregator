@@ -51,7 +51,57 @@ module OaiConcern
     end
   end
 
+  # Token for requesting records: base64-encoded combo of filters & page cursor
+  # A token lets you construct a list of records and point to somewhere in that
+  # list.
+  class ResumptionToken
+    attr_reader :set, :page, :from_date, :until_date, :version
+
+    def initialize(set: nil, page: nil, from_date: nil, until_date: nil)
+      @set = set
+      @page = page
+      @from_date = from_date
+      @until_date = until_date
+      @version = ResumptionToken.version
+      raise BadResumptionToken unless valid?
+    end
+
+    # Error if the token is invalid or if it is a version other than ours
+    def self.decode(string)
+      set, page, from_date, until_date, version = Base64.urlsafe_decode64(string).split(';')
+      raise BadResumptionToken unless version == ResumptionToken.version
+
+      token = ResumptionToken.new(set: set, page: page, from_date: from_date, until_date: until_date)
+      raise BadResumptionToken unless token.valid?
+
+      token
+    end
+
+    def self.version
+      'v1.0'
+    end
+
+    def encode
+      Base64.urlsafe_encode64([@set, @page, @from_date, @until_date, @version].join(';'))
+    end
+
+    # rubocop:disable Metrics/AbcSize
+    # valid iff all values can be parsed and set/page are nonnegative integers
+    def valid?
+      Integer(set) if @set.present?
+      Integer(page) if @page.present?
+      Date.parse(from_date) if @from_date.present?
+      Date.parse(until_date) if @until_date.present?
+      !set.to_i.negative? && !page.to_i.negative?
+    rescue ArgumentError
+      false
+    end
+    # rubocop:enable Metrics/AbcSize
+  end
+
   included do
+    private
+
     # XML namespace values for OAI-PMH, see:
     # https://www.openarchives.org/OAI/openarchivesprotocol.html#XMLResponse
     def oai_xmlns
@@ -59,6 +109,18 @@ module OaiConcern
         'xmlns' => 'http://www.openarchives.org/OAI/2.0/',
         'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
         'xsi:schemaLocation' => 'http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd'
+      }
+    end
+
+    # XML namespace values for OAI-PMH Dublin Core containers
+    # Used for the ListSets description, see:
+    # http://www.openarchives.org/OAI/openarchivesprotocol.html#ListSets
+    def oai_dc_xmlns
+      {
+        'xmlns:oai_dc' => 'http://www.openarchives.org/OAI/2.0/oai_dc/',
+        'xmlns:dc' => 'http://purl.org/dc/elements/1.1/',
+        'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+        'xsi:schemaLocation' => 'http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd'
       }
     end
   end

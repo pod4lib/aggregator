@@ -1,1 +1,107 @@
-<record xmlns='http://www.loc.gov/MARC21/slim'><leader>01257nam a2200325   4500</leader><controlfield tag='001'>a12345</controlfield><controlfield tag='003'>SIRSI</controlfield><controlfield tag='005'>20200914003001.0</controlfield><controlfield tag='008'>780221s1958    ii f          000 0 eng d</controlfield><datafield ind1=' ' ind2=' ' tag='035'><subfield code='a'>(OCoLC-M)3656884</subfield></datafield><datafield ind1=' ' ind2=' ' tag='035'><subfield code='a'>(OCoLC-I)268806725</subfield></datafield><datafield ind1=' ' ind2=' ' tag='040'><subfield code='a'>AFU</subfield><subfield code='c'>AFU</subfield><subfield code='d'>m/c</subfield><subfield code='d'>STF</subfield><subfield code='d'>OrLoB</subfield></datafield><datafield ind1='1' ind2=' ' tag='041'><subfield code='a'>eng</subfield><subfield code='h'>san</subfield></datafield><datafield ind1=' ' ind2=' ' tag='049'><subfield code='a'>STFA</subfield></datafield><datafield ind1=' ' ind2=' ' tag='092'><subfield code='a'>181.4</subfield><subfield code='b'>Y5W89 ed.6</subfield></datafield><datafield ind1='1' ind2=' ' tag='100'><subfield code='a'>Woodroffe, John George,</subfield><subfield code='c'>Sir,</subfield><subfield code='d'>1865-1936.</subfield><subfield code=' '>^A34726</subfield></datafield><datafield ind1='1' ind2='4' tag='245'><subfield code='a'>The serpent power:</subfield><subfield code='b'>being the Sat-cakra-nirūpana and Pādukā-pañcaka,</subfield><subfield code='b'>two works on Laya yoga,</subfield><subfield code='c'>translated from the Sanskrit, with introd. and commentary by Arthur Avalon [pseud.]</subfield></datafield><datafield ind1=' ' ind2=' ' tag='250'><subfield code='a'>6th ed.</subfield></datafield><datafield ind1=' ' ind2=' ' tag='260'><subfield code='a'>Madras,</subfield><subfield code='b'>Ganesh,</subfield><subfield code='c'>1958.</subfield></datafield><datafield ind1=' ' ind2=' ' tag='300'><subfield code='a'>xiv, 529, v, 184 p.</subfield><subfield code='b'>XVII plates (part col.)</subfield><subfield code='c'>25 cm.</subfield></datafield><datafield ind1=' ' ind2=' ' tag='596'><subfield code='a'>31</subfield></datafield><datafield ind1=' ' ind2='0' tag='650'><subfield code='a'>Yoga.</subfield><subfield code=' '>^A1076704</subfield></datafield><datafield ind1=' ' ind2='0' tag='650'><subfield code='a'>Shaktism.</subfield><subfield code=' '>^A1060436</subfield></datafield><datafield ind1='0' ind2=' ' tag='700'><subfield code='a'>Pūrnānanda Gosvāmǐ.</subfield><subfield code='t'>Sat-cakra-nirūpana.</subfield><subfield code=' '>UNAUTHORIZED</subfield></datafield><datafield ind1='0' ind2=' ' tag='700'><subfield code='a'>Pādukā.</subfield><subfield code=' '>UNAUTHORIZED</subfield></datafield><datafield ind1='0' ind2=' ' tag='700'><subfield code='a'>Kālīcharana, Tāntrika.</subfield><subfield code=' '>UNAUTHORIZED</subfield></datafield><datafield ind1='0' ind2=' ' tag='740'><subfield code='a'>Satcakranirūpana.</subfield></datafield><datafield ind1=' ' ind2=' ' tag='916'><subfield code='a'>DATE CATALOGED</subfield><subfield code='b'>19900915</subfield></datafield><datafield ind1=' ' ind2=' ' tag='919'><subfield code='a'>exclude from BorrowDirect</subfield><subfield code='b'>HathiTrust ETAS</subfield></datafield><datafield ind1=' ' ind2=' ' tag='999'><subfield code='a'>181.4 .Y5 W89 ED.6</subfield><subfield code='w'>DEWEY</subfield><subfield code='c'>1</subfield><subfield code='i'>36105010209950</subfield><subfield code='d'>8/9/2019</subfield><subfield code='e'>6/18/2019</subfield><subfield code='l'>STACKS</subfield><subfield code='m'>SAL3</subfield><subfield code='n'>4</subfield><subfield code='r'>Y</subfield><subfield code='s'>Y</subfield><subfield code='t'>STKS-MONO</subfield><subfield code='u'>2/21/1978</subfield></datafield></record>
+<?xml version="1.0" encoding="UTF-8"?>
+<record xmlns='http://www.loc.gov/MARC21/slim'>
+    <leader>01257nam a2200325   4500</leader>
+    <controlfield tag='001'>a12345</controlfield>
+    <controlfield tag='003'>SIRSI</controlfield>
+    <controlfield tag='005'>20200914003001.0</controlfield>
+    <controlfield tag='008'>780221s1958    ii f          000 0 eng d</controlfield>
+    <datafield ind1=' ' ind2=' ' tag='035'>
+        <subfield code='a'>(OCoLC-M)3656884</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='035'>
+        <subfield code='a'>(OCoLC-I)268806725</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='040'>
+        <subfield code='a'>AFU</subfield>
+        <subfield code='c'>AFU</subfield>
+        <subfield code='d'>m/c</subfield>
+        <subfield code='d'>STF</subfield>
+        <subfield code='d'>OrLoB</subfield>
+    </datafield>
+    <datafield ind1='1' ind2=' ' tag='041'>
+        <subfield code='a'>eng</subfield>
+        <subfield code='h'>san</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='049'>
+        <subfield code='a'>STFA</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='092'>
+        <subfield code='a'>181.4</subfield>
+        <subfield code='b'>Y5W89 ed.6</subfield>
+    </datafield>
+    <datafield ind1='1' ind2=' ' tag='100'>
+        <subfield code='a'>Woodroffe, John George,</subfield>
+        <subfield code='c'>Sir,</subfield>
+        <subfield code='d'>1865-1936.</subfield>
+        <subfield code=' '>^A34726</subfield>
+    </datafield>
+    <datafield ind1='1' ind2='4' tag='245'>
+        <subfield code='a'>The serpent power:</subfield>
+        <subfield code='b'>being the Sat-cakra-nirūpana and Pādukā-pañcaka,</subfield>
+        <subfield code='b'>two works on Laya yoga,</subfield>
+        <subfield code='c'>translated from the Sanskrit, with introd. and commentary by Arthur Avalon [pseud.]</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='250'>
+        <subfield code='a'>6th ed.</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='260'>
+        <subfield code='a'>Madras,</subfield>
+        <subfield code='b'>Ganesh,</subfield>
+        <subfield code='c'>1958.</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='300'>
+        <subfield code='a'>xiv, 529, v, 184 p.</subfield>
+        <subfield code='b'>XVII plates (part col.)</subfield>
+        <subfield code='c'>25 cm.</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='596'>
+        <subfield code='a'>31</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2='0' tag='650'>
+        <subfield code='a'>Yoga.</subfield>
+        <subfield code=' '>^A1076704</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2='0' tag='650'>
+        <subfield code='a'>Shaktism.</subfield>
+        <subfield code=' '>^A1060436</subfield>
+    </datafield>
+    <datafield ind1='0' ind2=' ' tag='700'>
+        <subfield code='a'>Pūrnānanda Gosvāmǐ.</subfield>
+        <subfield code='t'>Sat-cakra-nirūpana.</subfield>
+        <subfield code=' '>UNAUTHORIZED</subfield>
+    </datafield>
+    <datafield ind1='0' ind2=' ' tag='700'>
+        <subfield code='a'>Pādukā.</subfield>
+        <subfield code=' '>UNAUTHORIZED</subfield>
+    </datafield>
+    <datafield ind1='0' ind2=' ' tag='700'>
+        <subfield code='a'>Kālīcharana, Tāntrika.</subfield>
+        <subfield code=' '>UNAUTHORIZED</subfield>
+    </datafield>
+    <datafield ind1='0' ind2=' ' tag='740'>
+        <subfield code='a'>Satcakranirūpana.</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='916'>
+        <subfield code='a'>DATE CATALOGED</subfield>
+        <subfield code='b'>19900915</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='919'>
+        <subfield code='a'>exclude from BorrowDirect</subfield>
+        <subfield code='b'>HathiTrust ETAS</subfield>
+    </datafield>
+    <datafield ind1=' ' ind2=' ' tag='999'>
+        <subfield code='a'>181.4 .Y5 W89 ED.6</subfield>
+        <subfield code='w'>DEWEY</subfield>
+        <subfield code='c'>1</subfield>
+        <subfield code='i'>36105010209950</subfield>
+        <subfield code='d'>8/9/2019</subfield>
+        <subfield code='e'>6/18/2019</subfield>
+        <subfield code='l'>STACKS</subfield>
+        <subfield code='m'>SAL3</subfield>
+        <subfield code='n'>4</subfield>
+        <subfield code='r'>Y</subfield>
+        <subfield code='s'>Y</subfield>
+        <subfield code='t'>STKS-MONO</subfield>
+        <subfield code='u'>2/21/1978</subfield>
+    </datafield>
+</record>

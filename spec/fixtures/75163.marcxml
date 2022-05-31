@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record xmlns="http://www.loc.gov/MARC21/slim">
+   <leader>01554cam a2200385 4500</leader>
+   <controlfield tag="001">DUKE000075163</controlfield>
+   <controlfield tag="005">19910502000000.0</controlfield>
+   <controlfield tag="008">910502s1973^^^^nyu^^^^^^^^^^^000^0^eng^^</controlfield>
+   <datafield ind1=" " ind2=" " tag="010">
+      <subfield code="a">72081025 //r843</subfield>
+   </datafield>
+   <datafield ind1=" " ind2=" " tag="020">
+      <subfield code="a">0816402477</subfield>
+   </datafield>
+   <datafield ind1=" " ind2=" " tag="035">
+      <subfield code="a">00649938</subfield>
+   </datafield>
+   <datafield ind1=" " ind2=" " tag="040">
+      <subfield code="a">DLC</subfield>
+      <subfield code="b">eng</subfield>
+      <subfield code="c">DLC</subfield>
+      <subfield code="d">m.c.</subfield>
+      <subfield code="d">NDD</subfield>
+   </datafield>
+   <datafield ind1="1" ind2=" " tag="041">
+      <subfield code="a">eng</subfield>
+      <subfield code="a">fre</subfield>
+   </datafield>
+   <datafield ind1="9" ind2="9" tag="050">
+      <subfield code="a">BV4638</subfield>
+      <subfield code="b">.E4413 1973</subfield>
+   </datafield>
+   <datafield ind1="0" ind2=" " tag="050">
+      <subfield code="a">BV4638</subfield>
+      <subfield code="b">.E4413</subfield>
+   </datafield>
+   <datafield ind1=" " ind2=" " tag="082">
+      <subfield code="a">234/.2</subfield>
+   </datafield>
+   <datafield ind1="1" ind2=" " tag="100">
+      <subfield code="a">Ellul, Jacques,</subfield>
+      <subfield code="d">1912-1994.</subfield>
+      <subfield code="0">http://id.loc.gov/authorities/names/n80021739</subfield>
+   </datafield>
+   <datafield ind1="1" ind2="0" tag="240">
+      <subfield code="a">Espérance oubliée.</subfield>
+      <subfield code="l">English</subfield>
+      <subfield code="0">http://id.loc.gov/authorities/names/no2009078460</subfield>
+   </datafield>
+   <datafield ind1="1" ind2="0" tag="245">
+      <subfield code="a">Hope in time of abandonment.</subfield>
+      <subfield code="c">Translated by C. Edward Hopkin.</subfield>
+   </datafield>
+   <datafield ind1=" " ind2=" " tag="260">
+      <subfield code="a">New York,</subfield>
+      <subfield code="b">Seabury Press</subfield>
+      <subfield code="c">[1973]</subfield>
+   </datafield>
+   <datafield ind1=" " ind2=" " tag="300">
+      <subfield code="a">xiii, 306 p.</subfield>
+      <subfield code="c">22 cm.</subfield>
+   </datafield>
+   <datafield ind1=" " ind2=" " tag="336">
+      <subfield code="a">text</subfield>
+      <subfield code="b">txt</subfield>
+      <subfield code="2">rdacontent</subfield>
+   </datafield>
+   <datafield ind1=" " ind2=" " tag="337">
+      <subfield code="a">unmediated</subfield>
+      <subfield code="b">n</subfield>
+      <subfield code="2">rdamedia</subfield>
+   </datafield>
+   <datafield ind1=" " ind2=" " tag="338">
+      <subfield code="a">volume</subfield>
+      <subfield code="b">nc</subfield>
+      <subfield code="2">rdacarrier</subfield>
+   </datafield>
+   <datafield ind1=" " ind2=" " tag="500">
+      <subfield code="a">Translation of l'Espérance oubliée.</subfield>
+   </datafield>
+   <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">Hope</subfield>
+      <subfield code="x">Religious aspects</subfield>
+      <subfield code="x">Christianity.</subfield>
+      <subfield code="0">http://id.loc.gov/authorities/subjects/sh85061925</subfield>
+   </datafield>
+   <datafield ind1=" " ind2="0" tag="650">
+      <subfield code="a">Civilization, Modern</subfield>
+      <subfield code="y">1950-</subfield>
+      <subfield code="0">http://id.loc.gov/authorities/subjects/sh85026475</subfield>
+   </datafield>
+   <datafield ind1=" " ind2=" " tag="905">
+      <subfield code="a">MARCIVE 20190326</subfield>
+   </datafield>
+   <datafield ind1=" " ind2=" " tag="905">
+      <subfield code="a">MARCIVE 20200114</subfield>
+   </datafield>
+   <datafield ind1=" " ind2=" " tag="942">
+      <subfield code="a">AM</subfield>
+      <subfield code="b">Book</subfield>
+   </datafield>
+   <datafield ind1="0" ind2=" " tag="852">
+      <subfield code="b">DIV</subfield>
+      <subfield code="c">PD</subfield>
+      <subfield code="h">BV4638</subfield>
+      <subfield code="i">.E4413 1973</subfield>
+      <subfield code="D">x</subfield>
+   </datafield>
+   <datafield ind1="0" ind2=" " tag="852">
+      <subfield code="b">LSC</subfield>
+      <subfield code="c">PSD</subfield>
+      <subfield code="h">BV4638</subfield>
+      <subfield code="i">.E4413 1973</subfield>
+      <subfield code="D">x</subfield>
+   </datafield>
+   <datafield ind1=" " ind2=" " tag="940">
+      <subfield code="b">DIV</subfield>
+      <subfield code="c">PD</subfield>
+      <subfield code="d">0</subfield>
+      <subfield code="h">BV4638 .E4413 1973</subfield>
+      <subfield code="n">c.1</subfield>
+      <subfield code="o">01</subfield>
+      <subfield code="q" />
+      <subfield code="r">BOOK</subfield>
+      <subfield code="p">D02452825S </subfield>
+      <subfield code="s">20020705</subfield>
+      <subfield code="u">20071012</subfield>
+      <subfield code="v">20220520</subfield>
+      <subfield code="w">4</subfield>
+      <subfield code="k">000075163</subfield>
+   </datafield>
+   <datafield ind1=" " ind2=" " tag="940">
+      <subfield code="b">LSC</subfield>
+      <subfield code="c">PSD</subfield>
+      <subfield code="d">0</subfield>
+      <subfield code="h">BV4638 .E4413 1973</subfield>
+      <subfield code="n">c.2</subfield>
+      <subfield code="o">01</subfield>
+      <subfield code="q">DP</subfield>
+      <subfield code="r">BOOK</subfield>
+      <subfield code="p">D02452826T </subfield>
+      <subfield code="s">19930808</subfield>
+      <subfield code="u">20180814</subfield>
+      <subfield code="v">20140427</subfield>
+      <subfield code="w">1</subfield>
+      <subfield code="k">000075163</subfield>
+   </datafield>
+   <datafield ind1=" " ind2=" " tag="900">
+      <subfield code="5">POD</subfield>
+   </datafield>
+</record>

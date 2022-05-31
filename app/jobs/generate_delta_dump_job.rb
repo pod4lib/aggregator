@@ -28,27 +28,38 @@ class GenerateDeltaDumpJob < ApplicationJob
     progress.total = uploads.sum(&:marc_records_count)
 
     delta_dump = full_dump.deltas.create(stream_id: full_dump.stream_id)
-
-    writer = MarcRecordWriterService.new("#{organization.slug}-#{Time.zone.today}-delta")
+    base_name = "#{organization.slug}-#{Time.zone.today}-delta"
+    writer = MarcRecordWriterService.new(base_name)
+    oai_file_counter = 0
 
     begin
-      NormalizedMarcRecordReader.new(uploads).each_slice(100) do |records|
+      NormalizedMarcRecordReader.new(uploads).each_slice(Settings.oai_max_page_size) do |records|
+        oai_writer = OaiMarcRecordWriterService.new(base_name)
         records.each do |record|
           if record.status == 'delete'
             writer.write_delete(record)
+            oai_writer.write_delete(record)
           else
             writer.write_marc_record(record)
+            oai_writer.write_marc_record(record)
           end
         end
+        oai_writer.finalize
+        delta_dump.public_send(:oai_xml).attach(io: File.open(oai_writer.oai_file),
+                                                filename: human_readable_filename(base_name, :oai_xml, oai_file_counter))
 
+        oai_file_counter += 1
         progress.increment(records.length)
+      ensure
+        oai_writer.close
+        oai_writer.unlink
       end
 
       writer.finalize
 
       writer.files.each do |as, file|
         delta_dump.public_send(as).attach(io: File.open(file),
-                                          filename: human_readable_filename(as))
+                                          filename: human_readable_filename(base_name, as))
       end
 
       delta_dump.save!
@@ -62,20 +73,20 @@ class GenerateDeltaDumpJob < ApplicationJob
 
   private
 
-  def human_readable_filename(file_type)
-    case file_type
-    when :deletes
-      'deletes.del.txt'
-    when :marc21
-      'marc21.mrc.gz'
-    when :marcxml
-      'marcxml.xml.gz'
-    when :errata
-      'errata.gz'
-    when :oai_xml
-      'oai.xml.gz'
-    else
-      file_type
-    end
+  def human_readable_filename(base_name, file_type, counter = nil)
+    as = case file_type
+         when :deletes
+           'deletes.del.txt'
+         when :marc21
+           'marc21.mrc.gz'
+         when :marcxml
+           'marcxml.xml.gz'
+         when :oai_xml
+           "oai-#{format('%010d', counter)}.xml.gz"
+         else
+           "#{file_type}.gz"
+         end
+
+    "#{base_name}-#{as}"
   end
 end
