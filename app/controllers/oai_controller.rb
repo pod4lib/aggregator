@@ -233,6 +233,8 @@ class OaiController < ApplicationController
   # rubocop:enable Metrics/MethodLength
 
   # See https://www.openarchives.org/OAI/openarchivesprotocol.html#Identify
+  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/MethodLength
   def build_identify_response(earliest_date)
     Nokogiri::XML::Builder.new do |xml|
       build_oai_response xml, identify_params do
@@ -240,14 +242,24 @@ class OaiController < ApplicationController
           xml.repositoryName t('layouts.application.title')
           xml.baseURL oai_url
           xml.protocolVersion '2.0'
+          xml.adminEmail Settings.contact_email
           xml.earliestDatestamp earliest_date.strftime('%F')
           xml.deletedRecord 'transient'
           xml.granularity 'YYYY-MM-DD'
-          xml.adminEmail Settings.contact_email
+          xml.description do
+            xml.send :'oai-identifier', oai_id_xmlns do
+              xml.scheme 'oai'
+              xml.repositoryIdentifier Settings.oai_repository_id
+              xml.delimiter ':'
+              xml.sampleIdentifier "oai:#{Settings.oai_repository_id}:stanford:1:12345"
+            end
+          end
         end
       end
     end.to_xml
   end
+  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/MethodLength
 
   # See http://www.openarchives.org/OAI/openarchivesprotocol.html#ListMetadataFormats
   def build_list_metadata_formats_response
