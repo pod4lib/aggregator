@@ -23,7 +23,7 @@ class MarcRecord < ApplicationRecord
 
   # See http://www.openarchives.org/OAI/2.0/guidelines-oai-identifier.htm
   def oai_id
-    "oai:pod.stanford.edu:#{organization.slug}:#{stream.id}:#{marc001}"
+    "oai:#{Settings.oai_repository_id}:#{organization.slug}:#{stream.id}:#{marc001}"
   end
 
   def augmented_marc
