@@ -9,7 +9,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ms-md-5">
+      <ul class="navbar-nav me-auto">
         <% if current_user %>
         <li class='nav-item'>
           <%= link_to t('.providers'), organizations_url, class: class_names('nav-link', { active: current_page?(organizations_url) }) %>
@@ -31,11 +31,13 @@
         </li>
         <% end %>
       </ul>
-      <ul class="navbar-nav ms-md-auto">
+
+      <% if current_user && current_user.has_role?(:admin) %>
+        <span class="badge bg-warning text-dark h-100 my-auto d-none d-md-block"><%= t('.is_admin') %></span>
+      <% end %>
+      
+      <ul class="navbar-nav">
         <% if current_user %>
-          <% if current_user.has_role? :admin %>
-            <span class="badge bg-warning text-dark h-100 my-auto d-none d-sm-inline"><%= t('.is_admin') %></span>
-          <% end %>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
               aria-expanded="false">
