@@ -41,4 +41,14 @@ module DashboardHelper
   def any_failures?(statuses)
     (%i[invalid not_marc] & statuses).any?
   end
+
+  def count_roles(users)
+    highest_role_per_user = users.map(&:highest_role)
+
+    {
+      admin: highest_role_per_user.count(:admin),
+      owner: highest_role_per_user.count(:owner),
+      member: highest_role_per_user.count(:member)
+    }
+  end
 end

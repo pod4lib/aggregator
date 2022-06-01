@@ -4,13 +4,12 @@ require 'rails_helper'
 
 RSpec.describe DashboardHelper, type: :helper do
   let(:organization) { create(:organization) }
-  let(:stream) { create(:stream, organization: organization) }
   let(:uploads) do
     [
-      create(:upload, :binary_marc, stream: stream),
-      create(:upload, :multiple_files, stream: stream),
-      create(:upload, :binary_marc, stream: stream),
-      create(:upload, :binary_marc, stream: stream)
+      create(:upload, :binary_marc, stream: organization.default_stream),
+      create(:upload, :multiple_files, stream: organization.default_stream),
+      create(:upload, :binary_marc, stream: organization.default_stream),
+      create(:upload, :binary_marc, stream: organization.default_stream)
     ]
   end
 

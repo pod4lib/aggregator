@@ -1,6 +1,12 @@
 <% if normalized_dump %>
   <table class="table table-striped mb-0">
-    <thead><th>Type</th><th class="pl-4">File</th><th>Date created</th><th>Size</th><th class="text-end pr-4">Records</th></thead>
+    <thead>
+      <th>Type</th>
+      <th class="pl-4">File</th>
+      <th>Date created</th>
+      <th>Size</th>
+      <th class="text-end pr-4">Records</th>
+    </thead>
     <tbody>
       <%= render partial: 'streams/dump_attachment', locals: { type: 'Full', attachment: normalized_dump.marc21.attachment, stream: normalized_dump.stream } %>
       <%= render partial: 'streams/dump_attachment', locals: { type: 'Full', attachment: normalized_dump.marcxml.attachment, stream: normalized_dump.stream } %>

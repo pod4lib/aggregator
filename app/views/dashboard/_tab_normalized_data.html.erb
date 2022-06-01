@@ -1,3 +1,44 @@
 <div class="tab-pane fade" id="normalized-data-pane" role="tabpanel" aria-labelledby="normalized-data-tab">
-    Normalized data here
-</div>
+    <table class="table table-striped mb-3" id="normalized-data-table">
+      <thead>
+        <tr>
+          <th><%= t('dashboard.summary.table.provider') %></th>
+          <th><%= t('dashboard.summary.table.last_full_dump') %></th>
+          <th class="text-end pe-4"><%= t('dashboard.summary.table.dump_records') %></th>
+          <th><%= t('dashboard.summary.table.last_delta') %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Put organizations with nil dumps at the bottom of the time sorted list -->
+        <% @dashboard.normalized_data_by_provider.sort_by{ |_k, v| v.nil? ? Time.at(0) : v.updated_at}.reverse.each do |provider, dump| %>
+        <tr>
+          <td><%= link_to provider.name, normalized_data_organization_stream_path(provider, provider.default_stream) %></td>
+          <!-- Last full dump: -->
+          <td>
+              <% if dump && dump.last_full_dump_at%>
+                <%= local_time(dump.last_full_dump_at, format: datetime_display_format()) %>
+              <% else %>
+                <%= bootstrap_icon("exclamation-triangle-fill", class: "text-warning") %>
+              <% end %>
+          </td>
+          <!-- Dump records: -->
+          <td class="text-end pe-4">
+            <% if dump %>
+              <%= number_with_delimiter(dump.record_count) %>
+            <% else %>
+              0
+            <% end %>
+          </td>
+          <!-- Last delta: -->
+          <td>
+            <% if dump %>
+                <%= local_time(dump.last_delta_dump_at, format: datetime_display_format()) %>
+              <% else %>
+                <%= bootstrap_icon("exclamation-triangle-fill", class: "text-warning") %>
+              <% end %>
+          </td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
