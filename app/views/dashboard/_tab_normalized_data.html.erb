@@ -9,8 +9,7 @@
         </tr>
       </thead>
       <tbody>
-        <!-- Put organizations with nil dumps at the bottom of the time sorted list -->
-        <% @dashboard.normalized_data_by_provider.sort_by{ |_k, v| v.nil? ? Time.at(0) : v.updated_at}.reverse.each do |provider, dump| %>
+        <% @dashboard.normalized_data_by_provider.each do |provider, dump| %>
         <tr>
           <td><%= link_to provider.name, normalized_data_organization_stream_path(provider, provider.default_stream) %></td>
           <!-- Last full dump: -->
