@@ -113,63 +113,42 @@ class OaiController < ApplicationController
   end
 
   # rubocop:disable Metrics/AbcSize
-  # Get a page of OAI-XML records and a token pointing to the next page
   def next_record_page(token)
-    # filter normalized dumps and get the corresponding OAI-XML pages
-    # NOTE: each page is guaranteed to have < OAIPMHWriter::max_records_per_file,
-    # but some pages will have exactly that number and others won't. The sequence
-    # isn't predictable; the only thing we promise is that all pages are less than
-    # that size.
-    pages = normalized_dumps(token.set, token.from_date, token.until_date).flat_map(&:oai_xml_attachments)
-    raise OaiConcern::NoRecordsMatch if pages.empty?
-
-    # generate a token for the next page. no token on the last page, and throw
-    # an error if the page number is invalid.
-    page = token.page.to_i
-    token = if page == pages.length - 1 # last page
-              nil
-            elsif page < pages.length - 1
-              OaiConcern::ResumptionToken.new(set: token.set,
-                                              page: page + 1,
-                                              from_date: token.from_date,
-                                              until_date: token.until_date)
-                                         .encode
-            else
-              raise OaiConcern::BadResumptionToken
-            end
-
-    # return the current page and the token for the next page
-    [pages[page], token]
-  end
-  # rubocop:enable Metrics/AbcSize
-
-  # Get NormalizedDumps from a particular stream or created between two dates
-  # NOTE: this likely needs work to memoize/tune, but it should be called
-  # repeatedly by next_record_page with the same arguments
-  def normalized_dumps(set, from_date, until_date)
-    # get stream by id, or all default streams if not specified
-    streams = if set.present?
-                Stream.where(id: set)
+    streams = if token.set.present?
+                Stream.where(id: token.set)
               else
                 Stream.joins(:default_stream_histories).joins(normalized_dumps: :oai_xml_attachments).distinct
               end
 
-    # get all dumps in this stream, optionally between two dates; error if none
-    dumps = filter_dumps(streams, from_date, until_date)
-    raise OaiConcern::NoRecordsMatch if dumps.empty?
+    dump_ids = streams.map do |stream|
+      stream.current_dump_ids(from_date: token.from_date, until_date: token.until_date)
+    end.flatten.compact
 
-    dumps
+    oai_xml_query = ActiveStorage::Attachment.where(record_type: 'NormalizedDump', name: 'oai_xml',
+                                                    record_id: dump_ids).order(created_at: :asc)
+    page_count = oai_xml_query.count
+
+    raise OaiConcern::NoRecordsMatch if page_count.zero?
+
+    page = token.page.to_i
+    token = next_page_token(page, page_count, token)
+
+    [oai_xml_query.limit(1).offset(page).first, token]
   end
+  # rubocop:enable Metrics/AbcSize
 
-  def filter_dumps(streams, from_date, until_date)
-    # get candidate dumps (the current full dump and its deltas for each stream)
-    dumps = streams.flat_map(&:current_dumps).sort_by(&:created_at)
-
-    # filter candidate dumps (by from date and until date)
-    dumps = dumps.select { |dump| dump.created_at >= Time.zone.parse(from_date).beginning_of_day } if from_date.present?
-    dumps = dumps.select { |dump| dump.created_at <= Time.zone.parse(until_date).end_of_day } if until_date.present?
-
-    dumps
+  def next_page_token(page, page_count, token)
+    if page == page_count - 1 # last page
+      nil
+    elsif page < page_count - 1
+      OaiConcern::ResumptionToken.new(set: token.set,
+                                      page: page + 1,
+                                      from_date: token.from_date,
+                                      until_date: token.until_date)
+                                 .encode
+    else
+      raise OaiConcern::BadResumptionToken
+    end
   end
 
   # Wrap the provided Nokogiri::XML::Builder block in an OAI-PMH response
