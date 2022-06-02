@@ -43,7 +43,7 @@
 
   <!-- Upload activity table -->
   <h2 class="mt-5"><%= t('.upload_title') %></h2>
-  <ul class="table-key list-unstyled list-inline pt-3">
+  <ul class="table-key list-unstyled list-inline pt-3" aria-hidden="true">
     <% Settings.metadata_status.each do |status, values| %>
     <li class="list-inline-item">
       <%= bootstrap_icon(values.icon_class, class: "pod-metadata-status #{status}") %>
@@ -70,7 +70,7 @@
       <tr>
         <td class="text-center">
           <%= bootstrap_icon(Settings.metadata_status[file.pod_metadata_status].icon_class, class: "pod-metadata-status #{file.pod_metadata_status}") %>
-          <span class="visually-hidden"><%= file.pod_metadata_status %></span>
+          <span class="visually-hidden">Type of file: <%= file.pod_metadata_status %></span>
         </td>
         <td>
           <%= link_to_if can?(:read, upload), upload.name, organization_upload_path(upload.organization, upload), title: t('.table.upload_title', name: upload.name) %>
