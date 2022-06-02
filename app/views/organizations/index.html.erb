@@ -15,43 +15,46 @@
     </div>
   <% end %>
 
-  <h2>Consumer-only organizations</h2>
-  <table class="table table-striped organizations mb-5 mt-4" id="consumers">
-    <thead>
-      <tr>
-        <th colspan="2">Consumer</th>
-        <th class="text-end">Users</th>
-        <th>POD contact</th>
-        <th>Actions</th>
-        <th colspan="2"></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @consumers.each do |organization| %>
+  <!-- Only show consumer-only table to admins -->
+  <% if current_user && current_user.has_role?(:admin) %>
+    <h2>Consumer-only organizations</h2>
+    <table class="table table-striped organizations mb-5 mt-4" id="consumers">
+      <thead>
         <tr>
-          <td class="align-middle text-center icon-column">
-            <% if organization.icon.attached? %>
-              <%= image_tag(organization.icon, alt: '', class: 'icon-sm') %>
-            <% end %>
-          </td>
-          <td class="align-middle">
-            <%= link_to organization.name, organization %>
-          </td>
-          <td class="align-middle text-end"><%= organization.users.count %></td>
-          <td class="align-middle">
-            <% if organization.contact_email.present? %>
-              <span class="lead"><%= mail_to organization.contact_email.email %></span>
-            <% end %>
-          </td>
-          <% if can? :manage, Organization %>
-            <td class="align-middle"><%= link_to 'Edit', organization_details_organization_path(organization), class: 'btn btn-secondary btn-sm' if can? :edit, organization %></td>
-            <td class="align-middle"><%= link_to 'Delete', organization, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' if can? :destroy, organization %></td>
-          <% end %>
-
+          <th colspan="2">Consumer</th>
+          <th class="text-end">Users</th>
+          <th>POD contact</th>
+          <th>Actions</th>
+          <th colspan="2"></th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <% @consumers.each do |organization| %>
+          <tr>
+            <td class="align-middle text-center icon-column">
+              <% if organization.icon.attached? %>
+                <%= image_tag(organization.icon, alt: '', class: 'icon-sm') %>
+              <% end %>
+            </td>
+            <td class="align-middle">
+              <%= link_to organization.name, organization %>
+            </td>
+            <td class="align-middle text-end"><%= organization.users.count %></td>
+            <td class="align-middle">
+              <% if organization.contact_email.present? %>
+                <span class="lead"><%= mail_to organization.contact_email.email %></span>
+              <% end %>
+            </td>
+            <% if can? :manage, Organization %>
+              <td class="align-middle"><%= link_to 'Edit', organization_details_organization_path(organization), class: 'btn btn-secondary btn-sm' if can? :edit, organization %></td>
+              <td class="align-middle"><%= link_to 'Delete', organization, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' if can? :destroy, organization %></td>
+            <% end %>
+
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
 
   <h2 class="pt-4">Default stream statistics by provider</h2>
   <p>

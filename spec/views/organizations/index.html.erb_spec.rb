@@ -20,7 +20,8 @@ RSpec.describe 'organizations/index', type: :view do
     assert_select '#providers tr>td', text: 'Organization 2'
   end
 
-  it 'renders a list of consumers' do
+  it 'renders a list of consumers for admins' do
+    sign_in create(:admin)
     render
 
     assert_select '#consumers tr>td', text: 'Organization 3'
