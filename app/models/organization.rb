@@ -18,6 +18,7 @@ class Organization < ApplicationRecord
   accepts_nested_attributes_for :contact_email, update_only: true, reject_if: proc { |att| att['email'].blank? }
   has_many :users, -> { distinct }, through: :roles, class_name: 'User', source: :users
   scope :providers, -> { where(provider: true) }
+  scope :consumers, -> { where(provider: false) }
   validates :marc_docs_url, format: { with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), allow_blank: true }
 
   def default_stream

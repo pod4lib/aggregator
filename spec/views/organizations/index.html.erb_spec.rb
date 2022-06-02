@@ -5,16 +5,26 @@ require 'rails_helper'
 RSpec.describe 'organizations/index', type: :view do
   let(:org1) { create(:organization, name: 'Organization 1') }
   let(:org2) { create(:organization, name: 'Organization 2') }
+  let(:org3) { create(:organization, name: 'Organization 3', provider: false) }
+  let(:org4) { create(:organization, name: 'Organization 4', provider: false) }
 
   before do
-    assign(:organizations, [org1, org2])
+    assign(:providers, [org1, org2])
+    assign(:consumers, [org3, org4])
   end
 
-  it 'renders a list of organizations' do
+  it 'renders a list of providers' do
     render
 
-    assert_select 'tr>td', text: 'Organization 1'
-    assert_select 'tr>td', text: 'Organization 2'
+    assert_select '#providers tr>td', text: 'Organization 1'
+    assert_select '#providers tr>td', text: 'Organization 2'
+  end
+
+  it 'renders a list of consumers' do
+    render
+
+    assert_select '#consumers tr>td', text: 'Organization 3'
+    assert_select '#consumers tr>td', text: 'Organization 4'
   end
 
   it 'renders 2 charts' do
