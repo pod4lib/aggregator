@@ -28,7 +28,7 @@
               <table class="table table-striped mt-4">
                 <thead>
                   <tr>
-                    <th class="text-center"><%= t('job_tracker.table_heading.status') %></th>
+                    <th class="text-center" aria-hidden="true"><%= t('job_tracker.table_heading.status') %></th>
                     <th><%= t('job_tracker.table_heading.resource') %></th>
                     <th><%= t('job_tracker.table_heading.job_type') %></th>
                     <th class="text-end"><%= t('job_tracker.table_heading.progress') %></th>
@@ -37,7 +37,7 @@
                 </thead>
                 <% jobs.sort_by(&:created_at).reverse.each do |job| %>
                   <tr class="<%= "status-#{job.job_id}" %>">
-                    <td class="text-center">
+                    <td class="text-center" aria-hidden="true">
                       <%= bootstrap_icon(Settings.job_status_group[status_group].icon_class, class: "pod-icon pod-job-tracker-status #{job.sidekiq_status}")%>
                     </td>
                     <td><%= job.resource_label %></td>
