@@ -41,10 +41,16 @@ class OaiMarcRecordWriterService
     @files.each(&:unlink)
   end
 
+  def attach_files_to_dump(dump, base_name)
+    files.each_with_index do |file, counter|
+      dump.public_send(:oai_xml).attach(io: File.open(file), filename: human_readable_filename(base_name, counter))
+    end
+  end
+
   private
 
   def next_file
-    @oai_writer.close
+    @oai_writer&.close
     @oai_writer = OAIPMHWriter.new(Zlib::GzipWriter.new(temp_file))
     @records_written = 0
   end
@@ -53,6 +59,10 @@ class OaiMarcRecordWriterService
     Tempfile.new("#{base_name}-oai_xml", binmode: true).tap do |file|
       @files << file
     end
+  end
+
+  def human_readable_filename(base_name, counter = nil)
+    "#{base_name}-oai-#{format('%010d', counter)}.xml.gz"
   end
 
   # Special logic for writing OAI-PMH-style record responses
