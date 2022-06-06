@@ -3,6 +3,8 @@
 # :nodoc:
 class Organization < ApplicationRecord
   default_scope { order(name: :asc) }
+  attr_accessor :recently_inactive
+
   resourcify
   extend FriendlyId
   friendly_id :name, use: %i[finders slugged]

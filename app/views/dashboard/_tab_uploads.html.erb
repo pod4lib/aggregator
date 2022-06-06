@@ -21,25 +21,41 @@
 
           <!-- Most recent upload: -->
           <td>
-            <%= link_to local_time(uploads[0].created_at, format: datetime_display_format()), organization_upload_path(provider, uploads[0]) %>
+            <% if uploads %>
+              <%= link_to local_time(uploads[0].created_at, format: datetime_display_format()), organization_upload_path(provider, uploads[0]) %>
+            <% else %>
+              <%= bootstrap_icon("exclamation-triangle-fill", class: "text-warning") %>
+            <% end %>
           </td>
           <!-- Most recent upload status: -->
           <td class="text-center">
-            <%= bootstrap_icon(Settings.job_status_group[files_status(uploads[0])].icon_class, class: "pod-job-tracker-status #{files_status(uploads[0])}") %>
-            <span class="visually-hidden"><%= files_status(uploads[0]) %></span>
+            <% if uploads %>
+              <%= bootstrap_icon(Settings.job_status_group[files_status(uploads[0])].icon_class, class: "pod-job-tracker-status #{files_status(uploads[0])}") %>
+              <span class="visually-hidden"><%= files_status(uploads[0]) %></span>
+            <% else %>
+              <%= bootstrap_icon("exclamation-triangle-fill", class: "text-warning") %>
+            <% end %>
           </td>
           <!-- Date of successful upload: -->
           <td>
-            <% if last_successful_upload_date(uploads) %>
-              <%= local_time(last_successful_upload_date(uploads), format: datetime_display_format()) %>
+            <% if uploads %>
+              <% if last_successful_upload_date(uploads) %>
+                <%= local_time(last_successful_upload_date(uploads), format: datetime_display_format()) %>
+              <% else %>
+                <p>No prior successful uploads</p>
+              <% end %>
             <% else %>
-              <p>No prior successful uploads</p>
+              <%= bootstrap_icon("exclamation-triangle-fill", class: "text-warning") %>
             <% end %>
           </td>
           <!-- Did any uploads succeed in past 30 days? -->
           <td class="text-center">
-            <%= bootstrap_icon(Settings.job_status_group[best_status(uploads)].icon_class, class: "pod-job-tracker-status #{best_status(uploads)}") %>
-            <span class="visually-hidden"><%= best_status(uploads) %></span>
+            <% if provider.recently_inactive %>
+              <p class="mb-0">No uploads in last 30 days</p>
+            <% else %>
+              <%= bootstrap_icon(Settings.job_status_group[best_status(uploads)].icon_class, class: "pod-job-tracker-status #{best_status(uploads)}") %>
+              <span class="visually-hidden"><%= best_status(uploads) %></span>
+            <% end %>
           </td>
         </tr>
         <% end %>
