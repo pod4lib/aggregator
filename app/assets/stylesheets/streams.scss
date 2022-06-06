@@ -1,0 +1,60 @@
+.stream-metadata-box { 
+  border-radius: 0 0 0.33rem 0.33rem;
+  display: grid;
+  align-items: center;
+  grid-template-areas: 
+    "box-header box-header"
+    "files filesize"
+    "records unique";
+  grid-template-rows: 1fr 1.1fr 1.1fr;  
+  grid-template-columns: 1fr 1fr;
+  grid-row-gap: 3px;
+  grid-column-gap: 5px;
+  height: 100%;
+  margin: 0;
+}  
+
+// Stack the layout on small devices/viewports
+@media all and (max-width: 500px) {
+  .stream-metadata-box { 
+    grid-template-areas: 
+      "box-header"
+      "files"
+      "filesize"
+      "records"
+      "unique";
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr;
+    justify-items: left;
+    
+    .box-metadata {
+      padding-left: 1rem;
+    }
+  }
+}
+
+#box-header {
+  background-color: #495057;
+  font-size: 0.85rem;
+  grid-area: box-header;
+}
+
+#box-files { 
+  grid-area: files;      
+}
+
+#box-filesize { 
+  grid-area: filesize;      
+}
+
+#box-records { 
+  grid-area: records;      
+}
+
+#box-unique-records { 
+  grid-area: unique;      
+}
+
+.box-metadata {
+  padding-right: 1rem;
+}
