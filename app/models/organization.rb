@@ -3,8 +3,6 @@
 # :nodoc:
 class Organization < ApplicationRecord
   default_scope { order(name: :asc) }
-  attr_accessor :recently_inactive
-
   resourcify
   extend FriendlyId
   friendly_id :name, use: %i[finders slugged]
@@ -44,5 +42,10 @@ class Organization < ApplicationRecord
 
   def slug=(slug)
     super(slug.presence)
+  end
+
+  def upload_in_last_30_days?
+    last_upload = uploads.order(created_at: :desc).limit(1)
+    true if last_upload.any? && last_upload.first.created_at.between?(Date.current - 30, Date.current)
   end
 end
