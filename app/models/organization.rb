@@ -44,8 +44,12 @@ class Organization < ApplicationRecord
     super(slug.presence)
   end
 
+  def most_recent_upload
+    upload = uploads.order(created_at: :desc).limit(1)
+    upload.any? ? upload : nil
+  end
+
   def upload_in_last_30_days?
-    last_upload = uploads.order(created_at: :desc).limit(1)
-    true if last_upload.any? && last_upload.first.created_at.between?(Date.current - 30, Date.current)
+    true if most_recent_upload && most_recent_upload.first.created_at.between?(Date.current - 30, Date.current)
   end
 end
