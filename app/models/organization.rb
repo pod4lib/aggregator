@@ -51,6 +51,6 @@ class Organization < ApplicationRecord
   end
 
   def upload_in_last_30_days?
-    true if most_recent_upload && most_recent_upload.first.created_at.between?(Date.current - 30, Date.current)
+    most_recent_upload && most_recent_upload.first.created_at.between?(30.days.ago, Time.zone.now)
   end
 end
