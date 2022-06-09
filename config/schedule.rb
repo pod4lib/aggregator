@@ -22,14 +22,17 @@ job_type :runner,  "cd :path && :environment_variable=:environment bin/rails run
 
 # Learn more: http://github.com/javan/whenever
 
-every :day do
-  runner 'UpdateOrganizationStatisticsJob.perform_all'
-end
-
-every 3.months do
-  runner 'CleanupAndRemoveDataJob.enqueue_all'
-end
-
-every :day do
-  runner 'GenerateDeltaDumpJob.enqueue_all'
-end
+# Temporarily disable all scheduled jobs so we can
+# regenerate normalized dumps without interference.
+#
+# every :day do
+#   runner 'UpdateOrganizationStatisticsJob.perform_all'
+# end
+#
+# every 3.months do
+#   runner 'CleanupAndRemoveDataJob.enqueue_all'
+# end
+#
+# every :day do
+#   runner 'GenerateDeltaDumpJob.enqueue_all'
+# end
