@@ -21,7 +21,7 @@ class Dashboard
   end
 
   def normalized_data_by_provider
-    Organization.providers.index_with { |org| org.default_stream.normalized_dumps.full_dumps.last }
+    Organization.providers.index_with { |org| org.default_stream.normalized_dumps.full_dumps.published.last }
   end
 
   def users_by_organization

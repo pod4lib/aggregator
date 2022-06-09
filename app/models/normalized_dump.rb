@@ -3,6 +3,7 @@
 # :nodoc:
 class NormalizedDump < ApplicationRecord
   scope :full_dumps, -> { where(full_dump_id: nil) }
+  scope :published, -> { where.not(published_at: nil) }
 
   belongs_to :stream
   has_one :organization, through: :stream

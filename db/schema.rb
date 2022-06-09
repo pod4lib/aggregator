@@ -11,6 +11,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2022_05_24_194031) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_09_120300) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -187,6 +188,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_24_194031) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "full_dump_id"
+    t.datetime "published_at", precision: nil
     t.index ["full_dump_id"], name: "index_normalized_dumps_on_full_dump_id"
     t.index ["stream_id"], name: "index_normalized_dumps_on_stream_id"
   end

@@ -49,6 +49,8 @@ class GenerateDeltaDumpJob < ApplicationJob
                                                 filename: human_readable_filename(base_name, :oai_xml, oai_file_counter))
 
         oai_file_counter += 1
+        # Save the dump once for every 100 oai files to free up file handles
+        delta_dump.save! if (oai_file_counter % 100).zero?
         progress.increment(records.length)
       ensure
         oai_writer.close
@@ -62,6 +64,9 @@ class GenerateDeltaDumpJob < ApplicationJob
                                           filename: human_readable_filename(base_name, as))
       end
 
+      # Add a timestamp when the dump is saved at the end of the job to indicate
+      # it is complete and ready for harvesting.
+      delta_dump.published_at = Time.zone.now
       delta_dump.save!
       full_dump.update(last_delta_dump_at: now)
     ensure

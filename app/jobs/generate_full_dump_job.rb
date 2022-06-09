@@ -7,14 +7,14 @@ class GenerateFullDumpJob < ApplicationJob
 
   def self.enqueue_all
     Organization.find_each do |org|
-      full_dump = org.default_stream.normalized_dumps.last
+      full_dump = org.default_stream.normalized_dumps.published.last
       next if full_dump && org.default_stream.uploads.where(updated_at: full_dump.last_full_dump_at...Time.zone.now).none?
 
       GenerateFullDumpJob.perform_later(org)
     end
   end
 
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def perform(organization)
     now = Time.zone.now
     uploads = Upload.active.where(stream: organization.default_stream)
@@ -51,6 +51,8 @@ class GenerateFullDumpJob < ApplicationJob
         end
 
         oai_file_counter += 1
+        # Save the dump once for every 100 oai files to free up file handles
+        full_dump.save! if (oai_file_counter % 100).zero?
         progress.increment(records.length)
       ensure
         oai_writer.finalize
@@ -64,6 +66,9 @@ class GenerateFullDumpJob < ApplicationJob
         full_dump.public_send(as).attach(io: File.open(file), filename: human_readable_filename(base_name, as))
       end
 
+      # Add a timestamp when the dump is saved at the end of the job to indicate
+      # it is complete, should supercede the previous full dump, and is ready for harvesting.
+      full_dump.published_at = Time.zone.now
       full_dump.save!
 
       GenerateDeltaDumpJob.perform_later(organization)
@@ -72,7 +77,7 @@ class GenerateFullDumpJob < ApplicationJob
       writer.unlink
     end
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   def human_readable_filename(base_name, file_type, counter = nil)
     as = case file_type
