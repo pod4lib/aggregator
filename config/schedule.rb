@@ -27,7 +27,6 @@ every :day do
 end
 
 every 3.months do
-  runner 'GenerateFullDumpJob.enqueue_all'
   runner 'CleanupAndRemoveDataJob.enqueue_all'
 end
 
