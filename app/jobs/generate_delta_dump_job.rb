@@ -34,6 +34,10 @@ class GenerateDeltaDumpJob < ApplicationJob
 
     begin
       NormalizedMarcRecordReader.new(uploads).each_slice(Settings.oai_max_page_size) do |records|
+        # See note here on CPU saturation:
+        # https://github.com/mperham/sidekiq/discussions/5039
+        Thread.pass
+
         oai_writer = OaiMarcRecordWriterService.new(base_name)
         records.each do |record|
           if record.status == 'delete'
