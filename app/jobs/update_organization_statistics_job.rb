@@ -46,7 +46,7 @@ class UpdateOrganizationStatisticsJob < ApplicationJob
     {
       unique_record_count: context.marc_records.distinct.count(:marc001),
       record_count: context.marc_records.size,
-      file_size: context.files.sum(:byte_size),
+      file_size: context.files.sum { |file| file.blob.byte_size },
       file_count: context.files.size
     }
   end

@@ -26,7 +26,7 @@
         </td>
         <td class=""><%= local_time(stream.updated_at, format: datetime_display_format()) %></td>
         <td class="text-end"><%= stream.files.size %></td>
-        <td class="text-end"><%= number_to_human_size stream.files.sum(:byte_size) %></td>
+        <td class="text-end"><%= number_to_human_size stream.files.sum { |file| file.blob.byte_size } %></td>
         <td class="text-end">
           <%= link_to 'Make default', make_default_organization_streams_path(@organization, stream: stream.slug), method: :post, class: 'btn btn-sm btn-secondary' if !stream.default? && can?(:update, stream) %>
           <%= link_to 'Delete', [@organization, stream], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger' if can? :destroy, stream %>
