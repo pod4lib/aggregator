@@ -10,7 +10,7 @@ class Stream < ApplicationRecord
   has_many :uploads, dependent: :destroy
   has_many :default_stream_histories, dependent: :destroy
   has_many :marc_records, through: :uploads, inverse_of: :stream
-  has_many :files, source: :files_blobs, through: :uploads
+  has_many :files, source: :files_attachments, through: :uploads
   has_one :statistic, dependent: :delete, as: :resource
   has_many :normalized_dumps, dependent: :destroy
   has_many :interstream_deltas, through: :normalized_dumps, inverse_of: :stream

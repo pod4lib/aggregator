@@ -40,7 +40,6 @@ class Overview
     @organization.default_stream.files
                  .limit(3)
                  .reverse_order
-                 .flat_map(&:attachments)
   end
 
   # active and stuck jobs for the user's organization, grouped by status
