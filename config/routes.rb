@@ -25,7 +25,7 @@ Rails.application.routes.draw do
   get 'dashboard/summary', to: 'dashboard#summary', as: :activity
   get 'charts/uploads', to: 'charts#uploads', as: :uploads_chart
   get 'charts/records', to: 'charts#records', as: :records_chart
-  
+
   get '/data', to: 'pages#data'
 
   # disable default /edit path for organizations in favor of organization_details and provider_details
@@ -59,7 +59,7 @@ Rails.application.routes.draw do
 
     get 'invite/new', to: 'organization_invitations#new'
     post 'invite', to: 'organization_invitations#create'
-    
+
     resources :streams, only: [:index, :destroy, :show, :create, :new] do
       collection do
         post 'make_default'
