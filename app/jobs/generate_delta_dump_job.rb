@@ -38,10 +38,10 @@ class GenerateDeltaDumpJob < ApplicationJob
         records.each do |record|
           if record.status == 'delete'
             writer.write_delete(record)
-            oai_writer.write_delete(record)
+            oai_writer.write_delete(record, now)
           else
             writer.write_marc_record(record)
-            oai_writer.write_marc_record(record)
+            oai_writer.write_marc_record(record, now)
           end
         end
         oai_writer.finalize

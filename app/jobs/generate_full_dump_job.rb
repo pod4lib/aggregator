@@ -39,7 +39,7 @@ class GenerateFullDumpJob < ApplicationJob
           next if record.status == 'delete'
 
           writer.write_marc_record(record)
-          oai_writer.write_marc_record(record)
+          oai_writer.write_marc_record(record, now)
         end
 
         if oai_writer.bytes_written?
