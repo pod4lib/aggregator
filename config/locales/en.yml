@@ -117,7 +117,7 @@ en:
       providers:
         heading: POD providers
         normalized_data:
-          about_description_html: "<i>Deltas</i> and <i>deletes</i> are the changes since the full dump was generated. Normalized full dumps are generated every 3 months. Deltas are generated daily."
+          about_description_html: "<i>Deltas</i> and <i>deletes</i> are the changes since the full dump was generated. Deltas are generated daily."
           about_title_html: About normalized data
         providers_html:
           one: There is currently <b>1</b> data provider.
