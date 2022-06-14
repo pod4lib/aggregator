@@ -8,16 +8,16 @@ class OaiMarcRecordWriterService
     @base_name = base_name
   end
 
-  def write_marc_record(record)
-    oai_writer.write(record.augmented_marc, record.oai_id, record.stream.id, record.upload.created_at)
+  def write_marc_record(record, dump_created_at)
+    oai_writer.write(record.augmented_marc, record.oai_id, record.stream.id, dump_created_at)
   rescue StandardError => e
     error = "Error writing MARC OAI file #{record.oai_id}: #{e}"
     Rails.logger.info(error)
     Honeybadger.notify(error)
   end
 
-  def write_delete(record)
-    oai_writer.write_delete(record.oai_id, record.stream.id, record.upload.created_at)
+  def write_delete(record, dump_created_at)
+    oai_writer.write_delete(record.oai_id, record.stream.id, dump_created_at)
   end
 
   def finalize
