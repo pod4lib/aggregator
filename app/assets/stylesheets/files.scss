@@ -1,0 +1,47 @@
+.file-metadata-box { 
+  border-radius: 0 0 0.33rem 0.33rem;
+  display: grid;
+  align-items: center;
+  grid-template-areas: 
+    "box-header box-header"
+    "filesize records"
+    "stream stream"
+    "upload upload";
+  grid-template-rows: 1fr;  
+  grid-template-columns: 1fr 1fr;
+  grid-row-gap: 8px;
+  grid-column-gap: 5px;
+  justify-items: left;
+  height: 100%;
+  margin: 0;
+
+  .box-metadata {
+    padding-left: 1rem;
+  }
+}  
+
+#file-box-header {
+  background-color: #495057;
+  font-size: 0.85rem;
+  grid-area: box-header;
+}
+
+#file-box-filesize { 
+  grid-area: filesize;      
+}
+
+#file-box-records { 
+  grid-area: records;      
+}
+
+#file-box-stream { 
+  grid-area: stream;      
+}
+
+#file-box-upload { 
+  grid-area: upload;      
+}
+
+.box-metadata {
+  padding-right: 1rem;
+}

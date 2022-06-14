@@ -1,20 +1,19 @@
-<div class="card col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3 col-xxl-4 offset-xxl-4 mb-3 mt-3">
-    <div class="card-body bg-light">
-        <div class="row text-center">
-            <p class="lead mb-1">
-                Created: <%= local_time(@upload.created_at, format: datetime_display_format) %>
-            </p>
-            <span class="border-bottom mt-1 mb-3"></span>
-        </div>
-        <div class="row mt-3">
-            <div class="col">
-                <p>Size: <span class="fw-bold"><%= number_to_human_size @blob.byte_size %></p> 
-            </div>
-            <div class="col">
-                <p>Records: <span class="fw-bold"><%= number_with_delimiter @blob.metadata['count'] || 0 %></span></p>
-            </div>
-        </div>
-        <p>Part of stream: <%= link_to @upload.stream.display_name, organization_stream_path(@upload.organization, @upload.stream) %></p>
-        <p>Part of upload: <%= link_to @upload.name, organization_upload_path(@upload.organization, @upload) %></p>
+<div class="d-flex justify-content-center my-3">
+  <div class="file-metadata-box bg-light border border-bg-secondary text-center pb-3">
+    <div id="file-box-header" class="text-light mb-1 py-1 px-4 text-uppercase fw-bolder">File created:
+      <%= local_time(@upload.created_at, format: datetime_display_format) %>
     </div>
+    <div id="file-box-filesize" class="box-metadata">Size:
+      <span class="fw-bold"><%= number_to_human_size @blob.byte_size %></span>
+    </div>
+    <div id="file-box-records" class="box-metadata">Records:
+      <span class="fw-bold"><%= number_with_delimiter @blob.metadata['count'] || 0 %></span>
+    </div>
+    <div id="file-box-stream" class="box-metadata">Part of stream:
+      <%= link_to @upload.stream.display_name, organization_stream_path(@upload.organization, @upload.stream) %>
+    </div>
+    <div id="file-box-upload" class="box-metadata">Part of upload:
+      <%= link_to @upload.name, organization_upload_path(@upload.organization, @upload) %>
+    </div>
+  </div>
 </div>
