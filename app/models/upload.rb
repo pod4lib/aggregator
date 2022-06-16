@@ -40,6 +40,7 @@ class Upload < ApplicationRecord
     files.find_each(&:purge_later)
   end
 
+  # rubocop:disable Metrics/MethodLength
   def read_marc_record_metadata(**options, &block)
     return to_enum(:read_marc_record_metadata, **options) unless block
 
@@ -58,8 +59,10 @@ class Upload < ApplicationRecord
       end
     rescue StandardError => e
       Honeybadger.notify(e)
+      raise if e.instance_of?(ActiveStorage::FileNotFoundError)
     end
   end
+  # rubocop:enable Metrics/MethodLength
 
   private
 
