@@ -7,7 +7,7 @@ class ExtractMarcRecordMetadataJob < ApplicationJob
 
   # rubocop:disable Metrics/AbcSize
   def perform(upload)
-    return unless upload.active?
+    return unless upload.active? && upload.files.any?
 
     progress.total = 0
 
