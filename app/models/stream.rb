@@ -60,8 +60,8 @@ class Stream < ApplicationRecord
     any = false
     profile = MarcProfile.new(count: 0, histogram_frequency: {}, record_frequency: {}, sampled_values: {})
 
-    files.find_each do |blob|
-      blob_profile = MarcProfile.find_by(blob_id: blob.id)
+    files.find_each do |file|
+      blob_profile = MarcProfile.find_by(blob_id: file.blob.id)
       next unless blob_profile
 
       any = true
