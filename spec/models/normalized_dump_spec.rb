@@ -10,7 +10,7 @@ RSpec.describe NormalizedDump, type: :model do
     upload.files.blobs.first.analyze
     GenerateFullDumpJob.perform_now(organization)
     # Manually set the count metadata
-    organization.default_stream.reload.current_full_dump.marcxml.attachment.metadata = { 'count' => 1 }
+    organization.default_stream.reload.current_full_dump.marc21.attachment.metadata = { 'count' => 1 }
   end
 
   describe '#record_count' do
