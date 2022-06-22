@@ -7,7 +7,6 @@ en:
         active_jobs: Active jobs
         date_created: Date created
         download_title: Download %{filename}
-        dump_records: Dump records (marcxml)
         filename: File
         history: 30 day history
         jobs_attention: Jobs needing attention
@@ -24,6 +23,7 @@ en:
         record_count: Records
         size: Size
         status: Status
+        total_records: Total records
         upload: Upload
         upload_title: View upload %{name}
       title: Recent activity
