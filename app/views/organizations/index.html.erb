@@ -75,6 +75,7 @@
 
     <tbody>
       <% @providers.each do |organization| %>
+        <% next unless can? :read, organization %>
         <tr>
           <td class="align-middle text-center icon-column">
             <% if organization.icon.attached? %>

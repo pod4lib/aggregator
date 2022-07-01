@@ -14,6 +14,7 @@ RSpec.describe 'organizations/index', type: :view do
   end
 
   it 'renders a list of providers' do
+    allow(view).to receive(:can?).and_return(true)
     render
 
     assert_select '#providers tr>td', text: 'Organization 1'

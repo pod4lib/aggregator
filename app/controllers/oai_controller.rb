@@ -58,7 +58,10 @@ class OaiController < ApplicationController
   # rubocop:enable Metrics/AbcSize
   # rubocop:enable Metrics/MethodLength
   def render_list_sets
-    streams = Stream.joins(:default_stream_histories).joins(normalized_dumps: :oai_xml_attachments).distinct
+    streams = Stream.accessible_by(current_ability)
+                    .joins(:default_stream_histories)
+                    .joins(normalized_dumps: :oai_xml_attachments)
+                    .distinct
     render xml: build_list_sets_response(streams)
   end
 
@@ -112,12 +115,15 @@ class OaiController < ApplicationController
     oai_params(:verb)
   end
 
-  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def next_record_page(token)
     streams = if token.set.present?
-                Stream.where(id: token.set)
+                Stream.accessible_by(current_ability).where(id: token.set)
               else
-                Stream.joins(:default_stream_histories).joins(normalized_dumps: :oai_xml_attachments).distinct
+                Stream.accessible_by(current_ability)
+                      .joins(:default_stream_histories)
+                      .joins(normalized_dumps: :oai_xml_attachments)
+                      .distinct
               end
 
     dump_ids = streams.map do |stream|
@@ -135,7 +141,7 @@ class OaiController < ApplicationController
 
     [oai_xml_query.limit(1).offset(page).first, token]
   end
-  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   def next_page_token(page, page_count, token)
     if page == page_count - 1 # last page
