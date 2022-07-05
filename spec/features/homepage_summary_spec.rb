@@ -69,7 +69,6 @@ RSpec.describe 'homepage summary', type: :feature do
     it 'displays info for logging in' do
       expect(page).to have_content 'Already a POD user?'
       expect(page).to have_link 'Login'
-      expect(page).to have_css('a.btn')
     end
 
     it 'displays links to docs' do
