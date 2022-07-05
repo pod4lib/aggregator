@@ -3,11 +3,14 @@
 # :nodoc:
 class AllowlistedJwtsController < ApplicationController
   load_and_authorize_resource :organization
-  load_and_authorize_resource through: :organization
+  load_resource through: :organization, only: [:index]
+  load_and_authorize_resource through: :organization, except: [:index]
 
   # GET /organizations/1/allowlisted_jwts
   # GET /organizations/1/allowlisted_jwts.json
-  def index; end
+  def index
+    authorize! :read, @organization.allowlisted_jwts.build
+  end
 
   # GET /organizations/1/allowlisted_jwts/new
   def new; end
