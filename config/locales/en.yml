@@ -71,6 +71,15 @@ en:
       harvesting:
         body_html: Data providers contribute their data to POD Aggregator by uploading data sets, and data consumers download data for downstream use.
         header: Harvesting aggregated data
+      oai_pmh:
+        body_html: POD Aggregator also uses Open Archives Initiative Protocol for Metadata Harvesting (OAI-PMH) to expose aggregated MARC XML records. See the <a href='https://github.com/pod4lib/aggregator/wiki/Harvesting-using-OAI-PMH'>Harvesting using OAI-PMH wiki page</a> for details.
+        header: OAI-PMH
+        identify: Identify
+        list_metadata_formats: ListMetadataFormats
+        list_records: ListRecords
+        list_sets: ListSets
+        oai_verbs: Supported OAI-PMH verbs
+        update_cadence: "(updated nightly)"
       resource_sync:
         body_html: POD Aggregator uses ResourceSync, an extension of the Sitemaps protocol, to expose aggregated data in three forms. See the <a href='https://github.com/pod4lib/aggregator/wiki/Harvesting-using-ResourceSync'>Harvesting using ResourceSync wiki page</a> for details.
         header: ResourceSync
