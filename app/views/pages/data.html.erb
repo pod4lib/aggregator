@@ -25,4 +25,19 @@
         <li class="list-group-item"><%= link_to t('.resource_sync.normalized_marc21'), normalized_resourcelist_organizations_url(flavor: 'marc21') %> <%= t('.resource_sync.update_cadence') %></li>
       </ul>
   </div>
+
+  <h3><%= t('.oai_pmh.header') %></h3>
+  <p><%= t('.oai_pmh.body_html') %></p>
+
+  <div class="card my-4">
+      <div class="card-header">
+        <h4 class="h6 mb-0"><%= t('.oai_pmh.oai_verbs') %></h4>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><%= link_to t('.oai_pmh.identify'), oai_url(verb: 'Identify') %></li>
+        <li class="list-group-item"><%= link_to t('.oai_pmh.list_metadata_formats'), oai_url(verb: 'ListMetadataFormats') %></li>
+        <li class="list-group-item"><%= link_to t('.oai_pmh.list_sets'), oai_url(verb: 'ListSets') %></li>
+        <li class="list-group-item"><%= link_to t('.oai_pmh.list_records'), oai_url(verb: 'ListRecords', metadataPrefix: 'marc21') %> <%= t('.oai_pmh.update_cadence') %></li>
+      </ul>
+  </div>
 </div>
