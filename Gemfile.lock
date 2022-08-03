@@ -272,7 +272,7 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.7.1)
       mini_mime (>= 0.1.1)
-    marc (1.1.1)
+    marc (1.2.0)
       rexml
       scrub_rb (>= 1.0.1, < 2)
       unf
