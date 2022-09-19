@@ -49,7 +49,7 @@ RSpec.describe GenerateFullDumpJob, type: :job do
     end
   end
 
-  # rubocop:disable Rspec/ExampleLength
+  # rubocop:disable RSpec/ExampleLength
   it 'does not generate empty OAI-XML files for uploads consisting of only deletes' do
     organization.default_stream.uploads << build(:upload, :deletes)
     allow(Settings).to receive(:oai_max_page_size).and_return(1)
@@ -59,7 +59,7 @@ RSpec.describe GenerateFullDumpJob, type: :job do
       expect(file.blob.byte_size.positive?).to be true
     end
   end
-  # rubocop:enable Rspec/ExampleLength
+  # rubocop:enable RSpec/ExampleLength
 
   it 'has a content type of application/gzip for compressed marcxml' do
     described_class.perform_now(organization)
