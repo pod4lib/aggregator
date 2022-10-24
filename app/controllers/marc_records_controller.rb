@@ -6,8 +6,6 @@ class MarcRecordsController < ApplicationController
   load_and_authorize_resource through: :organization
   protect_from_forgery with: :null_session, if: :jwt_token
 
-  def show; end
-
   def index
     @marc_records = @marc_records.where(marc001: index_params[:marc001]) if index_params[:marc001]
     if index_params[:stream]
@@ -16,6 +14,8 @@ class MarcRecordsController < ApplicationController
     end
     @marc_records = @marc_records.page(index_params[:page])
   end
+
+  def show; end
 
   def marc21
     response.headers['Content-Disposition'] = "filename=#{@organization.slug}-#{@marc_record.marc001}.mrc"

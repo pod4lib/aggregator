@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'OAI-PMH', type: :feature do
+RSpec.describe 'OAI-PMH' do
   let(:organization) { create(:organization, name: 'My Org', slug: 'my-org') }
   let(:user) { create(:user) }
 

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Stream, type: :model do
+RSpec.describe Stream do
   subject(:stream) { create(:stream, organization: organization) }
 
   let(:organization) { create(:organization) }

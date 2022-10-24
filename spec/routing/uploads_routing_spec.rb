@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe UploadsController, type: :routing do
+RSpec.describe 'routes for UploadsController' do
   describe 'routing' do
     it 'routes to #index' do
       expect(get: '/organizations/1/uploads').to route_to('uploads#index', organization_id: '1')

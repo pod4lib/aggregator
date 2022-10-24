@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe StreamsController, type: :routing do
+RSpec.describe 'routes for StreamsController' do
   describe 'routing' do
     it 'routes to #normalized_data' do
       expect(get: '/organizations/1/streams/2/normalized_data').to route_to('streams#normalized_data', id: '2',

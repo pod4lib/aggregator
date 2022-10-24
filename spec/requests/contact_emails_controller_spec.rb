@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe '/contact_emails', type: :request do
+RSpec.describe '/contact_emails' do
   let(:organization) { create(:organization) }
 
   describe 'GET /confirm/12345' do

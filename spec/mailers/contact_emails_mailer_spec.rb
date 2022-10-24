@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ContactEmailsMailer, type: :mailer do
+RSpec.describe ContactEmailsMailer do
   let(:contact_email) { build(:contact_email) }
 
   describe 'confirm_email' do

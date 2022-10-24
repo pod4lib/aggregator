@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'allowlisted_jwts/index', type: :view do
+RSpec.describe 'allowlisted_jwts/index' do
   let(:organization) { build(:organization) }
   let(:stream) { create(:stream_with_uploads, organization: organization, default: true) }
 

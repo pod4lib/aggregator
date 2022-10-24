@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'uploads/show', type: :view do
+RSpec.describe 'uploads/show' do
   let(:organization) { create(:organization) }
 
   before do

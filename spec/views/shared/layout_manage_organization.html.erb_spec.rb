@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'shared/_layout_manage_organization', type: :view do
+RSpec.describe 'shared/_layout_manage_organization' do
   let(:is_provider) { true }
   let(:organization) do
     create(:organization, name: 'Best University', provider: is_provider)

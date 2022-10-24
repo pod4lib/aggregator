@@ -2,6 +2,6 @@
 
 require 'rails_helper'
 
-RSpec.describe InterstreamDelta, type: :model do
+RSpec.describe InterstreamDelta do
   pending "add some examples to (or delete) #{__FILE__}"
 end

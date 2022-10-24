@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe UpdateOrganizationStatisticsJob, type: :job do
+RSpec.describe UpdateOrganizationStatisticsJob do
   let(:organization) { create(:organization) }
   let(:first_upload) { build(:upload, :binary_marc) }
   let(:second_upload) { build(:upload, :binary_marc) }

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe RegistrationsController, type: :routing do
+RSpec.describe 'routes for RegistrationsController' do
   describe 'routing' do
     it 'uses local registrations_controller to send profile updates' do
       expect(put: '/users').to route_to('registrations#update')

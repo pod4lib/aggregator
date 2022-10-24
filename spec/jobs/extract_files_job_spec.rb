@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ExtractFilesJob, type: :job do
+RSpec.describe ExtractFilesJob do
   let!(:upload) { create(:upload, :tar_gz) }
 
   it 'creates additional uploads for each extracted file' do

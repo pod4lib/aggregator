@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'homepage summary', type: :feature do
+RSpec.describe 'homepage summary' do
   let(:provider) { create(:organization, name: 'Provider', provider: true) }
   let(:upload1) { create(:upload, :marc_xml, organization: provider, stream: provider.default_stream) }
   let(:upload2) { create(:upload, :marc21_multi_record, organization: provider, stream: provider.default_stream) }

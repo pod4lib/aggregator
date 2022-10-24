@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'site_users/index', type: :view do
+RSpec.describe 'site_users/index' do
   let(:user) { create(:user) }
   let(:admin) { create(:admin) }
 

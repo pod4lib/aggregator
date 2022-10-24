@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe DashboardController, type: :routing do
+RSpec.describe 'routes for DashboardController' do
   describe 'routing' do
     it 'routes to #summary' do
       expect(get: '/dashboard/summary').to route_to(

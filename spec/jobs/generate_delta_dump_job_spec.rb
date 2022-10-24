@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe GenerateDeltaDumpJob, type: :job do
+RSpec.describe GenerateDeltaDumpJob do
   let(:organization) { create(:organization) }
 
   before do

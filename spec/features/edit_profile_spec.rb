@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'editing your user profile', type: :feature do
+RSpec.describe 'editing your user profile' do
   context 'with a user' do
     let(:user) { create(:user, email: 'test@stanford.edu') }
 

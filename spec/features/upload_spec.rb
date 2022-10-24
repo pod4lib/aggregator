@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'uploading files to POD', type: :feature do
+RSpec.describe 'uploading files to POD' do
   context 'with an organization user' do
     let(:organization) { create(:organization, name: 'Best University') }
     let(:stream) { create(:stream, organization: organization) }

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'shared/_organization_header', type: :view do
+RSpec.describe 'shared/_organization_header' do
   let(:organization) do
     create(:organization,
            name: 'Best University',

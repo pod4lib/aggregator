@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe OrganizationInvitationsController, type: :routing do
+RSpec.describe 'routes for OrganizationInvitationsController' do
   describe 'routing' do
     it 'routes to #new' do
       expect(get: '/organizations/1/invite/new').to route_to('organization_invitations#new', organization_id: '1')

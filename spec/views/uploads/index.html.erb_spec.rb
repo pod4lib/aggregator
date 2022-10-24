@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'uploads/index', type: :view do
+RSpec.describe 'uploads/index' do
   let(:organization) { create(:organization) }
   let(:stream) { create(:stream, organization: organization) }
 

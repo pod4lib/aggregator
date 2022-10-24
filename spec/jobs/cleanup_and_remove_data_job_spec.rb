@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe CleanupAndRemoveDataJob, type: :job do
+RSpec.describe CleanupAndRemoveDataJob do
   let(:organization) { create(:organization) }
 
   describe 'archives older streams for an organization after a quarter of not being updated' do

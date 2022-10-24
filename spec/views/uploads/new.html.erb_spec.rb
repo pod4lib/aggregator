@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'uploads/new', type: :view do
+RSpec.describe 'uploads/new' do
   let(:organization) { create(:organization) }
   let(:stream) { organization.default_stream }
 

@@ -8,16 +8,6 @@ class OrganizationUsersController < ApplicationController
 
   def index; end
 
-  def destroy
-    authorize! :manage, @organization
-    @user.destroy
-
-    respond_to do |format|
-      format.html { redirect_to organization_users_url(@organization), notice: 'User was successfully removed.' }
-      format.json { head :no_content }
-    end
-  end
-
   # rubocop:disable Metrics/AbcSize
   def update
     authorize! :manage, @organization
@@ -30,6 +20,16 @@ class OrganizationUsersController < ApplicationController
     end
   end
   # rubocop:enable Metrics/AbcSize
+
+  def destroy
+    authorize! :manage, @organization
+    @user.destroy
+
+    respond_to do |format|
+      format.html { redirect_to organization_users_url(@organization), notice: 'User was successfully removed.' }
+      format.json { head :no_content }
+    end
+  end
 
   def load_user
     @user = User.find(params[:id]) || User.new

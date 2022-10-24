@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ReanalyzeJob, type: :job do
+RSpec.describe ReanalyzeJob do
   let(:organization) { create(:organization) }
 
   context 'with a stream' do

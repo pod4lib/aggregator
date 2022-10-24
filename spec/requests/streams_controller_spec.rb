@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe '/organization/:id/stream', type: :request do
+RSpec.describe '/organization/:id/stream' do
   let(:user) { create(:user) }
   let(:organization) { create(:organization) }
   let(:stream) { create(:stream, organization: organization) }

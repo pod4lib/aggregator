@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ContactEmailsController, type: :routing do
+RSpec.describe 'routes for ContactEmailsController' do
   describe 'routing' do
     it 'routes to #confirm' do
       expect(get: '/contact_emails/confirm/abcdef').to route_to(

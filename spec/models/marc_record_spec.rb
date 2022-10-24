@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe MarcRecord, type: :model do
+RSpec.describe MarcRecord do
   subject(:marc_record) { described_class.new(marc: record, upload: upload, **attr) }
 
   let(:attr) { {} }

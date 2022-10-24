@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe SiteUsersController, type: :routing do
+RSpec.describe 'routes for SiteUsersController' do
   describe 'routing' do
     it 'routes to #index' do
       expect(get: '/site_users').to route_to(

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe DashboardHelper, type: :helper do
+RSpec.describe DashboardHelper do
   let(:organization) { create(:organization) }
   let(:uploads) do
     [

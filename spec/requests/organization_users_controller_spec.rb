@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe '/organizations/1/organization_users', type: :request do
+RSpec.describe '/organizations/1/organization_users' do
   let(:organization) { create(:organization) }
   let(:user) { create(:user) }
 
