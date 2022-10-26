@@ -11,7 +11,7 @@ class RemoteUploadFixture < SimpleDelegator
   end
 end
 
-RSpec.describe AttachRemoteFileToUploadJob, type: :job do
+RSpec.describe AttachRemoteFileToUploadJob do
   include ActiveJob::TestHelper
 
   before do

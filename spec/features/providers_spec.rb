@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Viewing provider information', type: :feature do
+RSpec.describe 'Viewing provider information' do
   let(:organization) { create(:organization, name: 'Best org', code: 'best-org') }
   let(:user) { create(:user) }
 

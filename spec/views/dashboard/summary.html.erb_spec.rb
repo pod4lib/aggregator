@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'dashboard/summary', type: :view do
+RSpec.describe 'dashboard/summary' do
   let(:dashboard) { Dashboard.new }
   let(:provider1) { create(:organization, name: 'provider1') }
   let(:uploads1) do

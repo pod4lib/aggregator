@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ExtractMarcRecordMetadataJob, type: :job do
+RSpec.describe ExtractMarcRecordMetadataJob do
   include ActiveJob::TestHelper
 
   let(:upload) { create(:upload, :binary_marc) }

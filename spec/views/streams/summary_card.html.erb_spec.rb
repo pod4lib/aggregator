@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'streams/summary_card', type: :view do
+RSpec.describe 'streams/summary_card' do
   let(:organization) { create(:organization, name: 'Best University') }
   let(:stream) { create(:stream_with_uploads, organization: organization) }
   let(:user) { create(:user) }

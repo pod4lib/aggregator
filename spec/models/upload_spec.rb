@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Upload, type: :model do
+RSpec.describe Upload do
   subject(:upload) { create(:upload, :binary_marc) }
 
   describe 'validations' do

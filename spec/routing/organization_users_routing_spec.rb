@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe OrganizationUsersController, type: :routing do
+RSpec.describe 'routes for OrganizationUsersController' do
   describe 'routing' do
     it 'routes to #index' do
       expect(get: '/organizations/1/users').to route_to(

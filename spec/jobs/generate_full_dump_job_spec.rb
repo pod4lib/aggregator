@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe GenerateFullDumpJob, type: :job do
+RSpec.describe GenerateFullDumpJob do
   let(:organization) { create(:organization) }
 
   before do

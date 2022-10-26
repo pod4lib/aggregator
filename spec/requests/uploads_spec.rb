@@ -14,7 +14,7 @@ require 'rails_helper'
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe '/uploads', type: :request do
+RSpec.describe '/uploads' do
   # Upload. As you add validations to Upload, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) do

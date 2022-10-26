@@ -14,7 +14,7 @@ require 'rails_helper'
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe '/data', type: :request do
+RSpec.describe '/data' do
   describe 'GET /data' do
     it 'does not render a successful response when not logged in' do
       get data_url

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe '/organizations/1/invite', type: :request do
+RSpec.describe '/organizations/1/invite' do
   let(:organization) { create(:organization) }
 
   before do

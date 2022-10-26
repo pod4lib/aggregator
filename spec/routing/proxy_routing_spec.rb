@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ProxyController, type: :routing do
+RSpec.describe 'routes for ProxyController' do
   describe 'routing' do
     it 'proxies files to #show' do
       expect(get: '/file/1/test.txt').to route_to(

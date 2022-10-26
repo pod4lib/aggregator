@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe '/.well-known/resourcesync', type: :request do
+RSpec.describe '/.well-known/resourcesync' do
   before do
     sign_in create(:user)
   end

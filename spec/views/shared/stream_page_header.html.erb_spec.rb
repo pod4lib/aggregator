@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'shared/_stream_page_header', type: :view do
+RSpec.describe 'shared/_stream_page_header' do
   let(:organization) { create(:organization, name: 'Best University') }
   let(:stream) { create(:stream, organization: organization) }
 

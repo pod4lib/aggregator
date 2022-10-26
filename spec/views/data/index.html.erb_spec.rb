@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'pages/data', type: :view do
+RSpec.describe 'pages/data' do
   it 'renders' do
     render
     assert_select 'h2', 'Guidelines for data consumers'

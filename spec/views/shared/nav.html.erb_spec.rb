@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'shared/_nav', type: :view do
+RSpec.describe 'shared/_nav' do
   before do
     allow(view).to receive(:current_user).and_return(current_user)
   end

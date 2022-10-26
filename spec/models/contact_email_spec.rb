@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ContactEmail, type: :model do
+RSpec.describe ContactEmail do
   subject(:contact_email) { build(:contact_email, organization: organization) }
 
   let(:organization) { build(:organization) }

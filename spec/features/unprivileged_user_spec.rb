@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Downloading normalzed files from POD', type: :feature do
+RSpec.describe 'Downloading normalzed files from POD' do
   let(:organization) { create(:organization, name: 'Best org', code: 'best-org') }
   let(:user) { create(:user) }
 

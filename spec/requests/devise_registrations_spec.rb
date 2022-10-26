@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe '/users', type: :request do
+RSpec.describe '/users' do
   let(:user) { create(:user) }
 
   before do

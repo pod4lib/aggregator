@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'organization_users/index', type: :view do
+RSpec.describe 'organization_users/index' do
   let(:organization) { create(:organization) }
   let(:member) { create(:user) }
   let(:owner) { create(:user) }

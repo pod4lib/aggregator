@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'organizations/new', type: :view do
+RSpec.describe 'organizations/new' do
   before do
     assign(:organization, Organization.new(
                             name: 'MyString',

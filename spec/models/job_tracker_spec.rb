@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe JobTracker, type: :model do
+RSpec.describe JobTracker do
   subject(:job_tracker) do
     described_class.new(attributes.merge(job_class: 'whatever',
                                          job_id: job_id,

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe GenerateInterstreamDeltaJob, type: :job do
+RSpec.describe GenerateInterstreamDeltaJob do
   let(:organization) { create(:organization) }
 
   before do

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Using the dropdown menu in the navbar', type: :feature do
+RSpec.describe 'Using the dropdown menu in the navbar' do
   let(:organization) { create(:organization, name: 'Best University') }
   let(:user) { create(:user) }
 

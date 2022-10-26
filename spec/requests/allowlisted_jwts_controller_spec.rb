@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe '/organizations/1/allowlisted_jwts', type: :request do
+RSpec.describe '/organizations/1/allowlisted_jwts' do
   let(:organization) { create(:organization) }
 
   before do

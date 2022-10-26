@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe AllowlistedJwtsController, type: :routing do
+RSpec.describe 'routes for AllowlistedJwtsController' do
   describe 'routing' do
     it 'routes to #index' do
       expect(get: '/organizations/1/allowlisted_jwts').to route_to('allowlisted_jwts#index', organization_id: '1')

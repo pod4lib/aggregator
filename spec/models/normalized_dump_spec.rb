@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe NormalizedDump, type: :model do
+RSpec.describe NormalizedDump do
   let(:organization) { create(:organization) }
   let(:upload) { create(:upload, :binary_marc, stream: organization.default_stream) }
 

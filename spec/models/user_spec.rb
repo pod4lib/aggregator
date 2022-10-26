@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe User, type: :model do
+RSpec.describe User do
   let(:user) { create(:user) }
   let(:org1) { create(:organization) }
   let(:org2) { create(:organization) }

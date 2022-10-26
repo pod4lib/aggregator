@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'organizations/provider_details', type: :view do
+RSpec.describe 'organizations/provider_details' do
   let(:organization) { create(:organization, name: 'Best University') }
   let(:admin) { create(:admin) }
 

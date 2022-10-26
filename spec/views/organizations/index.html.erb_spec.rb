@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'organizations/index', type: :view do
+RSpec.describe 'organizations/index' do
   let(:org1) { create(:organization, name: 'Organization 1') }
   let(:org2) { create(:organization, name: 'Organization 2') }
   let(:org3) { create(:organization, name: 'Organization 3', provider: false) }

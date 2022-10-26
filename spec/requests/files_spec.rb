@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe '/files', type: :request do
+RSpec.describe '/files' do
   before do
     sign_in create(:admin)
   end
