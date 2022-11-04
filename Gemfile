@@ -94,7 +94,7 @@ gem 'kaminari'
 gem 'okcomputer'
 gem 'paper_trail'
 gem 'rolify'
-gem 'sidekiq'
+gem 'sidekiq', '< 7' # Remain on v6 until Redis is updated to v7 on VMs
 gem 'inline_svg'
 gem 'marc'
 gem 'rexml' # see https://github.com/ruby-marc/ruby-marc/issues/67...
