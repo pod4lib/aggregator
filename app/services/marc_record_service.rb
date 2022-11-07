@@ -217,7 +217,7 @@ class MarcRecordService
 
     each_raw_record_with_metadata_for_marc21
       .slice_when { |i, j| !same_record?(i[:marc], j[:marc]) }
-      .each_with_index do |records_to_combine, index|
+      .with_index do |records_to_combine, index|
       if records_to_combine.length == 1
         yield(records_to_combine.first[:marc], records_to_combine.first.except(:marc))
       else
