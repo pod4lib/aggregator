@@ -47,7 +47,7 @@ services:
 
   aggcache:
     container_name: aggcache
-    image: redis:6.2
+    image: redis:7.0
     ports:
       - "6379:6379"
     volumes:

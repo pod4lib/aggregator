@@ -69,7 +69,7 @@ class JobTracker < ApplicationRecord
     # NOTE: This does not scale and we might need to find an alternate approach:
     #       https://github.com/mperham/sidekiq/blob/main/lib/sidekiq/api.rb#L279-L286
     set_instance.find_job(provider_job_id).present?
-  rescue Redis::CannotConnectError => e
+  rescue RedisClient::CannotConnectError => e
     Rails.logger.info(e)
     Honeybadger.notify(e)
     false
