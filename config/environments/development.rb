@@ -34,7 +34,7 @@ Rails.application.configure do
   end
 
   # Use production-like ActiveJob backend (sidekiq) if Redis is available
-  config.active_job.queue_adapter = :sidekiq if ENV.include? 'REDIS_URL'
+  config.active_job.queue_adapter = :sidekiq if ENV.include? 'SIDEKIQ_REDIS_URL'
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
