@@ -1,7 +1,7 @@
 development:
-  <% if ENV.include? "SIDEKIQ_REDIS_URL" %>
+  <% if ENV.include? "ACTION_CABLE_REDIS_URL" %>
   adapter: redis
-  url: <%= ENV.fetch("SIDEKIQ_REDIS_URL") { "redis://localhost:6379/1" } %>
+  url: <%= ENV.fetch("ACTION_CABLE_REDIS_URL") { "redis://localhost:6379/3" } %>
   channel_prefix: aggregator_production
   <% else %>
   adapter: async
@@ -12,5 +12,5 @@ test:
 
 production:
   adapter: redis
-  url: <%= ENV.fetch("SIDEKIQ_REDIS_URL") { "redis://localhost:6379/1" } %>
+  url: <%= ENV.fetch("ACTION_CABLE_REDIS_URL") { "redis://localhost:6379/3" } %>
   channel_prefix: aggregator_production

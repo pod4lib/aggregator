@@ -62,7 +62,7 @@ One solution to this is to temporarily switch to using PostgreSQL and Sidekiq wi
 ```yaml
 development:
   adapter: redis
-  url: <%= ENV.fetch("SIDEKIQ_REDIS_URL") { "redis://localhost:6379/1" } %>
+  url: <%= ENV.fetch("ACTION_CABLE_REDIS_URL") { "redis://localhost:6379/3" } %>
   channel_prefix: aggregator_development
 ```
 
