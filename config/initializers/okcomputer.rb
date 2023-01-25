@@ -2,7 +2,7 @@
 
 OkComputer.mount_at = 'status'
 
-OkComputer::Registry.register 'redis', OkComputer::RedisCheck.new(url: ENV.fetch('SIDEKIQ_REDIS_URL') { 'redis://localhost:6379/1' })
+OkComputer::Registry.register 'redis', OkComputer::RedisCheck.new(url: ENV.fetch('SIDEKIQ_REDIS_URL') { 'redis://localhost:6379/0' })
 
 # check activestorage by uploading + downloading a file
 class ActiveStorageCheck < OkComputer::Check
