@@ -56,26 +56,11 @@ bundle exec rake
 ### Emulating production
 While using a standard development setup locally, developers may experience some issues with read/write concurrency in Sqlite and job processing using the ActiveJob AsyncAdapter.
 
-One solution to this is to temporarily switch to using PostgreSQL and Sidekiq with Redis locally for a more "production like" development environment. Steps:
+One solution to this is to temporarily switch to using PostgreSQL and Sidekiq with Redis locally for a more "production like" development environment. To do this:
 
-1. In `config/cable.yml`, change the entry for development to use Redis:
-```yaml
-development:
-  adapter: redis
-  url: <%= ENV.fetch("ACTION_CABLE_REDIS_URL") { "redis://localhost:6379/3" } %>
-  channel_prefix: aggregator_development
-```
-
-2.  Add the following to `development.rb`:
-   ```ruby
-  # Use a real queuing backend for Active Job (and separate queues per environment).
-  config.active_job.queue_adapter     = :sidekiq
-  ```
-
-3. Set environment variables prior to invoking the server. For now, you will need to re-export these variables in every new terminal window you open.
+Set environment variables prior to invoking the server. For now, you will need to re-export these variables in every new terminal window you open.
 ```sh
-export REDIS_HOST=localhost
-export REDIS_PORT=6379
+export SIDEKIQ_REDIS_URL=redis://localhost:6379/0
 export DATABASE_URL=postgresql://user:password@localhost:5432/dbname
 bundle exec rails server  # or other commands
 ```
