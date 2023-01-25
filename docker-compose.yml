@@ -7,9 +7,7 @@ services:
       dockerfile: Dockerfile
     environment:
       RAILS_ENV: development
-      SIDEKIQ_REDIS_URL: redis://aggcache:6379
-      REDIS_HOST: aggcache
-      REDIS_PORT: 6379
+      SIDEKIQ_REDIS_URL: redis://aggcache:6379/0
       DATABASE_URL: postgres://pod4lib:pod4lib@aggdb:5432/aggregator
     ports:
       - "3000:3000"
@@ -26,7 +24,7 @@ services:
       dockerfile: Dockerfile
     command: bundle exec sidekiq
     environment:
-      SIDEKIQ_REDIS_URL: redis://aggcache:6379
+      SIDEKIQ_REDIS_URL: redis://aggcache:6379/0
       DATABASE_URL: postgres://pod4lib:pod4lib@aggdb:5432/aggregator
       RAILS_MAX_THREADS: 5
     volumes:
