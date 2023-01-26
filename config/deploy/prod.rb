@@ -1,4 +1,4 @@
-server 'pod.stanford.edu', user: 'pod', roles: %w(web db app background) # remove background here when we switch to the pod-redis-prod-a
+server 'pod.stanford.edu', user: 'pod', roles: %w(web db app)
 server 'pod-worker-prod-a.stanford.edu', user: 'pod', roles: %w(background)
 server 'pod-worker-prod-b.stanford.edu', user: 'pod', roles: %w(background)
 
