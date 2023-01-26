@@ -3,9 +3,9 @@
 
   <%= hidden_field_tag(:stream, (upload.stream || current_stream).friendly_id) unless (upload.stream || current_stream).default? %>
 
-  <div class="custom-file mt-4">
-    <label class="custom-file-label" for="customFile">Upload file</label>
-    <%= form.file_field_without_bootstrap :files, type: :file, multiple: true, direct_upload: true, id: 'customFile', class: 'custom-file-input mt-2' %>
+  <div class="mt-4">
+    <label class="form-label" for="customFile">Upload file</label>
+    <%= form.file_field_without_bootstrap :files, type: :file, multiple: true, direct_upload: true, id: 'customFile', class: 'form-control' %>
   </div>
 
   <div class="direct-upload-area row mt-1"></div>
