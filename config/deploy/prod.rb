@@ -1,4 +1,4 @@
-server 'pod.stanford.edu', user: 'pod', roles: %w(web db app)
+server 'pod-prod.stanford.edu', user: 'pod', roles: %w(web db app)
 server 'pod-worker-prod-a.stanford.edu', user: 'pod', roles: %w(background)
 server 'pod-worker-prod-b.stanford.edu', user: 'pod', roles: %w(background)
 
