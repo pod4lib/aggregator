@@ -1,3 +1,5 @@
+import * as bootstrap from 'bootstrap';
+
 // Enable bootstrap tooltips, with localized time content if applicable
 document.addEventListener('turbolinks:load', function() {
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))

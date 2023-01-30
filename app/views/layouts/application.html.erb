@@ -10,9 +10,9 @@
   <%= csp_meta_tag %>
 
   <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-  <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload', nonce: true %>
   <%= favicon_link_tag 'favicon.svg' %>
   <%= content_for(:head) %>
+  <%= javascript_importmap_tags %>
 </head>
 
 <body class="min-vh-100 d-flex flex-column">
