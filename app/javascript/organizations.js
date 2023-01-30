@@ -113,7 +113,7 @@ Downcoder.Initialize = function () {
   Downcoder.regex = new RegExp('[' + Downcoder.chars + ']|[^' + Downcoder.chars + ']+', 'g');
 }
 
-downcode = function (slug) {
+function downcode(slug) {
   Downcoder.Initialize();
   var downcoded = ""
   var pieces = slug.match(Downcoder.regex);
