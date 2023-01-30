@@ -15,6 +15,7 @@
     "jquery": "^3.5.1",
     "local-time": "^2.1.0",
     "popper.js": "^1.16.1",
+    "sass": "^1.57.1",
     "turbolinks": "^5.2.0"
   },
   "version": "0.1.0",
@@ -31,5 +32,8 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.14.2",
     "webpack-dev-server": "^3.11.0"
+  },
+  "scripts": {
+    "build:css": "sass ./app/assets/stylesheets/application.sass.scss:./app/assets/builds/application.css --no-source-map --load-path=node_modules"
   }
 }

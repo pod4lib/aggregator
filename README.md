@@ -62,7 +62,7 @@ Set environment variables prior to invoking the server. For now, you will need t
 ```sh
 export SIDEKIQ_REDIS_URL=redis://localhost:6379/0
 export DATABASE_URL=postgresql://user:password@localhost:5432/dbname
-bundle exec rails server  # or other commands
+bin/dev  # or other commands
 ```
 
 ## Deployment
@@ -110,7 +110,7 @@ Step 3: Restart containers
 docker compose up -d
 ```
 
-#### Option 2: System prunne
+#### Option 2: System prune
 
 To completely remove all docker containers and images from the system, run the system prune command.
 

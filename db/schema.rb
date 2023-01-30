@@ -34,7 +34,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_09_120300) do
   end
 
   create_table "active_storage_variant_records", force: :cascade do |t|
-    t.bigint "blob_id", null: false
+    t.integer "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
@@ -111,7 +111,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_09_120300) do
   end
 
   create_table "default_stream_histories", force: :cascade do |t|
-    t.bigint "stream_id", null: false
+    t.integer "stream_id", null: false
     t.datetime "start_time", precision: nil, null: false
     t.datetime "end_time", precision: nil
     t.index ["stream_id"], name: "index_default_stream_histories_on_stream_id"
@@ -122,14 +122,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_09_120300) do
     t.integer "sluggable_id", null: false
     t.string "sluggable_type", limit: 50
     t.string "scope"
-    t.datetime "created_at", precision: nil
+    t.datetime "created_at"
     t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true
     t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type"
     t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
   end
 
   create_table "interstream_deltas", force: :cascade do |t|
-    t.bigint "normalized_dump_id", null: false
+    t.integer "normalized_dump_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["normalized_dump_id"], name: "index_interstream_deltas_on_normalized_dump_id"
@@ -168,9 +168,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_09_120300) do
     t.integer "file_id", null: false
     t.integer "upload_id", null: false
     t.string "marc001"
-    t.integer "bytecount"
-    t.integer "length"
-    t.integer "index"
+    t.bigint "bytecount"
+    t.bigint "length"
+    t.bigint "index"
     t.string "checksum"
     t.string "status"
     t.binary "json"
@@ -293,7 +293,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_09_120300) do
   end
 
   create_table "versions", force: :cascade do |t|
-    t.string "item_type", null: false
+    t.string "item_type"
+    t.string "{:null=>false}"
     t.integer "item_id", limit: 8, null: false
     t.string "event", null: false
     t.string "whodunnit"

@@ -14,9 +14,6 @@ gem 'pg'
 # Use Puma as the app server
 gem 'puma', '~> 5.0'
 
-# Use SCSS for stylesheets
-gem 'sass-rails', '>= 6'
-
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem 'webpacker', '~> 5.0'
 
@@ -80,7 +77,6 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-gem 'bootstrap'
 gem 'bootstrap_form'
 gem 'cancancan'
 gem 'config'
@@ -119,3 +115,5 @@ end
 gem 'concurrent-ruby'
 
 gem "local_time", "~> 2.1"
+
+gem "cssbundling-rails", "~> 1.1"
