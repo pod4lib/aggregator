@@ -1,9 +1,3 @@
-const bsCustomFileInput = require('bs-custom-file-input');
-
-document.addEventListener("turbolinks:load", function() {
-  bsCustomFileInput.init()
-})
-
 addEventListener("direct-upload:initialize", event => {
   const { target, detail } = event
   const { id, file } = detail
