@@ -351,7 +351,10 @@ GEM
     rainbow (2.2.2)
       rake
     rake (13.0.6)
-    redis (4.8.0)
+    redis (5.0.6)
+      redis-client (>= 0.9.0)
+    redis-client (0.12.1)
+      connection_pool
     regexp_parser (2.6.2)
     reline (0.3.2)
       io-console (~> 0.5)
@@ -416,10 +419,11 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
-    sidekiq (6.5.8)
-      connection_pool (>= 2.2.5, < 3)
-      rack (~> 2.0)
-      redis (>= 4.5.0, < 5)
+    sidekiq (7.0.3)
+      concurrent-ruby (< 2)
+      connection_pool (>= 2.3.0)
+      rack (>= 2.2.4)
+      redis-client (>= 0.11.0)
     simplecov (0.22.0)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -523,7 +527,7 @@ DEPENDENCIES
   rack-attack
   rails (~> 7.0.0)
   rails-controller-testing
-  redis (~> 4.0)
+  redis (~> 5.0)
   rexml
   rolify
   rspec-rails
@@ -533,7 +537,7 @@ DEPENDENCIES
   rubocop-rspec
   scss-lint
   selenium-webdriver
-  sidekiq (< 7)
+  sidekiq (~> 7.0)
   simplecov
   sprockets-rails
   sqlite3 (~> 1.4)
