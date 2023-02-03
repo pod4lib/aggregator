@@ -10,8 +10,6 @@ LocalTime.start()
 
 // require('../channels');
 import 'direct_uploads';
-import "chartkick"
-import "Chart.bundle"
 import 'pod_console';
 import 'copy_to_clipboard';
 import 'organizations';
