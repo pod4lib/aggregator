@@ -12,7 +12,7 @@ class UpdateOrganizationStatisticsJob < ApplicationJob
   def perform(organization, stream = nil, upload = nil)
     stream ||= organization.default_stream
 
-    # short-circuit if our statstics job is already obsolete
+    # short-circuit if our statistics job is already obsolete
     return if upload && stream.uploads.where('created_at > ?', upload.created_at).any?
 
     # short-circuit if the stream's statistics have already been updated today
