@@ -8,14 +8,19 @@ class UpdateOrganizationStatisticsJob < ApplicationJob
     Organization.find_each { |o| perform_later(o) }
   end
 
+  # rubocop:disable Metrics/CyclomaticComplexity
   def perform(organization, stream = nil, upload = nil)
     stream ||= organization.default_stream
 
-    # short-circuit if our statstics job is already obsolete
+    # short-circuit if our statistics job is already obsolete
     return if upload && stream.uploads.where('created_at > ?', upload.created_at).any?
+
+    # short-circuit if the stream's statistics have already been updated today
+    return if stream&.statistic&.updated_at&.today?
 
     generate_statistics!(organization, stream)
   end
+  # rubocop:enable Metrics/CyclomaticComplexity
 
   def generate_statistics!(organization, stream)
     stream_statistics = stream.statistic || stream.create_statistic
