@@ -29,13 +29,6 @@ RSpec.describe 'organizations/index' do
     assert_select '#consumers tr>td', text: 'Organization 4'
   end
 
-  it 'renders 2 charts' do
-    render
-
-    assert_select '#chart-1'
-    assert_select '#chart-2'
-  end
-
   it 'renders Delete button if privileged' do
     allow(view).to receive(:can?).and_return(true)
     render
