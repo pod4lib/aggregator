@@ -28,8 +28,6 @@ class ExtractMarcRecordMetadataJob < ApplicationJob
 
       upload.update(status: 'processed', marc_records_count: total)
     end
-
-    UpdateOrganizationStatisticsJob.perform_later(upload.organization, upload.stream, upload)
   end
   # rubocop:enable Metrics/AbcSize
 

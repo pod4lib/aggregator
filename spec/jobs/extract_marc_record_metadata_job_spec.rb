@@ -15,12 +15,6 @@ RSpec.describe ExtractMarcRecordMetadataJob do
     expect(MarcRecord.last).to have_attributes marc001: 'a1297245', bytecount: 0, length: 1407, index: 0
   end
 
-  it 'enqueues the stats job' do
-    expect do
-      described_class.perform_now(upload)
-    end.to enqueue_job(UpdateOrganizationStatisticsJob)
-  end
-
   it 'tracks job statistics' do
     expect do
       described_class.perform_later(upload)
