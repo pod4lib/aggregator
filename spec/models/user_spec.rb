@@ -14,7 +14,7 @@ RSpec.describe User do
       end
 
       it 'returns owned orgs' do
-        expect(user.organizations).to match_array([org1])
+        expect(user.organizations).to contain_exactly(org1)
       end
     end
 
@@ -24,7 +24,7 @@ RSpec.describe User do
       end
 
       it 'returns member orgs' do
-        expect(user.organizations).to match_array([org2])
+        expect(user.organizations).to contain_exactly(org2)
       end
     end
   end
