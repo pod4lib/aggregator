@@ -15,7 +15,7 @@ RSpec.describe ExtractMarcRecordMetadataJob do
     expect(MarcRecord.last).to have_attributes marc001: 'a1297245', bytecount: 0, length: 1407, index: 0
   end
 
-  it 'enqueues the stats job' do
+  it 'enqueues the stats job', skip: 'until we resolve: https://github.com/pod4lib/aggregator/issues/975' do
     expect do
       described_class.perform_now(upload)
     end.to enqueue_job(UpdateOrganizationStatisticsJob)

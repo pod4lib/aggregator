@@ -29,7 +29,9 @@ class ExtractMarcRecordMetadataJob < ApplicationJob
       upload.update(status: 'processed', marc_records_count: total)
     end
 
-    UpdateOrganizationStatisticsJob.perform_later(upload.organization, upload.stream, upload)
+    # For now, do no start an UpdateOrganizationStatisticsJob,
+    # until we resolve: https://github.com/pod4lib/aggregator/issues/975
+    # UpdateOrganizationStatisticsJob.perform_later(upload.organization, upload.stream, upload)
   end
   # rubocop:enable Metrics/AbcSize
 
