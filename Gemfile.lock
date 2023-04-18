@@ -409,11 +409,7 @@ GEM
     rubyzip (2.3.2)
     safely_block (0.3.0)
       errbase (>= 0.1.1)
-    sass (3.4.25)
     scrub_rb (1.0.1)
-    scss-lint (0.38.0)
-      rainbow (~> 2.0)
-      sass (~> 3.4.1)
     selenium-webdriver (4.8.6)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
@@ -533,7 +529,6 @@ DEPENDENCIES
   rubocop-performance
   rubocop-rails
   rubocop-rspec
-  scss-lint
   selenium-webdriver
   sidekiq (~> 7.0)
   simplecov
