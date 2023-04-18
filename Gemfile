@@ -52,8 +52,6 @@ group :development, :test do
   gem 'rubocop-rails', require: false
   gem 'rubocop-rspec', require: false
 
-  gem 'scss-lint'
-
   gem 'simplecov'
   gem 'timecop'
   gem 'webmock'
