@@ -6,10 +6,7 @@ RSpec.describe 'dashboard/summary' do
   let(:dashboard) { Dashboard.new }
   let(:provider1) { create(:organization, name: 'provider1') }
   let(:uploads1) do
-    [
-      create(:upload, :multiple_files, stream: provider1.default_stream),
-      create(:upload, :multiple_files, stream: provider1.default_stream)
-    ]
+    create_list(:upload, 2, :multiple_files, stream: provider1.default_stream)
   end
   let(:job_tracker_active) { JobTracker.new(created_at: DateTime.now) }
   let(:job_tracker_attention) { JobTracker.new(created_at: DateTime.now) }

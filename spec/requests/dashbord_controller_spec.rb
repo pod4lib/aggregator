@@ -7,9 +7,7 @@ RSpec.describe '/dashboard' do
   let(:organization) { create(:organization) }
   let(:stream) { create(:stream, organization: organization, default: true) }
   let(:uploads) do
-    [
-      create(:upload, :multiple_files, stream: stream)
-    ]
+    create_list(:upload, 1, :multiple_files, stream: stream)
   end
 
   before do
