@@ -13,7 +13,8 @@ module DashboardHelper
 
     return :completed if statuses.include? :completed
     return :needs_attention if statuses.include? :needs_attention
-    return :failed if statuses.include? :failed
+
+    :failed if statuses.include? :failed
   end
 
   # Status criteria outlined in https://github.com/pod4lib/aggregator/issues/674

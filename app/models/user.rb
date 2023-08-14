@@ -24,6 +24,7 @@ class User < ApplicationRecord
 
     return :admin if roles.include? 'admin'
     return :owner if roles.include? 'owner'
-    return :member if roles.include? 'member'
+
+    :member if roles.include? 'member'
   end
 end
