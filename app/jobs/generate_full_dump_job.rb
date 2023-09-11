@@ -14,12 +14,12 @@ class GenerateFullDumpJob < ApplicationJob
     end
   end
 
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
   def perform(organization)
     now = Time.zone.now
     uploads = Upload.active.where(stream: organization.default_stream)
 
-    uploads.where.not(status: 'processed').each do |upload|
+    uploads.where.not(status: 'processed').find_each do |upload|
       ExtractMarcRecordMetadataJob.perform_now(upload)
     end
 
@@ -81,7 +81,7 @@ class GenerateFullDumpJob < ApplicationJob
       writer.unlink
     end
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
 
   def human_readable_filename(base_name, file_type, counter = nil)
     as = case file_type

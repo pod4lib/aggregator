@@ -21,7 +21,7 @@ class GenerateDeltaDumpJob < ApplicationJob
 
     return unless uploads.any?
 
-    uploads.where.not(status: 'processed').each do |upload|
+    uploads.where.not(status: 'processed').find_each do |upload|
       ExtractMarcRecordMetadataJob.perform_now(upload)
     end
 
