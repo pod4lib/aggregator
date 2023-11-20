@@ -41,7 +41,8 @@ group :development, :test do
 
   # Capybara for feature/integration tests
   gem 'capybara'
-  gem 'factory_bot_rails'
+  # Pinned until https://github.com/thoughtbot/factory_bot_rails/issues/433 is resolved
+  gem 'factory_bot_rails', '~> 6.2.0'
   gem 'selenium-webdriver'
 
   gem 'webdrivers'
