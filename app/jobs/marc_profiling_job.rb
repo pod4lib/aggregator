@@ -22,9 +22,11 @@ class MarcProfilingJob < ApplicationJob
       @sample[j] = [@size_so_far, item] if @wanted > j
     end
 
+    # rubocop:disable Style/HashEachMethods
     def each
       @sample.sort.each { |_idx, it| yield(it) }
     end
+    # rubocop:enable Style/HashEachMethods
   end
 
   # Tally up some statistics about the MARC records in the file:
