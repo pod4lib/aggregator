@@ -9,6 +9,7 @@ action_mailer:
     from: 'test@example.com'
 
 contact_email: 'pod-support@lists.stanford.edu'
+accessibility_email: 'library-accessibility-contact@lists.stanford.edu'
 
 marc_fixture_seeds:
   host: https://pod.stanford.edu
