@@ -7,7 +7,7 @@ module JwtTokenConcern
   private
 
   def jwt_token
-    type, token = request.headers['Authorization']&.split(' ')
+    type, token = request.headers['Authorization']&.split
 
     token if type == 'Bearer'
   end
