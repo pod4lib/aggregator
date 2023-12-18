@@ -10,7 +10,7 @@ class OaiController < ApplicationController
 
   def show
     verb = params.require(:verb)
-    send("render_#{verb.underscore}")
+    send(:"render_#{verb.underscore}")
   rescue ActionController::ParameterMissing
     raise OaiConcern::BadVerb
   end
