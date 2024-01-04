@@ -21,10 +21,10 @@ RSpec.describe 'Downloading normalzed files from POD' do
   it 'lists some limited information about the org' do
     visit organization_url(organization)
 
-    expect(page).not_to have_selector 'h2', text: 'Access Tokens'
-    expect(page).not_to have_selector 'h2', text: 'Users'
+    expect(page).to have_no_selector 'h2', text: 'Access Tokens'
+    expect(page).to have_no_selector 'h2', text: 'Users'
 
     expect(page).to have_content '1297245.marc'
-    expect(page).not_to have_link 'Download'
+    expect(page).to have_no_link 'Download'
   end
 end
