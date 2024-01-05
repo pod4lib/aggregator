@@ -63,7 +63,7 @@ RSpec.describe 'Using the dropdown menu in the navbar' do
     end
 
     it 'Does not show affiliated organization manage link' do
-      expect(page).not_to have_link 'Manage Best University'
+      expect(page).to have_no_link 'Manage Best University'
     end
 
     it 'Shows affiliated organization home link' do

@@ -27,7 +27,7 @@ RSpec.describe 'shared/_layout_manage_organization' do
     it 'does not link to Provider home for consumer orgs' do
       render
 
-      expect(view.content_for(:org_header)).not_to have_link 'Provider home'
+      expect(view.content_for(:org_header)).to have_no_link 'Provider home'
     end
   end
 end

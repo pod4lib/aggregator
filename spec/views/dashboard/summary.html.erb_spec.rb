@@ -56,6 +56,6 @@ RSpec.describe 'dashboard/summary' do
 
   it 'does not render the activity summary tabs on page 2 of uploads' do
     assign(:uploads, Kaminari.paginate_array(uploads1).page(2))
-    expect(rendered).not_to have_css('ul#summary-tabs')
+    expect(rendered).to have_no_css('ul#summary-tabs')
   end
 end
