@@ -14,6 +14,9 @@ class NormalizedMarcRecordReader
     @thread_pool_size = thread_pool_size
   end
 
+  # Disable cop until rubocop false positive is fixed:
+  # https://github.com/rubocop/rubocop/issues/12621
+  # rubocop:disable Style/ArgumentsForwarding
   # @yield [MarcRecord]
   def each(&block)
     pool = Concurrent::FixedThreadPool.new(thread_pool_size)
@@ -35,6 +38,7 @@ class NormalizedMarcRecordReader
 
     pool.shutdown
   end
+  # rubocop:enable Style/ArgumentsForwarding
 
   # Return the full list of MarcRecord id values to include in the dump.
   # Note: ideally we'd be able to iterate through that list, but e.g. #find_each
