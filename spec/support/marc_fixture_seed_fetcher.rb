@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class MarcFixtureSeedFetcher
-  def self.fetch_uploads(slug, &block)
-    new.fetch_uploads(slug, &block)
+  def self.fetch_uploads(slug, ...)
+    new.fetch_uploads(slug, ...)
   end
 
   def fetch_uploads(slug, &_block)
