@@ -1,9 +1,13 @@
 # frozen_string_literal: true
 
 class MarcFixtureSeedFetcher
+  # Disable cop until rubocop false positive is fixed:
+  # https://github.com/rubocop/rubocop/issues/12621
+  # rubocop:disable Style/ArgumentsForwarding
   def self.fetch_uploads(slug, &block)
     new.fetch_uploads(slug, &block)
   end
+  # rubocop:enable Style/ArgumentsForwarding
 
   def fetch_uploads(slug, &_block)
     default_stream_url = default_stream_for(slug)['url']
