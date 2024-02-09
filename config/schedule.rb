@@ -4,7 +4,7 @@
 # http://en.wikipedia.org/wiki/Cron
 
 # Work-around for loading spring unless RAILS_ENV is actually defined...
-job_type :runner,  "cd :path && :environment_variable=:environment bin/rails runner -e :environment ':task' :output"
+job_type :runner,  "cd :path && RAILS_LOG_LEVEL=warn :environment_variable=:environment bin/rails runner -e :environment ':task' :output"
 
 # Example:
 #
