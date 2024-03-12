@@ -9,7 +9,7 @@ class Upload < ApplicationRecord
   has_many :marc_profiles, dependent: :delete_all
   belongs_to :user, optional: true
   belongs_to :allowlisted_jwts, optional: true
-  validates :url, presence: true, if: proc { |upload| upload.files.blank? }
+  validate :url_presence_if_no_uploaded_files
   validates :files, presence: true, if: proc { |upload| upload.url.blank? }
   validate :valid_url, if: proc { |upload| upload.url.present? }
   scope :active, -> { where(status: %w[active processed]) }
@@ -67,6 +67,10 @@ class Upload < ApplicationRecord
   # rubocop:enable Metrics/MethodLength
 
   private
+
+  def url_presence_if_no_uploaded_files
+    errors.add(:url, 'A URL must be provided if a file has not been uploaded') if !files.attached? && url.blank?
+  end
 
   def perform_extract_marc_record_metadata_job
     ExtractMarcRecordMetadataJob.perform_later(self)
