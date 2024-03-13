@@ -9,7 +9,8 @@ RSpec.describe Upload do
     it 'validates that a URL or files are present' do
       expect do
         create(:upload, files: [])
-      end.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Url can't be blank, Files can't be blank")
+      end.to raise_error(ActiveRecord::RecordInvalid,
+                         "Validation failed: Url A URL must be provided if a file has not been uploaded, Files can't be blank")
     end
 
     context 'with an invalid URL' do
