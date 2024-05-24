@@ -18,12 +18,12 @@ class Upload < ApplicationRecord
 
   after_create :attach_file_from_url
 
-  after_save_commit :perform_extract_marc_record_metadata_job, if: :active?
-  after_save_commit :perform_extract_files_job, if: :active?
-
-  # This should be after any callbacks that interact with the attached upload
+  # This should be _before_ any callbacks that interact with the attached upload
   # See https://github.com/rails/rails/issues/37304
   has_many_attached :files
+
+  after_save_commit :perform_extract_marc_record_metadata_job, if: :active?
+  after_save_commit :perform_extract_files_job, if: :active?
 
   def active?
     status == 'active'
@@ -73,10 +73,14 @@ class Upload < ApplicationRecord
   end
 
   def perform_extract_marc_record_metadata_job
+    return unless files.any?(&:saved_changes?)
+
     ExtractMarcRecordMetadataJob.perform_later(self)
   end
 
   def perform_extract_files_job
+    return unless files.any?(&:saved_changes?)
+
     ExtractFilesJob.perform_later(self)
   end
 
