@@ -49,8 +49,8 @@ class GenerateDeltaDumpJob < ApplicationJob
           end
         end
         oai_writer.finalize
-        delta_dump.public_send(:oai_xml).attach(io: File.open(oai_writer.oai_file),
-                                                filename: human_readable_filename(base_name, :oai_xml, oai_file_counter))
+        delta_dump.oai_xml.attach(io: File.open(oai_writer.oai_file),
+                                  filename: human_readable_filename(base_name, :oai_xml, oai_file_counter))
 
         oai_file_counter += 1
         # Save the dump once for every 100 oai files to free up file handles

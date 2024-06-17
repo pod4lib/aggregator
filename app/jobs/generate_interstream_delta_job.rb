@@ -101,11 +101,9 @@ class GenerateInterstreamDeltaJob < ApplicationJob
     # Attach Files
     current_stream_dump.create_interstream_delta unless current_stream_dump.interstream_delta
 
-    current_stream_dump.interstream_delta.public_send(:marc21).attach(io: File.open(mrc_tempfile), filename: "#{base_name}.mrc")
-    current_stream_dump.interstream_delta.public_send(:marcxml).attach(io: File.open(xml_tempfile), filename: "#{base_name}.xml")
-    # rubocop:disable Layout/LineLength
-    current_stream_dump.interstream_delta.public_send(:deletes).attach(io: File.open(delete_tempfile), filename: "#{base_name}.del.txt")
-    # rubocop:enable Layout/LineLength
+    current_stream_dump.interstream_delta.marc21.attach(io: File.open(mrc_tempfile), filename: "#{base_name}.mrc")
+    current_stream_dump.interstream_delta.marcxml.attach(io: File.open(xml_tempfile), filename: "#{base_name}.xml")
+    current_stream_dump.interstream_delta.deletes.attach(io: File.open(delete_tempfile), filename: "#{base_name}.del.txt")
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 end

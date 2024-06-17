@@ -46,7 +46,7 @@ RSpec.describe GenerateInterstreamDeltaJob do
 
     # Deltas should contain one addition (we find two instances of 'record' in the xml for <record> and </record>)
     xml = stream.current_full_dump.interstream_delta.marcxml.open { |file| File.readlines(file) }.to_s
-    expect(xml.scan(/record/).count).to be(2)
+    expect(xml.scan('record').count).to be(2)
 
     # Deltas should contain two deletions
     deletes = stream.current_full_dump.interstream_delta.deletes.open { |file| File.readlines(file) }
