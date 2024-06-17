@@ -32,7 +32,7 @@ RSpec.describe 'Downloading normalized files from POD' do
       visit normalized_data_organization_stream_path(organization, stream)
 
       # Note, this won't work in a driver other that Rack::Test w/o some other magic
-      click_link "#{organization.slug}-2020-01-01-full-marc21.mrc.gz"
+      click_on "#{organization.slug}-2020-01-01-full-marc21.mrc.gz"
       marc = MarcRecordService.marc_reader(StringIO.new(page.body), :marc21_gzip)
 
       expect(page.response_headers['Content-Disposition']).to eq 'attachment'
@@ -43,7 +43,7 @@ RSpec.describe 'Downloading normalized files from POD' do
       visit normalized_data_organization_stream_path(organization, stream)
 
       # Note, this won't work in a driver other that Rack::Test w/o some other magic
-      click_link "#{organization.slug}-2020-01-01-full-marc21.mrc.gz"
+      click_on "#{organization.slug}-2020-01-01-full-marc21.mrc.gz"
       records = MarcRecordService.marc_reader(StringIO.new(page.body), :marc21_gzip)
 
       records.each do |marc|
@@ -57,7 +57,7 @@ RSpec.describe 'Downloading normalized files from POD' do
 
       expect do
         # Note, this won't work in a driver other that Rack::Test w/o some other magic
-        click_link "#{organization.slug}-2020-01-01-full-marc21.mrc.gz"
+        click_on "#{organization.slug}-2020-01-01-full-marc21.mrc.gz"
       end.to change(Ahoy::Event, :count).by(1)
 
       expect(Ahoy::Event.last.properties.with_indifferent_access).to include(

@@ -90,8 +90,8 @@ class Stream < ApplicationRecord
                                 .or(NormalizedDump.where(full_dump_id: full_dump_id))
                                 .published
                                 .order(created_at: :asc)
-    dumps_query = dumps_query.where('created_at >= ?', Time.zone.parse(from_date).beginning_of_day) if from_date.present?
-    dumps_query = dumps_query.where('created_at <= ?', Time.zone.parse(until_date).end_of_day) if until_date.present?
+    dumps_query = dumps_query.where(created_at: Time.zone.parse(from_date).beginning_of_day..) if from_date.present?
+    dumps_query = dumps_query.where(created_at: ..Time.zone.parse(until_date).end_of_day) if until_date.present?
 
     dumps_query.pluck(:id)
   end
@@ -115,7 +115,7 @@ class Stream < ApplicationRecord
 
     organization.default_stream_histories
                 .order(end_time: :desc)
-                .where('end_time < ?', default_stream_history.start_time)
+                .where(end_time: ...default_stream_history.start_time)
                 .first
   end
 

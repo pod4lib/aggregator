@@ -48,10 +48,10 @@ class GenerateFullDumpJob < ApplicationJob
 
         if oai_writer.bytes_written?
           oai_writer.finalize
-          full_dump.public_send(:oai_xml).attach(io: File.open(oai_writer.oai_file),
-                                                 filename: human_readable_filename(
-                                                   base_name, :oai_xml, oai_file_counter
-                                                 ))
+          full_dump.oai_xml.attach(io: File.open(oai_writer.oai_file),
+                                   filename: human_readable_filename(
+                                     base_name, :oai_xml, oai_file_counter
+                                   ))
         end
 
         oai_file_counter += 1

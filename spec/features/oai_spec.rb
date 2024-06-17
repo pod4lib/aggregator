@@ -44,12 +44,12 @@ RSpec.describe 'OAI-PMH' do
 
   it 'renders an error if no verb is supplied' do
     visit oai_url
-    expect(page).to have_selector('error[code="badVerb"]')
+    expect(page).to have_css('error[code="badVerb"]')
   end
 
   it 'renders an error if an unknown verb is supplied' do
     visit oai_url(verb: 'Oops')
-    expect(page).to have_selector('error[code="badVerb"]')
+    expect(page).to have_css('error[code="badVerb"]')
   end
 
   it 'renders the time the request was submitted in iso8601 format' do
@@ -60,7 +60,7 @@ RSpec.describe 'OAI-PMH' do
 
   it 'renders the request params and root url as an element' do
     visit oai_url(verb: 'ListSets')
-    expect(page).to have_selector('request[verb="ListSets"]', text: oai_url)
+    expect(page).to have_css('request[verb="ListSets"]', text: oai_url)
   end
 
   context 'when the verb is ListSets' do
@@ -83,7 +83,7 @@ RSpec.describe 'OAI-PMH' do
 
     it 'renders an error if unknown params are supplied' do
       visit oai_url(verb: 'ListSets', foo: 'bar')
-      expect(page).to have_selector('error[code="badArgument"]')
+      expect(page).to have_css('error[code="badArgument"]')
     end
   end
 
@@ -129,7 +129,7 @@ RSpec.describe 'OAI-PMH' do
 
     it 'renders an error if unknown params are supplied' do
       visit oai_url(verb: 'Identify', foo: 'bar')
-      expect(page).to have_selector('error[code="badArgument"]')
+      expect(page).to have_css('error[code="badArgument"]')
     end
   end
 
@@ -151,12 +151,12 @@ RSpec.describe 'OAI-PMH' do
     it 'renders an error if an unknown identifier is supplied' do
       pending 'single item requests are not yet implemented'
       visit oai_url(verb: 'ListMetadataFormats', identifier: 'fake')
-      expect(page).to have_selector('error[code="idDoesNotExist"]')
+      expect(page).to have_css('error[code="idDoesNotExist"]')
     end
 
     it 'renders an error if unknown params are supplied' do
       visit oai_url(verb: 'ListMetadataFormats', foo: 'bar')
-      expect(page).to have_selector('error[code="badArgument"]')
+      expect(page).to have_css('error[code="badArgument"]')
     end
   end
 
@@ -178,7 +178,7 @@ RSpec.describe 'OAI-PMH' do
     it 'renders a header indicating records are deleted' do
       token = OaiConcern::ResumptionToken.new(set: organization.default_stream.id.to_s, page: '2')
       visit oai_url(verb: 'ListRecords', resumptionToken: token.encode)
-      expect(page).to have_selector('header[status="deleted"]')
+      expect(page).to have_css('header[status="deleted"]')
     end
 
     it 'renders the set membership of each item' do
@@ -227,22 +227,22 @@ RSpec.describe 'OAI-PMH' do
 
     it 'renders an error if unknown params are supplied' do
       visit oai_url(verb: 'ListRecords', metadataPrefix: 'marc21', foo: 'bar')
-      expect(page).to have_selector('error[code="badArgument"]')
+      expect(page).to have_css('error[code="badArgument"]')
     end
 
     it 'renders an error if no metadata prefix is supplied' do
       visit oai_url(verb: 'ListRecords')
-      expect(page).to have_selector('error[code="badArgument"]')
+      expect(page).to have_css('error[code="badArgument"]')
     end
 
     it 'renders an error if an unsupported metadata prefix is supplied' do
       visit oai_url(verb: 'ListRecords', metadataPrefix: 'foo')
-      expect(page).to have_selector('error[code="cannotDisseminateFormat"]')
+      expect(page).to have_css('error[code="cannotDisseminateFormat"]')
     end
 
     it 'renders an error if the request results in an empty result set' do
       visit oai_url(verb: 'ListRecords', metadataPrefix: 'marc21', set: '392487')
-      expect(page).to have_selector('error[code="noRecordsMatch"]')
+      expect(page).to have_css('error[code="noRecordsMatch"]')
     end
 
     context 'when a resumption token is supplied' do
@@ -253,17 +253,17 @@ RSpec.describe 'OAI-PMH' do
 
       it 'renders an error if any other argument is also supplied' do
         visit oai_url(verb: 'ListRecords', resumptionToken: OaiConcern::ResumptionToken.new(set: '1').encode, from: '2020-01-01')
-        expect(page).to have_selector('error[code="badArgument"]')
+        expect(page).to have_css('error[code="badArgument"]')
       end
 
       it 'renders an error if the resumption token is not valid' do
         visit oai_url(verb: 'ListRecords', resumptionToken: 'foo')
-        expect(page).to have_selector('error[code="badResumptionToken"]')
+        expect(page).to have_css('error[code="badResumptionToken"]')
       end
 
       it 'renders an error if the requested page of records does not exist' do
         visit oai_url(verb: 'ListRecords', resumptionToken: OaiConcern::ResumptionToken.new(page: '999').encode)
-        expect(page).to have_selector('error[code="badResumptionToken"]')
+        expect(page).to have_css('error[code="badResumptionToken"]')
       end
     end
   end
