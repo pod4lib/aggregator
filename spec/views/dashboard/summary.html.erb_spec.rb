@@ -16,15 +16,13 @@ RSpec.describe 'dashboard/summary' do
     assign(:uploads, Kaminari.paginate_array(uploads1).page(1))
     assign(:dashboard, dashboard)
 
-    allow(view).to receive(:files_status).and_return(:completed)
-    allow(view).to receive(:count_roles).and_return({ admin: 1, owner: 2, member: 3 })
+    allow(view).to receive_messages(files_status: :completed, count_roles: { admin: 1, owner: 2, member: 3 })
 
-    allow(dashboard).to receive(:recent_uploads_by_provider).and_return({ provider1 => uploads1 })
-
-    allow(dashboard).to receive(:job_status_groups_by_provider).and_return({ provider1 => { active: [job_tracker_active],
-                                                                                            needs_attention: [job_tracker_attention] } }) # rubocop:disable Layout/LineLength
-    allow(dashboard).to receive(:normalized_data_by_provider).and_return({ provider1 => normalized_data })
-    allow(dashboard).to receive(:users_by_organization).and_return({ provider1 => { admin: 1, owner: 2, member: 3 } })
+    allow(dashboard).to receive_messages(recent_uploads_by_provider: { provider1 => uploads1 },
+                                         job_status_groups_by_provider: { provider1 => { active: [job_tracker_active],
+                                                                                         needs_attention: [job_tracker_attention] } },
+                                         normalized_data_by_provider: { provider1 => normalized_data },
+                                         users_by_organization: { provider1 => { admin: 1, owner: 2, member: 3 } })
   end
 
   # rubocop:disable RSpec/ExampleLength, RSpec/MultipleExpectations
