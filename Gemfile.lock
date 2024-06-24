@@ -69,8 +69,8 @@ GEM
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
       tzinfo (~> 2.0)
-    addressable (2.8.6)
-      public_suffix (>= 2.0.2, < 6.0)
+    addressable (2.8.7)
+      public_suffix (>= 2.0.2, < 7.0)
     ahoy_matey (5.1.0)
       activesupport (>= 6.1)
       device_detector (>= 1)
@@ -104,6 +104,8 @@ GEM
       capistrano-bundler (>= 1.4)
     capistrano-bundler (2.1.0)
       capistrano (~> 3.1)
+    capistrano-one_time_key (0.2.0)
+      capistrano (~> 3.0)
     capistrano-passenger (0.2.1)
       capistrano (~> 3.0)
     capistrano-rails (1.6.3)
@@ -147,10 +149,11 @@ GEM
       actionmailer (>= 5.0)
       devise (>= 4.6)
     diff-lcs (1.5.1)
-    dlss-capistrano (5.0.3)
+    dlss-capistrano (5.1.1)
       bcrypt_pbkdf
       capistrano (~> 3.0)
       capistrano-bundle_audit (>= 0.3.0)
+      capistrano-one_time_key (>= 0.2.0)
       capistrano-shared_configs
       ed25519
     docile (1.4.0)
@@ -162,7 +165,9 @@ GEM
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
-    ffi (1.17.0)
+    ffi (1.17.0-arm64-darwin)
+    ffi (1.17.0-x86_64-darwin)
+    ffi (1.17.0-x86_64-linux-gnu)
     ffi-compiler (1.3.2)
       ffi (>= 1.15.5)
       rake
@@ -174,7 +179,7 @@ GEM
       activesupport (>= 6.1)
     hashdiff (1.1.0)
     highline (3.0.1)
-    honeybadger (5.12.0)
+    honeybadger (5.13.0)
     http (5.2.0)
       addressable (~> 2.8)
       base64 (~> 0.1)
@@ -211,7 +216,7 @@ GEM
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
     json (2.7.2)
-    jwt (2.8.1)
+    jwt (2.8.2)
       base64
     kaminari (1.2.2)
       activesupport (>= 4.1.0)
@@ -230,6 +235,7 @@ GEM
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
     local_time (2.1.0)
+    logger (1.6.0)
     loofah (2.22.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
@@ -246,9 +252,8 @@ GEM
     matrix (0.4.2)
     method_source (1.1.0)
     mini_mime (1.1.5)
-    minitest (5.23.1)
-    mutex_m (0.2.0)
-    net-imap (0.4.13)
+    minitest (5.24.0)
+    net-imap (0.4.14)
       date
       net-protocol
     net-pop (0.1.2)
@@ -281,7 +286,7 @@ GEM
     pg (1.5.6)
     psych (5.1.2)
       stringio
-    public_suffix (5.1.1)
+    public_suffix (6.0.0)
     puma (5.6.8)
       nio4r (~> 2.0)
     racc (1.8.0)
@@ -352,7 +357,7 @@ GEM
     rspec-mocks (3.13.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
-    rspec-rails (6.1.2)
+    rspec-rails (6.1.3)
       actionpack (>= 6.1)
       activesupport (>= 6.1)
       railties (>= 6.1)
@@ -395,8 +400,9 @@ GEM
     rubyzip (2.3.2)
     safely_block (0.4.0)
     scrub_rb (1.0.1)
-    selenium-webdriver (4.21.1)
+    selenium-webdriver (4.22.0)
       base64 (~> 0.2)
+      logger (~> 1.4)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
@@ -421,9 +427,8 @@ GEM
     sqlite3 (1.7.3-arm64-darwin)
     sqlite3 (1.7.3-x86_64-darwin)
     sqlite3 (1.7.3-x86_64-linux)
-    sshkit (1.22.2)
+    sshkit (1.23.0)
       base64
-      mutex_m
       net-scp (>= 1.1.2)
       net-sftp (>= 2.1.2)
       net-ssh (>= 2.8.0)
@@ -538,4 +543,4 @@ DEPENDENCIES
   whenever
 
 BUNDLED WITH
-   2.3.20
+   2.5.14
