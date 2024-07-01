@@ -93,7 +93,7 @@ GEM
       bundler (>= 1.2.0, < 3)
       thor (~> 1.0)
     cancancan (3.6.1)
-    capistrano (3.18.1)
+    capistrano (3.19.0)
       airbrussh (>= 1.0.0)
       i18n
       rake (>= 10.0.0)
@@ -252,7 +252,7 @@ GEM
     matrix (0.4.2)
     method_source (1.1.0)
     mini_mime (1.1.5)
-    minitest (5.24.0)
+    minitest (5.24.1)
     net-imap (0.4.14)
       date
       net-protocol
@@ -346,7 +346,7 @@ GEM
     responders (3.1.1)
       actionpack (>= 5.2)
       railties (>= 5.2)
-    rexml (3.3.0)
+    rexml (3.3.1)
       strscan
     rolify (6.0.1)
     rspec-core (3.13.0)
@@ -386,7 +386,7 @@ GEM
     rubocop-performance (1.21.1)
       rubocop (>= 1.48.1, < 2.0)
       rubocop-ast (>= 1.31.1, < 2.0)
-    rubocop-rails (2.25.0)
+    rubocop-rails (2.25.1)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.33.0, < 2.0)
