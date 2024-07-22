@@ -25,7 +25,7 @@ pipeline {
           export REVISION=$TAG_NAME
 
           # Load RVM
-          rvm use 3.0.1@pod --create
+          rvm use 3.3.1@pod --create
           gem install bundler
 
           bundle config --global gems.contribsys.com $SIDEKIQ_PRO_SECRET
@@ -53,13 +53,13 @@ pipeline {
       }
     }
 
-    stage('Deploy on release') {
+    stage('Deploy to -prod') {
       environment {
         DEPLOY_ENVIRONMENT = 'prod'
       }
 
       when {
-        tag "v*"
+        branch 'main'
       }
 
       steps {
@@ -71,7 +71,7 @@ pipeline {
           export REVISION=$TAG_NAME
 
           # Load RVM
-          rvm use 3.0.1@pod --create
+          rvm use 3.3.1@pod --create
           gem install bundler
 
           bundle config --global gems.contribsys.com $SIDEKIQ_PRO_SECRET
