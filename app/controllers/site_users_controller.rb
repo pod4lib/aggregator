@@ -13,7 +13,7 @@ class SiteUsersController < ApplicationController
     @user.add_role params[:add_role] if params[:add_role].present?
 
     respond_to do |format|
-      format.html { redirect_to site_users_url, notice: 'User role was successfully updated.' }
+      format.html { redirect_to site_users_url, notice: 'User role was successfully updated.', status: :see_other }
       format.json { head :no_content }
     end
   end

@@ -1,23 +1,26 @@
 // Entrypoint for stylesheet
-@import 'bootstrap-overrides';
-@import 'bootstrap/scss/bootstrap';
-@import 'variables';
-@import 'logo';
-@import 'pod-icons';
-@import 'rails_bootstrap_forms';
-@import 'organizations';
-@import 'streams';
-@import 'files';
+@import "bootstrap-overrides";
+@import "bootstrap/scss/bootstrap";
+@import "variables";
+@import "logo";
+@import "pod-icons";
+@import "rails_bootstrap_forms";
+@import "organizations";
+@import "streams";
+@import "files";
 
 // background image for homepage banner
 #hero .bg-image {
   width: 100%;
   height: 100%;
   position: absolute;
-  background-image: url('hero.jpg');
+  background-image: url("hero.jpg");
   background-size: contain;
-  top: 0; bottom: 0; left: 0; right: 0;
-  filter:blur(3.5px) brightness(50%) sepia(50%)  hue-rotate(160deg);
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  filter: blur(3.5px) brightness(50%) sepia(50%) hue-rotate(160deg);
 }
 
 .direct-upload {
@@ -39,7 +42,9 @@
   a {
     padding-left: 0.5rem;
     opacity: 0;
-    transition: color .15s ease-in-out,opacity .15s ease-in-out;
+    transition:
+      color 0.15s ease-in-out,
+      opacity 0.15s ease-in-out;
   }
   &:hover {
     a {
@@ -57,7 +62,9 @@
   min-width: 50px;
   background: $info;
   text-align: center;
-  transition: width 120ms ease-out, opacity 60ms 60ms ease-in;
+  transition:
+    width 120ms ease-out,
+    opacity 60ms 60ms ease-in;
   transform: translate3d(0, 0, 0);
 }
 
@@ -73,7 +80,7 @@
   border-color: $danger;
 }
 
-input[type=file][data-direct-upload-url][disabled] {
+input[type="file"][data-direct-upload-url][disabled] {
   display: none;
 }
 
@@ -148,10 +155,10 @@ input[type=file][data-direct-upload-url][disabled] {
   font-weight: 500;
 }
 
-// turbolinks progress bar: render in a more constrasting color, and prevent
+// turbo progress bar: render in a more constrasting color, and prevent
 // layout shift when it appears by absolute-positioning it. see:
 // https://github.com/pod4lib/aggregator/issues/658
-.turbolinks-progress-bar {
+.turbo-progress-bar {
   position: absolute;
   z-index: 1;
   top: 0;

@@ -9,7 +9,7 @@
     <div class="alert alert-info">
       No MARC profiling data found.<br />
 
-      <%= link_to 'Re-analyze', reanalyze_organization_stream_path(@organization, @stream), method: :post, class: 'btn btn-secondary align-self-center mt-3' if can?(:reanalyze, @stream) %>
+      <%= link_to 'Re-analyze', reanalyze_organization_stream_path(@organization, @stream), data: { turbo_method: :post }, class: 'btn btn-secondary align-self-center mt-3' if can?(:reanalyze, @stream) %>
     </div>
   <% end %>
 <% end %>

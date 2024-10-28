@@ -16,7 +16,7 @@ class OrganizationsController < ApplicationController
   def show
     # make the org homepage for consumer orgs point to their org details default tab
     # see https://github.com/pod4lib/aggregator/issues/535#issuecomment-1103234114
-    redirect_to organization_users_path(@organization) unless @organization.provider?
+    redirect_to organization_users_path(@organization), status: :see_other unless @organization.provider?
 
     @stream = @organization.default_stream if @organization.provider?
     @uploads = @organization.default_stream.uploads.active.order(created_at: :desc).page(params[:page])
@@ -30,7 +30,7 @@ class OrganizationsController < ApplicationController
   # GET /organizations/1/provider_details
   def provider_details
     # consumer orgs don't have provider details; redirect to org details instead
-    redirect_to organization_details_organization_path(@organization) unless @organization.provider?
+    redirect_to organization_details_organization_path(@organization), status: :see_other unless @organization.provider?
   end
 
   # GET /organizations/1/organization_details
@@ -43,7 +43,7 @@ class OrganizationsController < ApplicationController
 
     respond_to do |format|
       if @organization.save
-        format.html { redirect_to @organization, notice: 'Organization was successfully created.' }
+        format.html { redirect_to @organization, notice: 'Organization was successfully created.', status: :see_other }
         format.json { render :show, status: :created, location: @organization }
       else
         format.html { render :new }
@@ -71,7 +71,7 @@ class OrganizationsController < ApplicationController
   def destroy
     @organization.destroy
     respond_to do |format|
-      format.html { redirect_to organizations_url, notice: 'Organization was successfully destroyed.' }
+      format.html { redirect_to organizations_url, notice: 'Organization was successfully destroyed.', status: :see_other }
       format.json { head :no_content }
     end
   end
