@@ -20,7 +20,10 @@ class AllowlistedJwtsController < ApplicationController
   def create
     respond_to do |format|
       if @allowlisted_jwt.save
-        format.html { redirect_to organization_allowlisted_jwts_path(@organization), notice: 'Token was successfully created.' }
+        format.html do
+          redirect_to organization_allowlisted_jwts_path(@organization), notice: 'Token was successfully created.',
+                                                                         status: :see_other
+        end
         format.json { render :show, status: :created, location: [@organization, @allowlisted_jwt] }
       else
         format.html { render :new }
@@ -35,7 +38,10 @@ class AllowlistedJwtsController < ApplicationController
     @allowlisted_jwt.destroy
 
     respond_to do |format|
-      format.html { redirect_to organization_allowlisted_jwts_path(@organization), notice: 'Token was successfully destroyed.' }
+      format.html do
+        redirect_to organization_allowlisted_jwts_path(@organization), notice: 'Token was successfully destroyed.',
+                                                                       status: :see_other
+      end
       format.json { head :no_content }
     end
   end

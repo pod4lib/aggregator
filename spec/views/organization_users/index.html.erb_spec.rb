@@ -48,12 +48,12 @@ RSpec.describe 'organization_users/index' do
 
     it 'renders a link to delete the member account' do
       render
-      expect(rendered).to have_css("a[href='#{organization_user_path(organization, member)}'][data-method='delete']")
+      expect(rendered).to have_css("a[href='#{organization_user_path(organization, member)}'][data-turbo-method='delete']")
     end
 
     it 'renders a link to delete the owner account' do
       render
-      expect(rendered).to have_css("a[href='#{organization_user_path(organization, owner)}'][data-method='delete']")
+      expect(rendered).to have_css("a[href='#{organization_user_path(organization, owner)}'][data-turbo-method='delete']")
     end
 
     it 'renders a link to invite new user' do

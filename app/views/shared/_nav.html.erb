@@ -17,12 +17,12 @@
         <% end %>
         <% if can? :read, :pages_data %>
         <li class='nav-item'>
-          <%= link_to t('.data'), data_url, class: class_names('nav-link', { active: current_page?(data_url) }), data: { turbolinks: false } %>
+          <%= link_to t('.data'), data_url, class: class_names('nav-link', { active: current_page?(data_url) }), data: { turbo: false } %>
         </li>
         <% end %>
         <% if can? :manage, :dashboard_controller %>
         <li class='nav-item'>
-          <%= link_to t('.activity'), activity_url, class: class_names('nav-link', { active: current_page?(activity_url) }), data: { turbolinks: false } %>
+          <%= link_to t('.activity'), activity_url, class: class_names('nav-link', { active: current_page?(activity_url) }), data: { turbo: false } %>
         </li>
         <% end %>
         <% if can? :manage, User %>
@@ -35,7 +35,7 @@
       <% if current_user && current_user.has_role?(:admin) %>
         <span class="badge bg-warning text-dark h-100 my-auto d-none d-md-block"><%= t('.is_admin') %></span>
       <% end %>
-      
+
       <ul class="navbar-nav">
         <% if current_user %>
           <li class="nav-item dropdown">
@@ -59,7 +59,7 @@
                 <hr class="dropdown-divider">
               </li>
               <li>
-                <%= link_to t('.logout'), destroy_user_session_path, class: 'dropdown-item', data: { method: :delete } %>
+                <%= link_to t('.logout'), destroy_user_session_path, class: 'dropdown-item', data: { turbo_method: :delete } %>
               </li>
             </ul>
           </li>

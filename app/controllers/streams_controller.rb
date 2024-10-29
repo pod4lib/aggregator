@@ -32,7 +32,7 @@ class StreamsController < ApplicationController
 
     respond_to do |format|
       if @stream.save
-        format.html { redirect_to [@organization, @stream], notice: 'Stream was successfully created.' }
+        format.html { redirect_to [@organization, @stream], notice: 'Stream was successfully created.', status: :see_other }
         format.json { render :show, status: :created, location: [@organization, @stream] }
       else
         format.html { render :new }
@@ -45,7 +45,7 @@ class StreamsController < ApplicationController
     @stream.destroy
 
     respond_to do |format|
-      format.html { redirect_to organization_streams_path, notice: 'Stream was successfully destroyed.' }
+      format.html { redirect_to organization_streams_path, notice: 'Stream was successfully destroyed.', status: :see_other }
       format.json { head :no_content }
     end
   end
@@ -63,7 +63,7 @@ class StreamsController < ApplicationController
     @stream.make_default
 
     respond_to do |format|
-      format.html { redirect_to @organization, notice: 'Stream was successfully updated.' }
+      format.html { redirect_to @organization, notice: 'Stream was successfully updated.', status: :see_other }
       format.json { render :show, status: :ok, location: @organization }
     end
   end

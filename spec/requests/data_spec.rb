@@ -20,7 +20,7 @@ RSpec.describe '/data' do
       get data_url
       expect(response).not_to be_successful
       # redirect to login
-      expect(response).to have_http_status(:found)
+      expect(response).to have_http_status(:see_other)
     end
 
     it 'renders a successful response when logged in' do

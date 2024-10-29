@@ -15,7 +15,9 @@ class OrganizationUsersController < ApplicationController
     @user.add_role(params[:add_role], @organization) if params[:add_role].present?
 
     respond_to do |format|
-      format.html { redirect_to organization_users_url(@organization), notice: 'User role was successfully updated.' }
+      format.html do
+        redirect_to organization_users_url(@organization), notice: 'User role was successfully updated.', status: :see_other
+      end
       format.json { head :no_content }
     end
   end
@@ -26,7 +28,9 @@ class OrganizationUsersController < ApplicationController
     @user.destroy
 
     respond_to do |format|
-      format.html { redirect_to organization_users_url(@organization), notice: 'User was successfully removed.' }
+      format.html do
+        redirect_to organization_users_url(@organization), notice: 'User was successfully removed.', status: :see_other
+      end
       format.json { head :no_content }
     end
   end

@@ -29,7 +29,7 @@ class UploadsController < ApplicationController
   def create
     respond_to do |format|
       if @upload.save
-        format.html { redirect_to [@organization, @upload], notice: 'Upload was successfully created.' }
+        format.html { redirect_to [@organization, @upload], notice: 'Upload was successfully created.', status: :see_other }
         format.json { render :show, status: :created, location: [@organization, @upload] }
       else
         format.html { render :new }
@@ -43,7 +43,7 @@ class UploadsController < ApplicationController
   def update
     respond_to do |format|
       if @upload.update(upload_params)
-        format.html { redirect_to [@organization, @upload], notice: 'Upload was successfully updated.' }
+        format.html { redirect_to [@organization, @upload], notice: 'Upload was successfully updated.', status: :see_other }
         format.json { render :show, status: :ok, location: [@organization, @upload] }
       else
         format.html { render :edit }
@@ -57,7 +57,9 @@ class UploadsController < ApplicationController
   def destroy
     @upload.destroy
     respond_to do |format|
-      format.html { redirect_to organization_uploads_url(@organization), notice: 'Upload was successfully destroyed.' }
+      format.html do
+        redirect_to organization_uploads_url(@organization), notice: 'Upload was successfully destroyed.', status: :see_other
+      end
       format.json { head :no_content }
     end
   end

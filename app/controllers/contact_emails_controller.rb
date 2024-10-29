@@ -25,7 +25,7 @@ class ContactEmailsController < ApplicationController
     end
 
     if can? :read, @contact_email.organization
-      redirect_to @contact_email.organization
+      redirect_to @contact_email.organization, status: :see_other
     else
       render 'confirm'
     end

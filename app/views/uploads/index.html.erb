@@ -27,7 +27,7 @@
           <td><%= link_to upload.name, [@organization, upload] %></td>
           <td><%= local_time(upload.created_at, format: datetime_display_format()) %></td>
           <td><%= link_to upload.stream.display_name, organization_stream_path(upload.stream.organization, upload.stream) %></td>
-          <td><%= link_to 'Delete', [@organization, upload], method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' if can? :destroy, upload %></td>
+          <td><%= link_to 'Delete', [@organization, upload], data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' if can? :destroy, upload %></td>
         </tr>
       <% end %>
     </tbody>

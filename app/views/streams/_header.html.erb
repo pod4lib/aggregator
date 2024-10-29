@@ -9,6 +9,6 @@
 
   <div class="ms-auto p-2">
     <%= link_to t('.upload'), new_organization_upload_path(stream.organization, stream: (stream.default? ? nil : stream.friendly_id)), class: 'btn btn-primary' if can? :create, stream.uploads.build %>
-    <%= link_to t('.reanalyze'), reanalyze_organization_stream_path(stream.organization, stream), method: :post, class: 'btn btn-secondary align-self-center' if can?(:manage, stream) %>
+    <%= link_to t('.reanalyze'), reanalyze_organization_stream_path(stream.organization, stream), data: { turbo_method: :post }, class: 'btn btn-secondary align-self-center' if can?(:manage, stream) %>
   </div>
 </div>
