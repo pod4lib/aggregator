@@ -448,8 +448,8 @@ GEM
       actionpack (>= 6.1)
       activesupport (>= 6.1)
       sprockets (>= 3.0.0)
-    sqlite3 (1.7.3-arm64-darwin)
-    sqlite3 (1.7.3-x86_64-linux)
+    sqlite3 (2.5.0-arm64-darwin)
+    sqlite3 (2.5.0-x86_64-linux-gnu)
     sshkit (1.23.2)
       base64
       net-scp (>= 1.1.2)
@@ -496,6 +496,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-23
+  arm64-darwin-24
   x86_64-linux
 
 DEPENDENCIES
@@ -552,7 +553,7 @@ DEPENDENCIES
   sidekiq (~> 7.0)
   simplecov
   sprockets-rails
-  sqlite3 (~> 1.4)
+  sqlite3 (~> 2.5)
   timecop
   turbo-rails (~> 2.0)
   tzinfo-data
