@@ -58,7 +58,7 @@ class NormalizedMarcRecordReader
 
   def using_postgres?
     defined?(ActiveRecord::ConnectionAdapters::PostgreSQLAdapter) &&
-      ActiveRecord::Base.connection == ActiveRecord::ConnectionAdapters::PostgreSQLAdapter
+      ActiveRecord::Base.connection.instance_of?(ActiveRecord::ConnectionAdapters::PostgreSQLAdapter)
   end
 
   def __pgsql_current_marc_record_ids
