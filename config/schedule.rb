@@ -22,16 +22,14 @@ job_type :runner,  "cd :path && RAILS_LOG_LEVEL=warn :environment_variable=:envi
 
 # Learn more: http://github.com/javan/whenever
 
-# These jobs are expensive. Turning off this job for now
-# so stats update only when new files are uploaded.
-# every :day do
-#   runner 'UpdateOrganizationStatisticsJob.perform_all'
-# end
-
 every 3.months do
   runner 'CleanupAndRemoveDataJob.enqueue_all'
 end
 
 every :day do
   runner 'GenerateDeltaDumpJob.enqueue_all'
+end
+
+every :day do
+  runner 'UpdateOrganizationStatisticsJob.perform_all'
 end
