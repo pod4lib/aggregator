@@ -86,8 +86,6 @@ class OaiMarcRecordWriterService
       @bytes_written.positive?
     end
 
-    def close
-      @io.close
-    end
+    delegate :close, to: :@io
   end
 end
