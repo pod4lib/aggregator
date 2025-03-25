@@ -152,10 +152,10 @@ GEM
       responders
       warden (~> 1.2.3)
     devise-bootstrap-views (1.1.0)
-    devise_invitable (2.0.9)
+    devise_invitable (2.0.10)
       actionmailer (>= 5.0)
       devise (>= 4.6)
-    diff-lcs (1.6.0)
+    diff-lcs (1.6.1)
     dlss-capistrano (5.3.0)
       bcrypt_pbkdf
       capistrano (~> 3.0)
@@ -174,7 +174,6 @@ GEM
       factory_bot (~> 6.5)
       railties (>= 5.0.0)
     ffi (1.17.1-arm64-darwin)
-    ffi (1.17.1-x86_64-linux-gnu)
     ffi-compiler (1.3.2)
       ffi (>= 1.15.5)
       rake
@@ -264,7 +263,6 @@ GEM
     matrix (0.4.2)
     mini_mime (1.1.5)
     minitest (5.25.5)
-    mutex_m (0.3.0)
     net-imap (0.5.6)
       date
       net-protocol
@@ -280,9 +278,7 @@ GEM
       net-protocol
     net-ssh (7.3.0)
     nio4r (2.7.4)
-    nokogiri (1.18.5-arm64-darwin)
-      racc (~> 1.4)
-    nokogiri (1.18.5-x86_64-linux-gnu)
+    nokogiri (1.18.6-arm64-darwin)
       racc (~> 1.4)
     okcomputer (1.19.0)
     orm_adapter (0.5.0)
@@ -298,6 +294,7 @@ GEM
     pp (0.6.2)
       prettyprint
     prettyprint (0.2.0)
+    prism (1.4.0)
     psych (5.2.3)
       date
       stringio
@@ -397,8 +394,9 @@ GEM
       rubocop-ast (>= 1.38.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 4.0)
-    rubocop-ast (1.41.0)
+    rubocop-ast (1.43.0)
       parser (>= 3.3.7.2)
+      prism (~> 1.4)
     rubocop-capybara (2.22.1)
       lint_roller (~> 1.1)
       rubocop (~> 1.72, >= 1.72.1)
@@ -452,7 +450,6 @@ GEM
       activesupport (>= 6.1)
       sprockets (>= 3.0.0)
     sqlite3 (2.6.0-arm64-darwin)
-    sqlite3 (2.6.0-x86_64-linux-gnu)
     sshkit (1.24.0)
       base64
       logger
@@ -460,7 +457,7 @@ GEM
       net-sftp (>= 2.1.2)
       net-ssh (>= 2.8.0)
       ostruct
-    stringio (3.1.5)
+    stringio (3.1.6)
     terminal-table (4.0.0)
       unicode-display_width (>= 1.1.1, < 4)
     thor (1.3.2)
@@ -474,6 +471,7 @@ GEM
     unicode-display_width (3.1.4)
       unicode-emoji (~> 4.0, >= 4.0.4)
     unicode-emoji (4.0.4)
+    useragent (0.16.11)
     warden (1.2.9)
       rack (>= 2.0.9)
     web-console (4.2.1)
@@ -502,8 +500,6 @@ GEM
 
 PLATFORMS
   arm64-darwin-23
-  arm64-darwin-24
-  x86_64-linux
 
 DEPENDENCIES
   activejob-status
