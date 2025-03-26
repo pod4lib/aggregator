@@ -22,8 +22,8 @@ class Upload < ApplicationRecord
   # See https://github.com/rails/rails/issues/37304
   has_many_attached :files
 
-  after_save_commit :perform_extract_marc_record_metadata_job, if: :active?
-  after_save_commit :perform_extract_files_job, if: :active?
+  after_create_commit :perform_extract_files_job, if: :active?
+  after_create_commit :perform_extract_marc_record_metadata_job, if: :active?
 
   def active?
     status == 'active'
