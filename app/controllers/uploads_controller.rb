@@ -38,20 +38,6 @@ class UploadsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /uploads/1
-  # PATCH/PUT /uploads/1.json
-  def update
-    respond_to do |format|
-      if @upload.update(upload_params)
-        format.html { redirect_to [@organization, @upload], notice: 'Upload was successfully updated.', status: :see_other }
-        format.json { render :show, status: :ok, location: [@organization, @upload] }
-      else
-        format.html { render :edit }
-        format.json { render json: @upload.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
   # DELETE /uploads/1
   # DELETE /uploads/1.json
   def destroy
