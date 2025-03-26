@@ -73,14 +73,10 @@ class Upload < ApplicationRecord
   end
 
   def perform_extract_marc_record_metadata_job
-    return unless files.any?(&:saved_changes?)
-
     ExtractMarcRecordMetadataJob.perform_later(self)
   end
 
   def perform_extract_files_job
-    return unless files.any?(&:saved_changes?)
-
     ExtractFilesJob.perform_later(self)
   end
 
