@@ -16,14 +16,9 @@ class Upload < ApplicationRecord
   scope :archived, -> { where(status: 'archived') }
   scope :recent, -> { order(created_at: :desc) }
 
-  after_create :attach_file_from_url
-
   # This should be _before_ any callbacks that interact with the attached upload
   # See https://github.com/rails/rails/issues/37304
   has_many_attached :files
-
-  after_save_commit :perform_extract_marc_record_metadata_job, if: :active?
-  after_save_commit :perform_extract_files_job, if: :active?
 
   def active?
     status == 'active'
@@ -72,26 +67,8 @@ class Upload < ApplicationRecord
     errors.add(:url, 'A URL must be provided if a file has not been uploaded') if !files.attached? && url.blank?
   end
 
-  def perform_extract_marc_record_metadata_job
-    return unless files.any?(&:saved_changes?)
-
-    ExtractMarcRecordMetadataJob.perform_later(self)
-  end
-
-  def perform_extract_files_job
-    return unless files.any?(&:saved_changes?)
-
-    ExtractFilesJob.perform_later(self)
-  end
-
   def valid_url
     errors.add(:url, 'Unable to attach file from URL') unless URI.parse(url)&.host
-  end
-
-  def attach_file_from_url
-    return if url.blank?
-
-    AttachRemoteFileToUploadJob.perform_later(self)
   end
 
   def extract_marc_record_delete_metadata(file)
