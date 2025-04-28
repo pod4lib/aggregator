@@ -18,7 +18,7 @@ class NormalizedDump < ApplicationRecord
   has_many_attached :errata
 
   def record_count
-    if marc21&.attachment && marc21.attachment.metadata
+    if marc21&.attachment&.metadata
       # Use marc21 as the source of the record count. marcxml count may differ.
       marc21.attachment.metadata['count']
     else
