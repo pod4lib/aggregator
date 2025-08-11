@@ -85,7 +85,7 @@ RSpec.describe Stream do
       expect do
         stream.make_default
       end.to(change(stream, :default).from(false).to(true)
-         .and((change { current_default.reload.default }).from(true).to(false)))
+         .and(change { current_default.reload.default }.from(true).to(false)))
     end
 
     it 'does not do anything if the stream is already the default' do
