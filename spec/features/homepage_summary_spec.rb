@@ -18,7 +18,8 @@ RSpec.describe 'homepage summary' do
 
     # run the statistics jobs so stats are available
     UpdateOrganizationStatisticsJob.perform_now(provider)
-
+    ExtractMarcRecordMetadataJob.perform_later(upload1)
+    ExtractMarcRecordMetadataJob.perform_later(upload2)
     visit '/'
   end
 
