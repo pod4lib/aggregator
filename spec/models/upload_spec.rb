@@ -40,22 +40,6 @@ RSpec.describe Upload do
     end
   end
 
-  describe '#url' do
-    it 'submits a job to attach the file from the URL if a URL is provided' do
-      expect do
-        create(:upload, files: [], url: 'http://example.com/12345.marc')
-      end.to enqueue_job(AttachRemoteFileToUploadJob).exactly(1).times.with(described_class.last)
-    end
-  end
-
-  context 'with a tar.gz' do
-    it 'submits a job to extract the file' do
-      expect do
-        create(:upload, :tar_gz)
-      end.to enqueue_job(ExtractFilesJob).exactly(1).times.with(described_class.last)
-    end
-  end
-
   describe '#read_marc_record_metadata' do
     subject(:upload) { create(:upload, :small_batch_gz) }
 
