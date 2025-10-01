@@ -1,4 +1,4 @@
-FROM ruby:3.1
+FROM ruby:3.4
 
 RUN useradd --create-home poddev
 
@@ -6,8 +6,8 @@ RUN useradd --create-home poddev
 RUN bundle config --global frozen 1
 
 # Ensure latest packages for Yarn
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor > /usr/share/keyrings/yarn-archive-keyring.gpg
+RUN echo "deb [signed-by=/usr/share/keyrings/yarn-archive-keyring.gpg] https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
 
 # Allow apt to work with https-based sources
 RUN apt-get update -yqq && apt-get install -yqq --no-install-recommends \
