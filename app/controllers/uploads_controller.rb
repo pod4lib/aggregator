@@ -27,8 +27,9 @@ class UploadsController < ApplicationController
   # POST /uploads
   # POST /uploads.json
   def create
+    UploadCreatorService.new(@upload).call
     respond_to do |format|
-      if @upload.save
+      if @upload.persisted?
         format.html { redirect_to [@organization, @upload], notice: 'Upload was successfully created.', status: :see_other }
         format.json { render :show, status: :created, location: [@organization, @upload] }
       else
