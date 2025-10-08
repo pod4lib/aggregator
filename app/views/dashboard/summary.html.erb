@@ -46,7 +46,7 @@
   <ul class="table-key list-unstyled list-inline pt-3" aria-hidden="true">
     <% Settings.metadata_status.each do |status, values| %>
     <li class="list-inline-item">
-      <%= bootstrap_icon(values.icon_class, class: "pod-metadata-status #{status}") %>
+      <i class="<%= values.icon_class %> pod-metadata-status <%= status %>"></i>
       <span><%= values.label %></span>
     </li>
     <% end %>
@@ -69,7 +69,7 @@
       <% upload.files.each do |file| %>
       <tr>
         <td class="text-center">
-          <%= bootstrap_icon(Settings.metadata_status[file.pod_metadata_status].icon_class, class: "pod-metadata-status #{file.pod_metadata_status}") %>
+          <i class="<%= Settings.metadata_status[file.pod_metadata_status].icon_class %> pod-metadata-status <%= file.pod_metadata_status %>"></i>
           <span class="visually-hidden">Type of file: <%= file.pod_metadata_status %></span>
         </td>
         <td>

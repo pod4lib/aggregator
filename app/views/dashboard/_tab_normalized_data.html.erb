@@ -17,7 +17,7 @@
               <% if dump && dump.last_full_dump_at%>
                 <%= local_time(dump.last_full_dump_at, format: datetime_display_format()) %>
               <% else %>
-                <%= bootstrap_icon("exclamation-triangle-fill", class: "text-warning") %>
+                <i class="bi bi-exclamation-triangle-fill text-warning"></i>
               <% end %>
           </td>
           <!-- Dump records: -->
@@ -33,7 +33,7 @@
             <% if dump %>
                 <%= local_time(dump.last_delta_dump_at, format: datetime_display_format()) %>
               <% else %>
-                <%= bootstrap_icon("exclamation-triangle-fill", class: "text-warning") %>
+                <i class="bi bi-exclamation-triangle-fill text-warning"></i>
               <% end %>
           </td>
         </tr>

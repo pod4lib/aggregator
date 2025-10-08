@@ -64,7 +64,7 @@
         <ul class="list-unstyled">
           <% @overview.last_org_files.each do |file| %>
           <li class="my-3">
-            <%= bootstrap_icon(Settings.metadata_status[file.pod_metadata_status].icon_class, class: "pod-metadata-status #{file.pod_metadata_status} me-2") %>
+            <i class="<%= Settings.metadata_status[file.pod_metadata_status].icon_class %> pod-metadata-status <%= file.pod_metadata_status %> me-2"></i>
             <%= file.filename %>
           </li>
           <% end %>
@@ -81,13 +81,13 @@
           <% if @overview.active_org_jobs.present? %>
           <% @overview.active_org_jobs.each do |status, jobs| %>
           <li class="my-3">
-            <%= bootstrap_icon(Settings.job_status_group[status].icon_class, class: "pod-icon pod-job-tracker-status #{status} me-2")%>
+            <i class="<%= Settings.job_status_group[status].icon_class %> pod-icon pod-job-tracker-status <%= status %> me-2"></i>
             <%= t('.organization.jobs.status_html', count: jobs.count, status: t("job_tracker.status_group.#{status}.label").downcase) %>
           </li>
           <% end %>
           <% else %>
           <li class="my-3">
-            <%= bootstrap_icon(Settings.job_status_group['completed'].icon_class, class: "pod-icon pod-job-tracker-status completed me-2")%>
+            <i class="<%= Settings.job_status_group['completed'].icon_class %> pod-icon pod-job-tracker-status completed me-2"></i>
             <%= t('.organization.jobs.status_html.zero') %>
           </li>
           <% end %>

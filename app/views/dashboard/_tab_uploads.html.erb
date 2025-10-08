@@ -24,16 +24,16 @@
             <% if uploads %>
               <%= link_to local_time(uploads[0].created_at, format: datetime_display_format()), organization_upload_path(provider, uploads[0]) %>
             <% else %>
-              <%= bootstrap_icon("exclamation-triangle-fill", class: "text-warning") %>
+              <i class="bi bi-exclamation-triangle-fill text-warning"></i>
             <% end %>
           </td>
           <!-- Most recent upload status: -->
           <td class="text-center">
             <% if uploads %>
-              <%= bootstrap_icon(Settings.job_status_group[files_status(uploads[0])].icon_class, class: "pod-job-tracker-status #{files_status(uploads[0])}") %>
+              <i class="pod-job-tracker-status <%= Settings.job_status_group[files_status(uploads[0])].icon_class %> <%= files_status(uploads[0]) %>"></i>
               <span class="visually-hidden"><%= files_status(uploads[0]) %></span>
             <% else %>
-              <%= bootstrap_icon("exclamation-triangle-fill", class: "text-warning") %>
+              <i class="bi bi-exclamation-triangle-fill text-warning"></i>
             <% end %>
           </td>
           <!-- Date of successful upload: -->
@@ -45,13 +45,13 @@
                 <p>No prior successful uploads</p>
               <% end %>
             <% else %>
-              <%= bootstrap_icon("exclamation-triangle-fill", class: "text-warning") %>
+              <i class="bi bi-exclamation-triangle-fill text-warning"></i>
             <% end %>
           </td>
           <!-- Did any uploads succeed in past 30 days? -->
           <td class="text-center">
             <% if provider.upload_in_last_30_days? %>
-              <%= bootstrap_icon(Settings.job_status_group[best_status(uploads)]&.icon_class, class: "pod-job-tracker-status #{best_status(uploads)}") %>
+              <i class="pod-job-tracker-status <%= Settings.job_status_group[best_status(uploads)]&.icon_class %> <%= best_status(uploads) %>"></i>
               <span class="visually-hidden"><%= best_status(uploads) %></span>
             <% else %>
               <p class="mb-0">No uploads in last 30 days</p>

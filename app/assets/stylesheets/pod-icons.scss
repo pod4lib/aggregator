@@ -1,6 +1,5 @@
-.pod-icon > svg, .pod-metadata-status > svg {
-  height: 20px;
-  width: 20px;
+.pod-icon, .pod-metadata-status {
+  font-size: 20px;
 }
 
 .pod-job-tracker-status {
@@ -24,7 +23,7 @@
 }
 
 .pod-metadata-status {
-  vertical-align: text-bottom;
+  vertical-align: initial;
 
   &.deletes {
     color: $success;
