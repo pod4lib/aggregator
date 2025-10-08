@@ -42,8 +42,6 @@ namespace :agg do
 
   desc 'Seed data from Aggregator API'
   task seed_from_api: :environment do
-    Upload.skip_callback(:commit, :after, :perform_extract_marc_record_metadata_job)
-
     puts "Seeding data from Aggregator @ #{Settings.marc_fixture_seeds.host} (this may take a several minutes)"
     Settings.marc_fixture_seeds.organizations.each do |org_name|
       puts "Fetching data from #{org_name}"
@@ -84,7 +82,5 @@ namespace :agg do
 
       stream.make_default
     end
-
-    Upload.set_callback(:commit, :after, :perform_extract_marc_record_metadata_job)
   end
 end
