@@ -47,7 +47,7 @@ class Overview
     return if @organization.blank?
 
     @organization.default_stream.job_tracker_status_groups.filter do |_status, jobs|
-      jobs.count.positive?
+      jobs.any?
     end
   end
 

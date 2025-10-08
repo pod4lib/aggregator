@@ -5,6 +5,7 @@
 class Stream < ApplicationRecord
   has_paper_trail
   extend FriendlyId
+
   friendly_id :name, use: %i[finders slugged scoped], scope: :organization
   belongs_to :organization
   has_many :uploads, dependent: :destroy
@@ -159,11 +160,11 @@ class Stream < ApplicationRecord
   end
 
   def default_name
-    "#{I18n.l(created_at.to_date)} - #{default? ? '' : I18n.l(updated_at.to_date)}"
+    "#{I18n.l(created_at.to_date)} - #{I18n.l(updated_at.to_date) unless default?}"
   end
 
   def check_for_a_default_stream
-    return unless organization.streams.count == 1
+    return unless organization.streams.one?
 
     DefaultStreamHistory.create(stream: self, start_time: DateTime.now)
   end

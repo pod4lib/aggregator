@@ -52,6 +52,6 @@ class AllowlistedJwtsController < ApplicationController
   def allowlisted_jwt_params
     return {} unless params.key? :allowlisted_jwt
 
-    params.require(:allowlisted_jwt).permit(:label, :scope)
+    params.expect(allowlisted_jwt: %i[label scope])
   end
 end

@@ -5,6 +5,7 @@ class Organization < ApplicationRecord
   default_scope { order(name: :asc) }
   resourcify
   extend FriendlyId
+
   friendly_id :name, use: %i[finders slugged]
   has_paper_trail
   has_many :streams, dependent: :destroy

@@ -23,7 +23,7 @@ class MarcProfilingJob < ApplicationJob
     end
 
     def each
-      @sample.sort.each { |_idx, it| yield(it) }
+      @sample.sort.each { |_idx, v| yield(v) }
     end
   end
 

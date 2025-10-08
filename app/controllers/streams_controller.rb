@@ -83,6 +83,6 @@ class StreamsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def stream_params
-    params.require(:stream).permit(:name, :slug).merge(organization_id: @organization.id)
+    params.expect(stream: %i[name slug]).merge(organization_id: @organization.id)
   end
 end

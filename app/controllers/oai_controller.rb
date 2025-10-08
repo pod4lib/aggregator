@@ -15,7 +15,7 @@ class OaiController < ApplicationController
     raise OaiConcern::BadVerb
   end
 
-  def method_missing(method, *_args, &_block)
+  def method_missing(method, *_args, &)
     raise OaiConcern::BadVerb if method.to_s.start_with?('render_')
 
     super
