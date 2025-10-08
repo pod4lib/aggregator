@@ -16,5 +16,5 @@
 # end
 
 ActiveSupport::Inflector.inflections(:en) do |inflect|
-	inflect.irregular 'interstream_delta', 'interstream_deltas'  
+  inflect.irregular 'interstream_delta', 'interstream_deltas'
 end
