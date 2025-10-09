@@ -1,8 +1,11 @@
 <div class="d-flex justify-content-center mt-3 mb-2">
   <div class="stream-metadata-box bg-light border border-bg-secondary text-center">
-    <div id="box-header" class="text-light py-1 px-4 text-uppercase fw-bolder">
+    <div id="box-header" class="text-light py-1 px-4 text-uppercase fw-bolder d-flex justify-content-center align-items-center">
       <% stream_updated = stream.uploads.last&.updated_at || stream.updated_at %>
           Stream updated: <%= content_tag :span, "#{time_ago_in_words(stream_updated)} ago", title: local_time(stream_updated, format: datetime_display_format()) %>
+          <button class="btn btn-link p-0 ms-2" aria-label="info about stream update lag" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="Statistics are calculated daily and might not reflect the most recent uploads.">
+            <i class="bi bi-info-circle-fill text-light"></i>
+          </button>
     </div>
     <div id="box-files" class="box-metadata">Files:
       <span class="fw-bold"><%= number_with_delimiter stream.statistic&.file_count || 0 %></span>
