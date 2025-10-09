@@ -8,5 +8,5 @@ LocalTime.start()
 import 'direct_uploads';
 import 'copy_to_clipboard';
 import 'organizations';
-import 'tooltips'
+import 'popovers'
 import "@hotwired/turbo-rails"

@@ -15,10 +15,10 @@ module ApplicationHelper
   end
 
   def hidden_time(time, time_type)
-    local_time(time, format: datetime_display_format, class: "hidden-tooltip-time d-none #{time_type}")
+    local_time(time, format: datetime_display_format, class: "hidden-popover-time d-none #{time_type}")
   end
 
-  def badge_tooltip_text(history)
+  def badge_popover_text(history)
     if history.end_time.present?
       concat(hidden_time(history.start_time, 'start'))
       concat(hidden_time(history.end_time, 'end'))
@@ -28,15 +28,15 @@ module ApplicationHelper
   end
 
   def default_stream_status_badge(stream)
-    badge_class = stream.default? ? 'bg-info' : 'bg-warning'
+    badge_class = stream.default? ? 'btn-info' : 'btn-warning'
     badge_label = stream.default? ? 'Default ' : 'Previous default '
 
-    # Tooltips are added to <a> elements for accessibility.
-    # See https://getbootstrap.com/docs/5.0/components/tooltips/#markup
-    content_tag(:a,
+    # popovers are added to <button> elements for accessibility.
+    # See https://getbootstrap.com/docs/5.0/components/popovers
+    content_tag(:button,
                 href: '#',
-                class: "badge text-dark text-decoration-none #{badge_class}",
-                'data-bs-toggle': 'tooltip',
+                class: "badge text-dark btn #{badge_class}",
+                'data-bs-toggle': 'popover',
                 'data-bs-placement': 'top',
                 'data-bs-html': 'true') do
       concat(badge_label)
@@ -44,7 +44,7 @@ module ApplicationHelper
       stream.default_stream_histories.recent.collect do |history|
         next unless history.start_time
 
-        badge_tooltip_text(history)
+        badge_popover_text(history)
       end
     end
   end
