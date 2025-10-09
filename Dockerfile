@@ -24,5 +24,5 @@ RUN bundle install
 COPY --chown=poddev . .
 
 USER poddev
-CMD ["bundle exec rails s -b 0.0.0.0"]
+CMD ["bin/dev"]
 ENTRYPOINT [ "/usr/src/app/docker-entrypoint.sh" ]
