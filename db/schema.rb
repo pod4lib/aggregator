@@ -10,12 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_09_120300) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_09_132420) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_catalog.plpgsql"
+
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
-    t.integer "record_id", null: false
-    t.integer "blob_id", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
@@ -26,7 +29,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_09_120300) do
     t.string "filename", null: false
     t.string "content_type"
     t.text "metadata"
-    t.integer "byte_size", null: false
+    t.bigint "byte_size", null: false
     t.string "checksum"
     t.datetime "created_at", precision: nil, null: false
     t.string "service_name", null: false
@@ -34,14 +37,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_09_120300) do
   end
 
   create_table "active_storage_variant_records", force: :cascade do |t|
-    t.integer "blob_id", null: false
+    t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
   create_table "ahoy_events", force: :cascade do |t|
-    t.integer "visit_id"
-    t.integer "user_id"
+    t.bigint "visit_id"
+    t.bigint "user_id"
     t.string "name"
     t.json "properties"
     t.datetime "time", precision: nil
@@ -53,7 +56,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_09_120300) do
   create_table "ahoy_visits", force: :cascade do |t|
     t.string "visit_token"
     t.string "visitor_token"
-    t.integer "user_id"
+    t.bigint "user_id"
     t.string "ip"
     t.text "user_agent"
     t.text "referrer"
@@ -89,7 +92,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_09_120300) do
     t.string "aud"
     t.datetime "exp", precision: nil
     t.string "resource_type"
-    t.integer "resource_id"
+    t.bigint "resource_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string "label"
@@ -100,7 +103,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_09_120300) do
 
   create_table "contact_emails", force: :cascade do |t|
     t.string "email"
-    t.integer "organization_id", null: false
+    t.bigint "organization_id", null: false
     t.string "confirmation_token"
     t.datetime "confirmed_at", precision: nil
     t.datetime "confirmation_sent_at", precision: nil
@@ -111,7 +114,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_09_120300) do
   end
 
   create_table "default_stream_histories", force: :cascade do |t|
-    t.integer "stream_id", null: false
+    t.bigint "stream_id", null: false
     t.datetime "start_time", precision: nil, null: false
     t.datetime "end_time", precision: nil
     t.index ["stream_id"], name: "index_default_stream_histories_on_stream_id"
@@ -129,7 +132,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_09_120300) do
   end
 
   create_table "interstream_deltas", force: :cascade do |t|
-    t.integer "normalized_dump_id", null: false
+    t.bigint "normalized_dump_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["normalized_dump_id"], name: "index_interstream_deltas_on_normalized_dump_id"
@@ -137,9 +140,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_09_120300) do
 
   create_table "job_trackers", force: :cascade do |t|
     t.string "reports_on_type", null: false
-    t.integer "reports_on_id", null: false
+    t.bigint "reports_on_id", null: false
     t.string "resource_type", null: false
-    t.integer "resource_id", null: false
+    t.bigint "resource_id", null: false
     t.string "job_id"
     t.string "job_class"
     t.datetime "created_at", null: false
@@ -152,8 +155,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_09_120300) do
   end
 
   create_table "marc_profiles", force: :cascade do |t|
-    t.integer "upload_id"
-    t.integer "blob_id", null: false
+    t.bigint "upload_id"
+    t.bigint "blob_id", null: false
     t.json "field_frequency"
     t.json "record_frequency"
     t.json "histogram_frequency"
@@ -165,8 +168,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_09_120300) do
   end
 
   create_table "marc_records", force: :cascade do |t|
-    t.integer "file_id", null: false
-    t.integer "upload_id", null: false
+    t.bigint "file_id", null: false
+    t.bigint "upload_id", null: false
     t.string "marc001"
     t.bigint "bytecount"
     t.bigint "length"
@@ -181,12 +184,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_09_120300) do
   end
 
   create_table "normalized_dumps", force: :cascade do |t|
-    t.integer "stream_id", null: false
+    t.bigint "stream_id", null: false
     t.datetime "last_full_dump_at", precision: nil
     t.datetime "last_delta_dump_at", precision: nil
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "full_dump_id"
+    t.bigint "full_dump_id"
     t.datetime "published_at", precision: nil
     t.index ["full_dump_id"], name: "index_normalized_dumps_on_full_dump_id"
     t.index ["stream_id"], name: "index_normalized_dumps_on_stream_id"
@@ -208,7 +211,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_09_120300) do
   create_table "roles", force: :cascade do |t|
     t.string "name"
     t.string "resource_type"
-    t.integer "resource_id"
+    t.bigint "resource_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
@@ -218,7 +221,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_09_120300) do
 
   create_table "statistics", force: :cascade do |t|
     t.string "resource_type", null: false
-    t.integer "resource_id", null: false
+    t.bigint "resource_id", null: false
     t.bigint "unique_record_count", default: 0
     t.bigint "record_count", default: 0
     t.bigint "file_size", default: 0
@@ -232,7 +235,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_09_120300) do
 
   create_table "streams", force: :cascade do |t|
     t.string "name"
-    t.integer "organization_id"
+    t.bigint "organization_id"
     t.boolean "default", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -245,7 +248,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_09_120300) do
 
   create_table "uploads", force: :cascade do |t|
     t.string "name"
-    t.integer "stream_id"
+    t.bigint "stream_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "url"
@@ -285,8 +288,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_09_120300) do
   end
 
   create_table "users_roles", id: false, force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "role_id"
+    t.bigint "user_id"
+    t.bigint "role_id"
     t.index ["role_id"], name: "index_users_roles_on_role_id"
     t.index ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id"
     t.index ["user_id"], name: "index_users_roles_on_user_id"
@@ -295,12 +298,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_09_120300) do
   create_table "versions", force: :cascade do |t|
     t.string "item_type"
     t.string "{:null=>false}"
-    t.integer "item_id", limit: 8, null: false
+    t.bigint "item_id", null: false
     t.string "event", null: false
     t.string "whodunnit"
-    t.text "object", limit: 1073741823
+    t.text "object"
     t.datetime "created_at", precision: nil
-    t.text "object_changes", limit: 1073741823
+    t.text "object_changes"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
