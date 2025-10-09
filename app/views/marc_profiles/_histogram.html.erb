@@ -32,7 +32,7 @@
           <% if subfields.any? %>
             <button class="btn p-0 m-0 border-0 align-top text-start text-monospace" type="button" data-bs-toggle="collapse" data-bs-target="#histogram-subfields-<%= field.first.parameterize %>" aria-expanded="false" aria-controls="histogram-subfields-<%= field.first.parameterize %>">
               <span class="visually-hidden">Expand</span>
-              <%= inline_svg_tag 'bootstrap-icons/icons/chevron-right.svg', height: 20, width: 20 %>
+              <i class="bi bi-chevron-right" style="font-size: 20px; width: 20px; height: 20px;"></i>
             </button>
           <% end %>
         </td>
@@ -49,7 +49,7 @@
             <% else %>
 
             <button class="btn btn-sm btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#profiles-<%= field.first %>" aria-expanded="false" aria-controls="profiles-<%= field.first %>">
-              Toggle more/less <%= inline_svg_tag 'bootstrap-icons/icons/chevron-right.svg', height: 12, width: 12 %>
+              Toggle more/less <i class="bi bi-chevron-right" style="font-size: 12px;"></i>
             </button>
               <div class="position-relative">
                 <span class="text-monospace">

@@ -18,7 +18,7 @@
             <button class="btn p-0 m-0 border-0 align-top text-start text-monospace" type="button" data-bs-toggle="collapse" data-bs-target="#profile-<%= field %>" aria-expanded="false" aria-controls="collapseExample">
               <% value, id = values.first %>
               <%= value %> [<%= id %>]
-              <%= inline_svg_tag 'bootstrap-icons/icons/chevron-right.svg', height: 12, width: 12 %>
+              <i class="bi bi-chevron-right" style="font-size: 12px;"></i>
             </button>
 
             <div class="collapse" id="profile-<%= field %>">
@@ -58,7 +58,7 @@
             <% else %>
               <button class="btn p-0 m-0 border-0 align-top text-start text-monospace" type="button" data-bs-toggle="collapse" data-bs-target="#profile-<%= field.parameterize %>" aria-expanded="false" aria-controls="collapseExample">
                 <%= selected_values.map { |(value,id)| value }.join(', ').truncate(100) %> [<%= selected_values.map { |(value,id)| id }.compact.join(', ') %>]
-                <%= inline_svg_tag 'bootstrap-icons/icons/chevron-right.svg', height: 12, width: 12 %>
+                <i class="bi bi-chevron-right" style="font-size: 12px;"></i>
               </button>
 
               <div class="collapse" id="profile-<%= field.parameterize %>">

@@ -23,34 +23,34 @@ marc_fixture_seeds:
 
 job_status_group:
   active:
-    icon_class: 'arrow-repeat'
+    icon_class: 'bi bi-arrow-repeat'
     badge_class: 'bg-primary'
   needs_attention:
-    icon_class: 'exclamation-triangle-fill'
+    icon_class: 'bi bi-exclamation-triangle-fill'
     badge_class: 'bg-warning'
   completed:
-    icon_class: 'check-circle-fill'
+    icon_class: 'bi bi-check-circle-fill'
     badge_class: 'bg-success'
   failed:
-    icon_class: 'exclamation-circle-fill'
+    icon_class: 'bi bi-exclamation-circle-fill'
     badge_class: 'bg-danger'
 
 # refer to https://icons.getbootstrap.com/ for icon class names
 metadata_status:
   success:
-    icon_class: 'file-earmark-fill'
+    icon_class: 'bi bi-file-earmark-fill'
     label: 'Valid MARC (adds, updates, or deletes)'
   deletes:
-    icon_class: 'file-earmark-excel-fill'
+    icon_class: 'bi bi-file-earmark-excel-fill'
     label: 'Deletes (text file)'
   invalid:
-    icon_class: 'exclamation-circle-fill'
+    icon_class: 'bi bi-exclamation-circle-fill'
     label: 'Invalid MARC'
   not_marc:
-    icon_class: 'exclamation-triangle-fill'
+    icon_class: 'bi bi-exclamation-triangle-fill'
     label: 'Neither MARC nor Deletes'
   unknown:
-    icon_class: 'question-circle-fill'
+    icon_class: 'bi bi-question-circle-fill'
     label: 'Unknown'
 
 # max. MARC records per OAI-XML file; also max. size of one page in ListRecords

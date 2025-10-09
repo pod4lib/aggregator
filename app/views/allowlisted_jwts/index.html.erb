@@ -26,7 +26,9 @@
             </i>
           </td>
           <td class="text-end">
-            <button class='btn btn-primary copy-token-button' id="copy-token-button-<%= index %>"><%= bootstrap_icon('files', class: 'pod-icon') %> Copy</button>
+            <button class='btn btn-primary copy-token-button' id="copy-token-button-<%= index %>">
+              <i class="bi bi-files pod-icon"></i> Copy
+            </button>
             <%= link_to 'Revoke', [@organization, token], data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'btn btn-danger' if can? :destroy, token %>
           </td>
         </tr>
