@@ -9,7 +9,6 @@ class NormalizedDump < ApplicationRecord
   has_one :organization, through: :stream
   has_many :deltas, class_name: 'NormalizedDump', foreign_key: 'full_dump_id', inverse_of: :full_dump, dependent: :destroy
   belongs_to :full_dump, class_name: 'NormalizedDump', optional: true
-  has_one :interstream_delta, dependent: :destroy
 
   has_one_attached :marc21
   has_one_attached :marcxml
