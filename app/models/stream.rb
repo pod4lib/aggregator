@@ -57,8 +57,7 @@ class Stream < ApplicationRecord
   end
 
   def current_full_dump
-    @current_full_dump ||= normalized_dumps.full_dumps.published.last ||
-                           normalized_dumps.full_dumps.create(last_delta_dump_at: Time.zone.at(0))
+    @current_full_dump ||= normalized_dumps.full_dumps.published.last
   end
 
   # the ids of the current full dump and its associated deltas,

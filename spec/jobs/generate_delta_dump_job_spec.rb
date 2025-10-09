@@ -64,6 +64,22 @@ RSpec.describe GenerateDeltaDumpJob do
                        .marc21.attachment.blob.filename.to_s).to end_with 'marc21.mrc.gz'
   end
 
+  context 'when a published full dump does not exist' do
+    let(:no_full_dump_org) { create(:organization) }
+
+    before do
+      Timecop.travel(5.days.ago)
+      no_full_dump_org.default_stream.uploads << build(:upload, :binary_marc)
+      Timecop.return
+    end
+
+    it 'does not generate a delta if there is no existing published full dump' do
+      described_class.perform_now(no_full_dump_org)
+      expect(no_full_dump_org.default_stream.reload.current_full_dump).to be_nil
+      expect(no_full_dump_org.default_stream.reload.normalized_dumps.count).to be(0)
+    end
+  end
+
   context 'with deletes' do
     before do
       organization.default_stream.uploads << build(:upload, :deletes)
