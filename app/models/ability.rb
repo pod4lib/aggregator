@@ -3,6 +3,7 @@
 # :nodoc:
 class Ability
   include CanCan::Ability
+
   attr_reader :allowlisted_jwt, :user
 
   # rubocop:disable Metrics/CyclomaticComplexity

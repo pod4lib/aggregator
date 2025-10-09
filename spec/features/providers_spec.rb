@@ -21,6 +21,8 @@ RSpec.describe 'Viewing provider information' do
     it 'does not allow unprivileged user to edit, create, or destroy organizations' do
       visit organizations_url
 
+      expect(page).to have_content('Aggregator')
+
       # don't confuse "Edit" with "Edit Profile" in header nav
       expect(page).to have_no_link('Edit', exact: true)
       expect(page).to have_no_link 'Delete'
@@ -50,6 +52,7 @@ RSpec.describe 'Viewing provider information' do
   describe 'Provider detail page as an unprivileged user' do
     it 'lists some limited information about the org' do
       visit organization_url(organization)
+      expect(page).to have_content('Aggregator')
 
       expect(page).to have_no_selector 'h2', text: 'Access Tokens'
       expect(page).to have_no_selector 'h2', text: 'Users'
