@@ -1,0 +1,49 @@
+/* List of organizations, etc */
+.icon-sm {
+  height: 20px;
+}
+
+/* Table of organizations */
+.organizations .icon-column {
+  /* Try to avoid some layout shifting when icons are rendered */
+  min-width: 35px;
+}
+
+.organizations .files-column {
+  width: 6ch;
+}
+
+.manage-organization-container {
+  margin-bottom: 3em;
+}
+
+.manage-organization-container h2 {
+  margin-bottom: 2rem;
+}
+
+.manage-organization-tabs {
+  margin: 1rem 0 3rem;
+}
+
+.manage-organization-tabs a.current {
+  background-color: var(--bs-primary);
+  color: #fff;
+  text-decoration: none;
+}
+
+.manage-organization-tabs a:hover {
+  color: #fff;
+}
+
+dl.organization-details dt {
+  font-weight: 500;
+}
+
+dl.organization-details dd {
+  margin-bottom: 1rem;
+  margin-left: 1rem;
+}
+
+dl.organization-details dd img {
+  max-width: 35px;
+}

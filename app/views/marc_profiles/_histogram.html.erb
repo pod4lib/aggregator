@@ -12,7 +12,7 @@
   <tbody>
     <% marc_profile.record_frequency.sort_by { |key, _value| key }.slice_when { |(k1, _v1), (k2, _v2)| k1.split("$",2).first != k2.split("$",2).first }.each do |field_group| %>
     <% field, *subfields = field_group %>
-      <tr class="<%= MarcRules.common_field?(field.first) ? cycle('bg-light', '') : 'bg-local-practice' %>">
+      <tr class="<%= MarcRules.common_field?(field.first) ? cycle('bg-light', '') : 'bg-warning bg-opacity-50' %>">
         <td class="font-weight-bold"><%= field.first %></td>
         <td class="text-end"><%= number_to_percentage(100.0 * field.last / marc_profile.count, precision: 2) %></td>
         <td>
