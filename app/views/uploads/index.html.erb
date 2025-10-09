@@ -22,7 +22,7 @@
     </thead>
 
     <tbody>
-      <% @uploads.sort_by(&:created_at).reverse.each do |upload| %>
+      <% @uploads.each do |upload| %>
         <tr>
           <td><%= link_to upload.name, [@organization, upload] %></td>
           <td><%= local_time(upload.created_at, format: datetime_display_format()) %></td>
