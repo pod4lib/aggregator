@@ -7,9 +7,22 @@ require File.expand_path('../config/environment', __dir__)
 # Prevent database truncation if the environment is production
 abort('The Rails environment is running in production mode!') if Rails.env.production?
 require 'rspec/rails'
+require 'selenium-webdriver'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'capybara/rspec'
+require 'axe-rspec'
 
+Capybara.javascript_driver = :headless_chrome
+
+Capybara.register_driver :headless_chrome do |app|
+  Capybara::Selenium::Driver.load_selenium
+  browser_options = Selenium::WebDriver::Chrome::Options.new.tap do |opts|
+    opts.args << '--headless'
+    opts.args << '--disable-gpu'
+    opts.args << '--window-size=1000,700'
+  end
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: browser_options)
+end
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
 # run as spec files by default. This means that files in spec/support that end
