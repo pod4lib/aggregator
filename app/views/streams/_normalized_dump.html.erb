@@ -1,4 +1,5 @@
 <% if normalized_dump %>
+  <h4>Full Dumps</h4>
   <table class="table table-striped mb-0">
     <thead>
       <th>Type</th>
@@ -10,12 +11,28 @@
     <tbody>
       <%= render partial: 'streams/dump_attachment', locals: { type: 'Full', attachment: normalized_dump.marc21.attachment, stream: normalized_dump.stream } %>
       <%= render partial: 'streams/dump_attachment', locals: { type: 'Full', attachment: normalized_dump.marcxml.attachment, stream: normalized_dump.stream } %>
-
-      <% normalized_dump.deltas.sort_by(&:created_at).each do |delta| %>
-        <%= render partial: 'streams/dump_attachment', locals: { type: 'Delta', attachment: delta.marc21.attachment, stream: normalized_dump.stream } %>
-        <%= render partial: 'streams/dump_attachment', locals: { type: 'Delta', attachment: delta.marcxml.attachment, stream: normalized_dump.stream } %>
-        <%= render partial: 'streams/dump_attachment', locals: { type: 'Deletes', attachment: delta.deletes.attachment, stream: normalized_dump.stream } %>
-      <% end %>
     </tbody>
   </table>
+
+  <% if normalized_dump.deltas.exists? %>
+    <h4 class="mt-4">Deltas and Deletes</h4>
+    <table class="table table-striped">
+      <thead>
+        <th>Type</th>
+        <th class="pl-4">File</th>
+        <th>Date created</th>
+        <th>Size</th>
+        <th class="text-end pr-4">Records</th>
+      </thead>
+      <tbody>
+        <% paginated_dump =  normalized_dump.deltas.order(created_at: :desc).page(params[:page]).per(5) %>
+        <% paginated_dump.each do |delta| %>
+          <%= render partial: 'streams/dump_attachment', locals: { type: 'Delta', attachment: delta.marc21.attachment, stream: normalized_dump.stream } %>
+          <%= render partial: 'streams/dump_attachment', locals: { type: 'Delta', attachment: delta.marcxml.attachment, stream: normalized_dump.stream } %>
+          <%= render partial: 'streams/dump_attachment', locals: { type: 'Deletes', attachment: delta.deletes.attachment, stream: normalized_dump.stream } %>
+        <% end %>
+      </tbody>
+    </table>
+    <%= paginate paginated_dump %>
+  <% end %>
 <% end %>
