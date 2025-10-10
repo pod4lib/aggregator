@@ -56,23 +56,6 @@ class Stream < ApplicationRecord
     job_tracker_status_groups.values.flatten.any?
   end
 
-  def marc_profile
-    any = false
-    profile = MarcProfile.new(count: 0, histogram_frequency: {}, record_frequency: {}, sampled_values: {})
-
-    files.find_each do |file|
-      blob_profile = MarcProfile.find_by(blob_id: file.blob.id)
-      next unless blob_profile
-
-      any = true
-      profile.deep_merge!(blob_profile)
-    end
-
-    return unless any
-
-    profile
-  end
-
   def current_full_dump
     @current_full_dump ||= normalized_dumps.full_dumps.published.last ||
                            normalized_dumps.full_dumps.create(last_delta_dump_at: Time.zone.at(0))

@@ -54,7 +54,6 @@ class UploadsController < ApplicationController
   def info
     @attachment = @upload.files.find(params[:attachment_id])
     @blob = @attachment.blob
-    @marc_profile = @upload.marc_profiles.find_by(blob_id: @blob.id) if @blob.id
   end
 
   def current_stream

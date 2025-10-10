@@ -12,14 +12,4 @@
   </div>
 
   <%= render 'uploads/summary_card', upload: @upload %>
-
-  <% if @marc_profile %>
-    <%= render 'marc_profiles/summary', marc_profile: @marc_profile %>
-    <%= render 'marc_profiles/histogram', marc_profile: @marc_profile %>
-    <%= render 'marc_profiles/fields', marc_profile: @marc_profile %>
-  <% else %>
-    <div class="alert alert-info">No MARC profiling data found</div>
-  <% end %>
-
 <% end %>
-

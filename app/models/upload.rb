@@ -6,7 +6,6 @@ class Upload < ApplicationRecord
   belongs_to :stream, touch: true
   has_one :organization, through: :stream
   has_many :marc_records, dependent: :delete_all
-  has_many :marc_profiles, dependent: :delete_all
   belongs_to :user, optional: true
   belongs_to :allowlisted_jwts, optional: true
   validate :url_presence_if_no_uploaded_files
