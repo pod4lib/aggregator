@@ -3,6 +3,7 @@
 # Calculate some daily statistics for an organization
 class UpdateOrganizationStatisticsJob < ApplicationJob
   queue_as :default
+  sidekiq_options retry: 1
 
   def self.perform_all
     Organization.find_each { |o| perform_later(o) }
