@@ -231,8 +231,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_09_132420) do
     t.datetime "updated_at", null: false
     t.string "slug"
     t.string "status", default: "active"
+    t.index ["organization_id", "slug"], name: "index_streams_on_organization_id_and_slug", unique: true
     t.index ["organization_id"], name: "index_streams_on_organization_id"
-    t.index ["slug"], name: "index_streams_on_slug", unique: true
     t.index ["status"], name: "index_streams_on_status"
   end
 
