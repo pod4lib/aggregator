@@ -14,8 +14,8 @@
 <% upload.files.each do |file| %>
   <tr>
     <td class="align-middle text-center">
-      <i class="<%= Settings.metadata_status[file.pod_metadata_status].icon_class %> pod-metadata-status <%= file.pod_metadata_status %>"></i>
-      <span class="visually-hidden"><%= Settings.metadata_status[file.pod_metadata_status].label %></span>
+      <% status = file.pod_metadata_status %>
+      <i class="<%= Settings.metadata_status[status].icon_class %> pod-metadata-status <%= status %>" aria-label="<%= Settings.metadata_status[status].label  %>"></i>
     </td> 
     <td class="align-middle">
       <%= link_to_if can?(:read, upload), file.filename, download_url(file), title: "Download #{file.filename}" %>
@@ -27,8 +27,7 @@
     <td class="align-middle text-center">
       <% if can? :read, upload %>
         <%= link_to file_info_organization_upload_path(@organization, upload, file), class: 'btn btn-sm btn-secondary' do %>
-          <i class="bi bi-search pod-icon"></i>
-          <span class="visually-hidden">Profile</span>
+          <i class="bi bi-search pod-icon" aria-label="Profile"></i>
         <% end %>
         <% if upload.url.present? %>
           <%= link_to 'Source 🔗', upload.url, title: upload.url, class: 'btn btn-sm btn-link' %>
