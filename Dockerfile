@@ -24,5 +24,5 @@ RUN bundle install
 COPY --chown=poddev . .
 
 USER poddev
-CMD ["bin/dev"]
+CMD ["BINDING=0.0.0.0 bin/dev"]
 ENTRYPOINT [ "/usr/src/app/docker-entrypoint.sh" ]
