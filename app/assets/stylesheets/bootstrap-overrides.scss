@@ -1,6 +1,8 @@
 @import 'variables';
 
-$tooltip-max-width: 600px;
+.popover {
+  --bs-popover-max-width: 600px;
+}
 
 // Overrides for better text/link contrast on Bootstrap
 // colored backgrounds
