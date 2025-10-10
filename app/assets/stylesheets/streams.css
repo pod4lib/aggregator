@@ -14,10 +14,10 @@
   margin: 0;
 }  
 
-// Stack the layout on small devices/viewports
+/* Stack the layout on small devices/viewports */
 @media all and (max-width: 500px) {
-  .stream-metadata-box { 
-    grid-template-areas: 
+  .stream-metadata-box {
+    grid-template-areas:
       "box-header"
       "files"
       "filesize"
@@ -26,10 +26,10 @@
     grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
     grid-template-columns: 1fr;
     justify-items: left;
-    
-    .box-metadata {
-      padding-left: 1rem;
-    }
+  }
+
+  .stream-metadata-box .box-metadata {
+    padding-left: 1rem;
   }
 }
 

@@ -4,9 +4,6 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 8.0'
 
-# The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
-gem "sprockets-rails"
-
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3', '~> 2.5'
 gem 'pg'
@@ -110,8 +107,7 @@ gem 'concurrent-ruby'
 
 gem "local_time", "~> 2.1"
 
-gem "cssbundling-rails", "~> 1.1"
-
 gem "importmap-rails", "~> 1.1"
+gem 'propshaft'
 
 gem "turbo-rails", "~> 2.0"

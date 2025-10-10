@@ -1,0 +1,16 @@
+/* Overrides for better text/link contrast on Bootstrap colored backgrounds */
+.popover {
+  --bs-popover-max-width: 600px;
+}
+
+footer.bg-light a {
+  color: var(--text-muted-bg-light);
+}
+
+.bg-light a {
+  color: var(--link-bg-light);
+}
+
+.alert-info code {
+  color: var(--code-bg-info);
+}

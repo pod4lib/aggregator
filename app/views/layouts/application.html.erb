@@ -9,11 +9,12 @@
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
 
+  <%= stylesheet_link_tag "https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css", crossorigin: "anonymous", media: "all", "data-turbo-track": "reload" %>
+  <%= stylesheet_link_tag href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css", crossorigin: "anonymous", media: "all", "data-turbo-track": "reload" %>
   <%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
   <%= favicon_link_tag 'favicon.svg' %>
   <%= content_for(:head) %>
   <%= javascript_importmap_tags %>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
 
 <body class="min-vh-100 d-flex flex-column">

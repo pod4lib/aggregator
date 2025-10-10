@@ -4,21 +4,21 @@
 
 .pod-job-tracker-status {
   &.active {
-    color: $info
+    color: var(--bs-info);
   }
 
   &.retry,
   &.needs_attention {
-    color: $warning
+    color: var(--bs-warning);
   }
 
   &.dead,
   &.failed {
-    color: $danger
+    color: var(--bs-danger);
   }
 
   &.completed {
-    color: $success
+    color: var(--bs-success);
   }
 }
 
@@ -26,23 +26,23 @@
   vertical-align: initial;
 
   &.deletes {
-    color: $success;
+    color: var(--bs-success);;
   }
 
   &.invalid {
-    color: $danger;
+    color: var(--bs-danger);;
   }
 
   &.not_marc {
-    color: $warning;
+    color: var(--bs-warning);;
   }
 
   &.success {
-    color: $success;
+    color: var(--bs-success);;
   }
 
   &.unknown {
-    color: $info;
+    color: var(--bs-info);;
   }
 }
 
