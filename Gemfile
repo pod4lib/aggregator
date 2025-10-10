@@ -111,3 +111,4 @@ gem "importmap-rails", "~> 1.1"
 gem 'propshaft'
 
 gem "turbo-rails", "~> 2.0"
+gem 'stimulus-rails'
