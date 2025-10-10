@@ -15,7 +15,7 @@
   <tr>
     <td class="align-middle text-center">
       <i class="<%= Settings.metadata_status[file.pod_metadata_status].icon_class %> pod-metadata-status <%= file.pod_metadata_status %>"></i>
-      <span class="visually-hidden">Type of file: <%= file.pod_metadata_status %></span>
+      <span class="visually-hidden"><%= Settings.metadata_status[file.pod_metadata_status].label %></span>
     </td> 
     <td class="align-middle">
       <%= link_to_if can?(:read, upload), file.filename, download_url(file), title: "Download #{file.filename}" %>
