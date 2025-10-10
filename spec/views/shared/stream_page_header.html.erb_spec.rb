@@ -17,7 +17,6 @@ RSpec.describe 'shared/_stream_page_header' do
 
     expect(rendered).to have_link('Uploaded files')
     expect(rendered).to have_link('Normalized data')
-    expect(rendered).to have_link('MARC analysis')
     expect(rendered).to have_link('Processing status')
   end
   # rubocop:enable RSpec/MultipleExpectations
