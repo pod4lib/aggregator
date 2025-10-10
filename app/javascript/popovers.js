@@ -21,7 +21,7 @@ document.addEventListener('turbo:load', function() {
             }
         })
         // Replace the title element of the popover
-        popoverTriggerEl.dataset.bsContent = text
+        if (text) popoverTriggerEl.dataset.bsContent = text
         return new bootstrap.Popover(popoverTriggerEl)
     })
 
