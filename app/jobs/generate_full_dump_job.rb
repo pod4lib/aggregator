@@ -6,7 +6,7 @@ class GenerateFullDumpJob < ApplicationJob
   with_job_tracking
 
   def self.enqueue_all
-    Organization.find_each do |org|
+    Organization.providers.find_each do |org|
       full_dump = org.default_stream.normalized_dumps.published.last
       next if full_dump && org.default_stream.uploads.where(updated_at: full_dump.last_full_dump_at...Time.zone.now).none?
 

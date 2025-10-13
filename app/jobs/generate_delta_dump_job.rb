@@ -6,7 +6,7 @@ class GenerateDeltaDumpJob < ApplicationJob
   with_job_tracking
 
   def self.enqueue_all
-    Organization.find_each { |org| GenerateDeltaDumpJob.perform_later(org) }
+    Organization.providers.find_each { |org| GenerateDeltaDumpJob.perform_later(org) }
   end
 
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
