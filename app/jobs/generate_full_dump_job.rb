@@ -14,8 +14,8 @@ class GenerateFullDumpJob < ApplicationJob
     end
   end
 
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
-  def perform(organization)
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def perform(organization, publish: true)
     now = Time.zone.now
     uploads = Upload.active.where(stream: organization.default_stream)
 
@@ -72,16 +72,16 @@ class GenerateFullDumpJob < ApplicationJob
 
       # Add a timestamp when the dump is saved at the end of the job to indicate
       # it is complete, should supercede the previous full dump, and is ready for harvesting.
-      full_dump.published_at = Time.zone.now
+      full_dump.published_at = Time.zone.now if publish
       full_dump.save!
 
-      GenerateDeltaDumpJob.perform_later(organization)
+      GenerateDeltaDumpJob.perform_later(organization, publish: publish)
     ensure
       writer.close
       writer.unlink
     end
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   def human_readable_filename(base_name, file_type, counter = nil)
     as = case file_type
