@@ -32,13 +32,12 @@ group :development, :test do
 
   gem 'rspec-rails'
   gem 'rails-controller-testing'
+  gem 'axe-core-rspec'
 
   # Capybara for feature/integration tests
   gem 'capybara'
   gem 'factory_bot_rails', '~> 6.4'
-  gem 'selenium-webdriver'
-
-  gem 'webdrivers'
+  gem 'selenium-webdriver', '~> 4.36'
 
   # Rubocop is a static code analyzer to enforce style.
   gem 'rubocop', require: false
