@@ -85,6 +85,13 @@ RSpec.describe GenerateFullDumpJob do
     expect(organization.default_stream.normalized_dumps.last.marc21.attachment.blob.filename.to_s).to match(/marc21.mrc.gz/)
   end
 
+  it 'writes errata if the record is invalid' do
+    organization.default_stream.uploads << build(:upload, :invalid_marc)
+    described_class.perform_now(organization)
+    file = Zlib::GzipReader.new(StringIO.new(organization.default_stream.normalized_dumps.last.errata.first.download)).read
+    expect(file).to include 'u1621206: Invalid record'
+  end
+
   describe '.enqueue_all' do
     it 'enqueues jobs for each organization' do
       expect do

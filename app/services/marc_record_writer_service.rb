@@ -12,6 +12,8 @@ class MarcRecordWriterService
   end
 
   def write_marc_record(record)
+    write_errata("#{record.marc001}: Invalid record") and return unless valid?(record)
+
     write_marc21_record(record)
     write_marcxml_record(record)
   end
@@ -41,13 +43,13 @@ class MarcRecordWriterService
   def write_marc21_record(record)
     writer(:marc21).write(split_marc(record.augmented_marc))
   rescue StandardError => e
-    write_errata("#{record['001']}: #{e}")
+    write_errata("#{record.marc001}: #{e}")
   end
 
   def write_marcxml_record(record)
     marcxml_writer.write(record.augmented_marc)
   rescue StandardError => e
-    write_errata("#{record['001']}: #{e}")
+    write_errata("#{record.marc001}: #{e}")
   end
 
   def file(type)
@@ -82,5 +84,16 @@ class MarcRecordWriterService
     return CustomMarcWriter.encode(marc) if e.message.include? "Can't write MARC record in binary format, as a length/offset"
 
     raise e
+  end
+
+  def valid?(record)
+    record.marc.none? do |field|
+      case field
+      when MARC::ControlField
+        field.value.include?("\uFFFD")
+      when MARC::DataField
+        field.subfields.any? { |sf| sf.value.include?("\uFFFD") }
+      end
+    end
   end
 end

@@ -76,6 +76,15 @@ FactoryBot.define do
       end
     end
 
+    trait :invalid_marc do
+      after(:build) do |upload|
+        upload.files.attach(
+          io: Rails.root.join('spec/fixtures/bad_marc8.mrc').open,
+          filename: 'bad_marc8.marc', content_type: 'application/marc'
+        )
+      end
+    end
+
     trait :multiple_files do
       after(:build) do |upload|
         upload.files.attach([
