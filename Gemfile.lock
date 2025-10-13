@@ -182,7 +182,7 @@ GEM
     drb (2.2.3)
     dumb_delegator (1.1.0)
     ed25519 (1.4.0)
-    erb (5.0.3)
+    erb (5.1.1)
     erubi (1.13.1)
     factory_bot (6.5.5)
       activesupport (>= 6.1.0)
@@ -233,7 +233,7 @@ GEM
       ruby-progressbar (~> 1.8, >= 1.8.1)
       terminal-table (>= 1.5.1)
     ice_nine (0.11.2)
-    importmap-rails (1.2.3)
+    importmap-rails (2.2.2)
       actionpack (>= 6.0.0)
       activesupport (>= 6.0.0)
       railties (>= 6.0.0)
@@ -268,7 +268,7 @@ GEM
     llhttp-ffi (0.5.1)
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
-    local_time (2.1.0)
+    local_time (3.0.3)
     logger (1.7.0)
     loofah (2.24.1)
       crass (~> 1.0.2)
@@ -587,12 +587,12 @@ DEPENDENCIES
   honeybadger
   http
   i18n-tasks
-  importmap-rails (~> 1.1)
+  importmap-rails (~> 2.0)
   inline_svg
   jbuilder (~> 2.7)
   jwt
   kaminari
-  local_time (~> 2.1)
+  local_time (~> 3.0)
   marc
   okcomputer
   paper_trail
