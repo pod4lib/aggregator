@@ -33,3 +33,7 @@ end
 every :day do
   runner 'UpdateOrganizationStatisticsJob.perform_all'
 end
+
+every :day, at: '3:00 am' do
+  rake 'agg:prune_ahoy_visits[180]'
+end
