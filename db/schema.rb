@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_10_101010) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_13_212130) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -302,5 +302,4 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_10_101010) do
   add_foreign_key "contact_emails", "organizations"
   add_foreign_key "default_stream_histories", "streams"
   add_foreign_key "marc_profiles", "uploads"
-  add_foreign_key "normalized_dumps", "streams"
 end
