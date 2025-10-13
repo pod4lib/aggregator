@@ -620,7 +620,6 @@ DEPENDENCIES
   rails (~> 8.0)
   rails-controller-testing
   redis (~> 5.0)
-  rexml
   rolify
   rspec-rails
   rubocop
