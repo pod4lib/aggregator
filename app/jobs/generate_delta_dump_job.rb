@@ -10,7 +10,7 @@ class GenerateDeltaDumpJob < ApplicationJob
   end
 
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
-  def perform(organization)
+  def perform(organization, publish: true)
     now = Time.zone.now
     full_dump = organization.default_stream.current_full_dump
 
@@ -71,7 +71,7 @@ class GenerateDeltaDumpJob < ApplicationJob
 
       # Add a timestamp when the dump is saved at the end of the job to indicate
       # it is complete and ready for harvesting.
-      delta_dump.published_at = Time.zone.now
+      delta_dump.published_at = Time.zone.now if publish
       delta_dump.save!
       full_dump.update(last_delta_dump_at: now)
     ensure
