@@ -39,6 +39,8 @@ group :development, :test do
   gem 'factory_bot_rails', '~> 6.4'
   gem 'selenium-webdriver', '~> 4.36'
 
+  gem 'herb'
+
   # Rubocop is a static code analyzer to enforce style.
   gem 'rubocop', require: false
   gem 'rubocop-performance', require: false

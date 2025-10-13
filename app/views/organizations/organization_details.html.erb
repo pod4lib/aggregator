@@ -28,8 +28,9 @@
 
     <dt>POD contact for this organization</dt>
     <dd>
-      <direct_upload class="<%= @organization.contact_email.blank? ? 'fst-italic' : '' %>">
+      <p class="<%= @organization.contact_email.blank? ? 'fst-italic' : '' %>">
         <%= @organization.contact_email.blank? ? 'no value provided' : @organization.contact_email.email %>
+      </p>
     </dd>
 
     <dt>Icon</dt>

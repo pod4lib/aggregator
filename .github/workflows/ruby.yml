@@ -34,5 +34,7 @@ jobs:
       run: bundle config path vendor/bundle
     - name: Install dependencies
       run: bin/setup --skip-server
+    - name: Herb analyze
+      run: bundle exec herb analyze app --non-interactive --no-log-file
     - name: Run tests
       run: bundle exec rake
