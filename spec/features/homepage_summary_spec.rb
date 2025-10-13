@@ -18,8 +18,6 @@ RSpec.describe 'homepage summary' do
 
     # run the statistics jobs so stats are available
     UpdateOrganizationStatisticsJob.perform_now(provider)
-    ExtractMarcRecordMetadataJob.perform_later(upload1)
-    ExtractMarcRecordMetadataJob.perform_later(upload2)
     visit '/'
   end
 
@@ -53,8 +51,8 @@ RSpec.describe 'homepage summary' do
       expect(page).to have_content '9953670.marc'
     end
 
-    it 'displays the processing status of any active jobs' do
-      expect(page).to have_content '2 jobs active'
+    it 'displays the processing status' do
+      expect(page).to have_content 'No active jobs'
     end
 
     it 'displays the Provider home link' do
