@@ -13,6 +13,7 @@ class GenerateDeltaDumpJob < ApplicationJob
   def perform(organization)
     now = Time.zone.now
     full_dump = organization.default_stream.current_full_dump
+
     return unless full_dump
 
     from = full_dump.last_delta_dump_at
