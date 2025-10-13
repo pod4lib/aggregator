@@ -3,32 +3,58 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 8.0'
-
+# The modern asset pipeline for Rails [https://github.com/rails/propshaft]
+gem 'propshaft'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3', '~> 2.5'
-gem 'pg'
-
-# Use Puma as the app server
+# Use the Puma web server [https://github.com/puma/puma]
 gem 'puma', '>= 5.0'
-
+# Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
+gem "importmap-rails", "~> 2.0"
+# Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
+gem "turbo-rails", "~> 2.0"
+# Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
+gem 'stimulus-rails'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.7'
-
-# Use Redis adapter to run Action Cable in production
-gem 'redis', '~> 5.0'
 
 # Use Active Model has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
+# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem 'tzinfo-data', platforms: %i[ windows jruby ]
+
+# Use the database-backed adapters for Rails.cache, Active Job, and Action Cable
+# gem "solid_cache"
+# gem "solid_queue"
+# gem "solid_cable"
+
+# Reduces boot times through caching; required in config/boot.rb
+gem "bootsnap", require: false
+
+# Add HTTP asset caching/compression and X-Sendfile acceleration to Puma [https://github.com/basecamp/thruster/]
+gem "thruster", require: false
+
+# Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
+# gem "image_processing", "~> 1.2"
+
+# Use Redis adapter to run Action Cable in production
+gem 'redis', '~> 5.0'
+
 # jwt for token based auth
 gem 'jwt'
+
+gem 'pg'
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem "debug", platforms: %i[ mri mingw x64_mingw ]
+  gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
+
+  # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
+  gem "brakeman", require: false
 
   gem 'rspec-rails'
   gem 'rails-controller-testing'
@@ -39,6 +65,10 @@ group :development, :test do
   gem 'factory_bot_rails', '~> 6.4'
   gem 'selenium-webdriver', '~> 4.36'
 
+  gem 'herb'
+
+  # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
+  # gem "rubocop-rails-omakase", require: false
   # Rubocop is a static code analyzer to enforce style.
   gem 'rubocop', require: false
   gem 'rubocop-performance', require: false
@@ -60,13 +90,7 @@ group :development do
 
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
   # gem "rack-mini-profiler"
-
-  # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
-  # gem "spring"
 end
-
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'bootstrap_form'
 gem 'cancancan'
@@ -105,9 +129,3 @@ end
 gem 'concurrent-ruby'
 
 gem "local_time", "~> 3.0"
-
-gem "importmap-rails", "~> 2.0"
-gem 'propshaft'
-
-gem "turbo-rails", "~> 2.0"
-gem 'stimulus-rails'
