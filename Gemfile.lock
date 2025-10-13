@@ -206,6 +206,11 @@ GEM
     groupdate (6.7.0)
       activesupport (>= 7.1)
     hashdiff (1.2.1)
+    herb (0.7.5)
+    herb (0.7.5-aarch64-linux-musl)
+    herb (0.7.5-arm64-darwin)
+    herb (0.7.5-x86_64-linux-gnu)
+    herb (0.7.5-x86_64-linux-musl)
     highline (3.1.2)
       reline
     honeybadger (6.1.1)
@@ -584,6 +589,7 @@ DEPENDENCIES
   factory_bot_rails (~> 6.4)
   friendly_id
   groupdate
+  herb
   honeybadger
   http
   i18n-tasks
