@@ -157,5 +157,23 @@ class Stream < ApplicationRecord
       organization.default_stream_histories.where(end_time: nil).update(end_time: DateTime.now)
     end
   end
+
+  def cached_files_count
+    return statistic.file_count if statistic_up_to_date?
+
+    stream.files.size
+  end
+
+  def cached_files_size
+    return statistic.file_size if statistic_up_to_date?
+
+    stream.files.sum { |file| file.blob.byte_size }
+  end
+
+  def statistic_up_to_date?
+    return false unless statistic
+
+    statistic.updated_at >= updated_at
+  end
 end
 # rubocop:enable Metrics/ClassLength
