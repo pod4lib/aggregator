@@ -128,6 +128,18 @@ class Stream < ApplicationRecord
     "#{oai_dc_type.capitalize} stream for #{organization.name}, #{oai_dc_dates.join(' and ')}"
   end
 
+  def cached_files_count
+    return statistic.file_count if statistic_up_to_date?
+
+    files.size
+  end
+
+  def cached_files_size
+    return statistic.file_size if statistic_up_to_date?
+
+    files.sum { |file| file.blob.byte_size }
+  end
+
   private
 
   # Returns the DefaultStreamHistory object for self.stream
@@ -156,18 +168,6 @@ class Stream < ApplicationRecord
     else
       organization.default_stream_histories.where(end_time: nil).update(end_time: DateTime.now)
     end
-  end
-
-  def cached_files_count
-    return statistic.file_count if statistic_up_to_date?
-
-    stream.files.size
-  end
-
-  def cached_files_size
-    return statistic.file_size if statistic_up_to_date?
-
-    stream.files.sum { |file| file.blob.byte_size }
   end
 
   def statistic_up_to_date?
