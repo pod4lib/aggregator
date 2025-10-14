@@ -8,12 +8,12 @@ class Stream < ApplicationRecord
 
   friendly_id :name, use: %i[finders slugged scoped], scope: :organization
   belongs_to :organization
-  has_many :uploads, dependent: :destroy
-  has_many :default_stream_histories, dependent: :destroy
+  has_many :uploads, dependent: :destroy_async
+  has_many :default_stream_histories, dependent: :delete_all
   has_many :marc_records, through: :uploads, inverse_of: :stream
   has_many :files, source: :files_attachments, through: :uploads
   has_one :statistic, dependent: :delete, as: :resource
-  has_many :normalized_dumps, dependent: :destroy
+  has_many :normalized_dumps, dependent: :destroy_async
   has_many :job_trackers, dependent: :delete_all, as: :reports_on
 
   scope :default, -> { where(default: true) }
