@@ -3,7 +3,7 @@
     <div id="box-header" class="text-light py-1 px-4 text-uppercase fw-bolder d-flex justify-content-center align-items-center">
       <% stream_updated = stream.uploads.last&.updated_at || stream.updated_at %>
           Stream updated: <%= time_ago_in_words(stream_updated) %> ago
-          <button class="btn btn-link p-0 ms-2" aria-label="info about stream update lag" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="Statistics are calculated daily and might not reflect the most recent uploads.">
+          <button class="btn btn-link p-0 ms-2" aria-label="Info about stream update lag" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="Statistics are calculated daily and might not reflect the most recent uploads.">
             <i class="bi bi-info-circle-fill text-light"></i>
           </button>
     </div>

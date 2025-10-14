@@ -7,7 +7,7 @@
 <div class="container manage-organization-container">
   <% if @organization.provider? %>
     <%= render 'streams/header', stream: @stream %>
-    <%= render 'shared/stream_page_header'%>
+    <%= render 'shared/stream_page_header' %>
     
     <%= yield %>
   <% end %>

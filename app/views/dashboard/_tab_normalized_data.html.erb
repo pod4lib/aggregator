@@ -14,7 +14,7 @@
           <td><%= link_to provider.name, normalized_data_organization_stream_path(provider, provider.default_stream) %></td>
           <!-- Last full dump: -->
           <td>
-              <% if dump && dump.last_full_dump_at%>
+              <% if dump && dump.last_full_dump_at %>
                 <%= local_time(dump.last_full_dump_at, format: datetime_display_format()) %>
               <% else %>
                 <i class="bi bi-exclamation-triangle-fill text-warning"></i>
