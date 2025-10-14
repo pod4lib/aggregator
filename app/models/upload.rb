@@ -13,6 +13,7 @@ class Upload < ApplicationRecord
   validate :valid_url, if: proc { |upload| upload.url.present? }
   scope :active, -> { where(status: %w[active processed]) }
   scope :archived, -> { where(status: 'archived') }
+  scope :obsolete, -> { where(status: 'obsolete') }
   scope :recent, -> { order(created_at: :desc) }
 
   # This should be _before_ any callbacks that interact with the attached upload
@@ -31,8 +32,14 @@ class Upload < ApplicationRecord
     super.presence || created_at&.iso8601
   end
 
+  def obsolete!
+    update(status: 'obsolete')
+    marc_records.delete_all
+  end
+
   def archive
     update(status: 'archived')
+    marc_records.delete_all
     files.find_each(&:purge_later)
   end
 
