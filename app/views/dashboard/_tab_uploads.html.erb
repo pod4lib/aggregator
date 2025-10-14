@@ -12,7 +12,7 @@
         </tr>
       </thead>
       <tbody>
-        <% @dashboard.recent_uploads_by_provider.each do |provider, uploads| %>    
+        <% @dashboard.recent_uploads_by_provider.each do |provider, uploads| %>
         <tr>
           <td><%= link_to provider.name, organization_uploads_path(provider) %></td>
           
@@ -21,7 +21,7 @@
 
           <!-- Most recent upload: -->
           <td>
-            <% if uploads %>
+            <% if uploads.present? %>
               <%= link_to local_time(uploads[0].created_at, format: datetime_display_format()), organization_upload_path(provider, uploads[0]) %>
             <% else %>
               <i class="bi bi-exclamation-triangle-fill text-warning"></i>
@@ -29,7 +29,7 @@
           </td>
           <!-- Most recent upload status: -->
           <td class="text-center">
-            <% if uploads %>
+            <% if uploads.present? %>
               <% status = files_status(uploads[0]) %>
               <i class="pod-job-tracker-status <%= Settings.job_status_group[status].icon_class %> <%= status %>" aria-label="<%= status %>"></i>
             <% else %>
@@ -38,7 +38,7 @@
           </td>
           <!-- Date of successful upload: -->
           <td>
-            <% if uploads %>
+            <% if uploads.present? %>
               <% if last_successful_upload_date(uploads) %>
                 <%= local_time(last_successful_upload_date(uploads), format: datetime_display_format()) %>
               <% else %>
