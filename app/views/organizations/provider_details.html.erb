@@ -34,7 +34,7 @@
 
             <dt>Call number subfield</dt>
             <dd>
-                <p class="<%= @organization.normalization_steps.values.dig(0, 'subfields', 'a').blank? ? 'fst-italic' : '' %>"><%= @organization.normalization_steps.values.dig(0, 'subfields', 'a').blank? ? 'no value provided' : @organization.normalization_steps.values.dig(0, 'subfields', 'a')%></p>
+                <p class="<%= @organization.normalization_steps.values.dig(0, 'subfields', 'a').blank? ? 'fst-italic' : '' %>"><%= @organization.normalization_steps.values.dig(0, 'subfields', 'a').blank? ? 'no value provided' : @organization.normalization_steps.values.dig(0, 'subfields', 'a') %></p>
             </dd>
 
             <dt>Local library</dt>
