@@ -10,6 +10,7 @@
     <thead>
       <tr>
         <th>Name</th>
+        <th>Slug</th>
         <th>Status</th>
         <th>Last updated</th>
         <th class="text-end">Files</th>
@@ -21,6 +22,7 @@
       <% @streams.active.sort_by(&:updated_at).reverse.each do |stream| %>
       <tr>
         <td><%= link_to stream.display_name, organization_stream_path(@organization, stream) %></td>
+        <td><%= stream.slug %></td>
         <td>
           <%= default_stream_status_badge(stream) if stream.default_stream_histories.any? %>
         </td>
