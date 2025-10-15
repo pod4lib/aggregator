@@ -11,22 +11,22 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto">
         <% if current_user %>
-        <li class='nav-item'>
+        <li class="nav-item">
           <%= link_to t('.providers'), organizations_url, class: class_names('nav-link', { active: current_page?(organizations_url) }) %>
         </li>
         <% end %>
         <% if can? :read, :pages_data %>
-        <li class='nav-item'>
+        <li class="nav-item">
           <%= link_to t('.data'), data_url, class: class_names('nav-link', { active: current_page?(data_url) }), data: { turbo: false } %>
         </li>
         <% end %>
         <% if can? :manage, :dashboard_controller %>
-        <li class='nav-item'>
+        <li class="nav-item">
           <%= link_to t('.activity'), activity_url, class: class_names('nav-link', { active: current_page?(activity_url) }), data: { turbo: false } %>
         </li>
         <% end %>
         <% if can? :manage, User %>
-        <li class='nav-item'>
+        <li class="nav-item">
           <%= link_to t('.users'), site_users_url, class: class_names('nav-link', { active: current_page?(site_users_url) }) %>
         </li>
         <% end %>
