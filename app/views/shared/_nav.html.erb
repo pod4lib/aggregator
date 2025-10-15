@@ -9,7 +9,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <%if current_user %>
+      <% if current_user %>
         <ul class="navbar-nav">
           <li class="nav-item">
             <%= link_to t('.providers'), organizations_url, class: class_names('nav-link', { active: current_page?(organizations_url) }) %>
