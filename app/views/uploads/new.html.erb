@@ -7,13 +7,11 @@
     <p>
       You can also upload by submitting a POST with an http client (e.g. curl command).  Note that you should only provide either <code>upload[files][]</code> <strong>OR</strong> <code>upload[url]</code>.
     </p>
-    <pre class="mb-0">
-  curl -F 'upload[name]=[NAME_OF_YOUR_FILE]' \
+    <pre class="mb-0"><code>curl -F 'upload[name]=[NAME_OF_YOUR_FILE]' \
        -F 'upload[files][]=@[LOCATION_TO_YOUR_FILE];type=[THE_FILES_MIME_TYPE]' \
        -F 'upload[url]=[URL_TO_YOUR_FILE]' \
        -H 'Authorization: Bearer <%= @organization.jwt_token %>' \
-       <%= organization_uploads_url(@organization, stream: current_stream.default? ? nil : current_stream.friendly_id) %>
-    </pre>
+       <%= organization_uploads_url(@organization, stream: current_stream.default? ? nil : current_stream.friendly_id) %></code></pre>
   </div>
 
   <%= render 'form', upload: @upload %>
