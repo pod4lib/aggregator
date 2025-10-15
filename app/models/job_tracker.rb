@@ -20,7 +20,23 @@ class JobTracker < ApplicationRecord
     return 'retry' if in_retry_set?
     return 'dead' if in_dead_set?
 
-    'active'
+    'active' if in_queue? || in_workers?
+  end
+
+  def in_queue?
+    @in_queue ||= in_sidekiq_set?(Sidekiq::Queue)
+  end
+
+  def in_workers?
+    Sidekiq::Workers.new.each do |_process_id, _thread_id, work|
+      return true if JSON.parse(work.payload)['jid'] == provider_job_id
+    end
+  rescue Errno::ECONNREFUSED
+    false
+  end
+
+  def error_processing?
+    in_retry_set? || in_dead_set?
   end
 
   def in_retry_set?

@@ -22,6 +22,7 @@ RSpec.describe JobTracker do
     allow(ActiveJob::Status).to receive(:get).with(job_id).and_return(status_attributes)
     allow(Sidekiq::RetrySet).to receive(:new).and_return(retry_set)
     allow(Sidekiq::DeadSet).to receive(:new).and_return(dead_set)
+    allow(Sidekiq::Queue).to receive(:new).and_return(job)
     allow(job).to receive(:size).and_return(1)
     allow(no_job).to receive(:size).and_return(1)
   end
