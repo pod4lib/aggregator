@@ -11,6 +11,22 @@
     <td><%= link_to 'Source 🔗', upload.url, title: upload.url %></td>
   </tr>
 <% end %>
+<% if upload.status == 'compacted' %>
+  <tr>
+    <td class="align-middle text-center">
+      <i class="<%= Settings.metadata_status.unknown.icon_class %> pod-metadata-status" aria-label=""></i>
+    </td>
+    <td class="align-middle"><strong>Compacted uploads:</strong></td>
+    <td class="align-middle"><%= local_time(upload.created_at, format: datetime_display_format()) %></td>
+    <td class="align-middle text-end">-</td>
+    <td class="align-middle">-</td>
+    <td class="align-middle text-end">-</td>
+    <td></td>
+  </tr>
+  <% upload.compacted_uploads.each do |u| %>
+    <%= render 'uploads/file_rows', upload: u %>
+  <% end %>
+<% end %>
 <% upload.files.each do |file| %>
   <tr>
     <td class="align-middle text-center">
