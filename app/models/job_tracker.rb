@@ -28,8 +28,8 @@ class JobTracker < ApplicationRecord
   end
 
   def in_workers?
-    Sidekiq::Workers.new.each do |_process_id, _thread_id, work|
-      return true if JSON.parse(work.payload)['jid'] == provider_job_id
+    Sidekiq::Workers.new.any? do |_process_id, _thread_id, work|
+      JSON.parse(work.payload)['jid'] == provider_job_id
     end
   rescue Errno::ECONNREFUSED
     false
