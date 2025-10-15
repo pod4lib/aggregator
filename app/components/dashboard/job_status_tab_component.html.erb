@@ -1,4 +1,4 @@
-<div class="tab-pane fade" id="job-status-pane" role="tabpanel" aria-labelledby="job-status-tab">
+   <turbo-frame id="job_status_tab">
     <table class="table table-striped mb-3" id="jobs-table">
       <thead>
         <tr>
@@ -9,13 +9,13 @@
         </tr>
       </thead>
       <tbody>
-        <% @dashboard.job_status_groups_by_provider.each do |provider, job_statuses| %>
+        <% job_status_groups_by_provider.each do |provider, job_statuses| %>
         <tr>
-          <td><%= link_to provider.name, processing_status_organization_stream_path(provider, provider.default_stream) %></td>
+          <td><%= link_to provider.name, processing_status_organization_stream_path(provider, provider.default_stream), data: { turbo: false } %></td>
           <!-- Active jobs: -->
           <td class="text-end pe-4">
             <% if job_statuses[:active].length > 0 %>
-              <%= link_to job_statuses[:active].length, processing_status_organization_stream_path(provider, provider.default_stream) %>
+              <%= job_statuses[:active].length %>
             <% else %>
                 0
             <% end %>
@@ -23,7 +23,7 @@
           <!-- Most recent active job date: -->
           <td>
             <% if job_statuses[:active].length > 0 %>
-              <%= link_to job_statuses[:active].first.created_at, processing_status_organization_stream_path(provider, provider.default_stream) %>
+              <%= job_statuses[:active].first.created_at %>
             <% end %>
           </td>
           <!-- Jobs needing attention: -->
@@ -38,4 +38,4 @@
         <% end %>
       </tbody>
     </table>
-  </div>
+</turbo-frame>

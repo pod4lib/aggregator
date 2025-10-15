@@ -1,0 +1,47 @@
+  <!-- Upload activity table -->
+  <h2 class="mt-5"><%= t('dashboard.summary.upload_title') %></h2>
+  <ul class="table-key list-unstyled list-inline pt-3" aria-hidden="true">
+    <% Settings.metadata_status.each do |status, values| %>
+    <li class="list-inline-item">
+      <i class="<%= values.icon_class %> pod-metadata-status <%= status %>"></i>
+      <span><%= values.label %></span>
+    </li>
+    <% end %>
+  </ul>
+
+  <table class="table table-striped mb-3" id="upload-activity">
+    <thead>
+      <tr>
+        <th class="text-center"><%= t('dashboard.summary.table.status') %></th>
+        <th><%= t('dashboard.summary.table.upload') %></th>
+        <th><%= t('dashboard.summary.table.filename') %></th>
+        <th><%= t('dashboard.summary.table.date_created') %></th>
+        <th><%= t('dashboard.summary.table.provider') %></th>
+        <th class="text-end"><%= t('dashboard.summary.table.size') %></th>
+        <th class="text-end"><%= t('dashboard.summary.table.record_count') %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @uploads.each do |upload| %>
+      <% upload.files.each do |file| %>
+      <tr>
+        <td class="text-center">
+          <% status = file.pod_metadata_status %>
+          <i class="<%= Settings.metadata_status[status].icon_class %> pod-metadata-status <%= status %>" aria-label="<%= Settings.metadata_status[file.pod_metadata_status].label %>"></i>
+        </td>
+        <td>
+          <%= link_to_if helpers.can?(:read, upload), upload.name, organization_upload_path(upload.organization, upload), title: t('dashboard.summary.table.upload_title', name: upload.name) %>
+        </td>
+        <td>
+          <%= link_to_if helpers.can?(:read, upload), file.filename, download_url(file), title: t('dashboard.summary.table.download_title', filename: file.filename) %>
+        </td>
+        <td><%= helpers.local_time(file.created_at, format: helpers.datetime_display_format()) %></td>
+        <td><%= link_to upload.organization.name, organization_path(upload.organization) %></td>
+        <td class="text-end"><%= number_to_human_size file.byte_size %></td>
+        <td class="text-end"><%= file.metadata['count'] ? number_with_delimiter(file.metadata['count']) : '-' %></td>
+      </tr>
+      <% end %>
+      <% end %>
+    </tbody>
+  </table>
+  <%= helpers.paginate @uploads %>

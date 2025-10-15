@@ -12,7 +12,7 @@
         </tr>
       </thead>
       <tbody>
-        <% @dashboard.recent_uploads_by_provider.each do |provider, uploads| %>
+        <% recent_uploads_by_provider.each do |provider, uploads| %>
         <tr>
           <td><%= link_to provider.name, organization_uploads_path(provider) %></td>
           
@@ -22,7 +22,7 @@
           <!-- Most recent upload: -->
           <td>
             <% if uploads.present? %>
-              <%= link_to local_time(uploads[0].created_at, format: datetime_display_format()), organization_upload_path(provider, uploads[0]) %>
+              <%= link_to helpers.local_time(uploads[0].created_at, format: helpers.datetime_display_format()), organization_upload_path(provider, uploads[0]) %>
             <% else %>
               <i class="bi bi-exclamation-triangle-fill text-warning"></i>
             <% end %>
@@ -39,8 +39,8 @@
           <!-- Date of successful upload: -->
           <td>
             <% if uploads.present? %>
-              <% if last_successful_upload_date(uploads) %>
-                <%= local_time(last_successful_upload_date(uploads), format: datetime_display_format()) %>
+              <% if last_successful_upload_date %>
+                <%= helpers.local_time(last_successful_upload_date, format: helpers.datetime_display_format()) %>
               <% else %>
                 <p>No prior successful uploads</p>
               <% end %>
@@ -51,7 +51,7 @@
           <!-- Did any uploads succeed in past 30 days? -->
           <td class="text-center">
             <% if provider.upload_in_last_30_days? %>
-              <% status = best_status(uploads) %>
+              <% status = best_status %>
               <i class="pod-job-tracker-status <%= Settings.job_status_group[status]&.icon_class %> <%= status %>" aria-label="<%= status %>"></i>
             <% else %>
               <p class="mb-0">No uploads in last 30 days</p>

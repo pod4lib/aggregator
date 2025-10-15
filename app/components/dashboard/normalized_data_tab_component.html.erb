@@ -1,4 +1,4 @@
-<div class="tab-pane fade" id="normalized-data-pane" role="tabpanel" aria-labelledby="normalized-data-tab">
+<turbo-frame id="normalized_data_tab">
     <table class="table table-striped mb-3" id="normalized-data-table">
       <thead>
         <tr>
@@ -9,9 +9,9 @@
         </tr>
       </thead>
       <tbody>
-        <% @dashboard.normalized_data_by_provider.each do |provider, dump| %>
+        <% normalized_data_by_provider.each do |provider, dump| %>
         <tr>
-          <td><%= link_to provider.name, normalized_data_organization_stream_path(provider, provider.default_stream) %></td>
+          <td><%= link_to provider.name, normalized_data_organization_stream_path(provider, provider.default_stream), data: { turbo: false } %></td>
           <!-- Last full dump: -->
           <td>
               <% if dump && dump.last_full_dump_at %>
@@ -40,4 +40,4 @@
         <% end %>
       </tbody>
     </table>
-  </div>
+  </turbo-frame>
