@@ -5,6 +5,9 @@
 class OaiController < ApplicationController
   include OaiConcern
 
+  # NOTE: While we're skipping the controller-wide auth check, we are verifying
+  # current_ability before loading Stream resources so OAI requests are
+  # protected by authorization checks.
   skip_authorization_check
   rescue_from OaiConcern::OaiError, with: :render_error
 
