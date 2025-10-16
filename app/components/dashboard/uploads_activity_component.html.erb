@@ -3,8 +3,7 @@
   <ul class="table-key list-unstyled list-inline pt-3" aria-hidden="true">
     <% Settings.metadata_status.each do |status, values| %>
     <li class="list-inline-item">
-      <i class="<%= values.icon_class %> pod-metadata-status <%= status %>"></i>
-      <span><%= values.label %></span>
+      <%= render(MetadataStatusIconComponent.new(status: status, show_label: true)) %>
     </li>
     <% end %>
   </ul>
@@ -26,8 +25,7 @@
       <% upload.files.each do |file| %>
       <tr>
         <td class="text-center">
-          <% status = file.pod_metadata_status %>
-          <i class="<%= Settings.metadata_status[status].icon_class %> pod-metadata-status <%= status %>" aria-label="<%= Settings.metadata_status[file.pod_metadata_status].label %>"></i>
+          <%= render(MetadataStatusIconComponent.new(status: file.pod_metadata_status)) %>
         </td>
         <td>
           <%= link_to_if helpers.can?(:read, upload), upload.name, organization_upload_path(upload.organization, upload), title: t('dashboard.summary.table.upload_title', name: upload.name) %>
