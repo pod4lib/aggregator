@@ -23,10 +23,10 @@
                 <td class="align-middle"><%= user.title %></td>
                 <% if can? :manage, @organization %>
                     <td class="text-center align-middle">
-                        <div class="form-check form-switch align-middle d-inline-block">
+                        <div class="form-check align-middle d-inline-block">
                         <% if user.roles.map{|r| r['name']}.include? "owner" %>
                             <%= link_to '', organization_user_path(@organization, user, remove_role: 'owner'), data: { turbo_method: :patch, turbo_confirm: t('organization_users.index.confirm_action') }, class: 'form-check-input checked', title: t('organization_users.index.remove_owner') %>
-                            <input class="form-check-input pe-none" type="checkbox" aria-hidden="true" checked>
+                            <input class="form-check-input pe-none" type="checkbox" aria-label="Organization owner?" checked>
                         <% else %>
                             <%= link_to '', organization_user_path(@organization, user, add_role: 'owner'), data: { turbo_method: :patch, turbo_confirm: t('organization_users.index.confirm_action') }, class: 'form-check-input', title: t('organization_users.index.add_owner') %>
                         <% end %>

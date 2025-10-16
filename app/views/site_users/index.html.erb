@@ -20,10 +20,10 @@
           <% end %>
         </td>
         <td class="text-center align-middle">
-          <div class="form-check form-switch align-middle d-inline-block">
+          <div class="form-check align-middle d-inline-block">
             <% if user.has_role? :admin %>
             <%= link_to '', site_user_path(user, remove_role: 'admin'), data: { turbo_method: :patch, turbo_confirm: t('organization_users.index.confirm_action') }, class: 'form-check-input checked', title: t('.remove_admin') %>
-            <input class="form-check-input pe-none" type="checkbox" aria-hidden="true" checked>
+            <input class="form-check-input pe-none" type="checkbox" aria-label="Pod admin?" checked>
             <% else %>
             <%= link_to '', site_user_path(user, add_role: 'admin'), data: { turbo_method: :patch, turbo_confirm: t('organization_users.index.confirm_action') }, class: 'form-check-input', title: t('.add_admin') %>
             <% end %>
