@@ -1,13 +1,29 @@
-<%= bootstrap_form_with(model: [@organization, allowlisted_jwt], local: true, multipart: true) do |form| %>
-  <%= form.text_field :label %>
+<%= form_with(model: [@organization, allowlisted_jwt], local: true, multipart: true) do |form| %>
+  <div class="d-flex flex-column mb-2">
+    <%= form.label :label %>
+    <%= form.text_field :label %>
+  </div>
 
-  <%= form.form_group :scope, label: { text: 'Scope' } do %>
-    <%= form.radio_button :scope, 'all', label: 'all', checked: true %>
-    <%= form.radio_button :scope, 'download', label: 'download-only' %>
-    <%= form.radio_button :scope, 'upload', label: 'upload-only' %>
-  <% end %>
+  <fieldset>
+    <legend>Scope</legend>
+
+    <div>
+      <%= form.radio_button :scope, 'all', id: 'all', checked: true %>
+      <%= form.label :scope, 'All', for: 'all' %>
+    </div>
+
+    <div>
+      <%= form.radio_button :scope, 'download', id: 'download-only' %>
+      <%= form.label :scope, 'Download only', for: 'download-only' %>
+    </div>
+
+    <div>
+      <%= form.radio_button :scope, 'upload', id: 'upload-only' %>
+      <%= form.label :scope, 'Upload only', for: 'upload-only' %>
+    </div>
+  </fieldset>
 
   <div class="actions mt-3">
-    <%= form.primary 'Create token' %>
+    <%= form.submit 'Create token', class: 'btn btn-primary' %>
   </div>
 <% end %>
