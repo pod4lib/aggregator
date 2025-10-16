@@ -1,12 +1,12 @@
 <%= render 'shared/layout_manage_organization' do %>
   <h3>Access tokens</h3>
 
-  <table class="table mt-4">
+  <table class="table mt-4 w-100" style="table-layout: fixed;">
     <thead>
       <tr>
-        <th>Label</th>
-        <th>Token</th>
-        <th colspan="1"></th>
+        <th style="width: 15%">Label/Scope</th>
+        <th style="width: 60%">Token</th>
+        <th colspan="1" class="text-end">Token actions</th>
       </tr>
     </thead>
 
@@ -15,7 +15,7 @@
         <tr data-controller="copy-text">
           <td><%= token.label %> (scope: <%= token.scope %>)</td>
           <td>
-            <%= text_field_tag 'token', token.encoded_token, class: 'text-monospace w-100 custom-copy-text', disabled: true, data: { 'copy-text-target': 'text' } %>
+            <div id="token" class="text-monospace w-100 custom-copy-text overflow-auto user-select-all border p-1 text-nowrap" data-copy-text-target="text"><%= token.encoded_token %></div>
             <i class="small text-muted">
               Last used:
               <% if token.last_used %>
@@ -27,7 +27,7 @@
           </td>
           <td class="text-end">
             <button class="btn btn-primary" data-action="copy-text#copy">
-              <i class="bi bi-files pod-icon"></i> Copy
+              <i class="bi bi-files"></i> Copy
             </button>
             <%= link_to 'Revoke', [@organization, token], data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'btn btn-danger' if can? :destroy, token %>
           </td>

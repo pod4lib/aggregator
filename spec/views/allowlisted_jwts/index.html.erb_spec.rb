@@ -18,8 +18,8 @@ RSpec.describe 'allowlisted_jwts/index' do
   it 'renders a list of tokens for the organizations' do
     render
     assert_select 'tbody>tr', count: 2
-    assert_select 'input[value=?]', organization.allowlisted_jwts[0].encoded_token
-    assert_select 'input[value=?]', organization.allowlisted_jwts[1].encoded_token
+    assert_select 'div', organization.allowlisted_jwts[0].encoded_token
+    assert_select 'div', organization.allowlisted_jwts[1].encoded_token
   end
 
   it 'renders if the token has been used or not' do
