@@ -27,9 +27,9 @@ class MarcRecord < ApplicationRecord
   end
 
   def augmented_marc
-    return marc unless upload.organization
+    return marc unless organization
 
-    @augmented_marc ||= upload.organization.augmented_marc_record_service.execute(marc)
+    @augmented_marc ||= organization.augmented_marc_record_service.execute(marc)
   end
 
   private

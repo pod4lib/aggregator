@@ -19,7 +19,7 @@ class NormalizedMarcRecordReader
     pool = Concurrent::FixedThreadPool.new(thread_pool_size)
 
     current_marc_record_ids.each_slice(200) do |slice|
-      records = MarcRecord.find(slice)
+      records = MarcRecord.includes(:upload, :stream, :organization).find(slice)
 
       # do a little pre-processing to pre-generated the augmented MARC.
       # this is done in a thread pool for a marginal performance boost
