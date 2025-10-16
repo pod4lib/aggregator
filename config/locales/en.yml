@@ -28,6 +28,14 @@ en:
         upload_title: View upload %{name}
       title: Recent activity
       upload_title: Upload activity
+  groups:
+    create:
+      success: Group was successfully created.
+    destroy:
+      success: Group was successfully destroyed.
+    update:
+      error: Group could not be updated.
+      success: Group was successfully updated.
   job_tracker:
     status_group:
       active:
@@ -155,6 +163,7 @@ en:
       brand: Aggregator
       data: Data
       edit_profile: Edit profile
+      groups: Groups
       is_admin: POD Admin
       login: Login
       logout: Logout

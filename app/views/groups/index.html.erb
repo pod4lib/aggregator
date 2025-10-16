@@ -1,0 +1,78 @@
+<div class="container mt-4">
+  <h1>Groups</h1>
+  <table class="table table-striped mt-4">
+    <thead>
+      <tr>
+        <th colspan="2">Name</th>
+        <th>Short name</th>
+        <th>Slug</th>
+        <th>Description</th>
+        <th colspan="2">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @groups.each do |group| %>
+        <% next unless can? :read, group %>
+        <tr>
+          <td class="align-middle text-center icon-column">
+            <% if group.icon.attached? %>
+              <%= image_tag(group.icon, alt: '', class: 'icon-sm') %>
+            <% end %>
+          </td>
+          <td class="align-middle"><%= link_to group.name, group %></td>
+          <td class="align-middle"><%= group.display_name %></td>
+          <td class="align-middle"><%= group.slug %></td>
+          <td class="align-middle"><%= group.description&.truncate(50) %></td>
+          <% if can? :manage, Group %>
+            <td class="align-middle"><%= link_to 'Edit', edit_group_path(group), class: 'btn btn-secondary btn-sm' if can? :edit, group %></td>
+            <td class="align-middle"><%= link_to 'Delete', group, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' if can? :destroy, group %></td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <% if can? :manage, Group %>
+    <%= link_to 'New group', new_group_path, class: 'btn btn-primary' if can? :create, Group.new %>
+  <% end %>
+
+  <div class="mt-5">
+    <h2>Group membership</h2>
+    <table class="table table-striped mt-4" style="width: auto;">
+      <thead>
+        <tr>
+          <th colspan="2" class="pe-5">Organization</th>
+          <% @groups.each do |group| %>
+            <th class="pe-5"><%= group.display_name %></th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% @organizations.each do |organization| %>
+          <tr>
+            <td class="align-middle text-center icon-column">
+              <% if organization.icon.attached? %>
+                <%= image_tag(organization.icon, alt: '', class: 'icon-sm') %>
+              <% end %>
+            </td>
+            <td class="align-middle">
+              <%= link_to organization.name, organization %>
+            </td>
+            <% @groups.each do |group| %>
+              <td class="align-middle">
+                <% if group.organizations.include?(organization) %>
+                  <i class="bi bi-check-circle-fill text-success"></i>
+                  <span class="visually-hidden">Member</span>
+                <% else %>
+                  <i class="bi bi-dash-circle"></i>
+                  <span class="visually-hidden">Not a member</span>
+                <% end %>
+              </td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
