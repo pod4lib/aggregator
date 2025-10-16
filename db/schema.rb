@@ -169,6 +169,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_15_205942) do
     t.binary "json"
     t.index ["file_id", "marc001"], name: "index_marc_records_on_file_id_and_marc001"
     t.index ["file_id"], name: "index_marc_records_on_file_id"
+    t.index ["marc001", "upload_id"], name: "index_marc_records_on_marc001_and_upload_id"
     t.index ["upload_id", "marc001"], name: "index_marc_records_on_upload_id_and_marc001"
     t.index ["upload_id"], name: "index_marc_records_on_upload_id"
   end
