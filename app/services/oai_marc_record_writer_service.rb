@@ -64,7 +64,7 @@ class OaiMarcRecordWriterService
             <setSpec>#{set}</setSpec>
           </header>
           <metadata>
-            #{MARC::XMLWriter.encode(record, include_namespace: true)}
+            #{Ox.dump(OxMarcXmlWriter.encode(record, include_namespace: true))}
           </metadata>
         </record>
       EOXML

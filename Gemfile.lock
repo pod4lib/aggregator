@@ -327,6 +327,8 @@ GEM
     okcomputer (1.19.0)
     orm_adapter (0.5.0)
     ostruct (0.6.3)
+    ox (2.14.23)
+      bigdecimal (>= 3.0)
     paper_trail (16.0.0)
       activerecord (>= 6.1)
       request_store (~> 1.4)
@@ -612,6 +614,7 @@ DEPENDENCIES
   local_time (~> 3.0)
   marc
   okcomputer
+  ox
   paper_trail
   pg
   propshaft
