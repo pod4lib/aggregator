@@ -14,7 +14,7 @@ class GenerateFullDumpJob < ApplicationJob
     end
   end
 
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def perform(organization, publish: true)
     now = Time.zone.now
     uploads = Upload.active.where(stream: organization.default_stream)
@@ -29,41 +29,26 @@ class GenerateFullDumpJob < ApplicationJob
 
     base_name = "#{organization.slug}-#{Time.zone.today}-full"
     writer = MarcRecordWriterService.new(base_name)
-    oai_file_counter = 0
+    oai_writer = ChunkedOaiMarcRecordWriterService.new(base_name, dump: full_dump, now: now)
 
     begin
-      NormalizedMarcRecordReader.new(uploads).each_slice(Settings.oai_max_page_size) do |records|
+      NormalizedMarcRecordReader.new(uploads).each_slice(1000) do |records|
         # See note here on CPU saturation:
         # https://github.com/mperham/sidekiq/discussions/5039
         Thread.pass
 
-        oai_writer = OaiMarcRecordWriterService.new(base_name)
         records.each do |record|
           # In a full dump, we can omit the deletes
           next if record.status == 'delete'
 
           writer.write_marc_record(record)
-          oai_writer.write_marc_record(record, now)
+          oai_writer.write_marc_record(record)
         end
 
-        if oai_writer.bytes_written?
-          oai_writer.finalize
-          full_dump.oai_xml.attach(io: File.open(oai_writer.oai_file),
-                                   filename: human_readable_filename(
-                                     base_name, :oai_xml, oai_file_counter
-                                   ))
-        end
-
-        oai_file_counter += 1
-        # Save the dump once for every 100 oai files to free up file handles
-        full_dump.save! if (oai_file_counter % 100).zero?
         progress.increment(records.length)
-      ensure
-        oai_writer.finalize
-        oai_writer.close
-        oai_writer.unlink
       end
 
+      oai_writer.finalize
       writer.finalize
 
       writer.files.each do |as, file|
@@ -79,11 +64,14 @@ class GenerateFullDumpJob < ApplicationJob
     ensure
       writer.close
       writer.unlink
+
+      oai_writer.close
+      oai_writer.unlink
     end
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
-  def human_readable_filename(base_name, file_type, counter = nil)
+  def human_readable_filename(base_name, file_type)
     as = case file_type
          when :deletes
            'deletes.del.txt'
@@ -91,8 +79,6 @@ class GenerateFullDumpJob < ApplicationJob
            'marc21.mrc.gz'
          when :marcxml
            'marcxml.xml.gz'
-         when :oai_xml
-           "oai-#{format('%010d', counter)}.xml.gz"
          else
            "#{file_type}.gz"
          end
