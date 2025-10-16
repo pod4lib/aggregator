@@ -8,10 +8,14 @@ class Upload < ApplicationRecord
   has_many :marc_records, dependent: :delete_all
   belongs_to :user, optional: true
   belongs_to :allowlisted_jwts, optional: true
+  belongs_to :compacted_upload, class_name: 'Upload', optional: true
+  has_many :compacted_uploads, class_name: 'Upload', inverse_of: :compacted_upload, foreign_key: 'compacted_upload_id',
+                               dependent: :destroy_async
+
   validate :url_presence_if_no_uploaded_files
-  validates :files, presence: true, if: proc { |upload| upload.url.blank? }
-  validate :valid_url, if: proc { |upload| upload.url.present? }
-  scope :active, -> { where(status: %w[active processed]) }
+  validates :files, presence: true, if: proc { |upload| upload.url.blank? && upload.status != 'compacted' }
+  validate :valid_url, if: proc { |upload| upload.url.present? && upload.status != 'compacted' }
+  scope :active, -> { where(status: %w[active compacted processed]) }
   scope :archived, -> { where(status: 'archived') }
   scope :obsolete, -> { where(status: 'obsolete') }
   scope :recent, -> { order(created_at: :desc) }
@@ -70,10 +74,14 @@ class Upload < ApplicationRecord
   private
 
   def url_presence_if_no_uploaded_files
+    return if status == 'compacted'
+
     errors.add(:url, 'A URL must be provided if a file has not been uploaded') if !files.attached? && url.blank?
   end
 
   def valid_url
+    return if status == 'compacted'
+
     errors.add(:url, 'Unable to attach file from URL') unless URI.parse(url)&.host
   end
 
