@@ -57,6 +57,43 @@ RSpec.describe JobTracker do
     end
   end
 
+  describe '#in_workers?' do
+    let(:workers) { instance_double(Sidekiq::WorkSet) }
+    let(:work) { instance_double(Sidekiq::Work) }
+
+    before do
+      allow(Sidekiq::Workers).to receive(:new).and_return(workers)
+      allow(workers).to receive(:any?).and_yield('process_id', 'thread_id', work)
+      allow(work).to receive(:payload).and_return({ 'jid' => provider_job_id }.to_json)
+    end
+
+    context 'when the job is in the workers set' do
+      it 'returns true' do
+        expect(job_tracker.in_workers?).to be true
+      end
+    end
+
+    context 'when the job is not in the workers set' do
+      before do
+        allow(work).to receive(:payload).and_return({ 'jid' => 'other_jid' }.to_json)
+      end
+
+      it 'returns false' do
+        expect(job_tracker.in_workers?).to be false
+      end
+    end
+
+    context 'when Sidekiq is not running' do
+      before do
+        allow(Sidekiq::Workers).to receive(:new).and_raise(Errno::ECONNREFUSED)
+      end
+
+      it 'returns false' do
+        expect(job_tracker.in_workers?).to be false
+      end
+    end
+  end
+
   describe '#in_retry_set?' do
     let(:retry_set) { job }
 

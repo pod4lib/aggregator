@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_15_190704) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_15_205942) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -248,6 +248,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_15_190704) do
     t.string "ip_address"
     t.string "status", default: "active"
     t.bigint "marc_records_count", default: 0
+    t.integer "compacted_upload_id"
+    t.index ["compacted_upload_id"], name: "index_uploads_on_compacted_upload_id"
     t.index ["status"], name: "index_uploads_on_status"
     t.index ["stream_id"], name: "index_uploads_on_stream_id"
   end

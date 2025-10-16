@@ -3,14 +3,23 @@
   --bs-popover-max-width: 600px;
 }
 
-footer.bg-light a {
-  color: var(--text-muted-bg-light);
+footer.bg-light {
+  a {
+    --bs-link-color-rgb: 67, 66, 62;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  p a {
+    text-decoration: underline;
+  }
 }
 
 .bg-light a {
-  color: var(--link-bg-light);
+  --bs-link-color-rgb: 0, 106, 248;
 }
 
 .alert-info code {
-  color: var(--code-bg-info);
+  color: #c82279;
 }
