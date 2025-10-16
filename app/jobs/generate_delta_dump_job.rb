@@ -31,38 +31,29 @@ class GenerateDeltaDumpJob < ApplicationJob
     delta_dump = full_dump.deltas.create(stream_id: full_dump.stream_id)
     base_name = "#{organization.slug}-#{Time.zone.today}-delta"
     writer = MarcRecordWriterService.new(base_name)
-    oai_file_counter = 0
+    oai_writer = ChunkedOaiMarcRecordWriterService.new(base_name, dump: delta_dump, now: now)
 
     begin
-      NormalizedMarcRecordReader.new(uploads).each_slice(Settings.oai_max_page_size) do |records|
+      NormalizedMarcRecordReader.new(uploads).each_slice(1000) do |records|
         # See note here on CPU saturation:
         # https://github.com/mperham/sidekiq/discussions/5039
         Thread.pass
 
-        oai_writer = OaiMarcRecordWriterService.new(base_name)
         records.each do |record|
           if record.status == 'delete'
             writer.write_delete(record)
-            oai_writer.write_delete(record, now)
+            oai_writer.write_delete(record)
           else
             writer.write_marc_record(record)
-            oai_writer.write_marc_record(record, now)
+            oai_writer.write_marc_record(record)
           end
         end
-        oai_writer.finalize
-        delta_dump.oai_xml.attach(io: File.open(oai_writer.oai_file),
-                                  filename: human_readable_filename(base_name, :oai_xml, oai_file_counter))
 
-        oai_file_counter += 1
-        # Save the dump once for every 100 oai files to free up file handles
-        delta_dump.save! if (oai_file_counter % 100).zero?
         progress.increment(records.length)
-      ensure
-        oai_writer.close
-        oai_writer.unlink
       end
 
       writer.finalize
+      oai_writer.finalize
 
       writer.files.each do |as, file|
         delta_dump.public_send(as).attach(io: File.open(file),
@@ -77,6 +68,9 @@ class GenerateDeltaDumpJob < ApplicationJob
     ensure
       writer.close
       writer.unlink
+
+      oai_writer.close
+      oai_writer.unlink
     end
   end
   # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
