@@ -9,6 +9,8 @@ class MarcRecord < ApplicationRecord
 
   attr_accessor :marc_bytes
 
+  before_create :copy_organization_from_upload
+
   # @return [MARC::Record]
   def marc
     @marc ||= load_record_from_json
@@ -40,5 +42,9 @@ class MarcRecord < ApplicationRecord
 
   def load_record_from_json
     MARC::Record.new_from_marchash(JSON.parse(Zlib::Inflate.inflate(json))) if json
+  end
+
+  def copy_organization_from_upload
+    self.organization_id = upload.organization.id
   end
 end
