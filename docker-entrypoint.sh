@@ -1,8 +1,7 @@
 #!/bin/bash
 set -e
 
-if [ -f tmp/pids/server.pid ]; then
-  rm tmp/pids/server.pid
-fi
+# Suppresses the error if the file doesn't exist
+rm -f tmp/pids/server.pid
 
 exec bundle exec "$@"
