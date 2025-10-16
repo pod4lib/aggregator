@@ -1,0 +1,9 @@
+<div class="container mt-4">
+  <h1>New group</h1>
+  <%= bootstrap_form_with(model: @group, local: true) do |form| %>
+    <%= render 'form', group: @group, form: form %>
+    <div class="actions">
+      <%= form.primary 'Create group' %>
+    </div>
+  <% end %>
+</div>

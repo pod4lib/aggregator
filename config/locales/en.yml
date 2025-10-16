@@ -155,6 +155,7 @@ en:
       brand: Aggregator
       data: Data
       edit_profile: Edit profile
+      groups: Groups
       is_admin: POD Admin
       login: Login
       logout: Logout

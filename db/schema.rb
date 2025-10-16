@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_15_205942) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_16_183821) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -26,7 +26,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_15_205942) do
     t.string "filename", null: false
     t.string "content_type"
     t.text "metadata"
-    t.integer "byte_size", null: false
+    t.bigint "byte_size", null: false
     t.string "checksum"
     t.datetime "created_at", precision: nil, null: false
     t.string "service_name", null: false
@@ -112,8 +112,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_15_205942) do
 
   create_table "default_stream_histories", force: :cascade do |t|
     t.integer "stream_id", null: false
-    t.datetime "start_time", precision: nil, null: false
-    t.datetime "end_time", precision: nil
+    t.datetime "start_time", null: false
+    t.datetime "end_time"
     t.index ["stream_id"], name: "index_default_stream_histories_on_stream_id"
   end
 
@@ -126,6 +126,25 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_15_205942) do
     t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true
     t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type"
     t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
+  end
+
+  create_table "group_memberships", force: :cascade do |t|
+    t.integer "organization_id", null: false
+    t.integer "group_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_group_memberships_on_group_id"
+    t.index ["organization_id"], name: "index_group_memberships_on_organization_id"
+  end
+
+  create_table "groups", force: :cascade do |t|
+    t.string "name"
+    t.string "short_name"
+    t.string "slug"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_groups_on_slug", unique: true
   end
 
   create_table "job_trackers", force: :cascade do |t|
@@ -181,7 +200,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_15_205942) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "full_dump_id"
-    t.datetime "published_at", precision: nil
+    t.datetime "published_at"
     t.index ["full_dump_id"], name: "index_normalized_dumps_on_full_dump_id"
     t.index ["stream_id"], name: "index_normalized_dumps_on_stream_id"
   end
@@ -304,4 +323,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_15_205942) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "contact_emails", "organizations"
   add_foreign_key "default_stream_histories", "streams"
+  add_foreign_key "group_memberships", "groups"
+  add_foreign_key "group_memberships", "organizations"
 end
