@@ -9,7 +9,7 @@ RSpec.describe GenerateDeltaDumpJob do
     Timecop.travel(5.days.ago)
     organization.default_stream.uploads << build(:upload, :binary_marc)
     organization.default_stream.uploads << build(:upload, :binary_marc)
-    GenerateFullDumpJob.perform_now(organization)
+    GenerateFullDumpJob.perform_now(organization.default_stream)
 
     Timecop.return
     organization.default_stream.uploads << build(:upload, :binary_marc)
@@ -17,18 +17,18 @@ RSpec.describe GenerateDeltaDumpJob do
 
   it 'runs the ExtractMarcRecordMetadataJob for each upload if needed' do
     expect do
-      described_class.perform_now(organization)
+      described_class.perform_now(organization.default_stream)
     end.to change(MarcRecord, :count).from(2).to(3)
   end
 
   it 'creates a new normalized delta dump' do
     expect do
-      described_class.perform_now(organization)
+      described_class.perform_now(organization.default_stream)
     end.to change { organization.default_stream.reload.current_full_dump.deltas.count }.by(1)
   end
 
   it 'contains just the new the MARC records from the organization' do
-    described_class.perform_now(organization)
+    described_class.perform_now(organization.default_stream)
 
     download_and_uncompress(organization.default_stream.reload.current_full_dump.deltas.last.marcxml) do |file|
       expect(Nokogiri::XML(file).xpath('//marc:record', marc: 'http://www.loc.gov/MARC21/slim').count).to eq 1
@@ -37,28 +37,28 @@ RSpec.describe GenerateDeltaDumpJob do
   end
 
   it 'has a content type of application/gzip for compressed marcxml' do
-    described_class.perform_now(organization)
+    described_class.perform_now(organization.default_stream)
 
     expect(organization.default_stream.reload.current_full_dump.deltas.last
                        .marcxml.attachment.blob.content_type).to eq 'application/gzip'
   end
 
   it 'has a filename of marcxml.xml.gz for compressed marcxml' do
-    described_class.perform_now(organization)
+    described_class.perform_now(organization.default_stream)
 
     expect(organization.default_stream.reload.current_full_dump.deltas.last
                        .marcxml.attachment.blob.filename.to_s).to end_with 'marcxml.xml.gz'
   end
 
   it 'has a content type of application/gzip for compressed marc21' do
-    described_class.perform_now(organization)
+    described_class.perform_now(organization.default_stream)
 
     expect(organization.default_stream.reload.current_full_dump.deltas.last
                        .marc21.attachment.blob.content_type).to eq 'application/gzip'
   end
 
   it 'has a filename of marc21.mrc.gz for compressed marc21' do
-    described_class.perform_now(organization)
+    described_class.perform_now(organization.default_stream)
 
     expect(organization.default_stream.reload.current_full_dump.deltas.last
                        .marc21.attachment.blob.filename.to_s).to end_with 'marc21.mrc.gz'
@@ -74,7 +74,7 @@ RSpec.describe GenerateDeltaDumpJob do
     end
 
     it 'does not generate a delta if there is no existing published full dump' do
-      described_class.perform_now(no_full_dump_org)
+      described_class.perform_now(no_full_dump_org.default_stream)
       expect(no_full_dump_org.default_stream.reload.current_full_dump).to be_nil
       expect(no_full_dump_org.default_stream.reload.normalized_dumps.count).to be(0)
     end
@@ -87,35 +87,35 @@ RSpec.describe GenerateDeltaDumpJob do
     end
 
     it 'collects deletes into a single file' do
-      described_class.perform_now(organization)
+      described_class.perform_now(organization.default_stream)
       organization.default_stream.reload.current_full_dump.deltas.last.deletes.download do |file|
         expect(file.each_line.count).to eq 4
       end
     end
 
     it 'has a content type of text/plain for deletes' do
-      described_class.perform_now(organization)
+      described_class.perform_now(organization.default_stream)
 
       expect(organization.default_stream.reload.current_full_dump.deltas.last
                          .deletes.attachment.blob.content_type).to eq 'text/plain'
     end
 
     it 'has a filename of deletes.del.txt for deletes' do
-      described_class.perform_now(organization)
+      described_class.perform_now(organization.default_stream)
 
       expect(organization.default_stream.reload.current_full_dump.deltas.last
                          .deletes.attachment.blob.filename.to_s).to end_with 'deletes.del.txt'
     end
 
     it 'does not include MARC records that were deleted' do
-      described_class.perform_now(organization)
+      described_class.perform_now(organization.default_stream)
 
       expect(organization.default_stream.reload.current_full_dump.deltas.last.marcxml.attachment).to be_nil
     end
 
     it 'does not include deletes that were readded' do
       organization.default_stream.uploads << build(:upload, :binary_marc)
-      described_class.perform_now(organization)
+      described_class.perform_now(organization.default_stream)
 
       organization.default_stream.reload.current_full_dump.deltas.last.deletes.download do |file|
         expect(file).not_to include 'a1297245'
@@ -124,7 +124,7 @@ RSpec.describe GenerateDeltaDumpJob do
 
     it 'includes MARC records that were re-added' do
       organization.default_stream.uploads << build(:upload, :binary_marc)
-      described_class.perform_now(organization)
+      described_class.perform_now(organization.default_stream)
 
       download_and_uncompress(organization.default_stream.reload.current_full_dump.deltas.last.marcxml) do |file|
         expect(Nokogiri::XML(file).xpath('//marc:record', marc: 'http://www.loc.gov/MARC21/slim').count).to eq 1

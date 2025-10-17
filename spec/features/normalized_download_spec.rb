@@ -18,7 +18,7 @@ RSpec.describe 'Downloading normalized files from POD' do
   describe 'Full dumps' do
     before do
       allow(Time.zone).to receive(:today).and_return('2020-01-01')
-      GenerateFullDumpJob.perform_now(organization)
+      GenerateFullDumpJob.perform_now(organization.default_stream)
     end
 
     it 'generates binary & xml full dump files and provides a link to them' do
