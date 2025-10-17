@@ -58,3 +58,5 @@ oai_max_page_size: 5000
 
 # base ID of the repository used to generate OAI IDs for records
 oai_repository_id: 'pod.stanford.edu'
+
+marc_record_writer_tmpdir: ~
