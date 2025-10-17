@@ -30,8 +30,7 @@ class GenerateDeltaDumpJob < ApplicationJob
 
     delta_dump = full_dump.deltas.create(stream_id: full_dump.stream_id)
     base_name = "#{organization.slug}-#{Time.zone.today}-delta"
-    writer = MarcRecordWriterService.new(base_name)
-    oai_writer = ChunkedOaiMarcRecordWriterService.new(base_name, dump: delta_dump, now: now)
+    writer = MarcRecordWriterService.new(base_name, dump: delta_dump, now: now)
 
     begin
       NormalizedMarcRecordReader.new(uploads).each_slice(1000) do |records|
@@ -42,10 +41,8 @@ class GenerateDeltaDumpJob < ApplicationJob
         records.each do |record|
           if record.status == 'delete'
             writer.write_delete(record)
-            oai_writer.write_delete(record)
           else
             writer.write_marc_record(record)
-            oai_writer.write_marc_record(record)
           end
         end
 
@@ -53,12 +50,6 @@ class GenerateDeltaDumpJob < ApplicationJob
       end
 
       writer.finalize
-      oai_writer.finalize
-
-      writer.files.each do |as, file|
-        delta_dump.public_send(as).attach(io: File.open(file),
-                                          filename: human_readable_filename(base_name, as))
-      end
 
       # Add a timestamp when the dump is saved at the end of the job to indicate
       # it is complete and ready for harvesting.
@@ -68,29 +59,7 @@ class GenerateDeltaDumpJob < ApplicationJob
     ensure
       writer.close
       writer.unlink
-
-      oai_writer.close
-      oai_writer.unlink
     end
   end
   # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
-
-  private
-
-  def human_readable_filename(base_name, file_type, counter = nil)
-    as = case file_type
-         when :deletes
-           'deletes.del.txt'
-         when :marc21
-           'marc21.mrc.gz'
-         when :marcxml
-           'marcxml.xml.gz'
-         when :oai_xml
-           "oai-#{format('%010d', counter)}.xml.gz"
-         else
-           "#{file_type}.gz"
-         end
-
-    "#{base_name}-#{as}"
-  end
 end
