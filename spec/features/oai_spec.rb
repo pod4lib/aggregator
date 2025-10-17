@@ -165,7 +165,7 @@ RSpec.describe 'OAI-PMH' do
       visit oai_path(verb: 'ListRecords', metadataPrefix: 'marc21')
       doc = Nokogiri::XML(page.body)
       expect(doc.at_css('ListRecords > record > header > identifier').text).to(
-        eq("oai:pod.stanford.edu:my-org:#{organization.default_stream.id}:a12345")
+        eq('oai:pod.stanford.edu:my-org:a12345')
       )
     end
 
@@ -248,7 +248,7 @@ RSpec.describe 'OAI-PMH' do
     context 'when a resumption token is supplied' do
       it 'renders the indicated page of records' do
         visit oai_path(verb: 'ListRecords', resumptionToken: OaiConcern::ResumptionToken.new(page: '2').encode)
-        expect(page).to have_text("oai:pod.stanford.edu:my-org:#{organization.default_stream.id}:DUKE000075163")
+        expect(page).to have_text('oai:pod.stanford.edu:my-org:DUKE000075163')
       end
 
       it 'renders an error if any other argument is also supplied' do

@@ -48,7 +48,7 @@ class OaiMarcRecordWriterService
 
   # See http://www.openarchives.org/OAI/2.0/guidelines-oai-identifier.htm
   def oai_id(record)
-    "oai:#{Settings.oai_repository_id}:#{record.organization.slug}:#{record.stream.id}:#{record.marc001}"
+    "oai:#{Settings.oai_repository_id}:#{record.organization.slug}:#{record.marc001}"
   end
 
   # Special logic for writing OAI-PMH-style record responses
