@@ -39,8 +39,6 @@ set :linked_dirs, %w(storage log tmp/pids tmp/cache tmp/sockets vendor/bundle pu
 # honeybadger_env otherwise defaults to rails_env
 set :honeybadger_env, "#{fetch(:stage)}"
 
-before "deploy:assets:precompile"
-
 namespace :deploy do
   after :restart, :restart_sidekiq do
     on roles(:background) do
