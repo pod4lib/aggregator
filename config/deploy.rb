@@ -39,18 +39,9 @@ set :linked_dirs, %w(storage log tmp/pids tmp/cache tmp/sockets vendor/bundle pu
 # honeybadger_env otherwise defaults to rails_env
 set :honeybadger_env, "#{fetch(:stage)}"
 
-before "deploy:assets:precompile", "deploy:yarn_install"
+before "deploy:assets:precompile"
 
 namespace :deploy do
-  desc 'Run rake yarn:install'
-  task :yarn_install do
-    on roles(:web) do
-      within release_path do
-        execute("cd #{release_path} && yarn install")
-      end
-    end
-  end
-
   after :restart, :restart_sidekiq do
     on roles(:background) do
       sudo :systemctl, "restart", "sidekiq-*", raise_on_non_zero_exit: false

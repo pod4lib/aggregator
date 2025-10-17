@@ -59,11 +59,6 @@ node_modules/
 /public/packs-test
 /public/assets
 
-# Ignore yarn files
-/yarn-error.log
-yarn-debug.log*
-.yarn-integrity
-
 # Ignore pidfiles, but keep the directory.
 /tmp/pids/*
 !/tmp/pids/
@@ -82,9 +77,6 @@ yarn-debug.log*
 /public/packs
 /public/packs-test
 /node_modules
-/yarn-error.log
-yarn-debug.log*
-.yarn-integrity
 
 /spec/examples.txt
 
