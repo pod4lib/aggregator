@@ -61,7 +61,7 @@ class MarcRecordWriterService
   end
 
   def marcxml_writer
-    @writers[:marcxml] ||= MARC::XMLWriter.new(Zlib::GzipWriter.new(file(:marcxml)))
+    @writers[:marcxml] ||= OxMarcXmlWriter.new(Zlib::GzipWriter.new(file(:marcxml)))
   end
 
   def deletes_writer
