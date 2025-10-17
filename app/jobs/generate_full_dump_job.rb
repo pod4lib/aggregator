@@ -10,14 +10,14 @@ class GenerateFullDumpJob < ApplicationJob
       full_dump = org.default_stream.normalized_dumps.published.last
       next if full_dump && org.default_stream.uploads.where(updated_at: full_dump.last_full_dump_at...Time.zone.now).none?
 
-      GenerateFullDumpJob.perform_later(org)
+      GenerateFullDumpJob.perform_later(org.default_stream)
     end
   end
 
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-  def perform(organization, publish: true)
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
+  def perform(stream, publish: true)
     now = Time.zone.now
-    uploads = Upload.active.where(stream: organization.default_stream)
+    uploads = stream.uploads.active
 
     uploads.where.not(status: 'processed').find_each do |upload|
       ExtractMarcRecordMetadataJob.perform_now(upload)
@@ -25,9 +25,9 @@ class GenerateFullDumpJob < ApplicationJob
 
     progress.total = uploads.sum(&:marc_records_count)
 
-    full_dump = organization.default_stream.normalized_dumps.build(last_full_dump_at: now, last_delta_dump_at: now)
+    full_dump = stream.normalized_dumps.build(last_full_dump_at: now, last_delta_dump_at: now)
 
-    base_name = "#{organization.slug}-#{Time.zone.today}-full"
+    base_name = "#{stream.organization.slug}#{"-#{stream.slug}" unless stream.default}-#{Time.zone.today}-full"
     writer = MarcRecordWriterService.new(base_name)
     oai_writer = ChunkedOaiMarcRecordWriterService.new(base_name, dump: full_dump, now: now)
 
@@ -60,7 +60,7 @@ class GenerateFullDumpJob < ApplicationJob
       full_dump.published_at = Time.zone.now if publish
       full_dump.save!
 
-      GenerateDeltaDumpJob.perform_later(organization, publish: publish)
+      GenerateDeltaDumpJob.perform_later(stream, publish: publish)
     ensure
       writer.close
       writer.unlink
@@ -69,7 +69,7 @@ class GenerateFullDumpJob < ApplicationJob
       oai_writer.unlink
     end
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
 
   def human_readable_filename(base_name, file_type)
     as = case file_type

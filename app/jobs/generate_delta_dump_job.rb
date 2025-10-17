@@ -6,19 +6,19 @@ class GenerateDeltaDumpJob < ApplicationJob
   with_job_tracking
 
   def self.enqueue_all
-    Organization.providers.find_each { |org| GenerateDeltaDumpJob.perform_later(org) }
+    Organization.providers.find_each { |org| GenerateDeltaDumpJob.perform_later(org.default_stream) }
   end
 
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
-  def perform(organization, publish: true)
+  def perform(stream, publish: true)
     now = Time.zone.now
-    full_dump = organization.default_stream.current_full_dump
+    full_dump = stream.current_full_dump
 
     return unless full_dump
 
     from = full_dump.last_delta_dump_at
 
-    uploads = organization.default_stream.uploads.active.where(created_at: from...now)
+    uploads = stream.uploads.active.where(created_at: from...now)
 
     return unless uploads.any?
 
@@ -29,7 +29,7 @@ class GenerateDeltaDumpJob < ApplicationJob
     progress.total = uploads.sum(&:marc_records_count)
 
     delta_dump = full_dump.deltas.create(stream_id: full_dump.stream_id)
-    base_name = "#{organization.slug}-#{Time.zone.today}-delta"
+    base_name = "#{stream.organization.slug}#{"-#{stream.slug}" unless stream.default}-#{Time.zone.today}-delta"
     writer = MarcRecordWriterService.new(base_name)
     oai_writer = ChunkedOaiMarcRecordWriterService.new(base_name, dump: delta_dump, now: now)
 

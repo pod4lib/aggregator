@@ -11,7 +11,7 @@ RSpec.describe CompactUploadsJob do
 
     Timecop.return
 
-    GenerateFullDumpJob.perform_now(organization)
+    GenerateFullDumpJob.perform_now(organization.default_stream)
   end
 
   it 'compacts old uploads into a single upload' do # rubocop:disable RSpec/ExampleLength

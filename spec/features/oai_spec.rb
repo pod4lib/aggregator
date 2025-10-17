@@ -20,7 +20,7 @@ RSpec.describe 'OAI-PMH' do
       create(:upload, :binary_marc, stream: organization.default_stream)
     end
     travel_to Time.zone.local(2020, 5, 6).end_of_day do
-      GenerateFullDumpJob.perform_now(organization)
+      GenerateFullDumpJob.perform_now(organization.default_stream)
     end
 
     # delta dump from the next day, add one and delete one record
@@ -29,7 +29,7 @@ RSpec.describe 'OAI-PMH' do
       create(:upload, :deleted_marc_xml, stream: organization.default_stream)
     end
     travel_to Time.zone.local(2020, 5, 7).end_of_day do
-      GenerateDeltaDumpJob.perform_now(organization)
+      GenerateDeltaDumpJob.perform_now(organization.default_stream)
     end
 
     # required for API access

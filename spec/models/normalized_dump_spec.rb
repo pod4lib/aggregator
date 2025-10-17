@@ -8,7 +8,7 @@ RSpec.describe NormalizedDump do
 
   before do
     upload.files.blobs.first.analyze
-    GenerateFullDumpJob.perform_now(organization)
+    GenerateFullDumpJob.perform_now(organization.default_stream)
     # Manually set the count metadata
     organization.default_stream.reload.current_full_dump.marc21.attachment.metadata = { 'count' => 1 }
   end
