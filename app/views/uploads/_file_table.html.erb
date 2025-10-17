@@ -1,9 +1,8 @@
 <ul class="table-key list-unstyled list-inline pt-3" aria-hidden="true">
-  <% Settings.metadata_status.each do |status, values| %>
-  <li class="list-inline-item">
-    <i class="<%= values.icon_class %> pod-metadata-status <%= status %>"></i>
-    <span class="align-text-bottom"><%= values.label %></span>
-  </li>
+  <% Settings.metadata_status.each_key do |status| %>
+    <li class="list-inline-item">
+      <%= render(MetadataStatusIconComponent.new(status: status, show_label: true)) %>
+    </li>
   <% end %>
 </ul>
 

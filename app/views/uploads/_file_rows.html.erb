@@ -30,8 +30,7 @@
 <% upload.files.each do |file| %>
   <tr>
     <td class="align-middle text-center">
-      <% status = file.pod_metadata_status %>
-      <i class="<%= Settings.metadata_status[status].icon_class %> pod-metadata-status <%= status %>" aria-label="<%= Settings.metadata_status[status].label  %>"></i>
+      <%= render(MetadataStatusIconComponent.new(status: file.pod_metadata_status)) %>
     </td> 
     <td class="align-middle">
       <%= link_to_if can?(:read, upload), file.filename, download_url(file), title: "Download #{file.filename}" %>
