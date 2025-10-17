@@ -11,28 +11,12 @@ class OaiController < ApplicationController
   skip_authorization_check
   rescue_from OaiConcern::OaiError, with: :render_error
 
-  def show
-    verb = params.require(:verb)
-    send(:"render_#{verb.underscore}")
-  rescue ActionController::ParameterMissing
+  def bad_verb
     raise OaiConcern::BadVerb
   end
 
-  def method_missing(method, *_args, &)
-    raise OaiConcern::BadVerb if method.to_s.start_with?('render_')
-
-    super
-  end
-
-  def respond_to_missing?(method, include_private = false)
-    method.to_s.start_with?('render_') || super
-  end
-
-  private
-
-  # rubocop:disable Metrics/AbcSize
-  # rubocop:disable Metrics/MethodLength
-  def render_list_records
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def list_records
     headers['Cache-Control'] = 'no-cache'
     headers['Last-Modified'] = Time.current.httpdate
     headers['X-Accel-Buffering'] = 'no'
@@ -57,10 +41,9 @@ class OaiController < ApplicationController
 
     render xml: build_list_records_response(*next_record_page(token))
   end
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
-  # rubocop:enable Metrics/AbcSize
-  # rubocop:enable Metrics/MethodLength
-  def render_list_sets
+  def list_sets
     streams = Stream.accessible_by(current_ability)
                     .joins(:default_stream_histories)
                     .joins(normalized_dumps: :oai_xml_attachments)
@@ -68,7 +51,7 @@ class OaiController < ApplicationController
     render xml: build_list_sets_response(streams)
   end
 
-  def render_identify
+  def identify
     earliest_oai = Stream.joins(:default_stream_histories)
                          .joins(normalized_dumps: :oai_xml_attachments)
                          .distinct
@@ -79,9 +62,11 @@ class OaiController < ApplicationController
     render xml: build_identify_response(earliest_oai || Time.now.utc)
   end
 
-  def render_list_metadata_formats
+  def list_metadata_formats
     render xml: build_list_metadata_formats_response
   end
+
+  private
 
   # Render an error response.
   def render_error(exception)
