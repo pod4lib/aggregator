@@ -36,6 +36,8 @@ class MarcRecordWriterService
 
   def unlink
     @opened_files.each(&:unlink)
+
+    FileUtils.rm_rf tempdir
   end
 
   private
@@ -73,7 +75,7 @@ class MarcRecordWriterService
   end
 
   def temp_file(name)
-    Tempfile.new("#{base_name}-#{name}", binmode: true).tap do |file|
+    Tempfile.new("#{base_name}-#{name}", tempdir, binmode: true).tap do |file|
       @opened_files << file
     end
   end
@@ -95,5 +97,9 @@ class MarcRecordWriterService
         field.subfields.any? { |sf| sf.value.include?("\uFFFD") }
       end
     end
+  end
+
+  def tempdir
+    @tempdir ||= Dir.mktmpdir(base_name || 'marc_record_writer', Settings.marc_record_writer_tmpdir || Dir.tmpdir)
   end
 end
