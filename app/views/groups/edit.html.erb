@@ -1,0 +1,9 @@
+<div class="container mt-4">
+  <h1>Edit group</h1>
+  <%= bootstrap_form_with(model: @group, url: group_path(@group), html: { method: :put }) do |form| %>
+    <%= render 'form', group: @group, form: form %>
+    <div class="actions">
+      <%= form.primary 'Update group' %>
+    </div>
+  <% end %>
+</div>

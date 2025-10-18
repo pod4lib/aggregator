@@ -9,6 +9,12 @@
         <%= @organization.name %>
       </h1>
       <div class="d-flex flex-column ms-5">
+        <% if @organization.groups.any? %>
+          <span class="lead">
+            Member of: 
+            <%= @organization.groups.map(&:display_name).to_sentence %>
+          </span>
+        <% end %>
         <% if @organization.provider? && @organization.code.present? %>
           <span class="lead"><%= t('.marc_code', code: @organization.code) %></span>
         <% end %>

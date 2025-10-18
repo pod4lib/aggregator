@@ -1,0 +1,82 @@
+<div class="container mt-4">
+  <h1>Groups</h1>
+  <table class="table table-striped mt-4">
+    <thead>
+      <tr>
+        <th colspan="2">Name</th>
+        <th>Short name</th>
+        <th>Slug</th>
+        <th>Description</th>
+        <th colspan="2">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @groups.each do |group| %>
+        <% next unless can? :read, group %>
+        <tr>
+          <td class="align-middle text-center icon-column">
+            <% if group.icon.attached? %>
+              <%= image_tag(group.icon, alt: '', class: 'icon-sm') %>
+            <% end %>
+          </td>
+          <td class="align-middle"><%= link_to group.name, group %></td>
+          <td class="align-middle"><%= group.display_name %></td>
+          <td class="align-middle"><%= group.slug %></td>
+          <td class="align-middle"><%= group.description.truncate(50) %></td>
+
+          <% if can? :manage, Group %>
+            <td class="align-middle"><%= link_to 'Edit', edit_group_path(group), class: 'btn btn-secondary btn-sm' if can? :edit, group %></td>
+            <td class="align-middle"><%= link_to 'Delete', group, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' if can? :destroy, group %></td>
+          <% end %>
+
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <% if can? :manage, Group %>
+    <%= link_to 'New group', new_group_path, class: 'btn btn-primary' if can? :create, Group.new %>
+  <% end %>
+
+  <div class="mt-5">
+    <h2>Group Membership</h2>
+    <p>Manage which organizations belong to which groups</p>
+    <table class="table table-striped mt-4" style="width: auto;">
+      <thead>
+        <tr>
+          <th colspan="2" class="pe-5">Organization</th>
+          <% @groups.each do |group| %>
+            <th class="pe-5"><%= group.display_name %></th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% @organizations.each do |organization| %>
+          <tr>
+            <td class="align-middle text-center icon-column">
+              <% if organization.icon.attached? %>
+                <%= image_tag(organization.icon, alt: '', class: 'icon-sm') %>
+              <% end %>
+            </td>
+            <td class="align-middle">
+              <%= organization.name %>
+            </td>
+            <% @groups.each do |group| %>
+              <td class="align-middle">
+                <div class="form-check align-middle d-inline-block">
+                  <% if group.organizations.include?(organization) %>
+                  <%= link_to '', group_path(group, remove_organization: organization.id), data: { turbo_method: :patch, turbo_confirm: t('organization_users.index.confirm_action') }, class: 'form-check-input checked', title: t('.remove_admin') %>
+                  <input class="form-check-input pe-none" type="checkbox" aria-label="Pod admin?" checked>
+                  <% else %>
+                  <%= link_to '', group_path(group, add_organization: organization.id), data: { turbo_method: :patch, turbo_confirm: t('organization_users.index.confirm_action') }, class: 'form-check-input', title: t('.add_admin') %>
+                  <% end %>
+                </div>
+              </td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
