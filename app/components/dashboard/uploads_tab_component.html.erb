@@ -33,7 +33,7 @@
               <% status = files_status(uploads[0]) %>
               <%= render JobStatusIconComponent.new(status: status) %>
             <% else %>
-              <i class="bi bi-exclamation-triangle-fill text-warning" aria-label="Missing upload"></i>
+              <i class="bi bi-exclamation-triangle-fill text-warning" role="img" aria-label="Missing upload"></i>
             <% end %>
           </td>
           <!-- Date of successful upload: -->
