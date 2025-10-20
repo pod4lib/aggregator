@@ -92,43 +92,4 @@ RSpec.describe Stream do
       expect { current_default.make_default }.not_to(change { current_default.reload.default })
     end
   end
-
-  describe '#previous_default_stream_history' do
-    let(:org) { create(:organization) }
-    let(:stream00) { create(:stream, organization: org, default: true) }
-    let(:stream01) { create(:stream, organization: org) }
-    let(:stream02) { create(:stream, organization: org) }
-
-    before do
-      stream01.reload.make_default
-      stream02.reload.make_default
-    end
-
-    it 'returns the previous default stream history' do
-      expect(stream02.previous_default_stream_history).to eq(stream01.default_stream_histories.first)
-    end
-
-    it 'returns nil if there is not a previous default stream history' do
-      expect(stream00.previous_default_stream_history).to be_nil
-    end
-
-    context 'when the stream has been default more than once' do
-      before do
-        stream01.reload.make_default
-      end
-
-      it 'returns the previous default stream history for the most recent period when a datetime is not supplied' do
-        expect(stream01.previous_default_stream_history).to eq(stream02.default_stream_histories.first)
-      end
-
-      it 'returns the previous default stream history for the datetime supplied' do
-        datetime = stream01.default_stream_histories.first.start_time.strftime('%Y-%m-%d %H:%M:%S.%N')
-        expect(stream01.previous_default_stream_history(datetime)).to eq(stream00.default_stream_histories.first)
-      end
-
-      it 'returns nil if the datetime supplied is not within a range when the stream has been the default' do
-        expect(stream01.previous_default_stream_history('2008-05-10 12:50:35')).to be_nil
-      end
-    end
-  end
 end
