@@ -21,8 +21,6 @@ class Stream < ApplicationRecord
   scope :active, -> { where(status: 'active') }
   scope :archived, -> { where(status: 'archived') }
 
-  has_many_attached :snapshots
-
   after_create :check_for_a_default_stream
 
   before_update :update_default_stream_history, if: :default_changed?
