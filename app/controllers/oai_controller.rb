@@ -114,9 +114,18 @@ class OaiController < ApplicationController
                       .distinct
               end
 
-    dump_ids = streams.map do |stream|
-      stream.current_dump_ids(from_date: token.from_date, until_date: token.until_date)
-    end.flatten.compact
+    dump_ids = streams.flat_map do |stream|
+      most_recent_full_dump = stream.current_full_dump
+
+      next if most_recent_full_dump.blank?
+
+      NormalizedDump.where(id: most_recent_full_dump.id)
+                    .or(most_recent_full_dump.deltas)
+                    .published
+                    .where(created_at: token.date_range)
+                    .order(created_at: :asc)
+                    .pluck(:id)
+    end.compact
 
     oai_xml_query = ActiveStorage::Attachment.where(record_type: 'NormalizedDump', name: 'oai_xml',
                                                     record_id: dump_ids).order(created_at: :asc)
@@ -188,10 +197,10 @@ class OaiController < ApplicationController
               xml.setName stream.display_name
               xml.setDescription do
                 xml[:oai_dc].dc(oai_dc_xmlns) do
-                  xml[:dc].description stream.oai_dc_description
+                  xml[:dc].description oai_dc_description(stream)
                   xml[:dc].contributor stream.organization.slug
-                  xml[:dc].type stream.oai_dc_type
-                  stream.oai_dc_dates.each do |date|
+                  xml[:dc].type oai_dc_type(stream)
+                  oai_dc_dates(stream).each do |date|
                     xml[:dc].date date
                   end
                 end
@@ -204,6 +213,33 @@ class OaiController < ApplicationController
   end
   # rubocop:enable Metrics/AbcSize
   # rubocop:enable Metrics/MethodLength
+
+  # machine-readable descriptor used in OAI ListSets response that indicates
+  # if the stream is or was a default.
+  def oai_dc_type(stream)
+    if stream.default_stream_histories.any?
+      stream.default? ? 'default' : 'former default'
+    else
+      'non-default'
+    end
+  end
+
+  # machine-readable stream active dates used in OAI ListSets response, e.g.
+  # "2012-01-01/2012-01-31". for dublin core format, see:
+  # https://www.dublincore.org/specifications/dublin-core/dcmi-terms/terms/date/
+  def oai_dc_dates(stream)
+    return ["#{stream.created_at.to_date}/"] unless stream.default_stream_histories.any?
+
+    stream.default_stream_histories.recent.map do |history|
+      [history.start_time.to_date, history.end_time&.to_date].join('/')
+    end
+  end
+
+  # human-readable description used in OAI ListSets response that captures
+  # stream type, contributor org, and dates
+  def oai_dc_description(stream)
+    "#{oai_dc_type(stream).capitalize} stream for #{stream.organization.name}, #{oai_dc_dates(stream).join(' and ')}"
+  end
 
   # See https://www.openarchives.org/OAI/openarchivesprotocol.html#Identify
   # rubocop:disable Metrics/AbcSize

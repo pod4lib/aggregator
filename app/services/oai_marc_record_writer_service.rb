@@ -9,15 +9,15 @@ class OaiMarcRecordWriterService
   end
 
   def write_marc_record(record, dump_created_at)
-    oai_writer.write(record.augmented_marc, record.oai_id, record.stream.id, dump_created_at)
+    oai_writer.write(record.augmented_marc, oai_id(record), record.stream.id, dump_created_at)
   rescue StandardError => e
-    error = "Error writing MARC OAI file #{record.oai_id}: #{e}"
+    error = "Error writing MARC OAI file #{base_name} id #{record.id}: #{e}"
     Rails.logger.info(error)
     Honeybadger.notify(error)
   end
 
   def write_delete(record, dump_created_at)
-    oai_writer.write_delete(record.oai_id, record.stream.id, dump_created_at)
+    oai_writer.write_delete(oai_id(record), record.stream.id, dump_created_at)
   end
 
   def finalize
@@ -44,6 +44,11 @@ class OaiMarcRecordWriterService
 
   def oai_writer
     @oai_writer ||= OAIPMHWriter.new(Zlib::GzipWriter.new(oai_file))
+  end
+
+  # See http://www.openarchives.org/OAI/2.0/guidelines-oai-identifier.htm
+  def oai_id(record)
+    "oai:#{Settings.oai_repository_id}:#{record.organization.slug}:#{record.stream.id}:#{record.marc001}"
   end
 
   # Special logic for writing OAI-PMH-style record responses

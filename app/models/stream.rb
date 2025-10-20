@@ -57,52 +57,6 @@ class Stream < ApplicationRecord
     @current_full_dump ||= normalized_dumps.full_dumps.published.last
   end
 
-  # the ids of the current full dump and its associated deltas,
-  # optionally filtered by from and until dates.
-  # rubocop:disable Metrics/AbcSize
-  def current_dump_ids(from_date: nil, until_date: nil)
-    full_dump_id = normalized_dumps.full_dumps.published.order(created_at: :desc).limit(1).pick(:id)
-
-    return if full_dump_id.blank?
-
-    dumps_query = NormalizedDump.where(id: full_dump_id)
-                                .or(NormalizedDump.where(full_dump_id: full_dump_id))
-                                .published
-                                .order(created_at: :asc)
-    dumps_query = dumps_query.where(created_at: Time.zone.parse(from_date).beginning_of_day..) if from_date.present?
-    dumps_query = dumps_query.where(created_at: ..Time.zone.parse(until_date).end_of_day) if until_date.present?
-
-    dumps_query.pluck(:id)
-  end
-  # rubocop:enable Metrics/AbcSize
-
-  # machine-readable descriptor used in OAI ListSets response that indicates
-  # if the stream is or was a default.
-  def oai_dc_type
-    if default_stream_histories.any?
-      default? ? 'default' : 'former default'
-    else
-      'non-default'
-    end
-  end
-
-  # machine-readable stream active dates used in OAI ListSets response, e.g.
-  # "2012-01-01/2012-01-31". for dublin core format, see:
-  # https://www.dublincore.org/specifications/dublin-core/dcmi-terms/terms/date/
-  def oai_dc_dates
-    return "#{created_at.to_date}/" unless default_stream_histories.any?
-
-    default_stream_histories.recent.map do |history|
-      [history.start_time.to_date, history.end_time&.to_date].join('/')
-    end
-  end
-
-  # human-readable description used in OAI ListSets response that captures
-  # stream type, contributor org, and dates
-  def oai_dc_description
-    "#{oai_dc_type.capitalize} stream for #{organization.name}, #{oai_dc_dates.join(' and ')}"
-  end
-
   def cached_files_count
     return statistic.file_count if statistic_up_to_date?
 
