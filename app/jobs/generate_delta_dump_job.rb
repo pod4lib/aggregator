@@ -16,7 +16,7 @@ class GenerateDeltaDumpJob < ApplicationJob
 
     return unless full_dump
 
-    from = full_dump.last_delta_dump_at
+    from = [stream.delta_dumps.published.maximum(:created_at), full_dump.created_at].compact.max
 
     uploads = stream.uploads.active.where(created_at: from...now)
 
@@ -28,10 +28,12 @@ class GenerateDeltaDumpJob < ApplicationJob
 
     progress.total = uploads.sum(&:marc_records_count)
 
-    delta_dump = full_dump.deltas.create(stream_id: full_dump.stream_id)
+    delta_dump = stream.delta_dumps.build
+    normalized_dump = delta_dump.build_normalized_dump(stream: stream)
+
     base_name = "#{stream.organization.slug}#{"-#{stream.slug}" unless stream.default}-#{Time.zone.today}-delta"
     writer = MarcRecordWriterService.new(base_name)
-    oai_writer = ChunkedOaiMarcRecordWriterService.new(base_name, dump: delta_dump, now: now)
+    oai_writer = ChunkedOaiMarcRecordWriterService.new(base_name, dump: normalized_dump, now: now)
 
     begin
       NormalizedMarcRecordReader.new(uploads).each_slice(1000) do |records|
@@ -56,15 +58,14 @@ class GenerateDeltaDumpJob < ApplicationJob
       oai_writer.finalize
 
       writer.files.each do |as, file|
-        delta_dump.public_send(as).attach(io: File.open(file),
-                                          filename: human_readable_filename(base_name, as))
+        normalized_dump.public_send(as).attach(io: File.open(file),
+                                               filename: human_readable_filename(base_name, as))
       end
 
-      # Add a timestamp when the dump is saved at the end of the job to indicate
-      # it is complete and ready for harvesting.
+      normalized_dump.update(published_at: (Time.zone.now if publish))
       delta_dump.published_at = Time.zone.now if publish
+
       delta_dump.save!
-      full_dump.update(last_delta_dump_at: now)
     ensure
       writer.close
       writer.unlink

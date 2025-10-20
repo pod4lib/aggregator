@@ -7,7 +7,7 @@ module Dashboard
 
     def normalized_data_by_provider
       @normalized_data_by_provider ||= Organization.providers.index_with do |org|
-        org.default_stream.normalized_dumps.full_dumps.published.last
+        org.default_stream.full_dumps.published.last
       end
     end
   end

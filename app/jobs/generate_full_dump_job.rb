@@ -7,14 +7,14 @@ class GenerateFullDumpJob < ApplicationJob
 
   def self.enqueue_all
     Organization.providers.find_each do |org|
-      full_dump = org.default_stream.normalized_dumps.published.last
-      next if full_dump && org.default_stream.uploads.where(updated_at: full_dump.last_full_dump_at...Time.zone.now).none?
+      full_dump = org.default_stream.full_dumps.published.last
+      next if full_dump && org.default_stream.uploads.where(updated_at: full_dump.created_at...Time.zone.now).none?
 
       GenerateFullDumpJob.perform_later(org.default_stream)
     end
   end
 
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def perform(stream, publish: true)
     now = Time.zone.now
     uploads = stream.uploads.active
@@ -25,11 +25,12 @@ class GenerateFullDumpJob < ApplicationJob
 
     progress.total = uploads.sum(&:marc_records_count)
 
-    full_dump = stream.normalized_dumps.build(last_full_dump_at: now, last_delta_dump_at: now)
+    full_dump = stream.full_dumps.build
+    normalized_dump = full_dump.build_normalized_dump(stream: stream)
 
     base_name = "#{stream.organization.slug}#{"-#{stream.slug}" unless stream.default}-#{Time.zone.today}-full"
     writer = MarcRecordWriterService.new(base_name)
-    oai_writer = ChunkedOaiMarcRecordWriterService.new(base_name, dump: full_dump, now: now)
+    oai_writer = ChunkedOaiMarcRecordWriterService.new(base_name, dump: normalized_dump, now: now)
 
     begin
       NormalizedMarcRecordReader.new(uploads).each_slice(1000) do |records|
@@ -52,12 +53,12 @@ class GenerateFullDumpJob < ApplicationJob
       writer.finalize
 
       writer.files.each do |as, file|
-        full_dump.public_send(as).attach(io: File.open(file), filename: human_readable_filename(base_name, as))
+        normalized_dump.public_send(as).attach(io: File.open(file), filename: human_readable_filename(base_name, as))
       end
 
-      # Add a timestamp when the dump is saved at the end of the job to indicate
-      # it is complete, should supercede the previous full dump, and is ready for harvesting.
+      normalized_dump.update(published_at: (Time.zone.now if publish))
       full_dump.published_at = Time.zone.now if publish
+
       full_dump.save!
 
       GenerateDeltaDumpJob.perform_later(stream, publish: publish)
@@ -69,7 +70,7 @@ class GenerateFullDumpJob < ApplicationJob
       oai_writer.unlink
     end
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   def human_readable_filename(base_name, file_type)
     as = case file_type

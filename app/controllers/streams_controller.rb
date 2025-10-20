@@ -53,7 +53,7 @@ class StreamsController < ApplicationController
   def normalized_dump
     authorize! :read, @stream
 
-    @normalized_dump = @stream.normalized_dumps.full_dumps.published.last || @stream.normalized_dumps.build
+    @normalized_dump = @stream.full_dumps.published.last || @stream.full_dumps.build
   end
 
   def make_default

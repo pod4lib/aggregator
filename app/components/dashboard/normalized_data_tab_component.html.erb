@@ -14,8 +14,8 @@
           <td><%= link_to provider.name, normalized_data_organization_stream_path(provider, provider.default_stream), data: { turbo: false } %></td>
           <!-- Last full dump: -->
           <td>
-              <% if dump && dump.last_full_dump_at %>
-                <%= local_time(dump.last_full_dump_at, format: datetime_display_format()) %>
+              <% if dump && dump.created_at %>
+                <%= local_time(dump.created_at, format: datetime_display_format()) %>
               <% else %>
                 <i class="bi bi-exclamation-triangle-fill text-warning"></i>
               <% end %>
@@ -30,11 +30,11 @@
           </td>
           <!-- Last delta: -->
           <td>
-            <% if dump %>
-                <%= local_time(dump.last_delta_dump_at, format: datetime_display_format()) %>
-              <% else %>
-                <i class="bi bi-exclamation-triangle-fill text-warning"></i>
-              <% end %>
+            <% if dump && dump.deltas.any? %>
+              <%= local_time(dump.deltas.maximum(:created_at), format: datetime_display_format()) %>
+            <% else %>
+              <i class="bi bi-exclamation-triangle-fill text-warning"></i>
+            <% end %>
           </td>
         </tr>
         <% end %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_15_205942) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_20_183942) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -26,7 +26,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_15_205942) do
     t.string "filename", null: false
     t.string "content_type"
     t.text "metadata"
-    t.integer "byte_size", null: false
+    t.bigint "byte_size", null: false
     t.string "checksum"
     t.datetime "created_at", precision: nil, null: false
     t.string "service_name", null: false
@@ -112,9 +112,22 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_15_205942) do
 
   create_table "default_stream_histories", force: :cascade do |t|
     t.integer "stream_id", null: false
-    t.datetime "start_time", precision: nil, null: false
-    t.datetime "end_time", precision: nil
+    t.datetime "start_time", null: false
+    t.datetime "end_time"
     t.index ["stream_id"], name: "index_default_stream_histories_on_stream_id"
+  end
+
+  create_table "delta_dumps", force: :cascade do |t|
+    t.integer "stream_id", null: false
+    t.integer "previous_stream_id"
+    t.integer "normalized_dump_id", null: false
+    t.datetime "published_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["normalized_dump_id"], name: "index_delta_dumps_on_normalized_dump_id"
+    t.index ["previous_stream_id"], name: "index_delta_dumps_on_previous_stream_id"
+    t.index ["published_at"], name: "index_delta_dumps_on_published_at"
+    t.index ["stream_id"], name: "index_delta_dumps_on_stream_id"
   end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
@@ -126,6 +139,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_15_205942) do
     t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true
     t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type"
     t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
+  end
+
+  create_table "full_dumps", force: :cascade do |t|
+    t.integer "stream_id", null: false
+    t.integer "normalized_dump_id", null: false
+    t.datetime "published_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["normalized_dump_id"], name: "index_full_dumps_on_normalized_dump_id"
+    t.index ["published_at"], name: "index_full_dumps_on_published_at"
+    t.index ["stream_id"], name: "index_full_dumps_on_stream_id"
   end
 
   create_table "job_trackers", force: :cascade do |t|
@@ -181,7 +205,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_15_205942) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "full_dump_id"
-    t.datetime "published_at", precision: nil
+    t.datetime "published_at"
     t.index ["full_dump_id"], name: "index_normalized_dumps_on_full_dump_id"
     t.index ["stream_id"], name: "index_normalized_dumps_on_stream_id"
   end
@@ -290,7 +314,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_15_205942) do
 
   create_table "versions", force: :cascade do |t|
     t.string "item_type"
-    t.string "{:null=>false}"
+    t.string "{null: false}"
     t.integer "item_id", limit: 8, null: false
     t.string "event", null: false
     t.string "whodunnit"
@@ -304,4 +328,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_15_205942) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "contact_emails", "organizations"
   add_foreign_key "default_stream_histories", "streams"
+  add_foreign_key "delta_dumps", "normalized_dumps"
+  add_foreign_key "full_dumps", "normalized_dumps"
 end

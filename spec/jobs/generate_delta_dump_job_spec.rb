@@ -76,7 +76,7 @@ RSpec.describe GenerateDeltaDumpJob do
     it 'does not generate a delta if there is no existing published full dump' do
       described_class.perform_now(no_full_dump_org.default_stream)
       expect(no_full_dump_org.default_stream.reload.current_full_dump).to be_nil
-      expect(no_full_dump_org.default_stream.reload.normalized_dumps.count).to be(0)
+      expect(no_full_dump_org.default_stream.reload.delta_dumps.count).to be(0)
     end
   end
 

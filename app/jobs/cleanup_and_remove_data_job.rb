@@ -16,9 +16,11 @@ class CleanupAndRemoveDataJob < ApplicationJob
       .where.not(updated_at: 3.months.ago..Time.zone.now)
       .find_each(&:archive)
     # Keep the 2 most recent published normalized full dumps
-    last_two = organization.default_stream.normalized_dumps.full_dumps.published.last(2)
-    (organization.default_stream.normalized_dumps.full_dumps.published - last_two).map(&:destroy)
-    # Keep deltas for an additional month (1 whole quarter)
+    last_two = organization.default_stream.full_dumps.published.last(2)
+    (organization.default_stream.full_dumps.published - last_two).map(&:destroy)
+    # Keep deltas for an additional month (and at least 1 whole quarter)
+    organization.default_stream.delta_dumps.where(created_at: ([(last_two.first&.created_at || Time.zone.now) - 1.month,
+                                                                3.months.ago].max)..).map(&:destroy)
     # Keep deleted record information for 6 months after it is removed
     organization
       .streams
