@@ -20,8 +20,6 @@ class Stream < ApplicationRecord
   scope :active, -> { where(status: 'active') }
   scope :archived, -> { where(status: 'archived') }
 
-  has_many_attached :snapshots
-
   after_create :check_for_a_default_stream
 
   before_update :update_default_stream_history, if: :default_changed?
@@ -59,28 +57,6 @@ class Stream < ApplicationRecord
     @current_full_dump ||= normalized_dumps.full_dumps.published.last
   end
 
-  # If no datetime is provided then assume we want the previous DefaultStreamHistory
-  # object for the most recent period when self.stream was the default.
-  #
-  # If a datetime is provided then return the previous DefaultStreamHistory object
-  # for when self.stream was the default for the supplied datetime.
-  #
-  # If self.stream was not the default for the datetime supplied return nil
-  def previous_default_stream_history(datetime = nil)
-    default_stream_history = if datetime
-                               select_default_stream_history_by_date(datetime)
-                             else
-                               default_stream_histories.order(start_time: :desc).first
-                             end
-
-    return if default_stream_history.blank?
-
-    organization.default_stream_histories
-                .order(end_time: :desc)
-                .where(end_time: ...default_stream_history.start_time)
-                .first
-  end
-
   def cached_files_count
     return statistic.file_count if statistic_up_to_date?
 
@@ -94,16 +70,6 @@ class Stream < ApplicationRecord
   end
 
   private
-
-  # Returns the DefaultStreamHistory object for self.stream
-  # with a start_time and end_time between the supplied datetime.
-  def select_default_stream_history_by_date(datetime)
-    default_stream_histories.order(start_time: :desc)
-                            .where('start_time <= ? AND ((end_time >= ?) OR (end_time IS ?))',
-                                   Time.zone.parse(datetime),
-                                   Time.zone.parse(datetime),
-                                   nil).first
-  end
 
   def default_name
     "#{I18n.l(created_at.to_date)} - #{I18n.l(updated_at.to_date) unless default?}"

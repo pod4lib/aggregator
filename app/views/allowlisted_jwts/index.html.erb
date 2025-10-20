@@ -15,7 +15,7 @@
         <tr data-controller="copy-text">
           <td><%= token.label %> (scope: <%= token.scope %>)</td>
           <td>
-            <div id="token" class="text-monospace w-100 custom-copy-text overflow-auto user-select-all border p-1 text-nowrap" data-copy-text-target="text"><%= token.encoded_token %></div>
+            <div id="token" tabindex="0" class="text-monospace w-100 custom-copy-text overflow-auto user-select-all border p-1 text-nowrap" data-copy-text-target="text"><%= token.encoded_token %></div>
             <i class="small text-muted">
               Last used:
               <% if token.last_used %>
