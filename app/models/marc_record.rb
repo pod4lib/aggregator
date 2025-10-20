@@ -21,11 +21,6 @@ class MarcRecord < ApplicationRecord
     self.json = Zlib::Deflate.new.deflate(record.to_marchash.to_json, Zlib::FINISH)
   end
 
-  # See http://www.openarchives.org/OAI/2.0/guidelines-oai-identifier.htm
-  def oai_id
-    "oai:#{Settings.oai_repository_id}:#{organization.slug}:#{stream.id}:#{marc001}"
-  end
-
   def augmented_marc
     return marc unless organization
 

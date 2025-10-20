@@ -15,10 +15,6 @@ RSpec.describe MarcRecord do
     end
   end
 
-  it 'has a unique OAI identifier' do
-    expect(marc_record.oai_id).to eq("oai:pod.stanford.edu:ivy-u:#{upload.stream.id}:12345")
-  end
-
   describe '#marc' do
     context 'with serialized json' do
       let(:attr) do
