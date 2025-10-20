@@ -114,9 +114,18 @@ class OaiController < ApplicationController
                       .distinct
               end
 
-    dump_ids = streams.map do |stream|
-      stream.current_dump_ids(from_date: token.from_date, until_date: token.until_date)
-    end.flatten.compact
+    dump_ids = streams.flat_map do |stream|
+      most_recent_full_dump = stream.current_full_dump
+
+      next if most_recent_full_dump.blank?
+
+      NormalizedDump.where(id: most_recent_full_dump.id)
+                    .or(most_recent_full_dump.deltas)
+                    .published
+                    .where(created_at: token.date_range)
+                    .order(created_at: :asc)
+                    .pluck(:id)
+    end.compact
 
     oai_xml_query = ActiveStorage::Attachment.where(record_type: 'NormalizedDump', name: 'oai_xml',
                                                     record_id: dump_ids).order(created_at: :asc)

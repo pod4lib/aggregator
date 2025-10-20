@@ -85,6 +85,12 @@ module OaiConcern
       Base64.urlsafe_encode64([@set, @page, @from_date, @until_date, @version].join(';'))
     end
 
+    def date_range
+      range_start = from_date.present? ? Time.zone.parse(from_date).beginning_of_day : nil
+      range_end = until_date.present? ? Time.zone.parse(until_date).end_of_day : nil
+      range_start..range_end
+    end
+
     # rubocop:disable Metrics/AbcSize
     # valid iff all values can be parsed and set/page are nonnegative integers
     def valid?

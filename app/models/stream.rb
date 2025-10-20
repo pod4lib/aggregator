@@ -60,25 +60,6 @@ class Stream < ApplicationRecord
     @current_full_dump ||= normalized_dumps.full_dumps.published.last
   end
 
-  # the ids of the current full dump and its associated deltas,
-  # optionally filtered by from and until dates.
-  # rubocop:disable Metrics/AbcSize
-  def current_dump_ids(from_date: nil, until_date: nil)
-    full_dump_id = normalized_dumps.full_dumps.published.order(created_at: :desc).limit(1).pick(:id)
-
-    return if full_dump_id.blank?
-
-    dumps_query = NormalizedDump.where(id: full_dump_id)
-                                .or(NormalizedDump.where(full_dump_id: full_dump_id))
-                                .published
-                                .order(created_at: :asc)
-    dumps_query = dumps_query.where(created_at: Time.zone.parse(from_date).beginning_of_day..) if from_date.present?
-    dumps_query = dumps_query.where(created_at: ..Time.zone.parse(until_date).end_of_day) if until_date.present?
-
-    dumps_query.pluck(:id)
-  end
-  # rubocop:enable Metrics/AbcSize
-
   # If no datetime is provided then assume we want the previous DefaultStreamHistory
   # object for the most recent period when self.stream was the default.
   #
