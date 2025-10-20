@@ -14,7 +14,21 @@ Rails.application.routes.draw do
 
   get '/documentation/:id', to: 'pages#show', as: :pages
   get '/api', to: 'pages#api'
-  get '/oai', to: 'oai#show'
+  class OaiConstraint
+    def initialize(verb:)
+      @verb = verb
+    end
+
+    def matches?(request)
+      request.params['verb'] == @verb
+    end
+  end
+
+  get '/oai', to: 'oai#list_records', constraints: OaiConstraint.new(verb: 'ListRecords')
+  get '/oai', to: 'oai#list_sets', constraints: OaiConstraint.new(verb: 'ListSets')
+  get '/oai', to: 'oai#identify', constraints: OaiConstraint.new(verb: 'Identify')
+  get '/oai', to: 'oai#list_metadata_formats', constraints: OaiConstraint.new(verb: 'ListMetadataFormats')
+  get '/oai', to: 'oai#bad_verb'
 
   get 'contact_emails/confirm/:token', to: 'contact_emails#confirm', as: :contact_email_confirmation
 
