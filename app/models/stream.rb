@@ -58,6 +58,10 @@ class Stream < ApplicationRecord
     @current_full_dump ||= full_dumps.published.last
   end
 
+  def interstream_delta_dumps
+    delta_dumps.published.where.not(previous_stream_id: nil)
+  end
+
   def cached_files_count
     return statistic.file_count if statistic_up_to_date?
 

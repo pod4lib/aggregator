@@ -101,8 +101,8 @@ class OaiController < ApplicationController
     oai_params(:verb)
   end
 
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-  def next_record_page(token)
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+  def next_record_page(token, use_interstream_deltas: false)
     streams = if token.set.present?
                 Stream.accessible_by(current_ability).where(id: token.set)
               else
@@ -117,12 +117,25 @@ class OaiController < ApplicationController
 
       next if most_recent_full_dump.blank?
 
-      delta_dumps = most_recent_full_dump.deltas.published.where(created_at: token.date_range).order(created_at: :asc)
+      dump_ids = []
 
-      [
-        (most_recent_full_dump.normalized_dump_id if token.date_range.cover?(most_recent_full_dump.created_at)),
-        *delta_dumps.pluck(:normalized_dump_id)
-      ]
+      from_date = token.date_range&.min if token.from_date.present?
+
+      if use_interstream_deltas && from_date&.before?(stream.created_at.beginning_of_day)
+        interstream_delta = stream.interstream_delta_dumps.order_by(created_at: :asc).last
+
+        if interstream_delta.present? && interstream_delta.previous_stream.created_at >= from_date
+          dump_ids += interstream_delta.pluck(:normalized_dump_id)
+        else
+          dump_ids << most_recent_full_dump.normalized_dump_id
+        end
+      elsif from_date.nil? || token.date_range.cover?(most_recent_full_dump.created_at)
+        dump_ids << most_recent_full_dump.normalized_dump_id
+      end
+
+      delta_dumps = most_recent_full_dump.deltas.where(created_at: token.date_range).order(created_at: :asc)
+
+      dump_ids + delta_dumps.pluck(:normalized_dump_id)
     end.compact
 
     oai_xml_query = ActiveStorage::Attachment.where(record_type: 'NormalizedDump', name: 'oai_xml',
@@ -136,7 +149,7 @@ class OaiController < ApplicationController
 
     [oai_xml_query.limit(1).offset(page).first, token]
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
 
   def next_page_token(page, page_count, token)
     if page == page_count - 1 # last page

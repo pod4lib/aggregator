@@ -13,6 +13,15 @@ FactoryBot.define do
       end
     end
 
+    trait :modified_binary_marc do
+      after(:build) do |upload|
+        upload.files.attach(
+          io: StringIO.new(Rails.root.join('spec/fixtures/1297245.marc').read.sub('c28 cm', 'c29 cm')),
+          filename: '1297245.marc', content_type: 'application/marc'
+        )
+      end
+    end
+
     trait :binary_marc_gz do
       after(:build) do |upload|
         upload.files.attach(
