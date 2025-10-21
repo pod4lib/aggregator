@@ -46,18 +46,16 @@ class OaiController < ApplicationController
   def list_sets
     streams = Stream.accessible_by(current_ability)
                     .joins(:default_stream_histories)
-                    .joins(normalized_dumps: :oai_xml_attachments)
+                    .joins(:full_dumps)
                     .distinct
     render xml: build_list_sets_response(streams)
   end
 
   def identify
     earliest_oai = Stream.joins(:default_stream_histories)
-                         .joins(normalized_dumps: :oai_xml_attachments)
+                         .joins(:full_dumps)
                          .distinct
-                         .order('normalized_dumps.created_at ASC')
-                         .limit(1)
-                         .pick('normalized_dumps.created_at')
+                         .minimum('full_dumps.created_at')
 
     render xml: build_identify_response(earliest_oai || Time.now.utc)
   end
@@ -110,7 +108,7 @@ class OaiController < ApplicationController
               else
                 Stream.accessible_by(current_ability)
                       .joins(:default_stream_histories)
-                      .joins(normalized_dumps: :oai_xml_attachments)
+                      .joins(:full_dumps)
                       .distinct
               end
 
@@ -119,12 +117,12 @@ class OaiController < ApplicationController
 
       next if most_recent_full_dump.blank?
 
-      NormalizedDump.where(id: most_recent_full_dump.id)
-                    .or(most_recent_full_dump.deltas)
-                    .published
-                    .where(created_at: token.date_range)
-                    .order(created_at: :asc)
-                    .pluck(:id)
+      delta_dumps = most_recent_full_dump.deltas.published.where(created_at: token.date_range).order(created_at: :asc)
+
+      [
+        (most_recent_full_dump.normalized_dump_id if token.date_range.cover?(most_recent_full_dump.created_at)),
+        *delta_dumps.pluck(:normalized_dump_id)
+      ]
     end.compact
 
     oai_xml_query = ActiveStorage::Attachment.where(record_type: 'NormalizedDump', name: 'oai_xml',

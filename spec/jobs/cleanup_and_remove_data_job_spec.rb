@@ -31,19 +31,19 @@ RSpec.describe CleanupAndRemoveDataJob do
     end
   end
 
-  describe 'removes all but the last two normalized_dumps' do
+  describe 'removes all but the last two full dumps' do
     before do
-      create_list(:normalized_dump, 4, stream: organization.default_stream)
+      create_list(:full_dump, 4, stream: organization.default_stream)
     end
 
     it do
-      expect { described_class.perform_now(organization) }.to change { organization.default_stream.normalized_dumps.count }.by(-2)
+      expect { described_class.perform_now(organization) }.to change { organization.default_stream.full_dumps.count }.by(-2)
     end
 
     it do
       described_class.perform_now(organization)
-      organization.default_stream.normalized_dumps.reload
-      expect(organization.default_stream.normalized_dumps.map(&:id)).to eq [3, 4]
+      organization.default_stream.full_dumps.reload
+      expect(organization.default_stream.full_dumps.map(&:id)).to eq [3, 4]
     end
   end
 

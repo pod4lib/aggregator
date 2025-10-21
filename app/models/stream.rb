@@ -12,7 +12,8 @@ class Stream < ApplicationRecord
   has_many :marc_records, through: :uploads, inverse_of: :stream
   has_many :files, source: :files_attachments, through: :uploads
   has_one :statistic, dependent: :delete, as: :resource
-  has_many :normalized_dumps, dependent: :destroy_async
+  has_many :full_dumps, dependent: :destroy_async
+  has_many :delta_dumps, dependent: :destroy_async
   has_many :job_trackers, dependent: :delete_all, as: :reports_on
 
   scope :default, -> { where(default: true) }
@@ -54,7 +55,7 @@ class Stream < ApplicationRecord
   end
 
   def current_full_dump
-    @current_full_dump ||= normalized_dumps.full_dumps.published.last
+    @current_full_dump ||= full_dumps.published.last
   end
 
   def cached_files_count

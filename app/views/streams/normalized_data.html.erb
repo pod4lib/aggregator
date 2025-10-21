@@ -13,5 +13,5 @@
     </div>
   </div>
 
-  <%= render 'streams/normalized_dump', normalized_dump: @stream.normalized_dumps.full_dumps.published.last %>
+  <%= render 'streams/normalized_dump', normalized_dump: @stream.full_dumps.published.last %>
 <% end %>

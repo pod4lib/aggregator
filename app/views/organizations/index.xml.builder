@@ -20,7 +20,11 @@ xml.sitemapindex(
       xml.tag!(
         'rs:md',
         at: if params[:normalized]
-              (org.default_stream.normalized_dumps.published.last&.updated_at || Time.zone.now).iso8601
+              (
+                org.default_stream.delta_dumps.maximum(:updated_at) ||
+                org.default_stream.full_dumps.maximum(:updated_at) ||
+                org.default_stream.updated_at
+              ).iso8601
             else
               org.default_stream.updated_at.iso8601
             end
