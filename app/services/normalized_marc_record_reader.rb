@@ -46,15 +46,13 @@ class NormalizedMarcRecordReader
   # @return [Array<Integer>] the list of MarcRecord id values
   def current_marc_record_ids
     return __pgsql_current_marc_record_ids if using_postgres?
-
-    hash = {}
+    return to_enum(:current_marc_record_ids) unless block_given?
 
     # But for other databases, we'll have to do it ourselves.
-    MarcRecord.select(:marc001, :id).where(upload: uploads).order(file_id: :asc, id: :asc).each do |record|
-      hash[record.marc001] = record.id
-    end
+    query = MarcRecord.select(:marc001, :id).where(upload: uploads).order(marc001: :asc, file_id: :desc,
+                                                                          id: :asc)
 
-    hash.values
+    query.each.chunk(&:marc001).each { |_key, records| yield records.first.id }
   end
 
   private
