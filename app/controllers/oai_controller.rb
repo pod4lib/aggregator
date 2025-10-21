@@ -113,19 +113,22 @@ class OaiController < ApplicationController
               end
 
     dump_ids = streams.flat_map do |stream|
-      most_recent_full_dump = stream.current_full_dump
-
-      next if most_recent_full_dump.blank?
+      next unless stream.current_full_dump
 
       dump_ids = []
-
       from_date = token.date_range&.min if token.from_date.present?
 
-      if use_interstream_deltas && from_date&.before?(stream.created_at.beginning_of_day)
-        interstream_delta = stream.interstream_delta_dumps.order_by(effective_date: :asc).last
+      if from_date&.before?(stream.created_at.beginning_of_day)
+        interstream_deltas = if use_interstream_deltas
+                               stream.interstream_delta_dumps.order_by(effective_date: :asc).find_each.select do |delta|
+                                 delta.previous_stream.created_at.after?(from_date)
+                               end
+                             else
+                               []
+                             end
 
-        if interstream_delta.present? && interstream_delta.previous_stream.effective_date >= from_date
-          dump_ids += interstream_delta.pluck(:normalized_dump_id)
+        if interstream_deltas.any?
+          dump_ids += interstream_deltas.pluck(:normalized_dump_id)
         else
           dump_ids << most_recent_full_dump.normalized_dump_id
         end
