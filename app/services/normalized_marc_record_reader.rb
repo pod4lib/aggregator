@@ -64,8 +64,8 @@ class NormalizedMarcRecordReader
   def __pgsql_current_marc_record_ids
     # Postgres has 'SELECT DISTINCT ON', so we can have the database de-dupe marc records with the same 001
     # and return the most recent
-    inner_query = MarcRecord.select('DISTINCT ON (marc001) *').where(upload: uploads).order(:marc001, file_id: :desc, id: :asc)
-
-    MarcRecord.from(inner_query, :marc_records).order(file_id: :asc, id: :asc).pluck(:id)
+    MarcRecord.select('DISTINCT ON (marc001) marc_records.id')
+              .where(upload: uploads)
+              .order(:marc001, file_id: :desc, id: :asc).ids
   end
 end
