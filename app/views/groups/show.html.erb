@@ -1,0 +1,32 @@
+<div class="container mt-4">
+  <h1><%= @group.name %></h1>
+  <dl>
+    <dt>Icon</dt>
+    <dd>
+      <% if @group.icon.attached? %>
+        <%= image_tag(@group.icon, alt: '', class: 'icon-sm') %>
+      <% else %>
+        No icon
+      <% end %>
+    </dd>
+    <dt>Short name</dt>
+    <dd><%= @group.short_name %></dd>
+    <dt>Slug</dt>
+    <dd><%= @group.slug %></dd>
+    <dt>Description</dt>
+    <dd><%= @group.description %></dd>
+    <dt>Member organizations</dt>
+    <dd>
+      <% if @group.organizations.any? %>
+        <ul>
+          <% @group.organizations.each do |organization| %>
+            <li><%= link_to organization.name, organization %></li>
+          <% end %>
+        </ul>
+      <% else %>
+        No member organizations
+      <% end %>
+    </dd>
+  </dl>
+  <%= link_to 'Edit', edit_group_path(@group), class: 'btn btn-primary' if can? :edit, @group %>
+</div>

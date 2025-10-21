@@ -9,6 +9,18 @@
         <%= @organization.name %>
       </h1>
       <div class="d-flex flex-column ms-5">
+        <% if @organization.groups.any? %>
+          <span class="lead">
+            <% @organization.groups.each do |group| %>
+              <span class="me-2">
+                <% if group.icon.attached? %>
+                  <%= image_tag(group.icon, alt: '', class: '', height: 25) %>
+                <% end %>
+                <%= group.display_name %>
+              </span>
+            <% end %>
+          </span>
+        <% end %>
         <% if @organization.provider? && @organization.code.present? %>
           <span class="lead"><%= t('.marc_code', code: @organization.code) %></span>
         <% end %>

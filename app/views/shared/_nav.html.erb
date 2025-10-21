@@ -29,6 +29,11 @@
             <%= link_to t('.users'), site_users_url, class: class_names('nav-link', { active: current_page?(site_users_url) }) %>
           </li>
           <% end %>
+          <% if can? :manage, Group %>
+            <li class="nav-item">
+              <%= link_to t('.groups'), groups_url, class: class_names('nav-link', { active: current_page?(groups_url) }) %>
+            </li>
+          <% end %>
         </ul>
       <% end %>
 

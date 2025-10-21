@@ -152,6 +152,25 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_20_183942) do
     t.index ["stream_id"], name: "index_full_dumps_on_stream_id"
   end
 
+  create_table "group_memberships", force: :cascade do |t|
+    t.integer "organization_id", null: false
+    t.integer "group_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_group_memberships_on_group_id"
+    t.index ["organization_id"], name: "index_group_memberships_on_organization_id"
+  end
+
+  create_table "groups", force: :cascade do |t|
+    t.string "name"
+    t.string "short_name"
+    t.string "slug"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_groups_on_slug", unique: true
+  end
+
   create_table "job_trackers", force: :cascade do |t|
     t.string "reports_on_type", null: false
     t.integer "reports_on_id", null: false
@@ -330,4 +349,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_20_183942) do
   add_foreign_key "default_stream_histories", "streams"
   add_foreign_key "delta_dumps", "normalized_dumps"
   add_foreign_key "full_dumps", "normalized_dumps"
+  add_foreign_key "group_memberships", "groups"
+  add_foreign_key "group_memberships", "organizations"
 end
