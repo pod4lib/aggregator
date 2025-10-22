@@ -8,15 +8,15 @@ class GenerateFullDumpJob < ApplicationJob
   def self.enqueue_all
     Organization.providers.find_each do |org|
       full_dump = org.default_stream.full_dumps.published.last
-      next if full_dump && org.default_stream.uploads.where(updated_at: full_dump.created_at...Time.zone.now).none?
+      next if full_dump && org.default_stream.uploads.where(updated_at: full_dump.effective_date..).none?
 
       GenerateFullDumpJob.perform_later(org.default_stream)
     end
   end
 
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
   def perform(stream, publish: true)
-    now = Time.zone.now
+    effective_date = Time.zone.now
     uploads = stream.uploads.active
 
     GenerateDeltaDumpJob.perform_now(stream, publish: publish) if stream.current_full_dump
@@ -27,12 +27,12 @@ class GenerateFullDumpJob < ApplicationJob
 
     progress.total = uploads.sum(&:marc_records_count)
 
-    full_dump = stream.full_dumps.build
+    full_dump = stream.full_dumps.build(effective_date: effective_date)
     normalized_dump = full_dump.build_normalized_dump(stream: stream)
 
     base_name = "#{stream.organization.slug}#{"-#{stream.slug}" unless stream.default}-#{Time.zone.today}-full"
     writer = MarcRecordWriterService.new(base_name)
-    oai_writer = ChunkedOaiMarcRecordWriterService.new(base_name, dump: normalized_dump, now: now)
+    oai_writer = ChunkedOaiMarcRecordWriterService.new(base_name, dump: normalized_dump, now: effective_date)
 
     begin
       NormalizedMarcRecordReader.new(uploads).each_slice(1000) do |records|
@@ -59,14 +59,16 @@ class GenerateFullDumpJob < ApplicationJob
       end
 
       # Run manually for now:
-      # GenerateInterstreamDeltaDumpJob.perform_later(stream.current_full_dump, stream, now: now, publish: publish)
+      # GenerateInterstreamDeltaDumpJob.perform_now(
+      #   previous_stream, stream, effective_date: effective_date, publish: publish
+      # )
 
-      normalized_dump.update(published_at: (Time.zone.now if publish))
+      normalized_dump.update(published_at: effective_date)
       full_dump.published_at = Time.zone.now if publish
 
       full_dump.save!
 
-      GenerateDeltaDumpJob.perform_later(stream, publish: publish)
+      GenerateDeltaDumpJob.perform_later(stream, from_date: effective_date, publish: publish)
     ensure
       writer.close
       writer.unlink
@@ -75,7 +77,7 @@ class GenerateFullDumpJob < ApplicationJob
       oai_writer.unlink
     end
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
 
   def human_readable_filename(base_name, file_type)
     as = case file_type

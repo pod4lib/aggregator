@@ -31,7 +31,7 @@
           <!-- Last delta: -->
           <td>
             <% if dump && dump.deltas.any? %>
-              <%= local_time(dump.deltas.maximum(:created_at), format: datetime_display_format()) %>
+              <%= local_time(dump.deltas.maximum(:effective_date), format: datetime_display_format()) %>
             <% else %>
               <i class="bi bi-exclamation-triangle-fill text-warning"></i>
             <% end %>

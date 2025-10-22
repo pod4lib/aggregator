@@ -10,15 +10,14 @@ class GenerateDeltaDumpJob < ApplicationJob
   end
 
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
-  def perform(stream, publish: true)
-    now = Time.zone.now
+  def perform(stream, from_date: nil, effective_date: Time.zone.now, publish: true)
     full_dump = stream.current_full_dump
 
     return unless full_dump
 
-    from = [stream.delta_dumps.published.maximum(:created_at), full_dump.created_at].compact.max
+    from_date ||= [stream.delta_dumps.published.maximum(:effective_date), full_dump.effective_date].compact.max
 
-    uploads = stream.uploads.active.where(created_at: from...now)
+    uploads = stream.uploads.active.where(created_at: from_date...effective_date)
 
     return unless uploads.any?
 
@@ -28,12 +27,12 @@ class GenerateDeltaDumpJob < ApplicationJob
 
     progress.total = uploads.sum(&:marc_records_count)
 
-    delta_dump = stream.delta_dumps.build
+    delta_dump = stream.delta_dumps.build(effective_date: effective_date)
     normalized_dump = delta_dump.build_normalized_dump(stream: stream)
 
-    base_name = "#{stream.organization.slug}#{"-#{stream.slug}" unless stream.default}-#{Time.zone.today}-delta"
+    base_name = "#{stream.organization.slug}#{"-#{stream.slug}" unless stream.default}-#{effective_date}-delta"
     writer = MarcRecordWriterService.new(base_name)
-    oai_writer = ChunkedOaiMarcRecordWriterService.new(base_name, dump: normalized_dump, now: now)
+    oai_writer = ChunkedOaiMarcRecordWriterService.new(base_name, dump: normalized_dump, now: effective_date)
 
     begin
       NormalizedMarcRecordReader.new(uploads).each_slice(1000) do |records|
@@ -62,7 +61,7 @@ class GenerateDeltaDumpJob < ApplicationJob
                                                filename: human_readable_filename(base_name, as))
       end
 
-      normalized_dump.update(published_at: (Time.zone.now if publish))
+      normalized_dump.update(published_at: effective_date)
       delta_dump.published_at = Time.zone.now if publish
 
       delta_dump.save!

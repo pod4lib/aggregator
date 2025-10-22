@@ -5,11 +5,11 @@
 class GenerateInterstreamDeltaDumpJob < ApplicationJob
   with_job_tracking
 
-  def perform(previous_stream, stream, now: Time.zone.now, publish: true) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+  def perform(previous_stream, stream, effective_date: Time.zone.now, publish: true) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
     raise ArgumentError, 'Previous stream cannot be the same as the current stream' if previous_stream == stream
 
-    previous_uploads = previous_stream.uploads.active.where(created_at: ..now)
-    new_uploads = stream.uploads.active.where(created_at: ..now)
+    previous_uploads = previous_stream.uploads.active.where(created_at: ..effective_date)
+    new_uploads = stream.uploads.active.where(created_at: ..effective_date)
 
     previous_uploads.where.not(status: 'processed').find_each do |upload|
       ExtractMarcRecordMetadataJob.perform_now(upload)
@@ -19,12 +19,14 @@ class GenerateInterstreamDeltaDumpJob < ApplicationJob
       ExtractMarcRecordMetadataJob.perform_now(upload)
     end
 
-    interstream_delta = stream.delta_dumps.find_or_initialize_by(stream: stream, previous_stream: previous_stream)
+    interstream_delta = stream.delta_dumps.find_or_initialize_by(stream: stream,
+                                                                 previous_stream: previous_stream,
+                                                                 effective_date: effective_date)
     normalized_dump = interstream_delta.build_normalized_dump(stream: stream)
 
     base_name = "#{stream.organization.slug}-#{stream.slug}-#{Time.zone.today}-interstream-delta-#{previous_stream.slug}"
     writer = MarcRecordWriterService.new(base_name)
-    oai_writer = ChunkedOaiMarcRecordWriterService.new(base_name, dump: normalized_dump, now: now)
+    oai_writer = ChunkedOaiMarcRecordWriterService.new(base_name, dump: normalized_dump, now: effective_date)
 
     NormalizedMarcRecordReader.new(previous_uploads).each_slice(200) do |previous_records|
       current_records = NormalizedMarcRecordReader.new(new_uploads, augment_marc: false,
@@ -59,7 +61,7 @@ class GenerateInterstreamDeltaDumpJob < ApplicationJob
                                              filename: human_readable_filename(base_name, as))
     end
 
-    normalized_dump.update(published_at: (Time.zone.now if publish))
+    normalized_dump.update(published_at: effective_date)
     interstream_delta.published_at = Time.zone.now if publish
 
     interstream_delta.save!

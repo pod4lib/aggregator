@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_20_183942) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_22_142837) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -124,6 +124,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_20_183942) do
     t.datetime "published_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "effective_date"
+    t.index ["effective_date"], name: "index_delta_dumps_on_effective_date"
     t.index ["normalized_dump_id"], name: "index_delta_dumps_on_normalized_dump_id"
     t.index ["previous_stream_id"], name: "index_delta_dumps_on_previous_stream_id"
     t.index ["published_at"], name: "index_delta_dumps_on_published_at"
@@ -147,6 +149,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_20_183942) do
     t.datetime "published_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "effective_date"
+    t.index ["effective_date"], name: "index_full_dumps_on_effective_date"
     t.index ["normalized_dump_id"], name: "index_full_dumps_on_normalized_dump_id"
     t.index ["published_at"], name: "index_full_dumps_on_published_at"
     t.index ["stream_id"], name: "index_full_dumps_on_stream_id"
