@@ -1,0 +1,36 @@
+<ul class="nav nav-tabs pt-4" id="allowed-consumers-tabs" role="tablist">
+  <%# Manage access tab %>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="manage-tab" data-bs-toggle="tab" data-bs-target="#manage-pane" type="button"
+      role="tab" aria-controls="manage-pane" aria-selected="true"><%= t('allowed_consumers.manage_access_component.manage_tab_label') %></button>
+  </li>
+
+  <%# Summary of access tab %>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="access-tab" data-bs-toggle="tab" data-bs-target="#access-pane" type="button"
+      role="tab" aria-controls="access-pane" aria-selected="false"><%= t('allowed_consumers.manage_access_component.summary_tab_label') %></button>
+  </li>
+</ul>
+
+<div class="tab-content pt-3" id="allowed-consumers-tabs-content">
+  <%# Manage access tab content %>
+  <div id="manage-pane" class="tab-pane fade show active" role="tabpanel">
+    <h4 class="visually-hidden"><%= t('allowed_consumers.manage_access_component.heading') %></h4>
+    <div class="container">
+      <div class="row">
+        <%= render AllowedConsumers::ResourceManagementComponent.new(organization: @organization,
+                                                                    resources: @groups,
+                                                                    resource_type: 'Group') %>
+        <%= render AllowedConsumers::OrganizationManagementComponent.new(organization: @organization,
+                                                                      resources: @other_organizations,
+                                                                      resource_type: 'Organization') %>
+      </div>
+    </div>
+  </div>
+
+  <%# Summary of access tab content %>
+  <div id="access-pane" class="tab-pane fade" role="tabpanel">
+    <%= render AllowedConsumers::SummaryTableComponent.new(organization: @organization,
+                                                            other_organizations: @other_organizations) %>
+  </div>
+</div>

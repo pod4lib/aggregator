@@ -70,6 +70,9 @@ Rails.application.routes.draw do
     end
 
     # Route in the Manage Organization / View Organization Details tabs
+    resources :allowed_consumers, as: 'access_restrictions', only: [:index], path: 'access_restrictions'
+    post 'allowed_consumers/add_consumer', to: 'allowed_consumers#add_consumer', as: :add_allowed_consumer
+    delete 'allowed_consumers/remove_consumer', to: 'allowed_consumers#remove_consumer', as: :remove_allowed_consumer
     resources :organization_users, as: 'users', only: [:index, :destroy, :update], path: 'users'
     resources :allowlisted_jwts, only: [:index, :new, :create, :destroy]
 

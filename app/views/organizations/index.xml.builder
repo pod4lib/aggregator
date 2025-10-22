@@ -16,6 +16,8 @@ xml.sitemapindex(
   xml.tag!('rs:ln', rel: 'up', href: href)
   xml.tag!('rs:md', capability: 'resourcelist', at: Time.zone.now.iso8601)
   @organizations.each do |org|
+    next unless can? :read, org.default_stream
+
     xml.sitemap do
       xml.tag!(
         'rs:md',

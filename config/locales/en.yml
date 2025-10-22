@@ -14,6 +14,53 @@ en:
       provider: Provider
       total_records: Total records
     title: Recent activity
+  allowed_consumers:
+    heading: Access restrictions
+    manage_access_component:
+      heading: Manage access restrictions
+      manage_tab_label: Manage
+      summary_tab_label: Summary
+    record_access_form_component:
+      form_text: Choose whether to allow any POD organization to harvest records from your organization, or restrict access to specific organizations and groups.
+      restricted_option: Restricted - Only allow specific organizations and groups to harvest records
+      unrestricted_option: Unrestricted - Allow any POD organization to harvest records
+    resource_management_component:
+      add_access: Grant access
+      confirm_add: Allow %{consumer} to harvest %{provider}'s records?
+      confirm_remove: Revoke %{consumer}'s access to harvest %{provider}'s records?
+      group:
+        description_html: Granting group access allows all member organizations of the group to harvest data from %{org_name}, regardless of their individual access settings.
+        heading: Manage group access
+      organization:
+        description_html: Granting organization access allows that specific organization to harvest data from %{org_name}. Group access takes precedence.
+        heading: Manage organization access
+      remove_access: Remove access
+      table_heading:
+        grant_access: Grant access?
+    summary_card_component:
+      card_heading: Access restrictions
+      description_html: The table below shows which organizations have access to harvest records from %{org_name} and which organizations have granted %{org_name} access to their records.
+      heading_html: Summary of access restrictions
+      no_access: "%{org_name} has restrictions set and has not granted access to any organizations or groups."
+      restricted_group_access: "%{org_name} has restrictions set, allowing access to specific groups."
+      restricted_group_and_org_access: "%{org_name} has restrictions set, allowing access to specific organizations and groups."
+      restricted_org_access: "%{org_name} has restrictions set, allowing access to specific organizations."
+      unrestricted_access: "%{org_name} is currently unrestricted, meaning any POD organization can harvest its data."
+    summary_table_component:
+      table_heading:
+        access: Can harvest from %{org_name}?
+        organization: Organization
+        reason: Reason
+    summary_table_data_component:
+      can_harvest: Can harvest
+      cannot_harvest: Cannot harvest
+      explanation:
+        granted_through_groups: Access granted to %{grantee_name} through its %{groups} membership
+        granted_to_org_and_group: Access granted directly to %{grantee_name} and through its %{groups} membership
+        granted_to_organization: Access granted directly to %{grantee_name}
+        no_access_granted: No access granted to %{grantee_name}
+        not_a_provider: "%{grantor_name} is not a data provider"
+        unrestricted_access: "%{grantor_name} has no restrictions set"
   groups:
     create:
       success: Group was successfully created.

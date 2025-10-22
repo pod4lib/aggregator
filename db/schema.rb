@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_07_184730) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_11_191730) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -82,6 +82,17 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_07_184730) do
     t.index ["token_id"], name: "index_ahoy_visits_on_token_id"
     t.index ["user_id"], name: "index_ahoy_visits_on_user_id"
     t.index ["visit_token"], name: "index_ahoy_visits_on_visit_token", unique: true
+  end
+
+  create_table "allowed_consumers", force: :cascade do |t|
+    t.integer "allowed_consumer_id", null: false
+    t.string "allowed_consumer_type", null: false
+    t.datetime "created_at", null: false
+    t.integer "organization_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["allowed_consumer_type", "allowed_consumer_id"], name: "index_allowed_consumers_on_allowed_consumer"
+    t.index ["organization_id", "allowed_consumer_type", "allowed_consumer_id"], name: "idx_on_organization_id_allowed_consumer_type_allowe_632946e2d5", unique: true
+    t.index ["organization_id"], name: "index_allowed_consumers_on_organization_id"
   end
 
   create_table "allowlisted_jwts", force: :cascade do |t|
@@ -242,6 +253,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_07_184730) do
     t.string "name"
     t.json "normalization_steps"
     t.boolean "provider", default: true
+    t.string "record_access", default: "managed", null: false
     t.string "slug"
     t.datetime "updated_at", null: false
     t.index ["slug"], name: "index_organizations_on_slug", unique: true
@@ -477,6 +489,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_07_184730) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "allowed_consumers", "organizations"
   add_foreign_key "contact_emails", "organizations"
   add_foreign_key "default_stream_histories", "streams"
   add_foreign_key "delta_dumps", "normalized_dumps"

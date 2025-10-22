@@ -9,6 +9,7 @@ RSpec.describe 'shared/_stream_page_header' do
   before do
     assign(:organization, organization)
     assign(:stream, stream)
+    allow(view).to receive(:can?).and_return(true)
   end
 
   # rubocop:disable RSpec/MultipleExpectations

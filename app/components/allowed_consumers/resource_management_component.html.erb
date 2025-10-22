@@ -1,0 +1,34 @@
+<div class="col-12 col-lg-6">
+  <%= heading %>
+  <%= description %>
+  <table class="table table-striped mb-3">
+    <thead>
+      <tr>
+        <th colspan="2"><%= resource_type %></th>
+        <th><%= t('allowed_consumers.resource_management_component.table_heading.grant_access') %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @resources.each do |resource| %>
+        <tr>
+          <td class="align-middle text-center icon-column">
+            <% if resource.icon.attached? %>
+              <%= image_tag(resource.icon, alt: '', class: 'icon-sm') %>
+            <% end %>
+          </td>
+          <td><%= resource_link(resource) %></td>
+          <td class="align-middle text-center">
+            <div class="form-check align-middle d-inline-block">
+              <% if access_granted?(resource) %>
+                <%= remove_consumer_link(resource) %>
+                <input class="form-check-input pe-none" type="checkbox" aria-label="Access granted?" checked>
+              <% else %>
+                <%= add_consumer_link(resource) %>
+              <% end %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

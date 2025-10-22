@@ -1,0 +1,16 @@
+
+<h4 class="visually-hidden"><%= t('allowed_consumers.summary_card_component.heading_html') %></h4>
+<div class="card my-3">
+  <div class="card-header">
+    <h4 class="h6 mb-0 ">
+      <i class="info-circle-fill text-info"></i>
+      <span class="ml-2"><%= t('allowed_consumers.summary_card_component.card_heading') %></span>
+    </h4>
+  </div>
+  <div class="card-body">
+    <p class="card-text">
+      <%= t('allowed_consumers.summary_card_component.description_html', org_name: @organization.name) %>
+      <%= card_text %>
+    </p>
+  </div>
+</div>

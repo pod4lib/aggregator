@@ -2,6 +2,8 @@ jwt:
   secret: 'i♥️dolphins'
   algorithm: 'HS256'
 
+record_access_restrictions_enabled: false
+
 action_mailer:
   default_options:
     from: 'test@example.com'

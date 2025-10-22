@@ -1,0 +1,19 @@
+<%= render 'shared/layout_manage_organization' do %>
+  <h3><%= t('allowed_consumers.heading') %></h3>
+  <% unless Settings.record_access_restrictions_enabled %>
+    <div class="alert alert-danger my-5" role="alert">
+      Organization controlled access restrictions are currently not enabled. All authenticated POD users have access to all records.
+    </div>
+  <% end %>
+  <%= render AllowedConsumers::RecordAccessFormComponent.new(organization: @organization) %>
+  <% manage_access_component = AllowedConsumers::ManageAccessComponent.new(organization: @organization,
+                                                                           other_organizations: @other_organizations,
+                                                                           groups: @groups) %>
+  <%= render manage_access_component %>
+  <% unless manage_access_component.render? %>
+    <div class="pt-4">
+      <%= render AllowedConsumers::SummaryTableComponent.new(organization: @organization,
+                                                             other_organizations: @other_organizations) %>
+    </div>
+  <% end %>
+<% end %>

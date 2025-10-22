@@ -1,0 +1,12 @@
+<%= helpers.bootstrap_form_with(model: @organization, url: organization_path(@organization), html: { method: :patch }) do |f| %>
+  <div class="mb-3">
+    <%= f.select :record_access, options_for_select([[t('allowed_consumers.record_access_form_component.unrestricted_option'), 'authenticated_users'],
+                                                     [t('allowed_consumers.record_access_form_component.restricted_option'), 'managed']], @organization.record_access), class: 'form-select' %>
+    <div class="form-text">
+      <%= t('allowed_consumers.record_access_form_component.form_text') %>
+    </div>
+  </div>
+  <div class="mb-3">
+    <%= f.submit 'Change record access', class: 'btn btn-danger' %>
+  </div>
+<% end %>
