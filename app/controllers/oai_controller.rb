@@ -55,7 +55,7 @@ class OaiController < ApplicationController
     earliest_oai = Stream.joins(:default_stream_histories)
                          .joins(:full_dumps)
                          .distinct
-                         .minimum('full_dumps.created_at')
+                         .minimum('full_dumps.effective_date')
 
     render xml: build_identify_response(earliest_oai || Time.now.utc)
   end
@@ -122,24 +122,26 @@ class OaiController < ApplicationController
       from_date = token.date_range&.min if token.from_date.present?
 
       if use_interstream_deltas && from_date&.before?(stream.created_at.beginning_of_day)
-        interstream_delta = stream.interstream_delta_dumps.order_by(created_at: :asc).last
+        interstream_delta = stream.interstream_delta_dumps.order_by(effective_date: :asc).last
 
-        if interstream_delta.present? && interstream_delta.previous_stream.created_at >= from_date
+        if interstream_delta.present? && interstream_delta.previous_stream.effective_date >= from_date
           dump_ids += interstream_delta.pluck(:normalized_dump_id)
         else
           dump_ids << most_recent_full_dump.normalized_dump_id
         end
-      elsif from_date.nil? || token.date_range.cover?(most_recent_full_dump.created_at)
+      elsif from_date.nil? || token.date_range.cover?(most_recent_full_dump.effective_date)
         dump_ids << most_recent_full_dump.normalized_dump_id
       end
 
-      delta_dumps = most_recent_full_dump.deltas.where(created_at: token.date_range).order(created_at: :asc)
+      delta_dumps = most_recent_full_dump.deltas.where(effective_date: token.date_range).order(effective_date: :asc)
 
       dump_ids + delta_dumps.pluck(:normalized_dump_id)
     end.compact
 
-    oai_xml_query = ActiveStorage::Attachment.where(record_type: 'NormalizedDump', name: 'oai_xml',
-                                                    record_id: dump_ids).order(created_at: :asc)
+    dump_join = ActiveStorage::Attachment.arel_table.join(NormalizedDump.arel_table).on(ActiveStorage::Attachment.arel_table[:record_id].eq(NormalizedDump.arel_table[:id]))
+    oai_xml_query = ActiveStorage::Attachment.where(record_type: 'NormalizedDump', name: 'oai_xml', record_id: dump_ids)
+                                             .joins(dump_join.join_sources)
+                                             .order(NormalizedDump.arel_table[:published_at].asc, created_at: :asc)
     page_count = oai_xml_query.count
 
     raise OaiConcern::NoRecordsMatch if page_count.zero?
