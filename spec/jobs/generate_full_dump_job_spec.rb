@@ -25,7 +25,23 @@ RSpec.describe GenerateFullDumpJob do
     expect(NormalizedDump.last).to have_attributes stream_id: organization.default_stream.id
   end
 
-  it 'kicks off a delta dump' do
+  context 'with an existing full dump' do
+    before do
+      described_class.perform_now(organization.default_stream)
+    end
+
+    it 'runs a delta dump before doing the full dump' do
+      organization.default_stream.uploads << build(:upload, :binary_marc)
+
+      described_class.perform_now(organization.default_stream)
+
+      download_and_uncompress(organization.default_stream.delta_dumps.last.marcxml) do |file|
+        expect(Nokogiri::XML(file).xpath('//marc:record', marc: 'http://www.loc.gov/MARC21/slim').count).to eq 1
+      end
+    end
+  end
+
+  it 'kicks off a delta dump after the dump is complete' do
     expect do
       described_class.perform_now(organization.default_stream)
     end.to enqueue_job GenerateDeltaDumpJob

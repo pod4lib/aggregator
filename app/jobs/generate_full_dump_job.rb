@@ -19,6 +19,8 @@ class GenerateFullDumpJob < ApplicationJob
     now = Time.zone.now
     uploads = stream.uploads.active
 
+    GenerateDeltaDumpJob.perform_now(stream, publish: publish) if stream.current_full_dump
+
     uploads.where.not(status: 'processed').find_each do |upload|
       ExtractMarcRecordMetadataJob.perform_now(upload)
     end
