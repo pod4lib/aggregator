@@ -68,7 +68,7 @@ class NormalizedMarcRecordReader
     # and return the most recent
     MarcRecord.select('DISTINCT ON (marc001) marc_records.id')
               .where(upload: uploads, **conditions)
-              .order(:marc001, file_id: :desc, id: :asc).ids
+              .order(:marc001, file_id: :desc, id: :asc).map(&:id)
   end
 
   def eagerly_augment_marc?
