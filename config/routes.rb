@@ -95,6 +95,7 @@ Rails.application.routes.draw do
     route_for(:proxy_download, attachment.id, attachment.filename, options)
   end
 
+  resources :groups
   resources :site_users, only: [:index, :update]
 
   authenticate :user, lambda { |u| u.has_role? :admin } do
