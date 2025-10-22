@@ -22,8 +22,12 @@ job_type :runner,  "cd :path && RAILS_LOG_LEVEL=warn :environment_variable=:envi
 
 # Learn more: http://github.com/javan/whenever
 
-every 3.months do
+every :week do
   runner 'CleanupAndRemoveDataJob.enqueue_all'
+end
+
+every 2.days do
+  runner 'GenerateFullDumpJob.enqueue_some'
 end
 
 every :day do

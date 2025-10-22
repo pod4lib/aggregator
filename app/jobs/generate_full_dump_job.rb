@@ -14,6 +14,25 @@ class GenerateFullDumpJob < ApplicationJob
     end
   end
 
+  # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity
+  def self.enqueue_some(older_than: 4.weeks, maximum: 2)
+    count = 0
+
+    Organization.providers.find_each do |org|
+      full_dump = org.default_stream.full_dumps.published.last
+      next if full_dump&.effective_date&.after?(older_than.ago)
+      next if full_dump && org.default_stream.uploads.where(updated_at: full_dump.effective_date..).none?
+
+      GenerateFullDumpJob.perform_later(org.default_stream)
+
+      if maximum
+        count += 1
+        break if count >= maximum
+      end
+    end
+  end
+  # rubocop:enable Metrics/AbcSize,Metrics/CyclomaticComplexity
+
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def perform(stream, publish: true)
     effective_date = Time.zone.now
