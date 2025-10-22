@@ -1,0 +1,156 @@
+<%= render 'shared/layout_manage_organization' do %>
+  <h3>Access restrictions</h3>
+  <% if can?(:manage, @organization) %>
+    <%= bootstrap_form_with(model: @organization, url: organization_path(@organization), html: { method: :put }) do |f| %>
+      <div class="mb-3">
+        <%= f.select :record_access, options_for_select([['Unrestricted - any authenticated POD organization can harvest data', 'authenticated_users'], ['Restricted - only specific organizations and groups can harvest data', 'managed']], @organization.record_access), class: 'form-select' %>
+        <div class="form-text">
+          Choose whether to allow any authenticated POD organization to harvest data from your organization, or restrict access to specific organizations and groups.
+        </div>
+      </div>
+      <div class="mb-3">
+        <%= f.submit 'Change record access', class: 'btn btn-danger' %>
+      </div>
+    <% end %>
+  <% end %>
+  <h4 class="mt-5">Who can harvest <%= @organization.name %> records?</h3>
+  <div class="card my-3">
+    <div class="card-header">
+      <h4 class="h6 mb-0 ">
+        <i class="info-circle-fill text-info"></i>
+        <span class="ml-2">About access restrictions</span>
+      </h4>
+    </div>
+    <div class="card-body">
+      <p class="card-text">
+        The table below shows which organizations have access to harvest data from <strong><%= @organization.name %></strong>.
+        <% if @organization.authenticated_users? %>
+          This organization is currently unrestricted, meaning any POD organization can harvest its data.
+        <% elsif @organization.allowed_consumer_groups.any? && @organization.allowed_consumer_organizations.any? %>
+          This organization has restrictions set, allowing access to specific organizations and groups.
+        <% elsif @organization.allowed_consumer_groups.any? %>
+          This organization has restrictions set, allowing access to specific groups.
+        <% elsif @organization.allowed_consumer_organizations.any? %>
+          This organization has restrictions set, allowing access to specific organizations.
+        <% end %>
+      </p>
+    </div>
+  </div>
+  <table class="table table-striped mb-3">
+    <thead>
+      <tr>
+        <th colspan="2">Organization</th>
+        <th>Can harvest?</th>
+        <th>Reason</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @organizations.each do |org| %>
+        <tr>
+          <td class="align-middle text-center icon-column">
+            <% if org.icon.attached? %>
+              <%= image_tag(org.icon, alt: '', class: 'icon-sm') %>
+            <% end %>
+          </td>
+          <td><%= link_to org.name, organization_path(org) %></td>
+          <td class="align-middle">
+            <% if @organization.authenticated_users? || org.allowed_to_consume_organization_ids.include?(@organization.id) %>
+              <i class="bi bi-check-circle-fill text-success"></i>
+              <span class="visually-hidden">Can harvest</span>
+            <% else %>
+              <i class="bi bi-dash-circle"></i>
+              <span class="visually-hidden">Cannot harvest</span>
+            <% end %>
+          </td>
+          <td>
+            <% if @organization.authenticated_users? %>
+              No restrictions set
+            <% elsif @organization.allowed_consumer_groups.intersect?(org.groups) %>
+              Granted through <%= (@organization.allowed_consumer_groups & org.groups).map(&:display_name).to_sentence %> membership
+            <% elsif @organization.allowed_consumer_organizations.include?(org) %>
+              Granted to organization
+            <% else %>
+              No access granted
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <% if @organization.managed? && can?(:manage, @organization) %>
+  <h4 class="mt-5">Manage access restrictions</h4>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-lg-6">
+        <h4>Group access</h4>
+        <p>Granting group access allows all member organizations of the group to harvest data from <strong><%= @organization.name %></strong>, regardless of their individual access settings.</p>
+        <table class="table table-striped mb-3">
+          <thead>
+            <tr>
+              <th colspan="2">Group</th>
+              <th>Grant access?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @groups.each do |group| %>
+              <tr>
+                <td class="align-middle text-center icon-column">
+                  <% if group.icon.attached? %>
+                    <%= image_tag(group.icon, alt: '', class: 'icon-sm') %>
+                  <% end %>
+                </td>
+                <td><%= link_to group.display_name, group_path(group) %></td>
+                <td class="align-middle text-center">
+                  <div class="form-check align-middle d-inline-block">
+                    <% if @organization.allowed_consumer_groups.include?(group) %>
+                      <%= link_to '', organization_remove_allowed_consumer_path(@organization, consumer_type: 'Group', consumer_id: group.id), data: { turbo_method: :delete, turbo_confirm: t('organization_users.index.confirm_action') }, class: 'form-check-input checked', title: t('.remove_admin') %>
+                      <input class="form-check-input pe-none" type="checkbox" aria-label="Access granted?" checked>
+                    <% else %>
+                      <%= link_to '', organization_add_allowed_consumer_path(@organization, consumer_type: 'Group', consumer_id: group.id), data: { turbo_method: :post, turbo_confirm: t('organization_users.index.confirm_action') }, class: 'form-check-input', title: t('.add_admin') %>
+                    <% end %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-12 col-lg-6">
+        <h4>Organization access</h4>
+        <p>Granting organization access allows a specific organization to harvest data from <strong><%= @organization.name %></strong>. Group access takes precedence.</p>
+        <table class="table table-striped mb-3">
+          <thead>
+            <tr>
+              <th colspan="2">Organization</th>
+              <th>Grant access?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @organizations.each do |org| %>
+              <tr>
+                <td class="align-middle text-center icon-column">
+                  <% if org.icon.attached? %>
+                    <%= image_tag(org.icon, alt: '', class: 'icon-sm') %>
+                  <% end %>
+                </td>
+                <td><%= link_to org.name, organization_path(org) %></td>
+                <td class="align-middle text-center">
+                  <div class="form-check align-middle d-inline-block">
+                    <% if @organization.allowed_consumer_organizations.include?(org) %>
+                      <%= link_to '', organization_remove_allowed_consumer_path(@organization, consumer_type: 'Organization', consumer_id: org.id), data: { turbo_method: :delete, turbo_confirm: t('organization_users.index.confirm_action') }, class: 'form-check-input checked', title: t('.remove_admin') %>
+                      <input class="form-check-input pe-none" type="checkbox" aria-label="Access granted?" checked>
+                    <% else %>
+                      <%= link_to '', organization_add_allowed_consumer_path(@organization, consumer_type: 'Organization', consumer_id: org.id), data: { turbo_method: :post, turbo_confirm: t('organization_users.index.confirm_action') }, class: 'form-check-input', title: t('.add_admin') %>
+                    <% end %>
+                  </div>
+              </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <% end %>
+<% end %>

@@ -44,8 +44,17 @@ class TokenAbility < Ability
 
   def token_download_abilities
     can :read, Organization, public: true
-    can :read, [Stream, Upload], organization: { public: true }
-    can :read, ActiveStorage::Attachment, { record: { organization: { public: true } } }
+    record_read_abilities
+    record_read_abilities({ id: permitted_organization_ids, public: true })
+  end
+
+  def record_read_abilities(restrictions = { record_access: :authenticated_users, public: true })
+    can :read, [Stream, Upload], organization: restrictions
+    can :read, ActiveStorage::Attachment, { record: { organization: restrictions } }
+  end
+
+  def permitted_organization_ids
+    @permitted_organization_ids ||= @allowlisted_jwt&.resource&.allowed_to_consume_organizations
   end
 
   def token_jti

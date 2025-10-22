@@ -10,6 +10,10 @@ class Group < ApplicationRecord
 
   has_many :group_memberships, dependent: :destroy
   has_many :organizations, through: :group_memberships
+
+  has_many :received_allowed_consumer, class_name: 'AllowedConsumer', as: :allowed_consumer, dependent: :destroy
+  has_many :allowed_to_consume_organizations, through: :received_allowed_consumer, source: :organization
+
   has_one_attached :icon
 
   default_scope { order(name: :asc) }

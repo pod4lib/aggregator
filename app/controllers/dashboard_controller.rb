@@ -16,6 +16,8 @@ class DashboardController < ApplicationController
       render Dashboard::NormalizedDataTabComponent.new
     when 'users'
       render Dashboard::UsersTabComponent.new
+    when 'access'
+      render Dashboard::AccessTabComponent.new
     else
       head :not_found
     end

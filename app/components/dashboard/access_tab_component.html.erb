@@ -1,0 +1,69 @@
+<turbo-frame id="access_tab">
+    <div class="container mt-4 mb-4">
+      <h3>Access matrix</h3>
+      <ul class="table-key list-unstyled list-inline pt-3" aria-hidden="true">
+        <li class="list-inline-item pe-3">
+          <i class="bi bi-circle-fill text-success" aria-hidden="true"></i>
+          <span class="ms-1 align-text-baseline">Record owner</span>
+        </li>
+        <li class="list-inline-item pe-3">
+          <i class="bi bi-globe-americas-fill text-success" aria-hidden="true"></i>
+          <span class="ms-1 align-text-baseline">No restrictions</span>
+        </li>
+        <li class="list-inline-item pe-3">
+          <i class="bi bi-check-circle-fill text-success" aria-hidden="true"></i>
+          <span class="ms-1 align-text-baseline">Access granted directly</span>
+        </li>
+        <li class="list-inline-item pe-3">
+          <i class="bi bi-building-fill-check text-success" aria-hidden="true"></i>
+          <span class="ms-1 align-text-baseline">Access granted by group membership</span>
+        </li>
+        <li class="list-inline-item pe-3">
+          <i class="bi bi-dash-lg" aria-hidden="true"></i>
+          <span class="ms-1 align-text-baseline">No access</span>
+        </li>
+      </ul>
+      <table class="table table-striped mb-4">
+        <thead>
+          <tr>
+            <th colspan="2">Organization (provider)</th>
+            <% @organizations.each do |org| %>
+              <th><%= org.name %> (consumer)</th>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody>
+          <% @organizations.each do |org| %>
+            <tr>
+              <td class="align-middle text-center icon-column">
+                <% if org.icon.attached? %>
+                  <%= image_tag(org.icon, alt: '', class: 'icon-sm') %>
+                <% end %>
+              </td>
+              <td><%= link_to org.name, organization_access_restrictions_path(org), data: { turbo: false } %></td>
+              <% @organizations.each do |other_org| %>
+              <td>
+                <% if org == other_org %>
+                  <i class="bi bi-circle-fill text-success"></i>
+                  <span class="visually-hidden">Can harvest</span>
+                <% elsif org.authenticated_users? %>
+                  <i class="bi bi-globe-americas-fill text-success"></i>
+                  <span class="visually-hidden">Can harvest</span>
+                <% elsif org.allowed_consumer_groups.intersect?(other_org.groups) %>
+                  <i class="bi bi-building-fill-check text-success"></i>
+                  <span class="visually-hidden">Can harvest</span>
+                <% elsif org.allowed_consumer_organizations.include?(other_org) %>
+                  <i class="bi bi-check-circle-fill text-success"></i>
+                  <span class="visually-hidden">Can harvest</span>
+                <% else %>
+                  <i class="bi bi-dash-lg"></i>
+                  <span class="visually-hidden">Cannot harvest</span>
+                <% end %>
+              </td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+  </div>
+</turbo-frame>

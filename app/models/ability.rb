@@ -36,12 +36,25 @@ class Ability
   def user_with_roles_abilities
     return if user.roles.empty?
 
-    can :read, ActiveStorage::Attachment, { record: { organization: { public: true } } }
-    can :read, MarcRecord, upload: { organization: { public: true } }
-    can %i[read profile normalized_data processing_status], Stream, organization: { public: true }
-    can %i[read info], Upload, organization: { public: true }
     can :read, :pages_data
     can %i[read users organization_details provider_details], Organization, public: true
+    can :read, [Organization, AllowedConsumer], { public: true }
+
+    # Permits record access for organizations that permit all authenticated users
+    record_read_abilities
+    # Permits record access as allowed by organizations that have restrictions in place
+    record_read_abilities({ id: permitted_organization_ids, public: true })
+  end
+
+  def record_read_abilities(restrictions = { record_access: :authenticated_users, public: true })
+    can :read, ActiveStorage::Attachment, { record: { organization: restrictions } }
+    can :read, MarcRecord, upload: { organization: restrictions }
+    can %i[read profile normalized_data processing_status], Stream, organization: restrictions
+    can %i[read info], Upload, organization: restrictions
+  end
+
+  def permitted_organization_ids
+    @permitted_organization_ids ||= @user.organizations.flat_map(&:allowed_to_consume_organization_ids)
   end
 
   def site_admin_user_abilities

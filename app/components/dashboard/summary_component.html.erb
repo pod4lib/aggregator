@@ -29,6 +29,10 @@
         <button class="nav-link" id="users-tab" data-bs-toggle="tab" data-bs-target="#users-pane" type="button" role="tab"
           aria-controls="users-pane" aria-selected="false">Users</button>
       </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="access-tab" data-bs-toggle="tab" data-bs-target="#access-pane" type="button" role="tab"
+          aria-controls="access-pane" aria-selected="false">Access</button>
+      </li>
     </ul>
 
     <!-- Activity summary panes (tab content) -->
@@ -56,6 +60,13 @@
       <div id="users-pane" class="tab-pane fade" role="tabpanel">
         <%= helpers.turbo_frame_tag "users_tab", src: dashboard_tab_path(:users), loading: "lazy" do %>
           <div class="text-muted">Loading Users…</div>
+        <% end %>
+      </div>
+
+      <!-- Access tab -->
+      <div id="access-pane" class="tab-pane fade" role="tabpanel">
+        <%= helpers.turbo_frame_tag "access_tab", src: dashboard_tab_path(:access), loading: "lazy" do %>
+          <div class="text-muted">Loading Access…</div>
         <% end %>
       </div>
     </div>
