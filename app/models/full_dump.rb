@@ -9,6 +9,10 @@ class FullDump < ApplicationRecord
   delegate :marc21, :marcxml, :deletes, :oai_xml, :errata, :record_count, to: :normalized_dump
 
   def deltas
-    stream.delta_dumps.where(created_at: (created_at)..)
+    stream.delta_dumps.published.where(previous_stream_id: nil, created_at: (created_at)..)
+  end
+
+  def interstream_deltas
+    stream.interstream_delta_dumps
   end
 end

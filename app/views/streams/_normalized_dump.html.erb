@@ -14,6 +14,29 @@
     </tbody>
   </table>
 
+  <% if normalized_dump.interstream_deltas.any? %>
+    <h4 class="mt-4">Inter-stream deltas</h4>
+
+    <table class="table table-striped">
+      <thead>
+        <th>Type</th>
+        <th class="pl-4">File</th>
+        <th>Date created</th>
+        <th>Size</th>
+        <th class="text-end pr-4">Records</th>
+      </thead>
+        <% paginated_dump = normalized_dump.interstream_deltas.order(created_at: :asc) %>
+        <% paginated_dump.each do |delta| %>
+          <tbody class="table-group-divider">
+          <%= render partial: 'streams/dump_attachment', locals: { type: 'Delta', attachment: delta.marc21.attachment, stream: delta.stream } %>
+          <%= render partial: 'streams/dump_attachment', locals: { type: 'Delta', attachment: delta.marcxml.attachment, stream: delta.stream } %>
+          <%= render partial: 'streams/dump_attachment', locals: { type: 'Deletes', attachment: delta.deletes.attachment, stream: delta.stream } %>
+          </tbody>
+        <% end %>
+    </table>
+
+  <% end %>
+
   <% if normalized_dump.deltas.exists? %>
     <h4 class="mt-4">Deltas and Deletes</h4>
     <table class="table table-striped">
@@ -25,7 +48,7 @@
         <th class="text-end pr-4">Records</th>
       </thead>
       <tbody>
-        <% paginated_dump =  normalized_dump.deltas.order(created_at: :desc).page(params[:page]).per(5) %>
+        <% paginated_dump = normalized_dump.deltas.order(created_at: :desc).page(params[:page]).per(5) %>
         <% paginated_dump.each do |delta| %>
           <%= render partial: 'streams/dump_attachment', locals: { type: 'Delta', attachment: delta.marc21.attachment, stream: normalized_dump.stream } %>
           <%= render partial: 'streams/dump_attachment', locals: { type: 'Delta', attachment: delta.marcxml.attachment, stream: normalized_dump.stream } %>

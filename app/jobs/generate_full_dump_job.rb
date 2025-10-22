@@ -56,6 +56,9 @@ class GenerateFullDumpJob < ApplicationJob
         normalized_dump.public_send(as).attach(io: File.open(file), filename: human_readable_filename(base_name, as))
       end
 
+      # Run manually for now:
+      # GenerateInterstreamDeltaDumpJob.perform_later(stream.current_full_dump, stream, now: now, publish: publish)
+
       normalized_dump.update(published_at: (Time.zone.now if publish))
       full_dump.published_at = Time.zone.now if publish
 

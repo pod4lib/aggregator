@@ -6,23 +6,24 @@
 class NormalizedMarcRecordReader
   include Enumerable
 
-  attr_reader :uploads, :thread_pool_size
+  attr_reader :uploads, :thread_pool_size, :conditions
 
   # @param [Array<Upload>] uploads
-  def initialize(uploads, thread_pool_size: 10, augment_marc: true)
+  def initialize(uploads, thread_pool_size: 10, augment_marc: true, conditions: {})
     @uploads = uploads
     @thread_pool_size = thread_pool_size
     @augment_marc = augment_marc
+    @conditions = conditions
   end
 
   # @yield [MarcRecord]
   def each(...)
-    pool = Concurrent::FixedThreadPool.new(thread_pool_size) if @augment_marc
+    pool = Concurrent::FixedThreadPool.new(thread_pool_size) if eagerly_augment_marc?
 
     current_marc_record_ids.each_slice(200) do |slice|
       records = MarcRecord.includes(:upload, :stream, :organization).find(slice)
 
-      if @augment_marc
+      if eagerly_augment_marc?
         # do a little pre-processing to pre-generated the augmented MARC.
         # this is done in a thread pool for a marginal performance boost
         # (10-15%).
@@ -49,9 +50,9 @@ class NormalizedMarcRecordReader
     return to_enum(:current_marc_record_ids) unless block_given?
 
     # But for other databases, we'll have to do it ourselves.
-    query = MarcRecord.select(:marc001, :id).where(upload: uploads).order(marc001: :asc, file_id: :desc,
-                                                                          id: :asc)
-
+    query = MarcRecord.select(:marc001, :id)
+                      .where(upload: uploads, **conditions)
+                      .order(marc001: :asc, file_id: :desc, id: :asc)
     query.each.chunk(&:marc001).each { |_key, records| yield records.first.id }
   end
 
@@ -66,7 +67,11 @@ class NormalizedMarcRecordReader
     # Postgres has 'SELECT DISTINCT ON', so we can have the database de-dupe marc records with the same 001
     # and return the most recent
     MarcRecord.select('DISTINCT ON (marc001) marc_records.id')
-              .where(upload: uploads)
+              .where(upload: uploads, **conditions)
               .order(:marc001, file_id: :desc, id: :asc).ids
+  end
+
+  def eagerly_augment_marc?
+    @augment_marc
   end
 end
