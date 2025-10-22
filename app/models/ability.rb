@@ -41,22 +41,30 @@ class Ability
       return
     end
 
+    permitted_orgs = user.organizations.flat_map(&:allowed_to_consume_organization_ids)
     if user.roles.any?
-      can :read, ActiveStorage::Attachment, { record: { organization: { public: true } } }
-      can :read, MarcRecord, upload: { organization: { public: true } }
-      can %i[read profile normalized_data processing_status], Stream, organization: { public: true }
-      can %i[read info], Upload, organization: { public: true }
       can :read, :pages_data
       can %i[read users organization_details provider_details], Organization, public: true
+      can :read, ActiveStorage::Attachment, { record: { organization: { id: permitted_orgs, public: true } } }
+      can :read, MarcRecord, upload: { organization: { id: permitted_orgs, public: true } }
+      can %i[read profile normalized_data processing_status], Stream, organization: { id: permitted_orgs, public: true }
+      can %i[read info], Upload, organization: { id: permitted_orgs, public: true }
+
+      can :read, ActiveStorage::Attachment, { record: { organization: { record_access: :authenticated_users, public: true } } }
+      can :read, MarcRecord, upload: { organization: { record_access: :authenticated_users, public: true } }
+      can %i[read profile normalized_data processing_status], Stream, organization: { record_access: :authenticated_users, public: true }
+      can %i[read info], Upload, organization: { record_access: :authenticated_users, public: true }
     end
 
     can :manage, :all if user.has_role?(:admin)
     can :read, Organization, public: true
+    can :read, Group
     can :manage, :dashboard_controller if user.has_role?(:admin)
     can :manage, :organization_slug if user.has_role?(:admin)
 
     owned_orgs = Organization.with_role(:owner, user).pluck(:id)
     can :manage, Organization, id: owned_orgs
+    can :manage, [Organization, AllowedConsumer], { id: owned_orgs }
     cannot :destroy, Organization, id: owned_orgs
     can :crud, Stream, organization: { id: owned_orgs }
     can :crud, Upload, organization: { id: owned_orgs }
@@ -66,7 +74,10 @@ class Ability
 
     member_orgs = Organization.with_role(:member, user).pluck(:id)
     can %i[invite], Organization, id: member_orgs
+    can :read, [Organization, AllowedConsumer], { id: owned_orgs }
     can %i[create], [Upload], organization: { id: member_orgs }
+    can %i[read profile normalized_data processing_status], Stream, organization: { id: member_orgs }
+    can %i[read info], Upload, organization: { id: member_orgs }
     can :read, MarcRecord, upload: { organization: { id: member_orgs } }
     can :read, AllowlistedJwt, resource_type: 'Organization', resource_id: member_orgs
     can :read, ActiveStorage::Attachment, { record: { organization: { id: member_orgs } } }

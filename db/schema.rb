@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_10_23_185916) do
+ActiveRecord::Schema[8.1].define(version: 2025_10_22_154023) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.integer "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -84,6 +84,17 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_23_185916) do
     t.index ["visit_token"], name: "index_ahoy_visits_on_visit_token", unique: true
   end
 
+  create_table "allowed_consumers", force: :cascade do |t|
+    t.integer "allowed_consumer_id", null: false
+    t.string "allowed_consumer_type", null: false
+    t.datetime "created_at", null: false
+    t.integer "organization_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["allowed_consumer_type", "allowed_consumer_id"], name: "index_allowed_consumers_on_allowed_consumer"
+    t.index ["organization_id", "allowed_consumer_type", "allowed_consumer_id"], name: "idx_on_organization_id_allowed_consumer_type_allowe_632946e2d5", unique: true
+    t.index ["organization_id"], name: "index_allowed_consumers_on_organization_id"
+  end
+
   create_table "allowlisted_jwts", force: :cascade do |t|
     t.string "aud"
     t.datetime "created_at"
@@ -119,13 +130,11 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_23_185916) do
 
   create_table "delta_dumps", force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.datetime "effective_date"
     t.integer "normalized_dump_id", null: false
     t.integer "previous_stream_id"
     t.datetime "published_at"
     t.integer "stream_id", null: false
     t.datetime "updated_at", null: false
-    t.index ["effective_date"], name: "index_delta_dumps_on_effective_date"
     t.index ["normalized_dump_id"], name: "index_delta_dumps_on_normalized_dump_id"
     t.index ["previous_stream_id"], name: "index_delta_dumps_on_previous_stream_id"
     t.index ["published_at"], name: "index_delta_dumps_on_published_at"
@@ -145,12 +154,10 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_23_185916) do
 
   create_table "full_dumps", force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.datetime "effective_date"
     t.integer "normalized_dump_id", null: false
     t.datetime "published_at"
     t.integer "stream_id", null: false
     t.datetime "updated_at", null: false
-    t.index ["effective_date"], name: "index_full_dumps_on_effective_date"
     t.index ["normalized_dump_id"], name: "index_full_dumps_on_normalized_dump_id"
     t.index ["published_at"], name: "index_full_dumps_on_published_at"
     t.index ["stream_id"], name: "index_full_dumps_on_stream_id"
@@ -276,13 +283,11 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_23_185916) do
     t.boolean "default", default: false
     t.string "name"
     t.integer "organization_id"
-    t.integer "previous_stream_id"
     t.string "slug"
     t.string "status", default: "active"
     t.datetime "updated_at", null: false
     t.index ["organization_id", "slug"], name: "index_streams_on_organization_id_and_slug", unique: true
     t.index ["organization_id"], name: "index_streams_on_organization_id"
-    t.index ["previous_stream_id"], name: "index_streams_on_previous_stream_id"
     t.index ["status"], name: "index_streams_on_status"
   end
 
@@ -345,12 +350,13 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_23_185916) do
     t.text "object", limit: 1073741823
     t.text "object_changes", limit: 1073741823
     t.string "whodunnit"
-    t.string "{null: false}"
+    t.string "{:null=>false}"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "allowed_consumers", "organizations"
   add_foreign_key "contact_emails", "organizations"
   add_foreign_key "default_stream_histories", "streams"
   add_foreign_key "delta_dumps", "normalized_dumps"
