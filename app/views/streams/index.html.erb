@@ -30,7 +30,7 @@
         <td class="text-end"><%= stream.cached_files_count %></td>
         <td class="text-end"><%= number_to_human_size stream.cached_files_size %></td>
         <td class="text-end">
-          <%= link_to 'Make default', make_default_organization_streams_path(@organization, stream: stream.slug), data: { turbo_method: :post }, class: 'btn btn-sm btn-secondary' if !stream.default? && can?(:update, stream) %>
+          <%= link_to 'Make default', make_pending_default_organization_streams_path(@organization, stream: stream.slug), data: { turbo_method: :post }, class: 'btn btn-sm btn-secondary' if !stream.default? && can?(:update, stream) %>
           <%= link_to 'Delete', [@organization, stream], data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger' if can? :destroy, stream %>
         </td>
       </tr>

@@ -18,7 +18,8 @@ class Stream < ApplicationRecord
 
   scope :default, -> { where(default: true) }
   scope :previous_default, -> { joins(:default_stream_histories).where(default: false).distinct }
-  scope :active, -> { where(status: 'active') }
+  scope :active, -> { where(status: %w[active pending]) }
+  scope :pending, -> { where(status: 'pending') }
   scope :archived, -> { where(status: 'archived') }
 
   after_create :check_for_a_default_stream
@@ -41,6 +42,17 @@ class Stream < ApplicationRecord
       organization.streams.default.each { |stream| stream.update(default: false) }
       update(default: true)
     end
+  end
+
+  def make_pending
+    return if pending?
+
+    Stream.transaction do
+      organization.streams.default.each { |stream| stream.update(status: 'active') }
+      update(status: 'pending')
+    end
+
+    PromoteStreamToDefaultJob.perform_later(self)
   end
 
   def job_tracker_status_groups
@@ -72,6 +84,10 @@ class Stream < ApplicationRecord
     return statistic.file_size if statistic_up_to_date?
 
     files.sum { |file| file.blob.byte_size }
+  end
+
+  def pending?
+    status == 'pending'
   end
 
   private

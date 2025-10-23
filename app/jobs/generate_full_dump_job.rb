@@ -15,8 +15,7 @@ class GenerateFullDumpJob < ApplicationJob
   end
 
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-  def perform(stream, publish: true)
-    effective_date = Time.zone.now
+  def perform(stream, effective_date: Time.zone.now, publish: true)
     uploads = stream.uploads.active
 
     GenerateDeltaDumpJob.perform_now(stream, publish: publish) if stream.current_full_dump
@@ -57,11 +56,6 @@ class GenerateFullDumpJob < ApplicationJob
       writer.files.each do |as, file|
         normalized_dump.public_send(as).attach(io: File.open(file), filename: human_readable_filename(base_name, as))
       end
-
-      # Run manually for now:
-      # GenerateInterstreamDeltaDumpJob.perform_now(
-      #   previous_stream, stream, effective_date: effective_date, publish: publish
-      # )
 
       normalized_dump.update(published_at: effective_date)
       full_dump.published_at = Time.zone.now if publish

@@ -3,7 +3,7 @@
 # Controller to handle streams
 class StreamsController < ApplicationController
   load_and_authorize_resource :organization
-  load_and_authorize_resource through: :organization, except: %i[make_default]
+  load_and_authorize_resource through: :organization, except: %i[make_pending_default]
   skip_authorize_resource only: %i[normalized_dump resourcelist]
   protect_from_forgery with: :null_session, if: :jwt_token
 
@@ -56,11 +56,11 @@ class StreamsController < ApplicationController
     @normalized_dump = @stream.full_dumps.published.last || @stream.full_dumps.build
   end
 
-  def make_default
+  def make_pending_default
     @stream = @organization.streams.find(params[:stream])
     authorize!(:update, @stream)
 
-    @stream.make_default
+    @stream.make_pending
 
     respond_to do |format|
       format.html { redirect_to @organization, notice: 'Stream was successfully updated.', status: :see_other }
