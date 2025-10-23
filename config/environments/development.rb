@@ -52,8 +52,8 @@ Rails.application.configure do
   # Append comments with runtime information tags to SQL queries in logs.
   config.active_record.query_log_tags_enabled = true
 
-  # Use production-like ActiveJob backend (sidekiq) if Redis is available
-  config.active_job.queue_adapter = :sidekiq if ENV.include? 'SIDEKIQ_REDIS_URL'
+  # Use solid_queue
+  config.active_job.queue_adapter = :solid_queue
 
   # Highlight code that enqueued background job in logs.
   config.active_job.verbose_enqueue_logs = true
