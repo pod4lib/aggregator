@@ -2,12 +2,14 @@
 <div class="position-relative overflow-hidden mb-5 py-4 bg-light organization border-bottom">
   <div class="container">
     <div class="d-flex align-items-center">
-      <% if @organization.icon.attached? %>
-        <%= image_tag(@organization.icon, alt: '', class: 'me-2', height: 50) %>
-      <% end %>
-      <h1 class="display-5 font-weight-normal m-0">
-        <%= @organization.name %>
-      </h1>
+      <a href="<%= organization_path(@organization) %>" class="d-flex align-items-center text-decoration-dotted">
+        <% if @organization.icon.attached? %>
+          <%= image_tag(@organization.icon, alt: '', class: 'me-2', height: 50) %>
+        <% end %>
+        <h1 class="display-5 font-weight-normal m-0">
+          <%= @organization.name %>
+        </h1>
+      </a>
       <div class="d-flex flex-column ms-5">
         <% if @organization.groups.any? %>
           <span class="lead">
