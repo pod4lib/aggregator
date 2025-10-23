@@ -76,7 +76,7 @@ Rails.application.routes.draw do
 
     resources :streams, only: [:index, :destroy, :show, :create, :new] do
       collection do
-        post 'make_default'
+        post 'make_pending_default'
       end
 
       member do

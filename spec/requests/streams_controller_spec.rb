@@ -63,18 +63,13 @@ RSpec.describe '/organization/:id/stream' do
     end
   end
 
-  describe 'POST /make_default' do
-    let!(:default_stream) { organization.default_stream }
+  describe 'POST /make_pending_default' do
+    it 'toggles on the pending status the new stream' do
+      expect do
+        post make_pending_default_organization_streams_url(organization_id: stream.organization.id, stream: stream, format: :html)
+      end.to enqueue_job(PromoteStreamToDefaultJob).with(stream).and(change { stream.reload.status }.from('active').to('pending'))
 
-    it 'toggles on the default attribute for the new stream' do
-      post make_default_organization_streams_url(organization_id: stream.organization.id, stream: stream, format: :html)
       expect(response).to redirect_to(organization_url(stream.organization))
-      expect(stream.reload).to have_attributes default: true
-    end
-
-    it 'toggles off the default stream for the previous default' do
-      post make_default_organization_streams_url(organization_id: stream.organization.id, stream: stream, format: :html)
-      expect(default_stream.reload).to have_attributes default: false
     end
   end
 
