@@ -5,6 +5,22 @@
 class CompactUploadsJob < ApplicationJob
   queue_as :default
 
+  def self.enqueue_some(ratio: 0.25, maximum: 5) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity
+    streams = Stream.includes(:statistic).default.select do |stream|
+      next unless stream.statistic&.unique_record_count && stream.statistic.record_count
+
+      stream.statistic.unique_record_count / stream.statistic.record_count.to_f < ratio
+    end
+
+    selected_streams = streams.sort_by do |s|
+      s.upload.where(status: 'compacted').maximum(:updated_at) || Time.zone.at(0)
+    end.first(maximum)
+
+    selected_streams.each do |stream|
+      perform_later(stream)
+    end
+  end
+
   # rubocop:disable Rails/SkipsModelValidations,Metrics/AbcSize,Metrics/MethodLength
   def perform(stream, age: 6.months, min_uploads: 10)
     # identify uploads that are old enough to be compacted (but leave the most recent few alone regardless of age)
