@@ -39,13 +39,5 @@ set :linked_dirs, %w(storage log tmp/pids tmp/cache tmp/sockets vendor/bundle pu
 # honeybadger_env otherwise defaults to rails_env
 set :honeybadger_env, "#{fetch(:stage)}"
 
-namespace :deploy do
-  after :restart, :restart_sidekiq do
-    on roles(:background) do
-      sudo :systemctl, "restart", "sidekiq-*", raise_on_non_zero_exit: false
-    end
-  end
-end
-
 # update shared_configs before restarting app
 before 'deploy:restart', 'shared_configs:update'

@@ -25,8 +25,6 @@ class GenerateFullDumpJob < ApplicationJob
       ExtractMarcRecordMetadataJob.perform_now(upload)
     end
 
-    progress.total = uploads.sum(&:marc_records_count)
-
     full_dump = stream.full_dumps.build(effective_date: effective_date)
     normalized_dump = full_dump.build_normalized_dump(stream: stream)
 
@@ -47,8 +45,6 @@ class GenerateFullDumpJob < ApplicationJob
           writer.write_marc_record(record)
           oai_writer.write_marc_record(record)
         end
-
-        progress.increment(records.length)
       end
 
       oai_writer.finalize

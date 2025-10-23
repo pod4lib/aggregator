@@ -47,7 +47,6 @@ en:
     table_heading:
       created_at: Created at
       job_type: Job type
-      progress: Completed records
       resource: Resource
       status: Status
     title: Processing status of recent background jobs
