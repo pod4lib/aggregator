@@ -12,4 +12,6 @@
   </div>
 
   <%= render 'uploads/summary_card', upload: @upload %>
+
+  <%= turbo_frame_tag 'marc-records', src: organization_upload_attachment_marc_records_path(@upload.organization, @upload, @attachment) %>
 <% end %>

@@ -3,16 +3,18 @@
 # Controller to handle MarcRecords
 class MarcRecordsController < ApplicationController
   load_and_authorize_resource :organization
-  load_and_authorize_resource through: :organization
+  load_and_authorize_resource :stream, through: :organization, optional: true
+  load_and_authorize_resource :upload, through: :organization, optional: true
+  load_and_authorize_resource through: :organization, except: :index
+
+  before_action :load_marc_records, only: :index
+
   protect_from_forgery with: :null_session, if: :jwt_token
 
   def index
-    @marc_records = @marc_records.where(marc001: index_params[:marc001]) if index_params[:marc001]
-    if index_params[:stream]
-      stream = @organization.streams.find_by(slug: index_params[:stream])
-      @marc_records = @marc_records.where(upload: stream.uploads)
-    end
-    @marc_records = @marc_records.page(index_params[:page])
+    @marc_records = @marc_records.includes(:upload, :file)
+                                 .order(file_id: :desc, index: :asc)
+                                 .page(index_params[:page])
   end
 
   def show; end
@@ -28,6 +30,20 @@ class MarcRecordsController < ApplicationController
   end
 
   def index_params
-    params.permit(:page, :marc001, :stream)
+    params.permit(:page, :marc001, :organization_id, :stream_id, :upload_id, :attachment_id)
+  end
+
+  def load_marc_records # rubocop:disable Metrics/AbcSize
+    @marc_records = @organization.marc_records
+    @marc_records = @marc_records.where(marc001: index_params[:marc001]) if index_params[:marc001].present?
+    if params[:attachment_id].present?
+      @marc_records = @marc_records.where(file: params[:attachment_id])
+    elsif @upload
+      @marc_records = @marc_records.where(upload: @upload)
+    elsif @stream
+      @marc_records = @marc_records.where(upload: @stream.uploads)
+    end
+
+    @marc_records
   end
 end

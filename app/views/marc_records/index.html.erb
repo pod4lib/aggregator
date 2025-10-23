@@ -1,35 +1,49 @@
 <%= render 'shared/organization_header' %>
 
+<% if @stream %>
+<div class="container manage-organization-container">
+  <%= render 'streams/header', stream: @stream if @stream %>
+  <%= render 'shared/stream_page_header' if @stream %>
+</div>
+<% end %>
+
 <div class="container">
   <div class="d-flex justify-content-between">
-    <h1>Marc records</h1>
+    <h1>MARC records</h1>
   </div>
-  <%= link_to "view as JSON", format: :json %>
 
-  <table class="table table-striped organizations mt-4">
-    <thead>
-      <tr>
-        <th>marc001</th>
-        <th>Stream</th>
-        <th>Download</th>
-        <th>Type</th>
-      </tr>
-    </thead>
+  <turbo-frame id="marc-records">
+    <%= form_with method: :get do |f| %>
+      <div class="input-group mb-3 w-50">
+        <%= f.label :marc001, 'Search by MARC 001', class: 'visually-hidden' %>
+        <%= f.search_field :marc001, value: params[:marc001], placeholder: 'Search by MARC 001 value', class: 'form-control' %>
+        <%= f.submit 'Search', class: 'btn btn-primary', name: nil %>
+      </div>
+    <% end %>
 
-    <tbody>
-      <% @marc_records.each do |marc_record| %>
+    <table class="table table-striped organizations mt-4">
+      <thead>
         <tr>
-          <td><%= marc_record.marc001 %></td>
-          <td><%= link_to(marc_record.stream.display_name, organization_stream_path(@organization, marc_record.stream)) %></td>
-          <td>
-            <% unless marc_record.status == 'delete' %>
-              <%= link_to('marc21', marc21_organization_marc_record_url(@organization, marc_record)) %>, <%= link_to('marcxml', marcxml_organization_marc_record_url(@organization, marc_record)) %>
-            <% end %>
-          </td>
-          <td><%= marc_record.status %></td>
+          <th>marc001</th>
+          <th>File</th>
+          <th>Download</th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
-  <%= paginate @marc_records %>
+      </thead>
+
+      <tbody>
+        <% @marc_records.each do |marc_record| %>
+          <tr data-turbo="false">
+            <td><%= marc_record.marc001 %></td>
+            <td><%= link_to marc_record.file.filename, file_info_organization_upload_path(@organization, marc_record.upload, marc_record.file) %></td>
+            <td>
+              <% unless marc_record.status == 'delete' %>
+                <%= link_to('marc21', marc21_organization_marc_record_url(@organization, marc_record)) %>, <%= link_to('marcxml', marcxml_organization_marc_record_url(@organization, marc_record)) %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <%= paginate @marc_records %>
+  </turbo-frame>
 </div>
