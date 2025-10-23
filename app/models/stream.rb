@@ -43,10 +43,16 @@ class Stream < ApplicationRecord
     end
   end
 
+  def job_list
+    %w[AttachRemoteFileToUploadJob ExtractMarcRecordMetadataJob GenerateDeltaDumpJob GenerateFullDumpJob
+       GenerateInterstreamDeltaDumpJob]
+  end
+
   def job_tracker_status_groups
+    needs_attention = SolidQueue::Job.failed.where(class_name: job_list, organization_id: organization.id)
     {
-      needs_attention: job_trackers.order(created_at: :desc).select(&:error_processing?),
-      active: job_trackers.order(created_at: :desc).select { |jt| jt.sidekiq_status == 'active' }
+      needs_attention:,
+      active: SolidQueue::Job.where(class_name: job_list, finished_at: nil, organization_id: organization.id) - needs_attention
     }
   end
 
