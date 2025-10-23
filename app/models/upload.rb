@@ -7,7 +7,7 @@ class Upload < ApplicationRecord
   has_one :organization, through: :stream
   has_many :marc_records, dependent: :delete_all
   belongs_to :user, optional: true
-  belongs_to :allowlisted_jwts, optional: true
+  belongs_to :allowlisted_jwts, class_name: 'AllowlistedJwt', optional: true
   belongs_to :compacted_upload, class_name: 'Upload', optional: true
   has_many :compacted_uploads, class_name: 'Upload', inverse_of: :compacted_upload, foreign_key: 'compacted_upload_id',
                                dependent: :destroy_async
