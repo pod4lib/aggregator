@@ -14,7 +14,6 @@ class Stream < ApplicationRecord
   has_one :statistic, dependent: :delete, as: :resource
   has_many :full_dumps, dependent: :destroy_async
   has_many :delta_dumps, dependent: :destroy_async
-  has_many :job_trackers, dependent: :delete_all, as: :reports_on
   belongs_to :previous_stream, class_name: 'Stream', optional: true
 
   scope :default, -> { where(status: 'default') }

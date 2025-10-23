@@ -3,7 +3,7 @@
 # Calculate some daily statistics for an organization
 class UpdateOrganizationStatisticsJob < ApplicationJob
   queue_as :default
-  sidekiq_options retry: 1
+  retry_on StandardError, wait: :exponentially_longer, attempts: 1
 
   def self.perform_all
     Organization.unscope(:order).find_each do |o|

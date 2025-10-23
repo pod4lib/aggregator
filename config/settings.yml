@@ -1,8 +1,6 @@
 jwt:
   secret: 'i♥️dolphins'
   algorithm: 'HS256'
-sidekiq:
-  logger_level: 'Logger::INFO' # The default from Sidekiq
 
 action_mailer:
   default_options:
