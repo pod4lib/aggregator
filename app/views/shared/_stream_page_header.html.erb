@@ -11,5 +11,7 @@
         <%= link_to "Normalized data", normalized_data_organization_stream_path(@organization, @stream), class: "btn btn-outline-primary #{current_page_class(normalized_data_organization_stream_path(@organization, @stream))}" %>
 
         <%= link_to "Processing status", processing_status_organization_stream_path(@organization, @stream), class: "btn btn-outline-primary #{current_page_class(processing_status_organization_stream_path(@organization, @stream))}" %>
+
+        <%= link_to "MARC records", organization_stream_marc_records_path(@organization, @stream), class: "btn btn-outline-primary #{current_page_class(organization_stream_marc_records_path(@organization, @stream))}" %>
     </div>
 </div>

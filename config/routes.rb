@@ -62,6 +62,7 @@ Rails.application.routes.draw do
       member do
         get 'info/:attachment_id', to: 'uploads#info', as: :file_info
       end
+      get 'marc_records/:attachment_id', to: 'marc_records#index', as: :attachment_marc_records
     end
 
     # Route in the Manage Organization / View Organization Details tabs
@@ -86,6 +87,8 @@ Rails.application.routes.draw do
         get 'resourcelist', to: 'streams#resourcelist', defaults: { format: :xml }
         get 'normalized_resourcelist/:flavor', to: 'streams#normalized_dump', defaults: { format: :xml }, as: :normalized_resourcelist
       end
+
+      get 'marc_records', to: 'marc_records#index'
     end
   end
 
