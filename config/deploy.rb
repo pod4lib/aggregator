@@ -39,6 +39,10 @@ set :linked_dirs, %w(storage log tmp/pids tmp/cache tmp/sockets vendor/bundle pu
 # honeybadger_env otherwise defaults to rails_env
 set :honeybadger_env, "#{fetch(:stage)}"
 
+# Manage SolidQueue via systemd (from dlss-capistrano gem)
+set :solid_queue_systemd_role, :app
+set :solid_queue_systemd_use_hooks, true
+
 namespace :deploy do
   after :restart, :restart_sidekiq do
     on roles(:background) do
