@@ -2,8 +2,6 @@
 
 # :nodoc:
 class ApplicationJob < ActiveJob::Base
-  include ActiveJob::Status
-
   # Automatically retry jobs that encountered a deadlock
   # retry_on ActiveRecord::Deadlocked
 
@@ -12,25 +10,16 @@ class ApplicationJob < ActiveJob::Base
 
   def self.with_job_tracking
     after_enqueue :find_or_initialize_job_tracker
-    before_perform :find_or_initialize_job_tracker
-    after_perform :cleanup_job_tracker
   end
 
   private
 
   def find_or_initialize_job_tracker
-    JobTracker.find_or_create_by(job_id: job_id) do |tracker|
-      tracker.job_class = self.class.name
-      tracker.provider_job_id = provider_job_id
-      update_job_tracker_properties(tracker)
-    end
-  end
+    job = SolidQueue::Job.find_by(active_job_id: job_id)
+    gid = job&.arguments&.[]('arguments')&.first&.[]('_aj_globalid')
+    return unless gid
 
-  def update_job_tracker_properties(tracker)
-    tracker.resource = arguments.first
-  end
-
-  def cleanup_job_tracker
-    JobTracker.where(job_id: job_id).delete_all
+    resource = GlobalID::Locator.locate(gid)
+    job.update!(organization_id: resource.organization.id)
   end
 end

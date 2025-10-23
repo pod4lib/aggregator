@@ -291,6 +291,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_29_182836) do
     t.string "concurrency_key"
     t.datetime "created_at", null: false
     t.datetime "finished_at"
+    t.string "organization_id"
     t.integer "priority", default: 0, null: false
     t.string "queue_name", null: false
     t.datetime "scheduled_at"
@@ -298,6 +299,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_29_182836) do
     t.index ["active_job_id"], name: "index_solid_queue_jobs_on_active_job_id"
     t.index ["class_name"], name: "index_solid_queue_jobs_on_class_name"
     t.index ["finished_at"], name: "index_solid_queue_jobs_on_finished_at"
+    t.index ["organization_id"], name: "index_solid_queue_jobs_on_organization_id"
     t.index ["queue_name", "finished_at"], name: "index_solid_queue_jobs_for_filtering"
     t.index ["scheduled_at", "finished_at"], name: "index_solid_queue_jobs_for_alerting"
   end

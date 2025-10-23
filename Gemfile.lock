@@ -50,9 +50,6 @@ GEM
     activejob (8.1.0)
       activesupport (= 8.1.0)
       globalid (>= 0.3.6)
-    activejob-status (1.0.2)
-      activejob (>= 6.0)
-      activesupport (>= 6.0)
     activemodel (8.1.0)
       activesupport (= 8.1.0)
     activerecord (8.1.0)
@@ -508,12 +505,6 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 4.0)
       websocket (~> 1.0)
-    sidekiq (8.0.8)
-      connection_pool (>= 2.5.0)
-      json (>= 2.9.0)
-      logger (>= 1.6.2)
-      rack (>= 3.1.0)
-      redis-client (>= 0.23.2)
     simplecov (0.22.0)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -607,7 +598,6 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
-  activejob-status
   ahoy_matey
   axe-core-rspec
   bootsnap
@@ -663,7 +653,6 @@ DEPENDENCIES
   rubocop-rspec
   rubocop-rspec_rails
   selenium-webdriver (~> 4.36)
-  sidekiq (~> 8.0)
   simplecov
   solid_queue (~> 1.2)
   sqlite3 (~> 2.5)
