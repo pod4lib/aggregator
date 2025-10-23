@@ -14,7 +14,7 @@ class GenerateFullDumpJob < ApplicationJob
     end
   end
 
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def perform(stream, publish: true)
     effective_date = Time.zone.now
     uploads = stream.uploads.active
@@ -77,7 +77,7 @@ class GenerateFullDumpJob < ApplicationJob
       oai_writer.unlink
     end
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
 
   def human_readable_filename(base_name, file_type)
     as = case file_type
