@@ -14,7 +14,6 @@ class Stream < ApplicationRecord
   has_one :statistic, dependent: :delete, as: :resource
   has_many :full_dumps, dependent: :destroy_async
   has_many :delta_dumps, dependent: :destroy_async
-  has_many :job_trackers, dependent: :delete_all, as: :reports_on
   belongs_to :previous_stream, class_name: 'Stream', optional: true
 
   scope :default, -> { where(status: 'default') }
@@ -51,10 +50,16 @@ class Stream < ApplicationRecord
     PromoteStreamToDefaultJob.perform_later(self)
   end
 
+  def job_list
+    %w[AttachRemoteFileToUploadJob ExtractMarcRecordMetadataJob GenerateDeltaDumpJob GenerateFullDumpJob
+       GenerateInterstreamDeltaDumpJob]
+  end
+
   def job_tracker_status_groups
+    needs_attention = SolidQueue::Job.failed.where(class_name: job_list, organization_id: organization.id)
     {
-      needs_attention: job_trackers.order(created_at: :desc).select(&:error_processing?),
-      active: job_trackers.order(created_at: :desc).select { |jt| jt.sidekiq_status == 'active' }
+      needs_attention:,
+      active: SolidQueue::Job.where(class_name: job_list, finished_at: nil, organization_id: organization.id) - needs_attention
     }
   end
 

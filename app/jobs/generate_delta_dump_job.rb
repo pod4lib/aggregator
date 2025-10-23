@@ -25,8 +25,6 @@ class GenerateDeltaDumpJob < ApplicationJob
       ExtractMarcRecordMetadataJob.perform_now(upload)
     end
 
-    progress.total = uploads.sum(&:marc_records_count)
-
     delta_dump = stream.delta_dumps.build(effective_date: effective_date)
     normalized_dump = delta_dump.build_normalized_dump(stream: stream)
 
@@ -49,8 +47,6 @@ class GenerateDeltaDumpJob < ApplicationJob
             oai_writer.write_marc_record(record)
           end
         end
-
-        progress.increment(records.length)
       end
 
       writer.finalize

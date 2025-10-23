@@ -101,7 +101,6 @@ Rails.application.routes.draw do
   resources :site_users, only: [:index, :update]
 
   authenticate :user, lambda { |u| u.has_role? :admin } do
-    require 'sidekiq/web'
-    mount Sidekiq::Web => '/sidekiq'
+    mount MissionControl::Jobs::Engine, at: "/jobs"
   end
 end

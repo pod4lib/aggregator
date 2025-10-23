@@ -4,4 +4,3 @@ server 'pod-worker-prod-b.stanford.edu', user: 'pod', roles: %w(background)
 
 Capistrano::OneTimeKey.generate_one_time_key!
 set :rails_env, 'production'
-set :sidekiq_roles, :background

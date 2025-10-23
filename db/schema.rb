@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_10_23_185916) do
+ActiveRecord::Schema[8.1].define(version: 2025_10_28_180530) do
   create_table "active_storage_attachments", force: :cascade do |t|
-    t.integer "blob_id", null: false
+    t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
     t.string "name", null: false
-    t.integer "record_id", null: false
+    t.bigint "record_id", null: false
     t.string "record_type", null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
@@ -34,7 +34,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_23_185916) do
   end
 
   create_table "active_storage_variant_records", force: :cascade do |t|
-    t.integer "blob_id", null: false
+    t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
@@ -43,8 +43,8 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_23_185916) do
     t.string "name"
     t.json "properties"
     t.datetime "time", precision: nil
-    t.integer "user_id"
-    t.integer "visit_id"
+    t.bigint "user_id"
+    t.bigint "visit_id"
     t.index ["name", "time"], name: "index_ahoy_events_on_name_and_time"
     t.index ["user_id"], name: "index_ahoy_events_on_user_id"
     t.index ["visit_id"], name: "index_ahoy_events_on_visit_id"
@@ -70,7 +70,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_23_185916) do
     t.datetime "started_at", precision: nil
     t.string "token_id"
     t.text "user_agent"
-    t.integer "user_id"
+    t.bigint "user_id"
     t.string "utm_campaign"
     t.string "utm_content"
     t.string "utm_medium"
@@ -90,7 +90,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_23_185916) do
     t.datetime "exp", precision: nil
     t.string "jti", null: false
     t.string "label"
-    t.integer "resource_id"
+    t.bigint "resource_id"
     t.string "resource_type"
     t.string "scope", default: "all"
     t.datetime "updated_at"
@@ -104,16 +104,16 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_23_185916) do
     t.datetime "confirmed_at", precision: nil
     t.datetime "created_at", null: false
     t.string "email"
-    t.integer "organization_id", null: false
+    t.bigint "organization_id", null: false
     t.datetime "updated_at", null: false
     t.index ["confirmation_token"], name: "index_contact_emails_on_confirmation_token", unique: true
     t.index ["organization_id"], name: "index_contact_emails_on_organization_id"
   end
 
   create_table "default_stream_histories", force: :cascade do |t|
-    t.datetime "end_time"
-    t.datetime "start_time", null: false
-    t.integer "stream_id", null: false
+    t.datetime "end_time", precision: nil
+    t.datetime "start_time", precision: nil, null: false
+    t.bigint "stream_id", null: false
     t.index ["stream_id"], name: "index_default_stream_histories_on_stream_id"
   end
 
@@ -180,9 +180,9 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_23_185916) do
     t.string "job_class"
     t.string "job_id"
     t.string "provider_job_id"
-    t.integer "reports_on_id", null: false
+    t.bigint "reports_on_id", null: false
     t.string "reports_on_type", null: false
-    t.integer "resource_id", null: false
+    t.bigint "resource_id", null: false
     t.string "resource_type", null: false
     t.datetime "updated_at", null: false
     t.index ["job_id"], name: "index_job_trackers_on_job_id"
@@ -192,14 +192,14 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_23_185916) do
   end
 
   create_table "marc_profiles", force: :cascade do |t|
-    t.integer "blob_id", null: false
+    t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
     t.json "field_frequency"
     t.json "histogram_frequency"
     t.json "record_frequency"
     t.json "sampled_values"
     t.datetime "updated_at", null: false
-    t.integer "upload_id"
+    t.bigint "upload_id"
     t.index ["blob_id"], name: "index_marc_profiles_on_blob_id"
     t.index ["upload_id"], name: "index_marc_profiles_on_upload_id"
   end
@@ -207,13 +207,13 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_23_185916) do
   create_table "marc_records", force: :cascade do |t|
     t.bigint "bytecount"
     t.string "checksum"
-    t.integer "file_id", null: false
+    t.bigint "file_id", null: false
     t.bigint "index"
     t.binary "json"
     t.bigint "length"
     t.string "marc001"
     t.string "status"
-    t.integer "upload_id", null: false
+    t.bigint "upload_id", null: false
     t.index ["file_id", "marc001"], name: "index_marc_records_on_file_id_and_marc001"
     t.index ["file_id"], name: "index_marc_records_on_file_id"
     t.index ["marc001", "upload_id"], name: "index_marc_records_on_marc001_and_upload_id"
@@ -223,11 +223,11 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_23_185916) do
 
   create_table "normalized_dumps", force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.integer "full_dump_id"
+    t.bigint "full_dump_id"
     t.datetime "last_delta_dump_at", precision: nil
     t.datetime "last_full_dump_at", precision: nil
-    t.datetime "published_at"
-    t.integer "stream_id", null: false
+    t.datetime "published_at", precision: nil
+    t.bigint "stream_id", null: false
     t.datetime "updated_at", null: false
     t.index ["full_dump_id"], name: "index_normalized_dumps_on_full_dump_id"
     t.index ["stream_id"], name: "index_normalized_dumps_on_stream_id"
@@ -249,12 +249,135 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_23_185916) do
   create_table "roles", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name"
-    t.integer "resource_id"
+    t.bigint "resource_id"
     t.string "resource_type"
     t.datetime "updated_at", null: false
     t.index ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
     t.index ["name"], name: "index_roles_on_name"
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource_type_and_resource_id"
+  end
+
+  create_table "solid_queue_blocked_executions", force: :cascade do |t|
+    t.string "concurrency_key", null: false
+    t.datetime "created_at", null: false
+    t.datetime "expires_at", null: false
+    t.bigint "job_id", null: false
+    t.integer "priority", default: 0, null: false
+    t.string "queue_name", null: false
+    t.index ["concurrency_key", "priority", "job_id"], name: "index_solid_queue_blocked_executions_for_release"
+    t.index ["expires_at", "concurrency_key"], name: "index_solid_queue_blocked_executions_for_maintenance"
+    t.index ["job_id"], name: "index_solid_queue_blocked_executions_on_job_id", unique: true
+  end
+
+  create_table "solid_queue_claimed_executions", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "job_id", null: false
+    t.bigint "process_id"
+    t.index ["job_id"], name: "index_solid_queue_claimed_executions_on_job_id", unique: true
+    t.index ["process_id", "job_id"], name: "index_solid_queue_claimed_executions_on_process_id_and_job_id"
+  end
+
+  create_table "solid_queue_failed_executions", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "error"
+    t.bigint "job_id", null: false
+    t.index ["job_id"], name: "index_solid_queue_failed_executions_on_job_id", unique: true
+  end
+
+  create_table "solid_queue_jobs", force: :cascade do |t|
+    t.string "active_job_id"
+    t.text "arguments"
+    t.string "class_name", null: false
+    t.string "concurrency_key"
+    t.datetime "created_at", null: false
+    t.datetime "finished_at"
+    t.string "organization_id"
+    t.integer "priority", default: 0, null: false
+    t.string "queue_name", null: false
+    t.datetime "scheduled_at"
+    t.datetime "updated_at", null: false
+    t.index ["active_job_id"], name: "index_solid_queue_jobs_on_active_job_id"
+    t.index ["class_name"], name: "index_solid_queue_jobs_on_class_name"
+    t.index ["finished_at"], name: "index_solid_queue_jobs_on_finished_at"
+    t.index ["organization_id"], name: "index_solid_queue_jobs_on_organization_id"
+    t.index ["queue_name", "finished_at"], name: "index_solid_queue_jobs_for_filtering"
+    t.index ["scheduled_at", "finished_at"], name: "index_solid_queue_jobs_for_alerting"
+  end
+
+  create_table "solid_queue_pauses", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "queue_name", null: false
+    t.index ["queue_name"], name: "index_solid_queue_pauses_on_queue_name", unique: true
+  end
+
+  create_table "solid_queue_processes", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "hostname"
+    t.string "kind", null: false
+    t.datetime "last_heartbeat_at", null: false
+    t.text "metadata"
+    t.string "name", null: false
+    t.integer "pid", null: false
+    t.bigint "supervisor_id"
+    t.index ["last_heartbeat_at"], name: "index_solid_queue_processes_on_last_heartbeat_at"
+    t.index ["name", "supervisor_id"], name: "index_solid_queue_processes_on_name_and_supervisor_id", unique: true
+    t.index ["supervisor_id"], name: "index_solid_queue_processes_on_supervisor_id"
+  end
+
+  create_table "solid_queue_ready_executions", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "job_id", null: false
+    t.integer "priority", default: 0, null: false
+    t.string "queue_name", null: false
+    t.index ["job_id"], name: "index_solid_queue_ready_executions_on_job_id", unique: true
+    t.index ["priority", "job_id"], name: "index_solid_queue_poll_all"
+    t.index ["queue_name", "priority", "job_id"], name: "index_solid_queue_poll_by_queue"
+  end
+
+  create_table "solid_queue_recurring_executions", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "job_id", null: false
+    t.datetime "run_at", null: false
+    t.string "task_key", null: false
+    t.index ["job_id"], name: "index_solid_queue_recurring_executions_on_job_id", unique: true
+    t.index ["task_key", "run_at"], name: "index_solid_queue_recurring_executions_on_task_key_and_run_at", unique: true
+  end
+
+  create_table "solid_queue_recurring_tasks", force: :cascade do |t|
+    t.text "arguments"
+    t.string "class_name"
+    t.string "command", limit: 2048
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.string "key", null: false
+    t.integer "priority", default: 0
+    t.string "queue_name"
+    t.string "schedule", null: false
+    t.boolean "static", default: true, null: false
+    t.datetime "updated_at", null: false
+    t.index ["key"], name: "index_solid_queue_recurring_tasks_on_key", unique: true
+    t.index ["static"], name: "index_solid_queue_recurring_tasks_on_static"
+  end
+
+  create_table "solid_queue_scheduled_executions", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "job_id", null: false
+    t.integer "priority", default: 0, null: false
+    t.string "queue_name", null: false
+    t.datetime "scheduled_at", null: false
+    t.index ["job_id"], name: "index_solid_queue_scheduled_executions_on_job_id", unique: true
+    t.index ["scheduled_at", "priority", "job_id"], name: "index_solid_queue_dispatch_all"
+  end
+
+  create_table "solid_queue_semaphores", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "expires_at", null: false
+    t.string "key", null: false
+    t.datetime "updated_at", null: false
+    t.integer "value", default: 1, null: false
+    t.index ["expires_at"], name: "index_solid_queue_semaphores_on_expires_at"
+    t.index ["key", "value"], name: "index_solid_queue_semaphores_on_key_and_value"
+    t.index ["key"], name: "index_solid_queue_semaphores_on_key", unique: true
   end
 
   create_table "statistics", force: :cascade do |t|
@@ -263,7 +386,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_23_185916) do
     t.bigint "file_count", default: 0
     t.bigint "file_size", default: 0
     t.bigint "record_count", default: 0
-    t.integer "resource_id", null: false
+    t.bigint "resource_id", null: false
     t.string "resource_type", null: false
     t.bigint "unique_record_count", default: 0
     t.datetime "updated_at", null: false
@@ -275,7 +398,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_23_185916) do
     t.datetime "created_at", null: false
     t.boolean "default", default: false
     t.string "name"
-    t.integer "organization_id"
+    t.bigint "organization_id"
     t.integer "previous_stream_id"
     t.string "slug"
     t.string "status", default: "active"
@@ -294,7 +417,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_23_185916) do
     t.bigint "marc_records_count", default: 0
     t.string "name"
     t.string "status", default: "active"
-    t.integer "stream_id"
+    t.bigint "stream_id"
     t.datetime "updated_at", null: false
     t.string "url"
     t.integer "user_id"
@@ -330,8 +453,8 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_23_185916) do
   end
 
   create_table "users_roles", id: false, force: :cascade do |t|
-    t.integer "role_id"
-    t.integer "user_id"
+    t.bigint "role_id"
+    t.bigint "user_id"
     t.index ["role_id"], name: "index_users_roles_on_role_id"
     t.index ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id"
     t.index ["user_id"], name: "index_users_roles_on_user_id"
@@ -340,10 +463,10 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_23_185916) do
   create_table "versions", force: :cascade do |t|
     t.datetime "created_at", precision: nil
     t.string "event", null: false
-    t.integer "item_id", limit: 8, null: false
+    t.bigint "item_id", null: false
     t.string "item_type"
-    t.text "object", limit: 1073741823
-    t.text "object_changes", limit: 1073741823
+    t.text "object"
+    t.text "object_changes"
     t.string "whodunnit"
     t.string "{null: false}"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
@@ -357,4 +480,10 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_23_185916) do
   add_foreign_key "full_dumps", "normalized_dumps"
   add_foreign_key "group_memberships", "groups"
   add_foreign_key "group_memberships", "organizations"
+  add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
+  add_foreign_key "solid_queue_claimed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
+  add_foreign_key "solid_queue_failed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
+  add_foreign_key "solid_queue_ready_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
+  add_foreign_key "solid_queue_recurring_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
+  add_foreign_key "solid_queue_scheduled_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
 end

@@ -2,10 +2,6 @@
 
 # :nodoc:
 module ApplicationHelper
-  def job_status_tabs_collapse(tab_expanded, jobs_count)
-    !tab_expanded && jobs_count.positive? ? 'show' : 'collapsed'
-  end
-
   def current_page_class(path)
     'current' if current_page?(path)
   end

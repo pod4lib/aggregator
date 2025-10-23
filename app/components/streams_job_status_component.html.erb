@@ -31,20 +31,11 @@
                     <th class="text-center" aria-hidden="true"><%= t('job_tracker.table_heading.status') %></th>
                     <th><%= t('job_tracker.table_heading.resource') %></th>
                     <th><%= t('job_tracker.table_heading.job_type') %></th>
-                    <th class="text-end"><%= t('job_tracker.table_heading.progress') %></th>
                     <th><%= t('job_tracker.table_heading.created_at') %></th>
                   </tr>
                 </thead>
                 <% jobs.sort_by(&:created_at).reverse.each do |job| %>
-                  <tr class="<%= "status-#{job.job_id}" %>">
-                    <td class="text-center" aria-hidden="true">
-                      <%= render JobStatusIconComponent.new(status: status_group, classes: "pod-icon #{job.sidekiq_status}") %>
-                    </td>
-                    <td><%= job.resource_label %></td>
-                    <td><%= job.job_class.titleize %></td>
-                    <td class="text-end"><%= job.progress_label %></td>
-                    <td><%= local_time(job.created_at, format: datetime_display_format()) %></td>
-                  </tr>
+                  <%= render StreamJobRowComponent.new(job, status_group) %>
                 <% end %>
               </table>
             <% end %>
