@@ -20,7 +20,7 @@ RSpec.describe PromoteStreamToDefaultJob do
   it 'makes the pending stream the default stream' do
     described_class.perform_now(new_pending_stream)
 
-    expect(current_default_stream.reload).to have_attributes default: false
-    expect(new_pending_stream.reload).to have_attributes default: true
+    expect(current_default_stream.reload).to have_attributes default?: false
+    expect(new_pending_stream.reload).to have_attributes default?: true
   end
 end

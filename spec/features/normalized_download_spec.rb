@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Downloading normalized files from POD' do
   let(:organization) { create(:organization, code: 'best-org') }
-  let(:stream) { create(:stream, organization: organization, default: true) }
+  let(:stream) { create(:stream, organization: organization, status: 'default') }
   let(:user) { create(:user) }
 
   before do
@@ -18,7 +18,7 @@ RSpec.describe 'Downloading normalized files from POD' do
   describe 'Full dumps' do
     before do
       allow(Time.zone).to receive(:today).and_return('2020-01-01')
-      GenerateFullDumpJob.perform_now(organization.default_stream)
+      GenerateFullDumpJob.perform_now(stream)
     end
 
     it 'generates binary & xml full dump files and provides a link to them' do

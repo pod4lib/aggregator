@@ -30,7 +30,7 @@ class GenerateDeltaDumpJob < ApplicationJob
     delta_dump = stream.delta_dumps.build(effective_date: effective_date)
     normalized_dump = delta_dump.build_normalized_dump(stream: stream)
 
-    base_name = "#{stream.organization.slug}#{"-#{stream.slug}" unless stream.default}-#{effective_date.strftime('%FT%T')}-delta"
+    base_name = "#{stream.organization.slug}#{"-#{stream.slug}" unless stream.default?}-#{effective_date.strftime('%FT%T')}-delta"
     writer = MarcRecordWriterService.new(base_name)
     oai_writer = ChunkedOaiMarcRecordWriterService.new(base_name, dump: normalized_dump, now: effective_date)
 

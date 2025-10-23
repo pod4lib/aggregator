@@ -9,7 +9,6 @@ class Organization < ApplicationRecord
   friendly_id :name, use: %i[finders slugged]
   has_paper_trail
   has_many :streams, dependent: :destroy
-  has_many :default_stream_histories, through: :streams, inverse_of: :organization
   has_many :uploads, through: :streams
   has_many :marc_records, through: :streams, inverse_of: :organization
   has_many :allowlisted_jwts, as: :resource, dependent: :delete_all
@@ -25,7 +24,7 @@ class Organization < ApplicationRecord
   validates :marc_docs_url, format: { with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), allow_blank: true }
 
   def default_stream
-    @default_stream ||= streams.find_or_create_by(default: true)
+    @default_stream ||= streams.find_or_create_by(status: 'default')
   end
 
   def jwt_token
