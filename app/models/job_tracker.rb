@@ -5,13 +5,6 @@ class JobTracker < ApplicationRecord
   belongs_to :reports_on, polymorphic: true
   belongs_to :resource, polymorphic: true
 
-  def resource_label
-    return resource.filename if resource.is_a? ActiveStorage::Blob
-    return resource.name if resource.is_a? Upload
-
-    resource_id
-  end
-
   def status
     @status ||= ActiveJob::Status.get(job_id)
   end
@@ -45,12 +38,6 @@ class JobTracker < ApplicationRecord
 
   def in_dead_set?
     @in_dead_set ||= in_sidekiq_set?(Sidekiq::DeadSet)
-  end
-
-  def progress_label
-    return number_with_delimiter(progress) unless total?
-
-    "#{number_with_delimiter(progress)} of #{number_with_delimiter(total)}"
   end
 
   def progress

@@ -7,28 +7,6 @@ RSpec.describe ApplicationHelper do
   let(:user) { create(:user) }
   let(:stream) { create(:stream) }
 
-  describe '#job_status_tabs_collapse' do
-    it 'applies class to show tab when tab expanded is false and job count is positive' do
-      set_tab_class = helper.job_status_tabs_collapse(false, 3)
-      expect(set_tab_class).to be('show')
-    end
-
-    it 'applies class to collapse tab when tab expanded is true and job count is positive' do
-      set_tab_class = helper.job_status_tabs_collapse(true, 3)
-      expect(set_tab_class).to be('collapsed')
-    end
-
-    it 'applies class to collapse tab when tab expanded is true and job count is zero' do
-      set_tab_class = helper.job_status_tabs_collapse(true, 0)
-      expect(set_tab_class).to be('collapsed')
-    end
-
-    it 'applies class to collapse tab when tab expanded is false and job count is zero' do
-      set_tab_class = helper.job_status_tabs_collapse(false, 0)
-      expect(set_tab_class).to be('collapsed')
-    end
-  end
-
   describe '#current_page_class' do
     it 'returns "current" if the route matches the current page' do
       allow(helper).to receive(:current_page?).and_return true
