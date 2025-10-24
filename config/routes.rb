@@ -12,7 +12,6 @@ Rails.application.routes.draw do
 
   root to: 'pages#home'
 
-  get '/documentation/:id', to: 'pages#show', as: :pages
   get '/api', to: 'pages#api'
   class OaiConstraint
     def initialize(verb:)

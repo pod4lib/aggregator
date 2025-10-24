@@ -74,7 +74,7 @@ class OaiController < ApplicationController
     if %w[badArgument badVerb].include?(code)
       render xml: build_error_response(code, exception.message)
     else
-      render xml: build_error_response(code, exception.message, params.permit!)
+      render xml: build_error_response(code, exception.message, error_params.permit!)
     end
   end
 
@@ -99,6 +99,10 @@ class OaiController < ApplicationController
 
   def identify_params
     oai_params(:verb)
+  end
+
+  def error_params
+    oai_params(:verb, :identifier, :metadataPrefix, :from, :until, :set, :resumptionToken)
   end
 
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
