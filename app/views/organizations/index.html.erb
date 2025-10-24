@@ -75,8 +75,8 @@
           <td class="align-middle text-end"><%= number_with_delimiter organization.default_stream&.statistic&.unique_record_count || 0 %></td>
           <td class="align-middle text-end"><%= number_with_delimiter organization.default_stream&.statistic&.record_count || 0 %></td>
           <td class="align-middle">
-            <% if organization.default_stream.uploads.last&.created_at %>
-              <%= local_time(organization.default_stream.uploads.last&.created_at, format: datetime_display_format()) %>
+            <% if created_at = organization.default_stream.uploads.maximum(:created_at) %>
+              <%= local_time(created_at, format: datetime_display_format()) %>
             <% end %>
           </td>
 
