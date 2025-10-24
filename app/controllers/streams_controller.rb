@@ -8,7 +8,11 @@ class StreamsController < ApplicationController
   protect_from_forgery with: :null_session, if: :jwt_token
 
   def show
-    @uploads = @stream.uploads.active.order(created_at: :desc).page(params[:page])
+    @current_filter = params[:filter]
+
+    filters = {}
+    filters[:metadata_status] = @current_filter if @current_filter.present?
+    @uploads = @stream.uploads.active.where(filters).order(created_at: :desc).page(params[:page])
   end
 
   def resourcelist
