@@ -22,7 +22,11 @@ job_type :runner,  "cd :path && RAILS_LOG_LEVEL=warn :environment_variable=:envi
 
 # Learn more: http://github.com/javan/whenever
 
-every :week do
+every :tuesday do
+  runner 'CompactUploadsJob.enqueue_some'
+end
+
+every :wednesday do
   runner 'CleanupAndRemoveDataJob.enqueue_all'
 end
 
