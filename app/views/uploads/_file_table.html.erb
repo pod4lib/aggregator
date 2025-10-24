@@ -1,9 +1,21 @@
-<ul class="table-key list-unstyled list-inline pt-3" aria-hidden="true">
-  <% Settings.metadata_status.keys.each do |status| %>
-    <li class="list-inline-item">
-      <%= render(MetadataStatusIconComponent.new(status: status, show_label: true)) %>
+<ul class="table-key list-unstyled list-inline pt-3" id="uploaded-file-filters">
+  <% Settings.metadata_status.each do |status, _values| %>
+    <li class="list-inline-item <%= 'active' if @current_filter == status.to_s %>">
+      <% if local_assigns[:filtering_enabled] %>
+        <%= link_to organization_stream_path(@organization, @stream, filter: status), data: { turbo_frame: 'stream-upload-files' } do %>
+          <%= render(MetadataStatusIconComponent.new(status: status, show_label: true)) %>
+        <% end %>
+      <% else %>
+        <%= render(MetadataStatusIconComponent.new(status: status, show_label: true)) %>
+      <% end %>
     </li>
   <% end %>
+
+<% if local_assigns[:filtering_enabled] %>
+  <li class="list-inline-item">
+    <%= link_to "Clear filter", organization_stream_path(@organization, @stream), data: { turbo_frame: 'stream-upload-files' }, class: 'btn btn-link btn-sm' %>
+  </li>
+<% end %>
 </ul>
 
 <table class="table table-striped mb-3 text-break">

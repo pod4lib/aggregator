@@ -45,3 +45,7 @@
 .box-metadata {
   padding-right: 1rem;
 }
+
+#uploaded-file-filters > li.list-inline-item.active {
+   font-weight: bold;
+}

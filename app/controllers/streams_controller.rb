@@ -7,9 +7,27 @@ class StreamsController < ApplicationController
   skip_authorize_resource only: %i[normalized_dump resourcelist]
   protect_from_forgery with: :null_session, if: :jwt_token
 
+  # rubocop:disable Metrics/AbcSize
+  # GET /organizations/1/streams/2
   def show
-    @uploads = @stream.uploads.active.order(created_at: :desc).page(params[:page])
+    @uploads = @stream.uploads.active
+    @current_filter = params[:filter]
+
+    if params[:filter].present?
+      filter_status = params[:filter].to_sym
+
+      filtered_ids = @uploads.select do |upload|
+        upload.files.any? { |file| file.pod_metadata_status == filter_status }
+      end.map(&:id)
+
+      @uploads = Upload.where(id: filtered_ids)
+    end
+
+    # Reset to page 1 if a filter is applied
+    page_number = params[:filter].present? ? 1 : params[:page]
+    @uploads = @uploads.order(created_at: :desc).page(page_number)
   end
+  # rubocop:enable Metrics/AbcSize
 
   def resourcelist
     authorize! :read, @stream

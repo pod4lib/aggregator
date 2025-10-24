@@ -27,7 +27,14 @@
     <%= render 'uploads/file_rows', upload: u %>
   <% end %>
 <% end %>
-<% upload.files.each do |file| %>
+<% files_to_render = if params[:filter].present?
+                        upload.files.select { |f| f.pod_metadata_status.to_s == params[:filter].to_s }
+                      else
+                        upload.files
+                      end %>
+
+<% files_to_render.each do |file| %>
+
   <tr>
     <td class="align-middle text-center">
       <%= render(MetadataStatusIconComponent.new(status: file.pod_metadata_status)) %>
