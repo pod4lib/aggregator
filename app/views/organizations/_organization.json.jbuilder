@@ -5,6 +5,6 @@ json.url organization_url(organization, format: :json)
 json.streams organization.streams do |stream|
   json.id stream.id
   json.name stream.name
-  json.default stream.default
+  json.default stream.default?
   json.url organization_stream_url(organization, stream, format: :json)
 end

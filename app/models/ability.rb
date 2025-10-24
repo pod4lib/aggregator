@@ -72,8 +72,8 @@ class Ability
     can :read, ActiveStorage::Attachment, { record: { organization: { id: member_orgs } } }
 
     # Must be last
-    cannot :destroy, Stream.previous_default, organization: { id: owned_orgs }
-    cannot :destroy, Stream, default: true
+    cannot :destroy, Stream, status: %w[previous-default] unless user.has_role?(:admin)
+    cannot :destroy, Stream, status: %w[default]
   end
   # rubocop:enable Metrics/CyclomaticComplexity
   # rubocop:enable Metrics/PerceivedComplexity

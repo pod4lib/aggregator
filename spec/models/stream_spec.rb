@@ -51,45 +51,18 @@ RSpec.describe Stream do
     end
   end
 
-  describe '#default_stream_histories' do
-    it 'creates a default stream history when the first stream is created in an organization' do
-      org = create(:organization)
-      described_class.create({ organization: org, default: true })
-      described_class.create({ organization: org, default: true })
-      expect(org.default_stream_histories.count).to be(1)
-    end
-
-    it 'creates a new default stream history when stream becomes the default' do
-      org = create(:organization)
-      described_class.create({ organization: org, default: true })
-      second_stream = described_class.create({ organization: org, default: false })
-
-      second_stream.update(default: true)
-      expect(DefaultStreamHistory.all[1].end_time).to be_nil
-    end
-
-    it 'updates and appends endtime to prior default stream history when the stream is no longer the default' do
-      org = create(:organization)
-      first_stream = described_class.create({ organization: org, default: true })
-      described_class.create({ organization: org, default: false })
-
-      first_stream.update(default: false)
-      expect(DefaultStreamHistory.all[0].end_time).not_to be_nil
-    end
-  end
-
   describe '#make_default' do
-    let!(:current_default) { create(:stream, organization: organization, default: true) }
+    let!(:current_default) { create(:stream, organization: organization, status: 'default') }
 
     it 'makes the current stream the only default' do
       expect do
         stream.make_default
-      end.to(change(stream, :default).from(false).to(true)
-         .and(change { current_default.reload.default }.from(true).to(false)))
+      end.to(change(stream, :default?).from(false).to(true)
+         .and(change { current_default.reload.default? }.from(true).to(false)))
     end
 
     it 'does not do anything if the stream is already the default' do
-      expect { current_default.make_default }.not_to(change { current_default.reload.default })
+      expect { current_default.make_default }.not_to(change { current_default.reload.default? })
     end
   end
 end

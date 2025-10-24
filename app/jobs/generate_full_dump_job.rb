@@ -48,7 +48,7 @@ class GenerateFullDumpJob < ApplicationJob
     full_dump = stream.full_dumps.build(effective_date: effective_date)
     normalized_dump = full_dump.build_normalized_dump(stream: stream)
 
-    base_name = "#{stream.organization.slug}#{"-#{stream.slug}" unless stream.default}-#{Time.zone.today}-full"
+    base_name = "#{stream.organization.slug}#{"-#{stream.slug}" unless stream.default?}-#{Time.zone.today}-full"
     writer = MarcRecordWriterService.new(base_name)
     oai_writer = ChunkedOaiMarcRecordWriterService.new(base_name, dump: normalized_dump, now: effective_date)
 

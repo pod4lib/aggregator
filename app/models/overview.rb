@@ -18,7 +18,7 @@ class Overview
     @last_upload ||=
       Upload.includes(:organization, :stream)
             .where(organization: { provider: true, public: true })
-            .where(stream: { default: true })
+            .where(stream: { status: 'default' })
             .order(created_at: :desc)
             .first
   end

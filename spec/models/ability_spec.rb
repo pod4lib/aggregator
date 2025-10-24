@@ -53,16 +53,10 @@ RSpec.describe Ability do
     let(:organization) { create(:organization) }
     let(:not_my_org) { create(:organization) }
     let(:default_stream) { create(:stream, :default, organization: organization) }
-    let(:previous_default_stream) { create(:stream, organization: organization) }
+    let(:previous_default_stream) { create(:stream, status: 'previous-default', organization: organization) }
 
     context 'with an admin' do
       let(:user) { create(:admin) }
-
-      before do
-        # add previous_default_stream to the history
-        DefaultStreamHistory.create(stream_id: previous_default_stream.id, start_time: '2022-04-15 13:29:21',
-                                    end_time: '2022-04-15 13:30:21')
-      end
 
       it { is_expected.to be_able_to(:manage, :all) }
       it { is_expected.not_to be_able_to(:destroy, default_stream) }
@@ -84,9 +78,6 @@ RSpec.describe Ability do
 
       before do
         user.add_role :owner, organization
-        # add previous_default_stream to the history
-        DefaultStreamHistory.create(stream_id: previous_default_stream.id, start_time: '2022-04-15 13:29:21',
-                                    end_time: '2022-04-15 13:30:21')
       end
 
       it { is_expected.not_to be_able_to(:destroy, default_stream) }

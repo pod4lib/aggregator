@@ -44,16 +44,14 @@ class OaiController < ApplicationController
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   def list_sets
-    streams = Stream.accessible_by(current_ability)
-                    .joins(:default_stream_histories)
+    streams = Stream.accessible_by(current_ability).where(status: 'default')
                     .joins(:full_dumps)
                     .distinct
     render xml: build_list_sets_response(streams)
   end
 
   def identify
-    earliest_oai = Stream.joins(:default_stream_histories)
-                         .joins(:full_dumps)
+    earliest_oai = Stream.joins(:full_dumps).where(status: 'default')
                          .distinct
                          .minimum('full_dumps.effective_date')
 
@@ -110,8 +108,7 @@ class OaiController < ApplicationController
     streams = if token.set.present?
                 Stream.accessible_by(current_ability).where(id: token.set)
               else
-                Stream.accessible_by(current_ability)
-                      .joins(:default_stream_histories)
+                Stream.accessible_by(current_ability).where(status: 'default')
                       .joins(:full_dumps)
                       .distinct
               end
@@ -234,10 +231,10 @@ class OaiController < ApplicationController
   # machine-readable descriptor used in OAI ListSets response that indicates
   # if the stream is or was a default.
   def oai_dc_type(stream)
-    if stream.default_stream_histories.any?
-      stream.default? ? 'default' : 'former default'
-    else
-      'non-default'
+    case stream.status
+    when 'previous-default' then 'former default'
+    when 'default' then 'default'
+    else 'non-default'
     end
   end
 
@@ -245,11 +242,9 @@ class OaiController < ApplicationController
   # "2012-01-01/2012-01-31". for dublin core format, see:
   # https://www.dublincore.org/specifications/dublin-core/dcmi-terms/terms/date/
   def oai_dc_dates(stream)
-    return ["#{stream.created_at.to_date}/"] unless stream.default_stream_histories.any?
+    return ["#{stream.created_at.to_date}/"] if stream.default?
 
-    stream.default_stream_histories.recent.map do |history|
-      [history.start_time.to_date, history.end_time&.to_date].join('/')
-    end
+    "#{stream.created_at.to_date}/#{stream.updated_at.to_date}"
   end
 
   # human-readable description used in OAI ListSets response that captures
