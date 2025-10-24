@@ -38,20 +38,16 @@
           </td>
           <!-- Date of successful upload: -->
           <td>
-            <% if uploads.present? %>
-              <% if last_successful_upload_date %>
-                <%= helpers.local_time(last_successful_upload_date, format: helpers.datetime_display_format()) %>
-              <% else %>
-                <p>No prior successful uploads</p>
-              <% end %>
+            <% if last_successful_upload_date = provider.uploads.where(status: 'processed', marc_records_count: 1..).maximum(:created_at) %>
+              <%= helpers.local_time(last_successful_upload_date, format: helpers.datetime_display_format()) %>
             <% else %>
-              <i class="bi bi-exclamation-triangle-fill text-warning"></i>
+              <p>No prior successful uploads</p>
             <% end %>
           </td>
           <!-- Did any uploads succeed in past 30 days? -->
           <td class="text-center">
             <% if provider.upload_in_last_30_days? %>
-              <% status = best_status %>
+              <% status = best_status(uploads) %>
               <%= render JobStatusIconComponent.new(status: status) %>
             <% else %>
               <p class="mb-0">No uploads in last 30 days</p>
