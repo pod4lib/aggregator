@@ -6,24 +6,12 @@ class UpdateOrganizationStatisticsJob < ApplicationJob
   sidekiq_options retry: 1
 
   def self.perform_all
-    Organization.find_each { |o| perform_later(o) }
+    Organization.find_each do |o|
+      perform_later(o.default_stream) unless o.default_stream&.statistic&.updated_at&.today?
+    end
   end
 
-  # rubocop:disable Metrics/CyclomaticComplexity
-  def perform(organization, stream = nil, upload = nil)
-    stream ||= organization.default_stream
-
-    # short-circuit if our statistics job is already obsolete
-    return if upload && stream.uploads.where('created_at > ?', upload.created_at).any?
-
-    # short-circuit if the stream's statistics have already been updated today
-    return if stream&.statistic&.updated_at&.today?
-
-    generate_statistics!(stream)
-  end
-  # rubocop:enable Metrics/CyclomaticComplexity
-
-  def generate_statistics!(stream)
+  def perform(stream)
     stream_statistics = stream.statistic || stream.create_statistic
     stream_statistics.update(date: Time.zone.today, **calculate_stream_statistics(stream))
   end
