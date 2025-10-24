@@ -167,3 +167,7 @@ input[type="file"][data-direct-upload-url][disabled] {
   margin-right: 0.25rem;
   vertical-align: text-bottom;
 }
+
+.text-decoration-dotted {
+  text-decoration: underline dotted;
+}
