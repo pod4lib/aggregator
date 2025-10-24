@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 require 'active_storage_blob_content_types'
 
 RSpec.describe ActiveStorageBlobContentTypes do
@@ -32,7 +32,7 @@ RSpec.describe ActiveStorageBlobContentTypes do
   let(:test_class) { blob_class.new(content_type, analyzer) }
 
   describe '#analyze' do
-    let(:analyzer) { instance_double('MarcAnalyzer', reader: instance_double('MarcRecordService', identify: :marc21)) }
+    let(:analyzer) { instance_double(MarcAnalyzer, reader: instance_double(MarcRecordService, identify: :marc21)) }
 
     it 'updates from marc_content_types' do
       expect(test_class.analyze).to eq 'application/marc'
@@ -41,7 +41,7 @@ RSpec.describe ActiveStorageBlobContentTypes do
 
   describe '#marc_content_type' do
     context 'when type is :marc' do
-      let(:analyzer) { instance_double('MarcAnalyzer', reader: instance_double('MarcRecordService', identify: :marc21)) }
+      let(:analyzer) { instance_double(MarcAnalyzer, reader: instance_double(MarcRecordService, identify: :marc21)) }
 
       it do
         expect(test_class.marc_content_type)
@@ -50,7 +50,7 @@ RSpec.describe ActiveStorageBlobContentTypes do
     end
 
     context 'when type is :marcxml' do
-      let(:analyzer) { instance_double('MarcAnalyzer', reader: instance_double('MarcRecordService', identify: :marcxml)) }
+      let(:analyzer) { instance_double(MarcAnalyzer, reader: instance_double(MarcRecordService, identify: :marcxml)) }
 
       it do
         expect(test_class.marc_content_type)
@@ -60,7 +60,7 @@ RSpec.describe ActiveStorageBlobContentTypes do
 
     context 'when type is :marcxml_gzip' do
       let(:content_type) { 'application/gzip' }
-      let(:analyzer) { instance_double('MarcAnalyzer', reader: instance_double('MarcRecordService', identify: :marcxml_gzip)) }
+      let(:analyzer) { instance_double(MarcAnalyzer, reader: instance_double(MarcRecordService, identify: :marcxml_gzip)) }
 
       it do
         expect(test_class.marc_content_type)
