@@ -111,7 +111,7 @@ class Upload < ApplicationRecord
         upload: self
       )
 
-      out.checksum ||= Digest::MD5.hexdigest(record.to_xml.to_s) if checksum
+      out.checksum ||= Digest::MD5.hexdigest(record.to_xml_string(fast_but_unsafe: true)) if checksum
 
       yield out
     end
