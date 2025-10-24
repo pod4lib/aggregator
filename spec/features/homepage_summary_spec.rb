@@ -17,7 +17,7 @@ RSpec.describe 'homepage summary' do
     create(:marc_record, upload: upload2, file: upload2.files.first, marc001: '2')
 
     # run the statistics jobs so stats are available
-    UpdateOrganizationStatisticsJob.perform_now(provider)
+    UpdateOrganizationStatisticsJob.perform_now(provider.default_stream)
     visit '/'
   end
 
