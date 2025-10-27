@@ -12,7 +12,7 @@ class UploadsController < ApplicationController
   # GET /uploads.json
   def index
     respond_to do |format|
-      format.html { @uploads = @uploads.order(created_at: :desc).page(index_params[:page]) }
+      format.html { @uploads = @uploads.includes(files_attachments: :blob).order(created_at: :desc).page(index_params[:page]) }
       format.json
     end
   end

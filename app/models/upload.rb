@@ -20,6 +20,18 @@ class Upload < ApplicationRecord
   scope :obsolete, -> { where(status: 'obsolete') }
   scope :recent, -> { order(created_at: :desc) }
 
+  def pod_metadata_status
+    files.first&.pod_metadata_status || :unknown
+  end
+
+  def byte_size
+    files.sum(&:byte_size)
+  end
+
+  def content_type
+    files.first&.content_type
+  end
+
   # This should be _before_ any callbacks that interact with the attached upload
   # See https://github.com/rails/rails/issues/37304
   has_many_attached :files

@@ -24,30 +24,41 @@
     <td></td>
   </tr>
   <% upload.compacted_uploads.each do |u| %>
-    <%= render 'uploads/file_rows', upload: u %>
+    <%= render 'uploads/row', upload: u %>
   <% end %>
 <% end %>
-<% upload.files.each do |file| %>
-  <tr>
-    <td class="align-middle text-center">
-      <%= render(MetadataStatusIconComponent.new(status: file.pod_metadata_status)) %>
-    </td> 
-    <td class="align-middle">
+
+<tr>
+  <td class="align-middle text-center">
+    <%= render(MetadataStatusIconComponent.new(status: upload.pod_metadata_status)) %>
+  </td>
+  <td class="align-middle">
+    <% if upload.files.one? %>
+      <% file = upload.files.first %>
       <%= link_to_if can?(:read, upload), file.filename, download_url(file), title: "Download #{file.filename}" %>
-    </td>
-    <td class="align-middle"><%= local_time(file.created_at, format: datetime_display_format()) %></td>
-    <td class="align-middle text-end"><%= number_to_human_size file.byte_size %></td>
-    <td class="align-middle"><%= file.content_type %></td>
-    <td class="align-middle text-end"><%= file.metadata['count'] ? number_with_delimiter(file.metadata['count']) : '-' %></td>
-    <td class="align-middle text-center">
-      <% if can? :read, upload %>
+    <% elsif upload.files.any? %>
+      <%= upload.files.count %> files:
+
+      <% upload.files.each do |file| %>
+        <%= link_to_if can?(:read, upload), file.filename, download_url(file), title: "Download #{file.filename}" %>
+      <% end %>
+    <% end %>
+  </td>
+  <td class="align-middle"><%= local_time(upload.created_at, format: datetime_display_format()) %></td>
+  <td class="align-middle text-end"><%= number_to_human_size upload.byte_size %></td>
+  <td class="align-middle"><%= upload.content_type if upload.files.one? %></td>
+  <td class="align-middle text-end"><%= upload.marc_records_count %></td>
+  <td class="align-middle text-center">
+    <% if can? :read, upload %>
+      <% if upload.files.one? %>
+      <% file = upload.files.first %>
         <%= link_to file_info_organization_upload_path(@organization, upload, file), class: 'btn btn-sm btn-secondary' do %>
           <i class="bi bi-search pod-icon" aria-label="Profile"></i>
         <% end %>
-        <% if upload.url.present? %>
-          <%= link_to 'Source 🔗', upload.url, title: upload.url, class: 'btn btn-sm btn-link' %>
-        <% end %>
       <% end %>
-    </td>
-  </tr>
-<% end %>
+      <% if upload.url.present? %>
+        <%= link_to 'Source 🔗', upload.url, title: upload.url, class: 'btn btn-sm btn-link' %>
+      <% end %>
+    <% end %>
+  </td>
+</tr>
