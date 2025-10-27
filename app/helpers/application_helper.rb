@@ -18,34 +18,34 @@ module ApplicationHelper
     local_time(time, format: datetime_display_format, class: "hidden-popover-time d-none #{time_type}")
   end
 
-  def badge_popover_text(history)
-    if history.end_time.present?
-      concat(hidden_time(history.start_time, 'start'))
-      concat(hidden_time(history.end_time, 'end'))
+  def badge_popover_text(stream)
+    if stream.default?
+      concat(hidden_time(stream.created_at, 'default'))
     else
-      concat(hidden_time(history.start_time, 'default'))
+      concat(hidden_time(stream.created_at, 'start'))
+      concat(hidden_time(stream.updated_at, 'end'))
     end
   end
 
-  def default_stream_status_badge(stream)
-    badge_class = stream.default? ? 'btn-info' : 'btn-warning'
-    badge_label = stream.default? ? 'Default ' : 'Previous default '
+  def stream_status_badge(stream)
+    badge_label = case stream.status
+                  when 'default' then 'Default'
+                  when 'previous-default' then 'Previous default'
+                  end
+
+    return if badge_label.blank?
 
     # popovers are added to <button> elements for accessibility.
     # See https://getbootstrap.com/docs/5.0/components/popovers
     content_tag(:button,
                 href: '#',
-                class: "badge text-dark btn #{badge_class}",
+                class: "badge text-dark btn #{stream.default? ? 'btn-info' : 'btn-warning'}",
                 'data-bs-toggle': 'popover',
                 'data-bs-placement': 'top',
                 'data-bs-html': 'true') do
       concat(badge_label)
       concat(content_tag(:i, nil, class: 'bi bi-info-circle-fill text-dark'))
-      stream.default_stream_histories.recent.collect do |history|
-        next unless history.start_time
-
-        badge_popover_text(history)
-      end
+      badge_popover_text(stream)
     end
   end
 end

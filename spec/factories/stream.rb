@@ -10,7 +10,7 @@ FactoryBot.define do
     end
 
     trait :default do
-      default { true }
+      status { 'default' }
     end
   end
 end
