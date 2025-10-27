@@ -9,7 +9,7 @@ plugins:
   - rubocop-rspec_rails
 
 AllCops:
-  TargetRubyVersion: 3.3
+  TargetRubyVersion: 3.4
   DisplayCopNames: true
   Exclude:
     - 'config.ru'
@@ -21,6 +21,7 @@ AllCops:
     - 'spec/spec_helper.rb'
     - 'spec/teaspoon_env.rb'
     - 'storage/**/*'
+    - 'tmp/storage/**/*'
     - 'vendor/**/*'
     - 'app/controllers/concerns/action_controller/**/*'
     - 'app/models/custom_marc_writer.rb'

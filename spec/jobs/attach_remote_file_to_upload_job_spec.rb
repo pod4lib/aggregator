@@ -15,7 +15,7 @@ RSpec.describe AttachRemoteFileToUploadJob do
   include ActiveJob::TestHelper
 
   before do
-    allow(URI).to receive(:parse).with(anything).and_return(instance_double('URI::HTTP', host: 'example.com', open: fixture))
+    allow(URI).to receive(:parse).with(anything).and_return(instance_double(URI::HTTP, host: 'example.com', open: fixture))
   end
 
   let(:fixture) do

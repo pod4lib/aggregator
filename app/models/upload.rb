@@ -48,8 +48,8 @@ class Upload < ApplicationRecord
   end
 
   # rubocop:disable Metrics/MethodLength
-  def read_marc_record_metadata(**options, &block)
-    return to_enum(:read_marc_record_metadata, **options) unless block
+  def read_marc_record_metadata(**, &block)
+    return to_enum(:read_marc_record_metadata, **) unless block
 
     files.each do |file|
       service = MarcRecordService.new(file.blob)
@@ -62,7 +62,7 @@ class Upload < ApplicationRecord
       when :unknown
         next
       else
-        extract_marc_record_metadata(file, service, **options, &block)
+        extract_marc_record_metadata(file, service, **, &block)
       end
     rescue StandardError => e
       Honeybadger.notify(e)
