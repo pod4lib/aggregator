@@ -20,12 +20,8 @@ class Upload < ApplicationRecord
   scope :obsolete, -> { where(status: 'obsolete') }
   scope :recent, -> { order(created_at: :desc) }
 
-  def pod_metadata_status
-    files.first&.pod_metadata_status || :unknown
-  end
-
-  def byte_size
-    files.sum(&:byte_size)
+  def metadata_status
+    super.presence || files.first&.pod_metadata_status || :unknown
   end
 
   def content_type
@@ -35,6 +31,14 @@ class Upload < ApplicationRecord
   # This should be _before_ any callbacks that interact with the attached upload
   # See https://github.com/rails/rails/issues/37304
   has_many_attached :files
+  after_touch :update_files_metadata
+
+  def update_files_metadata
+    attachments = files_attachments.includes(:blob)
+
+    total_byte_size = attachments.sum { |file| file.blob.byte_size }
+    update(total_byte_size: total_byte_size)
+  end
 
   def active?
     status == 'active'

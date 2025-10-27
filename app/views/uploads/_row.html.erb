@@ -30,7 +30,7 @@
 
 <tr>
   <td class="align-middle text-center">
-    <%= render(MetadataStatusIconComponent.new(status: upload.pod_metadata_status)) %>
+    <%= render(MetadataStatusIconComponent.new(status: upload.metadata_status)) %>
   </td>
   <td class="align-middle">
     <% if upload.files.one? %>
@@ -45,9 +45,12 @@
     <% end %>
   </td>
   <td class="align-middle"><%= local_time(upload.created_at, format: datetime_display_format()) %></td>
-  <td class="align-middle text-end"><%= number_to_human_size upload.byte_size %></td>
+  <td class="align-middle text-end"><%= number_to_human_size upload.total_byte_size %></td>
   <td class="align-middle"><%= upload.content_type if upload.files.one? %></td>
-  <td class="align-middle text-end"><%= upload.marc_records_count %></td>
+  <td class="align-middle text-end">
+    <span class="text-success"><%= "+#{upload.marc_records_count}" if upload.marc_records_count.positive? %></span>
+    <span class="text-danger"><%= "-#{upload.deletes_count}" if upload.deletes_count&.positive? %></span>
+  </td>
   <td class="align-middle text-center">
     <% if can? :read, upload %>
       <% if upload.files.one? %>
