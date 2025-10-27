@@ -6,7 +6,7 @@ class UpdateOrganizationStatisticsJob < ApplicationJob
   sidekiq_options retry: 1
 
   def self.perform_all
-    Organization.find_each do |o|
+    Organization.unscope(:order).find_each do |o|
       perform_later(o.default_stream) unless o.default_stream&.statistic&.updated_at&.today?
     end
   end
