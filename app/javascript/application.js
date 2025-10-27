@@ -6,7 +6,6 @@ LocalTime.start()
 
 // require('../channels');
 import 'direct_uploads';
-import 'organizations';
 import 'popovers'
 import "@hotwired/turbo-rails"
 import "controllers"
