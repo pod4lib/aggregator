@@ -3,7 +3,7 @@
 # Cleanup data per data retention policy
 class CleanupAndRemoveDataJob < ApplicationJob
   def self.enqueue_all
-    Organization.find_each { |org| CleanupAndRemoveDataJob.perform_later(org) }
+    Organization.unscope(:order).find_each { |org| CleanupAndRemoveDataJob.perform_later(org) }
   end
 
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
