@@ -24,7 +24,7 @@
         <td><%= link_to stream.display_name, organization_stream_path(@organization, stream) %></td>
         <td><%= stream.slug %></td>
         <td>
-          <%= stream_status_badge(stream) %>
+          <%= render StreamBadgeComponent.new(stream: stream) %>
         </td>
         <td class=""><%= local_time(stream.updated_at, format: datetime_display_format()) %></td>
         <td class="text-end"><%= stream.cached_files_count %></td>
