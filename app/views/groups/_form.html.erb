@@ -1,5 +1,5 @@
 <%= form.text_field :name, data: { slug_target: 'name', action: 'input->slug#populate' } %>
-<%= form.text_field :short_name %>
+<%= form.text_field :short_name, help: 'Displays next to group logo. Defaults to full name.' %>
 <%= form.text_field :slug, data: { slug_target: 'slug', action: 'focus->slug#focus' } %>
 <%= form.text_area :description, rows: 3 %><div class="mb-3">
   <label class="form-label" for="customFile">
