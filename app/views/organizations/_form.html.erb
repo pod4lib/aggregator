@@ -1,5 +1,5 @@
-<%= form.text_field :name %>
-<%= form.text_field :slug %>
+<%= form.text_field :name,  data: { slug_target: 'name', action: 'input->slug#populate' } %>
+<%= form.text_field :slug, data: { slug_target: 'slug', action: 'focus->slug#focus' } %>
 <%= form.text_field :code, help: 'LoC MARC organization code' %>
 <%= form.fields_for :contact_email, (organization.contact_email || organization.build_contact_email) do |contact_form| %>
 <%= contact_form.email_field :email, label: 'POD contact for this organization', help: 'An email address other POD users can use to contact this organization.' %>

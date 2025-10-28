@@ -1,6 +1,6 @@
 <div class="container">
   <h1>New organization</h1>
-  <%= bootstrap_form_with(model: @organization, local: true) do |form| %>
+  <%= bootstrap_form_with(model: @organization, local: true, data: { controller: 'slug' }) do |form| %>
     <%= render 'form', organization: @organization, form: form %>
     <%= render 'provider_details_form', organization: @organization, form: form %>
     <div class="actions">

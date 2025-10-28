@@ -1,6 +1,6 @@
-<%= bootstrap_form_with(model: stream, url: [@organization, stream], local: true) do |form| %>
-  <%= form.text_field :name %>
-  <%= form.text_field :slug %>
+<%= bootstrap_form_with(model: stream, url: [@organization, stream], local: true, data: { controller: 'slug' }) do |form| %>
+  <%= form.text_field :name, data: { slug_target: 'name', action: 'input->slug#populate' } %>
+  <%= form.text_field :slug, data: { slug_target: 'slug', action: 'focus->slug#focus' } %>
 
   <div class="actions">
     <%= form.primary 'Create stream' %>
