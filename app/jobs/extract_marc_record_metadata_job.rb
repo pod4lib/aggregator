@@ -21,7 +21,7 @@ class ExtractMarcRecordMetadataJob < ApplicationJob
       upload.read_marc_record_metadata.each_slice(100) do |batch|
         progress.increment(batch.size)
 
-        batch_deletes = batch.count { |x| x.status == 'deleted' }
+        batch_deletes = batch.count { |x| x.status == 'delete' }
         total += batch.count - batch_deletes
         deletes += batch_deletes
 
