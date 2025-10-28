@@ -6,12 +6,6 @@
 <% end %>
 <%= form.check_box :provider if organization.new_record? %>
 <div class="mb-3">
-  <label class="form-label" for="customFile">
-    <% if organization&.icon&.attached? %>
-    Replace icon file
-    <% else %>
-    Choose icon file
-    <% end %>
-  </label>
+  <%= render IconLabelComponent.new(icon: organization&.icon) %>
   <%= form.file_field_without_bootstrap :icon, type: :file, direct_upload: true, id: 'customFile', class: 'form-control', accept: '.svg, .png, .jpg, .jpeg' %>
 </div>

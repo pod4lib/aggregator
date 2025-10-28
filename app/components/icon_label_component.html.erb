@@ -1,0 +1,8 @@
+<label class="form-label" for="customFile">
+  <% if icon&.attached? %>
+    Replace icon file
+    <%= image_tag(icon, alt: '', class: 'icon-sm align-text-bottom') %>
+  <% else %>
+    Choose icon file
+  <% end %>
+</label>

@@ -2,13 +2,7 @@
 <%= form.text_field :short_name %>
 <%= form.text_field :slug, data: { slug_target: 'slug', action: 'focus->slug#focus' } %>
 <%= form.text_area :description, rows: 3 %><div class="mb-3">
-  <label class="form-label" for="customFile">
-    <% if group.icon.attached? %>
-    Replace icon file
-    <% else %>
-    Choose icon file
-    <% end %>
-  </label>
+  <%= render IconLabelComponent.new(icon: group.icon) %>
   <%= form.file_field_without_bootstrap :icon, type: :file, direct_upload: true, id: 'customFile', class: 'form-control', accept: '.svg, .jpg, .png' %>
 </div>
 <%= form.collection_check_boxes(:organization_ids, Organization.all, :id, :name, label: 'Member organizations') %>
