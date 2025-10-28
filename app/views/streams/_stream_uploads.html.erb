@@ -1,6 +1,6 @@
-<%= render 'uploads/file_table' do %>
+<%= render 'uploads/table' do %>
     <% uploads.each do |upload| %>
-      <%= render 'uploads/file_rows', upload: upload %>
+      <%= render 'uploads/row', upload: upload %>
     <% end %>
 <% end %>
 

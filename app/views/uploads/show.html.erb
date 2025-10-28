@@ -18,8 +18,8 @@
 
   <h3 class="mb-0 pt-4 pb-3">Files</h3>
 
-  <%= render 'uploads/file_table' do %>
-    <%= render 'uploads/file_rows', upload: @upload %>
+  <%= render 'uploads/table' do %>
+    <%= render 'uploads/row', upload: @upload %>
   <% end %>
 
 <% end %>
