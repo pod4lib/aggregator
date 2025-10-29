@@ -177,6 +177,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_29_182836) do
 
   create_table "job_trackers", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.text "data"
     t.string "job_class"
     t.string "job_id"
     t.string "provider_job_id"
@@ -184,6 +185,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_29_182836) do
     t.string "reports_on_type", null: false
     t.bigint "resource_id", null: false
     t.string "resource_type", null: false
+    t.string "status"
     t.datetime "updated_at", null: false
     t.index ["job_id"], name: "index_job_trackers_on_job_id"
     t.index ["provider_job_id"], name: "index_job_trackers_on_provider_job_id"

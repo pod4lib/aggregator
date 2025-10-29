@@ -43,7 +43,7 @@ class GenerateFullDumpJob < ApplicationJob
       ExtractMarcRecordMetadataJob.perform_now(upload)
     end
 
-    progress.total = uploads.sum(&:marc_records_count)
+    job_tracker.update(total: uploads.sum(&:marc_records_count))
 
     full_dump = stream.full_dumps.build(effective_date: effective_date)
     normalized_dump = full_dump.build_normalized_dump(stream: stream)
@@ -66,7 +66,7 @@ class GenerateFullDumpJob < ApplicationJob
           oai_writer.write_marc_record(record)
         end
 
-        progress.increment(records.length)
+        job_tracker.increment(records.size)
       end
 
       oai_writer.finalize
@@ -90,7 +90,7 @@ class GenerateFullDumpJob < ApplicationJob
       oai_writer.unlink
     end
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   def human_readable_filename(base_name, file_type)
     as = case file_type
