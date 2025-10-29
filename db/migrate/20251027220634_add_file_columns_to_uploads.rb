@@ -1,8 +1,8 @@
 class AddFileColumnsToUploads < ActiveRecord::Migration[8.1]
   def change
-    add_column :uploads, :deletes_count, :integer, default: 0
+    add_column :uploads, :deletes_count, :bigint, default: 0
     add_column :uploads, :metadata_status, :string
-    add_column :uploads, :total_byte_size, :integer, default: 0
+    add_column :uploads, :total_byte_size, :bigint, default: 0
 
     reversible do |dir|
       dir.up do
