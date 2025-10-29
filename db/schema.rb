@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_10_29_133037) do
+ActiveRecord::Schema[8.1].define(version: 2025_10_29_182836) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.integer "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -291,14 +291,14 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_29_133037) do
     t.integer "compacted_upload_id"
     t.string "content_type"
     t.datetime "created_at", null: false
-    t.integer "deletes_count", default: 0
+    t.bigint "deletes_count", default: 0
     t.string "ip_address"
     t.bigint "marc_records_count", default: 0
     t.string "metadata_status"
     t.string "name"
     t.string "status", default: "active"
     t.integer "stream_id"
-    t.integer "total_byte_size", default: 0
+    t.bigint "total_byte_size", default: 0
     t.datetime "updated_at", null: false
     t.string "url"
     t.integer "user_id"
