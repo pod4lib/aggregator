@@ -1,7 +1,7 @@
 <%= render 'shared/layout_upload_page' do %>
 
   <div class="d-flex align-items-center">
-    <h2 class="font-weight-normal mb-0">Upload: <%= @upload.name %></h2>
+    <h2 class="font-weight-normal mb-3">Upload: <%= @upload.name %></h2>
 
     <div class="ms-auto p-2">
       <span><%= link_to 'View all uploads', organization_uploads_path(@upload.organization), class: 'pr-4' %></span>
@@ -11,7 +11,9 @@
     </div>
 
   </div>
-
+  <p class="lead">
+    Status: <%= @upload.status.humanize %>
+  </p>
   <p class="lead">
     Part of stream: <%= link_to @upload.stream.display_name, organization_stream_path(@upload.stream.organization, @upload.stream) %>
   </p>
