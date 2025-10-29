@@ -25,6 +25,9 @@ production:
   remove_data:
     command: "CleanupAndRemoveDataJob.enqueue_all"
     schedule: every wednesday
+  clean_up_job_trackers:
+    command: "JobTracker.clean_up_old_records"
+    schedule: every hour at minute 17
   compact:
     command: "CompactUploadsJob.enqueue_some"
     schedule: every tuesday

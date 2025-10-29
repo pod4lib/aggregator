@@ -51,7 +51,7 @@ class Stream < ApplicationRecord
   end
 
   def job_tracker_status_groups
-    trackers = JobTracker.where(reports_on: self)
+    trackers = JobTracker.includes(:solid_queue_job).where(reports_on: self)
     needs_attention, other_trackers = trackers.partition { |x| x.status == 'error' }
     active, recent = other_trackers.partition { |x| x.status != 'complete' }
 
