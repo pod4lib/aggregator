@@ -15,6 +15,7 @@
     <thead>
       <tr>
         <th>Name</th>
+        <th>Status</th>
         <th>Date</th>
         <th>Stream</th>
         <th>Actions</th>
@@ -25,6 +26,7 @@
       <% @uploads.each do |upload| %>
         <tr>
           <td><%= link_to upload.name, [@organization, upload] %></td>
+          <td><%= upload.status.humanize %></td>
           <td><%= local_time(upload.created_at, format: datetime_display_format()) %></td>
           <td><%= link_to upload.stream.display_name, organization_stream_path(upload.stream.organization, upload.stream) %></td>
           <td><%= link_to 'Delete', [@organization, upload], data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' if can? :destroy, upload %></td>
