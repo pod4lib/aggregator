@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # :nodoc:
-class Upload < ApplicationRecord
+class Upload < ApplicationRecord # rubocop:disable Metrics/ClassLength
   has_paper_trail
   belongs_to :stream, touch: true
   has_one :organization, through: :stream
@@ -25,7 +25,7 @@ class Upload < ApplicationRecord
   end
 
   def content_type
-    files.first&.content_type
+    super.presence || files.filter_map(&:content_type).uniq.join(', ')
   end
 
   # This should be _before_ any callbacks that interact with the attached upload
@@ -37,7 +37,8 @@ class Upload < ApplicationRecord
     attachments = files_attachments.includes(:blob)
 
     total_byte_size = attachments.sum { |file| file.blob.byte_size }
-    update(total_byte_size: total_byte_size)
+    content_type = attachments.map { |file| file.blob.content_type }.uniq.join(', ')
+    update(total_byte_size: total_byte_size, content_type: content_type)
   end
 
   def active?
