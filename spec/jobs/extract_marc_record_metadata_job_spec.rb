@@ -21,6 +21,15 @@ RSpec.describe ExtractMarcRecordMetadataJob do
     end.to enqueue_job(UpdateOrganizationStatisticsJob)
   end
 
+  it 'tracks job statistics' do
+    expect do
+      described_class.perform_later(upload)
+    end.to change(JobTracker, :count).by(1) # ... would be nice, but the test adapter
+    # seems to change job ids between enqueue + perform...
+
+    expect(JobTracker.last).to have_attributes(resource: upload, reports_on: upload.stream)
+  end
+
   it 'marks the upload as processed' do
     expect do
       described_class.perform_now(upload)

@@ -32,6 +32,8 @@ class GenerateDeltaDumpJob < ApplicationJob
     writer = MarcRecordWriterService.new(base_name)
     oai_writer = ChunkedOaiMarcRecordWriterService.new(base_name, dump: normalized_dump, now: effective_date)
 
+    job_tracker.update(total: uploads.sum(&:marc_records_count))
+
     begin
       NormalizedMarcRecordReader.new(uploads).each_slice(1000) do |records|
         # See note here on CPU saturation:
@@ -47,6 +49,8 @@ class GenerateDeltaDumpJob < ApplicationJob
             oai_writer.write_marc_record(record)
           end
         end
+
+        job_tracker.increment(records.size)
       end
 
       writer.finalize

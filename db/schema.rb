@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_10_28_180530) do
+ActiveRecord::Schema[8.1].define(version: 2025_10_29_150136) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -177,6 +177,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_28_180530) do
 
   create_table "job_trackers", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.text "data"
     t.string "job_class"
     t.string "job_id"
     t.string "provider_job_id"
@@ -184,6 +185,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_28_180530) do
     t.string "reports_on_type", null: false
     t.bigint "resource_id", null: false
     t.string "resource_type", null: false
+    t.string "status"
     t.datetime "updated_at", null: false
     t.index ["job_id"], name: "index_job_trackers_on_job_id"
     t.index ["provider_job_id"], name: "index_job_trackers_on_provider_job_id"

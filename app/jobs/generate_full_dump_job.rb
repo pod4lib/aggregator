@@ -33,7 +33,7 @@ class GenerateFullDumpJob < ApplicationJob
   end
   # rubocop:enable Metrics/AbcSize,Metrics/CyclomaticComplexity
 
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def perform(stream, effective_date: Time.zone.now, publish: true)
     uploads = stream.uploads.active
 
@@ -42,6 +42,8 @@ class GenerateFullDumpJob < ApplicationJob
     uploads.where.not(status: 'processed').find_each do |upload|
       ExtractMarcRecordMetadataJob.perform_now(upload)
     end
+
+    job_tracker.update(total: uploads.sum(&:marc_records_count))
 
     full_dump = stream.full_dumps.build(effective_date: effective_date)
     normalized_dump = full_dump.build_normalized_dump(stream: stream)
@@ -63,6 +65,8 @@ class GenerateFullDumpJob < ApplicationJob
           writer.write_marc_record(record)
           oai_writer.write_marc_record(record)
         end
+
+        job_tracker.increment(records.size)
       end
 
       oai_writer.finalize
@@ -86,7 +90,7 @@ class GenerateFullDumpJob < ApplicationJob
       oai_writer.unlink
     end
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   def human_readable_filename(base_name, file_type)
     as = case file_type

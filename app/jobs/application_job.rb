@@ -8,18 +8,43 @@ class ApplicationJob < ActiveJob::Base
   # Most jobs are safe to ignore if the underlying records are no longer available
   # discard_on ActiveJob::DeserializationError
 
-  def self.with_job_tracking
+  def self.with_job_tracking # rubocop:disable Metrics/AbcSize
+    before_perform :find_or_initialize_job_tracker
     after_enqueue :find_or_initialize_job_tracker
+    around_perform do |job, block|
+      job.job_tracker&.update(status: 'in progress') if job.job_tracker.status == 'enqueued'
+
+      block.call
+
+      job.job_tracker&.update(status: 'complete') if job.job_tracker.status == 'in progress'
+    end
+
+    after_discard do |job, exception|
+      job.job_tracker&.update(status: 'error', error_message: exception.message)
+    end
   end
+
+  attr_reader :job_tracker
 
   private
 
   def find_or_initialize_job_tracker
-    job = SolidQueue::Job.find_by(active_job_id: job_id)
-    gid = job&.arguments&.[]('arguments')&.first&.[]('_aj_globalid')
-    return unless gid
+    @job_tracker = JobTracker.find_or_create_by!(job_id: job_id) do |tracker|
+      tracker.status = 'enqueued'
+      tracker.job_class = self.class.name
+      tracker.resource = arguments.first
+      tracker.reports_on = reports_on || tracker.resource.try(:organization)
+    end
+  end
 
-    resource = GlobalID::Locator.locate(gid)
-    job.update!(organization_id: resource.organization.id)
+  def reports_on
+    resource = arguments.first
+
+    case resource
+    when Stream, Organization
+      resource
+    when Upload
+      resource.stream
+    end
   end
 end

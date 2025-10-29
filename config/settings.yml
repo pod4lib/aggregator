@@ -32,6 +32,9 @@ job_status_group:
   failed:
     icon_class: 'bi bi-exclamation-circle-fill'
     badge_class: 'bg-danger'
+  recent:
+    icon_class: 'bi bi-check-square-fill'
+    badge_class: 'bg-success'
 
 # refer to https://icons.getbootstrap.com/ for icon class names
 metadata_status:

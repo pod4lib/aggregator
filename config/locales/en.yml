@@ -44,9 +44,13 @@ en:
       needs_attention:
         job_count_zero: There are no background jobs that need attention.
         label: Needs attention
+      recent:
+        job_count_zero: There are no recently performed jobs.
+        label: Recent
     table_heading:
       created_at: Created at
       job_type: Job type
+      progress: Completed records
       resource: Resource
       status: Status
     title: Processing status of recent background jobs

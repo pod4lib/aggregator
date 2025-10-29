@@ -8,7 +8,7 @@
                   data-bs-toggle="collapse" data-bs-target="#collapse<%= status_group.to_s.classify %>"
                   aria-expanded="false" aria-controls="collapse<%= status_group.to_s.classify %>">
             <span class="fw-bold"><%= t("job_tracker.status_group.#{status_group}.label") %></span>&nbsp;
-            <span class="badge <%= jobs.count > 0 ? Settings.job_status_group[status_group].badge_class : 'bg-secondary' %>">
+            <span class="badge <%= jobs.count > 0 ? Settings.job_status_group[status_group]&.badge_class : 'bg-secondary' %>">
               <%= jobs.count %>
             </span>
           </button>
@@ -31,6 +31,7 @@
                     <th class="text-center" aria-hidden="true"><%= t('job_tracker.table_heading.status') %></th>
                     <th><%= t('job_tracker.table_heading.resource') %></th>
                     <th><%= t('job_tracker.table_heading.job_type') %></th>
+                    <th><%= t('job_tracker.table_heading.progress') %></th>
                     <th><%= t('job_tracker.table_heading.created_at') %></th>
                   </tr>
                 </thead>

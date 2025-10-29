@@ -1,8 +1,9 @@
-<tr class="<%= "status-#{job.active_job_id}" %>">
+<tr class="<%= "status-#{job_tracker.job_id}" %>">
   <td class="text-center" aria-hidden="true">
-    <%= render JobStatusIconComponent.new(status:, classes: "pod-icon #{job.status}") %>
+    <%= render JobStatusIconComponent.new(status:, classes: "pod-icon #{job_tracker.status}") %>
   </td>
   <td><%= resource_label %></td>
-  <td><%= job.class_name.titleize %></td>
-  <td><%= local_time(job.created_at, format: datetime_display_format()) %></td>
+  <td><%= job_tracker.job_class.titleize %></td>
+  <td class="text-end"><%= progress_label %></td>
+  <td><%= local_time(job_tracker.created_at, format: datetime_display_format()) %></td>
 </tr>

@@ -28,6 +28,8 @@ class GenerateInterstreamDeltaDumpJob < ApplicationJob
     writer = MarcRecordWriterService.new(base_name)
     oai_writer = ChunkedOaiMarcRecordWriterService.new(base_name, dump: normalized_dump, now: effective_date)
 
+    job_tracker.update(total: previous_uploads.sum(&:marc_records_count))
+
     NormalizedMarcRecordReader.new(previous_uploads).each_slice(200) do |previous_records|
       current_records = NormalizedMarcRecordReader.new(new_uploads, augment_marc: false,
                                                                     conditions: { marc001: previous_records.map(&:marc001) })
@@ -51,6 +53,8 @@ class GenerateInterstreamDeltaDumpJob < ApplicationJob
         writer.write_marc_record(new_record)
         oai_writer.write_marc_record(new_record)
       end
+
+      job_tracker.increment(previous_records.size)
     end
 
     writer.finalize

@@ -50,16 +50,15 @@ class Stream < ApplicationRecord
     PromoteStreamToDefaultJob.perform_later(self)
   end
 
-  def job_list
-    %w[AttachRemoteFileToUploadJob ExtractMarcRecordMetadataJob GenerateDeltaDumpJob GenerateFullDumpJob
-       GenerateInterstreamDeltaDumpJob]
-  end
-
   def job_tracker_status_groups
-    needs_attention = SolidQueue::Job.failed.where(class_name: job_list, organization_id: organization.id)
+    trackers = JobTracker.includes(:solid_queue_job).where(reports_on: self)
+    needs_attention, other_trackers = trackers.partition { |x| x.status == 'error' }
+    active, recent = other_trackers.partition { |x| x.status != 'complete' }
+
     {
       needs_attention:,
-      active: SolidQueue::Job.where(class_name: job_list, finished_at: nil, organization_id: organization.id) - needs_attention
+      active: active,
+      recent: recent
     }
   end
 
