@@ -60,3 +60,5 @@ oai_max_page_size: 5000
 oai_repository_id: 'pod.stanford.edu'
 
 marc_record_writer_tmpdir: ~
+
+resource_sync_harvest_token: ~
