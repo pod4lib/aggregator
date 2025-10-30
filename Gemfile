@@ -133,3 +133,6 @@ gem 'concurrent-ruby'
 
 gem "local_time", "~> 3.0"
 gem "ox"
+
+gem "solid_queue", "~> 1.2"
+gem "mission_control-jobs"
