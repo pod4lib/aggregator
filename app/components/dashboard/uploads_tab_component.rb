@@ -13,42 +13,33 @@ module Dashboard
       end
     end
 
-    # Return the most successful status level given a set up uploads
-    def best_status(uploads)
-      statuses = uploads.map { |upload| files_status(upload) }.uniq
+    def most_recent_upload_status(uploads)
+      uploads[0].metadata_status
+    end
 
-      return :completed if statuses.include? :completed
-      return :needs_attention if statuses.include? :needs_attention
-
-      :failed if statuses.include? :failed
+    # These are distinct from StatusIconComponents
+    # They simply reflect a boolean success/failure state for the purpose of this tab's UI
+    def success_icon_class(uploads)
+      if best_status(uploads) == 'success'
+        'bi bi-check-circle-fill align-middle text-success'
+      else
+        'bi bi-x-circle-fill align-middle text-danger'
+      end
     end
 
     private
 
-    # Status criteria outlined in https://github.com/pod4lib/aggregator/issues/674
-    # Completed - When all files in the upload are flagged as valid MARC or deletes
-    # Needs attention - Some, but not all files in upload are flagged as invalid MARC or Neither MARC nor deletes
-    # Failed - All files in upload are flagged as invalid MARC or Neither MARC nor deletes
-    def files_status(upload)
-      statuses = upload.files.map(&:pod_metadata_status).uniq
+    # Return the most successful status level given a set up uploads
+    def best_status(uploads)
+      statuses ||= uploads.map(&:metadata_status).uniq.compact
 
-      if any_successes?(statuses) && any_failures?(statuses)
-        :needs_attention
-      elsif any_successes?(statuses)
-        :completed
-      elsif upload.active?
-        :active
+      if statuses.include?('success')
+        'success'
+      elsif statuses.include?('needs_attention')
+        'needs_attention'
       else
-        :failed
+        'unknown'
       end
-    end
-
-    def any_successes?(statuses)
-      %i[deletes success].intersect?(statuses)
-    end
-
-    def any_failures?(statuses)
-      %i[invalid not_marc].intersect?(statuses)
     end
   end
 end

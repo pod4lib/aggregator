@@ -36,7 +36,17 @@ job_status_group:
     badge_class: 'bg-danger'
 
 # refer to https://icons.getbootstrap.com/ for icon class names
-metadata_status:
+upload_status:
+  success:
+    icon_class: 'bi bi-file-earmark-fill text-success'
+    label: 'Upload success'
+  needs_attention:
+    icon_class: 'bi bi-exclamation-triangle-fill text-warning'
+    label: 'Needs attention'
+  unknown:
+    icon_class: 'bi bi-question-circle-fill align-middle text-info'
+    label: 'Unknown'
+
   success:
     icon_class: 'bi bi-file-earmark-fill text-success'
     label: 'Valid MARC (adds, updates, or deletes)'

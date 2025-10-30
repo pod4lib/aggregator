@@ -15,7 +15,7 @@ RSpec.describe 'shared/_stream_page_header' do
   it 'displays the tab links for all users' do
     render
 
-    expect(rendered).to have_link('Uploaded files')
+    expect(rendered).to have_link('Uploads')
     expect(rendered).to have_link('Normalized data')
     expect(rendered).to have_link('Processing status')
   end

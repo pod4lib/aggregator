@@ -64,7 +64,7 @@
         <ul class="list-unstyled">
           <% @overview.last_org_files.each do |file| %>
           <li class="my-3">
-            <%= render(StatusIcons::MetadataStatusIconComponent.new(status: file.pod_metadata_status, classes: 'me-2')) %>
+            <%= render(StatusIcons::UploadStatusIconComponent.new(status: file.pod_metadata_status, classes: 'me-2')) %>
             <%= file.filename %>
           </li>
           <% end %>
