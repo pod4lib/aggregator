@@ -64,7 +64,7 @@
         <ul class="list-unstyled">
           <% @overview.last_org_files.each do |file| %>
           <li class="my-3">
-            <%= render(MetadataStatusIconComponent.new(status: file.pod_metadata_status, classes: 'me-2')) %>
+            <%= render(StatusIcons::MetadataStatusIconComponent.new(status: file.pod_metadata_status, classes: 'me-2')) %>
             <%= file.filename %>
           </li>
           <% end %>
@@ -81,13 +81,13 @@
           <% if @overview.active_org_jobs.present? %>
           <% @overview.active_org_jobs.each do |status, jobs| %>
           <li class="my-3">
-            <%= render JobStatusIconComponent.new(status: status, classes: "pod-icon me-2") %>
+            <%= render StatusIcons::JobStatusIconComponent.new(status: status, classes: "pod-icon me-2") %>
             <%= t('.organization.jobs.status_html', count: jobs.count, status: t("job_tracker.status_group.#{status}.label").downcase) %>
           </li>
           <% end %>
           <% else %>
           <li class="my-3">
-            <%= render JobStatusIconComponent.new(status: 'completed', classes: 'pod-icon me-2') %>
+            <%= render StatusIcons::JobStatusIconComponent.new(status: 'completed', classes: 'pod-icon me-2') %>
             <%= t('.organization.jobs.status_html.zero') %>
           </li>
           <% end %>
