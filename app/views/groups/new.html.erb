@@ -1,4 +1,5 @@
 <div class="container mt-4">
+  <%= render BackLinkComponent.new %>
   <h1>New group</h1>
   <%= bootstrap_form_with(model: @group, local: true, data: { controller: 'slug' }) do |form| %>
     <%= render 'form', group: @group, form: form %>
