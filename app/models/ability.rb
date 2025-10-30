@@ -1,80 +1,87 @@
 # frozen_string_literal: true
 
-# :nodoc:
+# Ability class that defines user-based abilities
 class Ability
   include CanCan::Ability
 
   attr_reader :allowlisted_jwt, :user
 
-  # rubocop:disable Metrics/CyclomaticComplexity
-  # rubocop:disable Metrics/PerceivedComplexity
-  def initialize(user, token = nil)
+  def initialize(user)
     alias_action :create, :read, :update, :destroy, to: :crud
-
-    can :confirm, ContactEmail
-    return unless user || token
 
     @user = user
 
-    if token
-      can :read, Organization, allowlisted_jwts: { jti: token['jti'] }
+    public_abilities
 
-      @allowlisted_jwt = AllowlistedJwt.find_by(jti: token['jti'])
+    return if user.blank?
 
-      case @allowlisted_jwt.scope
-      when 'all'
-        can %i[create update], [Stream, Upload], organization: { allowlisted_jwts: { jti: token['jti'] } }
-        can :read, Organization, public: true
-        can :read, [Stream, Upload], organization: { public: true }
+    all_user_abilities
+    user_with_roles_abilities
+    site_admin_user_abilities
+    organization_owner_abilities
+    organization_member_abilities
+    final_ability_restrictions
+  end
 
-        can :read, ActiveStorage::Attachment, { record: { organization: { public: true } } }
-      when 'upload'
-        can %i[create update], [Stream, Upload], organization: { allowlisted_jwts: { jti: token['jti'] } }
-      when 'download'
-        can :read, Organization, public: true
-        can :read, [Stream, Upload], organization: { public: true }
+  private
 
-        can :read, ActiveStorage::Attachment, { record: { organization: { public: true } } }
-      end
+  def public_abilities
+    can :confirm, ContactEmail
+  end
 
-      allowlisted_jwt&.update(updated_at: Time.zone.now)
-      return
-    end
-
-    if user.roles.any?
-      can :read, ActiveStorage::Attachment, { record: { organization: { public: true } } }
-      can :read, MarcRecord, upload: { organization: { public: true } }
-      can %i[read profile normalized_data processing_status], Stream, organization: { public: true }
-      can %i[read info], Upload, organization: { public: true }
-      can :read, :pages_data
-      can %i[read users organization_details provider_details], Organization, public: true
-    end
-
-    can :manage, :all if user.has_role?(:admin)
+  def all_user_abilities
     can :read, Organization, public: true
-    can :manage, :dashboard_controller if user.has_role?(:admin)
-    can :manage, :organization_slug if user.has_role?(:admin)
+  end
 
-    owned_orgs = Organization.with_role(:owner, user).pluck(:id)
-    can :manage, Organization, id: owned_orgs
-    cannot :destroy, Organization, id: owned_orgs
-    can :crud, Stream, organization: { id: owned_orgs }
-    can :crud, Upload, organization: { id: owned_orgs }
-    can :read, MarcRecord, upload: { organization: { id: owned_orgs } }
-    can :manage, AllowlistedJwt, resource_type: 'Organization', resource_id: owned_orgs
-    can :read, ActiveStorage::Attachment, { record: { organization: { id: owned_orgs } } }
+  def user_with_roles_abilities
+    return if user.roles.empty?
 
-    member_orgs = Organization.with_role(:member, user).pluck(:id)
-    can %i[invite], Organization, id: member_orgs
-    can %i[create], [Upload], organization: { id: member_orgs }
-    can :read, MarcRecord, upload: { organization: { id: member_orgs } }
-    can :read, AllowlistedJwt, resource_type: 'Organization', resource_id: member_orgs
-    can :read, ActiveStorage::Attachment, { record: { organization: { id: member_orgs } } }
+    can :read, ActiveStorage::Attachment, { record: { organization: { public: true } } }
+    can :read, MarcRecord, upload: { organization: { public: true } }
+    can %i[read profile normalized_data processing_status], Stream, organization: { public: true }
+    can %i[read info], Upload, organization: { public: true }
+    can :read, :pages_data
+    can %i[read users organization_details provider_details], Organization, public: true
+  end
 
-    # Must be last
+  def site_admin_user_abilities
+    return unless user.has_role?(:admin)
+
+    can :manage, :all
+    can :manage, :dashboard_controller
+    can :manage, :organization_slug
+  end
+
+  def organization_owner_abilities
+    return if owned_organization_ids.empty?
+
+    can :manage, Organization, id: owned_organization_ids
+    can :crud, Stream, organization: { id: owned_organization_ids }
+    can :crud, Upload, organization: { id: owned_organization_ids }
+    can :manage, AllowlistedJwt, resource_type: 'Organization', resource_id: owned_organization_ids
+  end
+
+  def owned_organization_ids
+    @owned_organization_ids ||= Organization.with_role(:owner, user).pluck(:id)
+  end
+
+  def organization_member_abilities
+    return if member_organization_ids.empty?
+
+    can %i[invite], Organization, id: member_organization_ids
+    can %i[create], [Upload], organization: { id: member_organization_ids }
+    can :read, MarcRecord, upload: { organization: { id: member_organization_ids } }
+    can :read, AllowlistedJwt, resource_type: 'Organization', resource_id: member_organization_ids
+    can :read, ActiveStorage::Attachment, { record: { organization: { id: member_organization_ids } } }
+  end
+
+  def member_organization_ids
+    @member_organization_ids ||= Organization.with_role(:member, user).pluck(:id)
+  end
+
+  def final_ability_restrictions
+    cannot :destroy, Organization unless user.has_role?(:admin)
     cannot :destroy, Stream, status: %w[previous-default] unless user.has_role?(:admin)
     cannot :destroy, Stream, status: %w[default]
   end
-  # rubocop:enable Metrics/CyclomaticComplexity
-  # rubocop:enable Metrics/PerceivedComplexity
 end

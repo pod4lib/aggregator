@@ -4,7 +4,11 @@
 # A concern to add the a custom current_ability
 module CustomPodAbilityConcern
   def current_ability
-    @current_ability ||= Ability.new(current_user, current_token)
+    @current_ability ||= if current_token
+                           TokenAbility.new(current_token)
+                         else
+                           Ability.new(current_user)
+                         end
   end
 
   def current_token
