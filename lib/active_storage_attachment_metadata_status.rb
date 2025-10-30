@@ -20,6 +20,14 @@ module ActiveStorageAttachmentMetadataStatus
     metadata['error']
   end
 
+  def pod_unknown_format?
+    pod_metadata_status == :unknown
+  end
+
+  def pod_ok_format?
+    pod_metadata_status&.in? %i[success deletes]
+  end
+
   private
 
   def marc_analyzer?
