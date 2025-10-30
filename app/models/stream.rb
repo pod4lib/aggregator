@@ -79,7 +79,7 @@ class Stream < ApplicationRecord
   def cached_files_size
     return statistic.file_size if statistic_up_to_date?
 
-    files.sum { |file| file.blob.byte_size }
+    uploads.sum(&:total_byte_size)
   end
 
   def pending?
