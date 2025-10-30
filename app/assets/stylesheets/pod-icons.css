@@ -2,50 +2,10 @@
   font-size: 20px;
 }
 
-.pod-job-tracker-status {
-  &.active {
-    color: var(--bs-info);
-  }
-
-  &.retry,
-  &.needs_attention {
-    color: var(--bs-warning);
-  }
-
-  &.dead,
-  &.failed {
-    color: var(--bs-danger);
-  }
-
-  &.completed {
-    color: var(--bs-success);
-  }
+.table-key li {
+  margin-bottom: 0.33rem;
 }
 
 .pod-metadata-status {
   vertical-align: initial;
-
-  &.deletes {
-    color: var(--bs-success);;
-  }
-
-  &.invalid {
-    color: var(--bs-danger);;
-  }
-
-  &.not_marc {
-    color: var(--bs-warning);;
-  }
-
-  &.success {
-    color: var(--bs-success);;
-  }
-
-  &.unknown {
-    color: var(--bs-info);;
-  }
-}
-
-.table-key li {
-  margin-bottom: 0.33rem;
 }
