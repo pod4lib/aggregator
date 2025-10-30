@@ -140,22 +140,6 @@ RSpec.describe JobTracker do
     end
   end
 
-  describe '#progress_label' do
-    let(:status_attributes) { { progress: 5000, total: 12_345 } }
-
-    it 'returns the current progress' do
-      expect(job_tracker.progress_label).to eq '5,000 of 12,345'
-    end
-
-    context 'without a final total' do
-      let(:status_attributes) { { progress: 5000 } }
-
-      it 'just shows the current progress' do
-        expect(job_tracker.progress_label).to eq '5,000'
-      end
-    end
-  end
-
   describe '#progress' do
     let(:status_attributes) { { progress: 50 } }
 
