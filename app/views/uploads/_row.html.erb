@@ -30,7 +30,7 @@
 
 <tr>
   <td class="align-middle text-center">
-    <%= render(MetadataStatusIconComponent.new(status: upload.metadata_status)) %>
+    <%= render(StatusIcons::MetadataStatusIconComponent.new(status: upload.metadata_status)) %>
   </td>
   <td class="align-middle">
     <% if upload.files.one? %>
