@@ -19,6 +19,7 @@ class Upload < ApplicationRecord # rubocop:disable Metrics/ClassLength
   scope :archived, -> { where(status: 'archived') }
   scope :obsolete, -> { where(status: 'obsolete') }
   scope :recent, -> { order(created_at: :desc) }
+  scope :successful, -> { where(status: 'processed', metadata_status: 'success', marc_records_count: 1..) }
 
   def content_type
     super.presence || files.filter_map(&:content_type).uniq.join(', ')
