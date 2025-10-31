@@ -13,42 +13,32 @@ module Dashboard
       end
     end
 
-    # Return the most successful status level given a set up uploads
-    def best_status(uploads)
-      statuses = uploads.map { |upload| files_status(upload) }.uniq
-
-      return :completed if statuses.include? :completed
-      return :needs_attention if statuses.include? :needs_attention
-
-      :failed if statuses.include? :failed
-    end
-
-    private
-
-    # Status criteria outlined in https://github.com/pod4lib/aggregator/issues/674
-    # Completed - When all files in the upload are flagged as valid MARC or deletes
-    # Needs attention - Some, but not all files in upload are flagged as invalid MARC or Neither MARC nor deletes
-    # Failed - All files in upload are flagged as invalid MARC or Neither MARC nor deletes
-    def files_status(upload)
-      statuses = upload.files.map(&:pod_metadata_status).uniq
-
-      if any_successes?(statuses) && any_failures?(statuses)
-        :needs_attention
-      elsif any_successes?(statuses)
-        :completed
-      elsif upload.active?
-        :active
+    # I guess we map upload statuses to job statuses to get round icons instead of file-like icons
+    def status_icon(upload_status,
+                    success_classes: 'bi bi-check-circle-fill align-middle text-success',
+                    failure_classes: 'bi bi-x-circle-fill align-middle text-danger',
+                    unknown_classes: 'bi bi-arrow-repeat align-middle text-info')
+      case upload_status
+      when 'needs_attention', 'invalid'
+        tag.i class: failure_classes, role: 'img', aria: { label: 'Failed' }
+      when 'success'
+        tag.i class: success_classes, role: 'img', aria: { label: 'Completed' }
       else
-        :failed
+        tag.i class: unknown_classes, role: 'img', aria: { label: 'Unknown' }
       end
     end
 
-    def any_successes?(statuses)
-      %i[deletes success].intersect?(statuses)
-    end
+    # Return the most successful status level given a set up uploads
+    def best_status(uploads)
+      statuses = uploads.map(&:metadata_status)
 
-    def any_failures?(statuses)
-      %i[invalid not_marc].intersect?(statuses)
+      if statuses.include?('success')
+        'success'
+      elsif statuses.include?('needs_attention')
+        'needs_attention'
+      else
+        'failed'
+      end
     end
   end
 end
