@@ -2,8 +2,6 @@
 
 OkComputer.mount_at = 'status'
 
-OkComputer::Registry.register 'redis', OkComputer::RedisCheck.new(url: ENV.fetch('SIDEKIQ_REDIS_URL') { 'redis://localhost:6379/0' })
-
 # Do not track ahoy visits to status check page
 Rails.application.config.to_prepare do
   OkComputer::OkComputerController.skip_before_action :track_ahoy_visit

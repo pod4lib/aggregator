@@ -43,12 +43,4 @@ set :honeybadger_env, "#{fetch(:stage)}"
 set :solid_queue_systemd_role, :background
 set :solid_queue_systemd_use_hooks, true
 
-namespace :deploy do
-  after :restart, :restart_sidekiq do
-    on roles(:background) do
-      sudo :systemctl, "restart", "sidekiq-*", raise_on_non_zero_exit: false
-    end
-  end
-end
-
 before 'deploy:restart', 'shared_configs:update'

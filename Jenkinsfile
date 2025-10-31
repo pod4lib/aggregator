@@ -3,7 +3,6 @@ pipeline {
 
   environment {
     PROJECT = 'ivplus/aggregator'
-    SIDEKIQ_PRO_SECRET = credentials("sidekiq_pro_secret")
   }
 
   stages {
@@ -28,7 +27,6 @@ pipeline {
           rvm use 3.4.1@pod --create
           gem install bundler
 
-          bundle config --global gems.contribsys.com $SIDEKIQ_PRO_SECRET
           bundle install --without production
 
           # Deploy it
@@ -74,7 +72,6 @@ pipeline {
           rvm use 3.4.1@pod --create
           gem install bundler
 
-          bundle config --global gems.contribsys.com $SIDEKIQ_PRO_SECRET
           bundle install --without production
 
           # Deploy it
