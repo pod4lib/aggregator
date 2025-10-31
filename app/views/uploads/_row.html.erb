@@ -18,10 +18,14 @@
     </td>
     <td class="align-middle"><strong>Compacted uploads:</strong></td>
     <td class="align-middle"><%= local_time(upload.created_at, format: datetime_display_format()) %></td>
-    <td class="align-middle text-end">-</td>
+    <td class="align-middle text-end"><%= number_to_human_size upload.compacted_uploads.sum(:total_byte_size) %></td>
     <td class="align-middle">-</td>
     <td class="align-middle text-end">-</td>
-    <td></td>
+    <td class="align-middle text-center">
+      <%= link_to organization_upload_path(@organization, upload), class: 'btn btn-sm btn-secondary' do %>
+        <i class="bi bi-search pod-icon" aria-label="Show"></i>
+      <% end %>
+    </td>
   </tr>
   <% upload.compacted_uploads.each do |u| %>
     <%= render 'uploads/row', upload: u %>
@@ -54,7 +58,7 @@
   <td class="align-middle text-center">
     <% if can? :read, upload %>
       <% if upload.files.one? %>
-      <% file = upload.files.first %>
+        <% file = upload.files.first %>
         <%= link_to file_info_organization_upload_path(@organization, upload, file), class: 'btn btn-sm btn-secondary' do %>
           <i class="bi bi-search pod-icon" aria-label="Profile"></i>
         <% end %>
