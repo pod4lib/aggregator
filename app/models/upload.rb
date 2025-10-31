@@ -87,10 +87,12 @@ class Upload < ApplicationRecord # rubocop:disable Metrics/ClassLength
   private
 
   def update_files_metadata_status
-    status = if files.any?(&:pod_unknown_format?)
-               'unknown'
-             elsif files.all?(&:pod_ok_format?)
+    status = if files.all?(&:pod_ok_format?)
                'success'
+             elsif files.all?(&:pod_invalid_format?)
+               'invalid'
+             elsif files.any? { |f| f.pod_metadata_status == 'unknown' }
+               'unknown'
              else
                'needs_attention'
              end
