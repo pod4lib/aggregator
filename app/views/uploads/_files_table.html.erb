@@ -1,0 +1,22 @@
+<ul class="table-key list-unstyled list-inline pt-3" aria-hidden="true">
+  <% Settings.metadata_status.keys.each do |status| %>
+    <li class="list-inline-item">
+      <%= render(StatusIcons::MetadataStatusIconComponent.new(status: status, show_label: true)) %>
+    </li>
+  <% end %>
+</ul>
+
+<table class="table table-striped mb-3">
+  <thead>
+    <th class="text-center">Status</th>
+    <th>File</th>
+    <th>Date created</th>
+    <th class="text-end">Size</th>
+    <th>Content type</th>
+    <th class="text-end">Records</th>
+    <th><span class="visually-hidden">Actions</span></th>
+  </thead>
+  <tbody class="text-break">
+    <%= yield %>
+  </tbody>
+</table>

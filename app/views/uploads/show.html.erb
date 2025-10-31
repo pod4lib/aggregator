@@ -17,11 +17,25 @@
   <p class="lead">
     Part of stream: <%= link_to @upload.stream.display_name, organization_stream_path(@upload.stream.organization, @upload.stream) %>
   </p>
+  <% if can?(:read, @upload) && @upload.url.present? %>
+    <p class="lead">
+      URL: <%= @upload.url %>
+      <% if @upload.files.none? %>
+        (Downloading...)
+      <% end %>
+    </p>
+  <% end %>
 
   <h3 class="mb-0 pt-4 pb-3">Files</h3>
 
-  <%= render 'uploads/table' do %>
-    <%= render 'uploads/row', upload: @upload %>
+  <%= render 'uploads/files_table' do %>
+    <% if @upload.status == 'compacted' %>
+      <% @upload.compacted_uploads.each do |u| %>
+        <%= render partial: 'uploads/file', collection: u.files, locals: { upload: u } %>
+      <% end %>
+    <% else %>
+      <%= render partial: 'uploads/file', collection: @upload.files, locals: { upload: @upload } %>
+    <% end %>
   <% end %>
 
 <% end %>
