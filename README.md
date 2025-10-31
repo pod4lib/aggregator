@@ -55,11 +55,10 @@ bundle exec rake
 ### Emulating production
 While using a standard development setup locally, developers may experience some issues with read/write concurrency in Sqlite and job processing using the ActiveJob AsyncAdapter.
 
-One solution to this is to temporarily switch to using PostgreSQL and Sidekiq with Redis locally for a more "production like" development environment. To do this:
+One solution to this is to temporarily switch to using PostgreSQL locally for a more "production like" development environment. To do this:
 
 Set environment variables prior to invoking the server. For now, you will need to re-export these variables in every new terminal window you open.
 ```sh
-export SIDEKIQ_REDIS_URL=redis://localhost:6379/0
 export DATABASE_URL=postgresql://user:password@localhost:5432/dbname
 bin/dev  # or other commands
 ```
@@ -142,5 +141,3 @@ To display a date in the UI, use the `local_time` library with the `datetime_dis
 ```
 <%= local_time(uploads.last.created_at, format: datetime_display_format()) %>
 ```
-
-

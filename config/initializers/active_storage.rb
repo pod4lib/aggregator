@@ -13,10 +13,6 @@ Rails.application.reloader.to_prepare do
   Rails.application.config.active_storage.analyzers.append MarcAnalyzer
 end
 
-# Use default queue for analysis and purge for Sidekiq simplification
-Rails.application.config.active_storage.queues[:analysis] = :default
-Rails.application.config.active_storage.queues[:purge] = :default
-
 
 Rails.configuration.to_prepare do
   ActiveStorage::Attachment.send :include, ::ActiveStorageAttachmentMetadataStatus
