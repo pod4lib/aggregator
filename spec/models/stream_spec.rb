@@ -47,7 +47,7 @@ RSpec.describe Stream do
 
   describe '#job_tracker_status_groups' do
     it 'groups the job trackers by status' do
-      expect(stream.job_tracker_status_groups).to eq({ active: [], needs_attention: [] })
+      expect(stream.job_tracker_status_groups).to eq({ active: [], needs_attention: [], recent: [] })
     end
   end
 

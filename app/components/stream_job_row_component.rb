@@ -13,8 +13,9 @@ class StreamJobRowComponent < ViewComponent::Base
 
   delegate :resource, to: :job_tracker
 
-  def resource_label
+  def resource_label # rubocop:disable Metrics/AbcSize
     return resource.filename if resource.is_a? ActiveStorage::Blob
+    return resource.files.first.filename if resource.is_a?(Upload) && resource.files.one?
 
     resource.name || resource.slug
   end

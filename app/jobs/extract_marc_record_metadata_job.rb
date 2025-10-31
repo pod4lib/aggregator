@@ -5,11 +5,8 @@ class ExtractMarcRecordMetadataJob < ApplicationJob
   queue_as :default
   with_job_tracking
 
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-  def perform(upload)
+  def perform(upload) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     return unless upload.active? && upload.files.any?
-
-    progress.total = 0
 
     upload.with_lock do
       upload.update(status: 'active')
@@ -18,29 +15,23 @@ class ExtractMarcRecordMetadataJob < ApplicationJob
 
       total = 0
       deletes = 0
-      upload.read_marc_record_metadata.each_slice(100) do |batch|
-        progress.increment(batch.size)
+      job_tracker.update(total: total)
 
+      upload.read_marc_record_metadata.each_slice(100) do |batch|
         batch_deletes = batch.count { |x| x.status == 'delete' }
         total += batch.count - batch_deletes
         deletes += batch_deletes
+
+        job_tracker.increment(batch.size)
 
         # rubocop:disable Rails/SkipsModelValidations
         MarcRecord.insert_all(batch.map { |x| x.attributes.except('id') }, returning: false)
         # rubocop:enable Rails/SkipsModelValidations
       end
 
+      job_tracker.update(progress: total, total: total)
+
       upload.update(status: 'processed', marc_records_count: total, deletes_count: deletes)
     end
-  end
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
-
-  private
-
-  def update_job_tracker_properties(tracker)
-    super
-    upload = arguments.first
-    tracker.resource = upload
-    tracker.reports_on = upload&.stream
   end
 end

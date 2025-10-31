@@ -38,12 +38,4 @@ class AttachRemoteFileToUploadJob < ApplicationJob
 
     potential_file_name
   end
-
-  def update_job_tracker_properties(tracker)
-    super
-
-    upload = arguments.first
-    tracker.reports_on = upload&.stream
-    tracker.resource = upload
-  end
 end
