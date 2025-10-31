@@ -5,6 +5,7 @@
 @import url("organizations.css");
 @import url("streams.css");
 @import url("files.css");
+@import url("sparklines.css");
 
 /* background image for homepage banner */
 #hero .bg-image {

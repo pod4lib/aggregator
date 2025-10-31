@@ -8,7 +8,7 @@ en:
         date_created: Date created
         download_title: Download %{filename}
         filename: File
-        history: 30 day history
+        history: 30-day history
         jobs_attention: Jobs needing attention
         last_active_job: Last active job started
         last_delta: Last delta
@@ -19,7 +19,6 @@ en:
         owners: Owners
         pod_admins: POD admins
         provider: Provider
-        recent_success: Success in last 30 days?
         record_count: Records
         size: Size
         status: Status

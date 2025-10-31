@@ -3,12 +3,10 @@
       <thead>
         <tr>
           <th><%= t('dashboard.summary.table.provider') %></th>
-          <!-- TODO: Sparkline goes here, see https://github.com/pod4lib/aggregator/issues/679 -->
-          <!-- <th class="text-center"><%= t('dashboard.summary.table.history') %></th> -->
+          <th><%= t('dashboard.summary.table.history') %></th>
           <th><%= t('dashboard.summary.table.last_upload') %></th>
           <th class="text-center"><%= t('dashboard.summary.table.status') %></th>
           <th><%= t('dashboard.summary.table.last_successful_upload') %></th>
-          <th class="text-center"><%= t('dashboard.summary.table.recent_success') %></th>
         </tr>
       </thead>
       <tbody>
@@ -16,8 +14,14 @@
         <tr>
           <td><%= link_to provider.name, organization_uploads_path(provider) %></td>
           
-          <!-- TODO: Sparkline goes here, see https://github.com/pod4lib/aggregator/issues/679 -->
-          <!-- <td class="text-center"></td> -->
+          <!-- Did any uploads succeed in past 30 days? -->
+          <td>
+            <% if provider.upload_in_last_30_days? %>
+              <%= render Dashboard::UploadStatusSparklineComponent.new(uploads: uploads) %>
+            <% else %>
+              <p class="mb-0">No uploads in last 30 days</p>
+            <% end %>
+          </td>
 
           <!-- Most recent upload: -->
           <td>
@@ -42,15 +46,6 @@
               <%= helpers.local_time(last_successful_upload_date, format: helpers.datetime_display_format()) %>
             <% else %>
               <p>No prior successful uploads</p>
-            <% end %>
-          </td>
-          <!-- Did any uploads succeed in past 30 days? -->
-          <td class="text-center">
-            <% if provider.upload_in_last_30_days? %>
-              <% status = best_status(uploads) %>
-              <%= render StatusIcons::JobStatusIconComponent.new(status: status) %>
-            <% else %>
-              <p class="mb-0">No uploads in last 30 days</p>
             <% end %>
           </td>
         </tr>

@@ -1,0 +1,7 @@
+.sparkline {
+  display: grid;
+  width: 160px;
+  height: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(1px, 1fr));
+  grid-template-rows: 100%;
+}
