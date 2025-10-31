@@ -2,6 +2,7 @@
     <table class="table table-striped mb-3" id="uploads-table">
       <thead>
         <tr>
+          <th class="text-center"><%= t('dashboard.summary.table.status') %></th>
           <th><%= t('dashboard.summary.table.provider') %></th>
           <th><%= t('dashboard.summary.table.history') %></th>
           <th><%= t('dashboard.summary.table.last_upload') %></th>
@@ -11,6 +12,9 @@
       <tbody>
         <% recent_uploads_by_provider.each do |provider, uploads| %>
         <tr>
+          <td class="text-center">
+            <%= provider_status_icon(uploads) %>
+          </td>
           <th class="fw-normal"><%= link_to provider.name, organization_uploads_path(provider) %></th>
           
           <!-- Did any uploads succeed in past 30 days? -->
