@@ -6,7 +6,7 @@
           <!-- TODO: Sparkline goes here, see https://github.com/pod4lib/aggregator/issues/679 -->
           <!-- <th class="text-center"><%= t('dashboard.summary.table.history') %></th> -->
           <th><%= t('dashboard.summary.table.last_upload') %></th>
-          <th class="text-center"><%= t('dashboard.summary.table.status') %></th>
+          <th class="text-center"><%= t('dashboard.summary.table.upload_status') %></th>
           <th><%= t('dashboard.summary.table.last_successful_upload') %></th>
           <th class="text-center"><%= t('dashboard.summary.table.recent_success') %></th>
         </tr>
@@ -30,8 +30,7 @@
           <!-- Most recent upload status: -->
           <td class="text-center">
             <% if uploads.present? %>
-              <% status = files_status(uploads[0]) %>
-              <%= render StatusIcons::JobStatusIconComponent.new(status: status) %>
+              <%= render StatusIcons::UploadStatusIconComponent.new(status: most_recent_upload_status(uploads)) %>
             <% else %>
               <i class="bi bi-exclamation-triangle-fill text-warning" role="img" aria-label="Missing upload"></i>
             <% end %>
@@ -46,9 +45,8 @@
           </td>
           <!-- Did any uploads succeed in past 30 days? -->
           <td class="text-center">
-            <% if provider.upload_in_last_30_days? %>
-              <% status = best_status(uploads) %>
-              <%= render StatusIcons::JobStatusIconComponent.new(status: status) %>
+            <% if uploads.present? %>
+              <i class="<%= success_icon_class(uploads) %>"></i>
             <% else %>
               <p class="mb-0">No uploads in last 30 days</p>
             <% end %>

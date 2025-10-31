@@ -22,9 +22,9 @@ en:
         recent_success: Success in last 30 days?
         record_count: Records
         size: Size
-        status: Status
         total_records: Total records
         upload: Upload
+        upload_status: Upload status
         upload_title: View upload %{name}
       title: Recent activity
       upload_title: Upload activity

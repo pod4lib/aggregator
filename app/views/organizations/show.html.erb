@@ -1,9 +1,9 @@
 <!-- Use the organization_path aka "Provider home" for the Uploaded Files tab on organization/show -->
-<% content_for :uploaded_files_link do %>
-  <%= link_to "Uploaded files", organization_path(@organization), class: "btn btn-outline-primary #{current_page_class(organization_path(@organization))}" %>
+<% content_for :uploads_link do %>
+  <%= link_to "Uploads", organization_path(@organization), class: "btn btn-outline-primary #{current_page_class(organization_path(@organization))}" %>
 <% end %>
 
 <%= render 'shared/layout_stream_page' do %>
-  <h3>Uploaded files</h3>
+  <h3>Uploads</h3>
   <%= render 'streams/stream_uploads', stream: @organization.default_stream, uploads: @uploads %>
 <% end %>

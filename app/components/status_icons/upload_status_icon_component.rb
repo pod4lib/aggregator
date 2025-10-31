@@ -2,13 +2,13 @@
 
 module StatusIcons
   # Metadata status icon component
-  class MetadataStatusIconComponent < StatusIconComponent
+  class UploadStatusIconComponent < StatusIconComponent
     def additional_classes
       'pod-metadata-status'
     end
 
     def settings_data
-      Settings.metadata_status
+      Settings.upload_status
     end
   end
 end
