@@ -9,7 +9,7 @@ module Dashboard
 
     def recent_uploads_by_provider
       @recent_uploads_by_provider ||= Organization.providers.index_with do |org|
-        org.uploads.recent.where('uploads.created_at > ?', 30.days.ago)
+        org.uploads.recent.where(created_at: 30.days.ago..)
       end
     end
   end

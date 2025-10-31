@@ -15,29 +15,29 @@
           
           <!-- Did any uploads succeed in past 30 days? -->
           <td>
-            <% if provider.upload_in_last_30_days? %>
+            <% if uploads.any? %>
               <%= render Dashboard::UploadStatusSparklineComponent.new(uploads: uploads) %>
             <% else %>
-              <p class="mb-0">No uploads in last 30 days</p>
+              <p class="mb-0"><i class="bi bi-exclamation-triangle-fill text-warning me-1"></i> No uploads in last 30 days</p>
             <% end %>
           </td>
 
           <!-- Most recent upload: -->
           <td>
-            <% if uploads.present? %>
-              <%= render StatusIcons::MetadataStatusIconComponent.new(status: uploads.first.metadata_status) %>
-              <%= link_to helpers.local_time(uploads[0].created_at, format: helpers.datetime_display_format()), organization_upload_path(provider, uploads[0]) %>
+            <% if upload = uploads.first || provider.latest_upload %>
+              <%= render StatusIcons::MetadataStatusIconComponent.new(status: upload.metadata_status) %>
+              <%= link_to helpers.local_time(upload.created_at, format: helpers.datetime_display_format()), organization_upload_path(provider, upload) %>
             <% else %>
               <i class="bi bi-exclamation-triangle-fill text-warning"></i>
             <% end %>
           </td>
           <!-- Last successful upload: -->
           <td>
-            <% if last_successful_upload = provider.uploads.where(status: 'processed', metadata_status: 'success', marc_records_count: 1..).order(created_at: :desc).first %>
+            <% if last_successful_upload = provider.latest_successful_upload %>
               <%= render StatusIcons::MetadataStatusIconComponent.new(status: last_successful_upload.metadata_status) %>
               <%= link_to helpers.local_time(last_successful_upload.created_at, format: helpers.datetime_display_format()), organization_upload_path(provider, last_successful_upload)  %>
             <% else %>
-              <p>No prior successful uploads</p>
+              <p class="mb-0">No prior successful uploads</p>
             <% end %>
           </td>
         </tr>
