@@ -37,7 +37,7 @@
               <%= render StatusIcons::MetadataStatusIconComponent.new(status: last_successful_upload.metadata_status) %>
               <%= link_to helpers.local_time(last_successful_upload.created_at, format: helpers.datetime_display_format()), organization_upload_path(provider, last_successful_upload)  %>
             <% else %>
-              <p>No prior successful uploads</p>
+              <p class="mb-0">No prior successful uploads</p>
             <% end %>
           </td>
         </tr>
