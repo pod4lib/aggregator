@@ -20,8 +20,8 @@ module ActiveStorageAttachmentMetadataStatus
     metadata['error']
   end
 
-  def pod_unknown_format?
-    pod_metadata_status == :unknown
+  def pod_invalid_format?
+    pod_metadata_status&.in? %i[not_marc invalid]
   end
 
   def pod_ok_format?
