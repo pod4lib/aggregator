@@ -20,10 +20,6 @@ class Upload < ApplicationRecord # rubocop:disable Metrics/ClassLength
   scope :obsolete, -> { where(status: 'obsolete') }
   scope :recent, -> { order(created_at: :desc) }
 
-  def metadata_status
-    super.presence || files.first&.pod_metadata_status || :unknown
-  end
-
   def content_type
     super.presence || files.filter_map(&:content_type).uniq.join(', ')
   end
@@ -31,9 +27,9 @@ class Upload < ApplicationRecord # rubocop:disable Metrics/ClassLength
   # This should be _before_ any callbacks that interact with the attached upload
   # See https://github.com/rails/rails/issues/37304
   has_many_attached :files
-  after_touch :update_files_metadata
+  after_touch :update_files_byte_size, :update_files_metadata_status
 
-  def update_files_metadata
+  def update_files_byte_size
     attachments = files_attachments.includes(:blob)
 
     total_byte_size = attachments.sum { |file| file.blob.byte_size }
@@ -89,6 +85,18 @@ class Upload < ApplicationRecord # rubocop:disable Metrics/ClassLength
   # rubocop:enable Metrics/MethodLength
 
   private
+
+  def update_files_metadata_status
+    status = if files.any?(&:pod_unknown_format?)
+               'unknown'
+             elsif files.all?(&:pod_ok_format?)
+               'success'
+             else
+               'needs_attention'
+             end
+
+    update(metadata_status: status)
+  end
 
   def url_presence_if_no_uploaded_files
     return if status == 'compacted'
