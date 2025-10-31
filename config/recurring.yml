@@ -13,3 +13,21 @@ production:
   clear_solid_queue_finished_jobs:
     command: "SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"
     schedule: every hour at minute 12
+  organization_statistics_job:
+    command: "UpdateOrganizationStatisticsJob.perform_all"
+    schedule: every day at 03:30
+  delta_dump:
+    command: "GenerateDeltaDumpJob.enqueue_all"
+    schedule: every day at 03:40
+  full_dump:
+    command: "GenerateFullDumpJob.enqueue_some"
+    schedule: every 2 days
+  remove_data:
+    command: "CleanupAndRemoveDataJob.enqueue_all"
+    schedule: every wednesday
+  clean_up_job_trackers:
+    command: "JobTracker.clean_up_old_records"
+    schedule: every hour at minute 17
+  compact:
+    command: "CompactUploadsJob.enqueue_some"
+    schedule: every tuesday

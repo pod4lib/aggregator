@@ -6,6 +6,8 @@ class JobTracker < ApplicationRecord
   belongs_to :resource, polymorphic: true
   store :data, accessors: %i[progress total error_message]
 
+  belongs_to :solid_queue_job, class_name: 'SolidQueue::Job', primary_key: 'active_job_id', foreign_key: 'job_id', optional: true # rubocop:disable Rails/InverseOf
+
   def increment(value = 1)
     update(progress: (progress || 0) + value)
   end

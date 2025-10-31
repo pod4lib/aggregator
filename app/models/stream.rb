@@ -14,7 +14,6 @@ class Stream < ApplicationRecord
   has_one :statistic, dependent: :delete, as: :resource
   has_many :full_dumps, dependent: :destroy_async
   has_many :delta_dumps, dependent: :destroy_async
-  has_many :job_trackers, dependent: :delete_all, as: :reports_on
   belongs_to :previous_stream, class_name: 'Stream', optional: true
 
   scope :default, -> { where(status: 'default') }
@@ -52,7 +51,7 @@ class Stream < ApplicationRecord
   end
 
   def job_tracker_status_groups
-    trackers = JobTracker.where(reports_on: self)
+    trackers = JobTracker.includes(:solid_queue_job).where(reports_on: self)
     needs_attention, other_trackers = trackers.partition { |x| x.status == 'error' }
     active, recent = other_trackers.partition { |x| x.status != 'complete' }
 
