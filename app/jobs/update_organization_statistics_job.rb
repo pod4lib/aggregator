@@ -4,6 +4,7 @@
 class UpdateOrganizationStatisticsJob < ApplicationJob
   queue_as :default
   retry_on StandardError, wait: :exponentially_longer, attempts: 1
+  limits_concurrency key: ->(stream) { stream }, duration: 3.hours, on_conflict: :discard
 
   def self.perform_all
     Organization.unscope(:order).find_each do |o|

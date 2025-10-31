@@ -32,6 +32,9 @@ class ExtractMarcRecordMetadataJob < ApplicationJob
       job_tracker.update(progress: total, total: total)
 
       upload.update(status: 'processed', marc_records_count: total, deletes_count: deletes)
+
+      # Schedule a job to update organization statistics, with a little delay to try to debounce multiple uploads
+      UpdateOrganizationStatisticsJob.set(wait: 1.minute).perform_later(upload.stream)
     end
   end
 end
