@@ -4,49 +4,12 @@ require 'rails_helper'
 require 'cancan/matchers'
 
 RSpec.describe Ability do
-  subject { described_class.new(user, token) }
+  subject { described_class.new(user) }
 
   let(:user) { nil }
-  let(:token) { nil }
 
   describe 'for an anonymous user' do
     it { is_expected.to be_able_to(:confirm, ContactEmail) }
-  end
-
-  describe 'with a token' do
-    let(:org1) { create(:organization) }
-    let(:org2) { create(:organization) }
-    let(:default_stream) { create(:stream, :default) }
-    let(:token) { { 'jti' => 'anything' } }
-    let(:token_attributes) { {} }
-
-    before do
-      AllowlistedJwt.create(resource: org1, jti: 'anything', **token_attributes)
-    end
-
-    it { is_expected.to be_able_to(:read, org1) }
-    it { is_expected.to be_able_to(:read, org2) }
-
-    it { is_expected.to be_able_to(:create, Upload.new(organization: org1)) }
-    it { is_expected.not_to be_able_to(:create, Upload.new(organization: org2)) }
-
-    context 'with a token scoped to reads' do
-      let(:token_attributes) { { scope: 'download' } }
-
-      it { is_expected.to be_able_to(:read, org1) }
-      it { is_expected.to be_able_to(:read, org2) }
-      it { is_expected.to be_able_to(:read, create(:upload, :binary_marc, organization: org1)) }
-      it { is_expected.to be_able_to(:read, create(:upload, :binary_marc, organization: org2)) }
-      it { is_expected.not_to be_able_to(:create, Upload.new(organization: org1)) }
-    end
-
-    context 'with a token scoped to upload' do
-      let(:token_attributes) { { scope: 'upload' } }
-
-      it { is_expected.to be_able_to(:read, org1) }
-      it { is_expected.not_to be_able_to(:read, org2) }
-      it { is_expected.to be_able_to(:create, Upload.new(organization: org1)) }
-    end
   end
 
   describe 'with a user' do
