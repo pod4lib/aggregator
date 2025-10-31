@@ -5,14 +5,13 @@
           <th><%= t('dashboard.summary.table.provider') %></th>
           <th><%= t('dashboard.summary.table.history') %></th>
           <th><%= t('dashboard.summary.table.last_upload') %></th>
-          <th class="text-center"><%= t('dashboard.summary.table.status') %></th>
           <th><%= t('dashboard.summary.table.last_successful_upload') %></th>
         </tr>
       </thead>
       <tbody>
         <% recent_uploads_by_provider.each do |provider, uploads| %>
         <tr>
-          <td><%= link_to provider.name, organization_uploads_path(provider) %></td>
+          <th class="fw-normal"><%= link_to provider.name, organization_uploads_path(provider) %></th>
           
           <!-- Did any uploads succeed in past 30 days? -->
           <td>
@@ -26,24 +25,17 @@
           <!-- Most recent upload: -->
           <td>
             <% if uploads.present? %>
+              <%= render StatusIcons::MetadataStatusIconComponent.new(status: uploads.first.metadata_status) %>
               <%= link_to helpers.local_time(uploads[0].created_at, format: helpers.datetime_display_format()), organization_upload_path(provider, uploads[0]) %>
             <% else %>
               <i class="bi bi-exclamation-triangle-fill text-warning"></i>
             <% end %>
           </td>
-          <!-- Most recent upload status: -->
-          <td class="text-center">
-            <% if uploads.present? %>
-              <% status = files_status(uploads[0]) %>
-              <%= render StatusIcons::JobStatusIconComponent.new(status: status) %>
-            <% else %>
-              <i class="bi bi-exclamation-triangle-fill text-warning" role="img" aria-label="Missing upload"></i>
-            <% end %>
-          </td>
-          <!-- Date of successful upload: -->
+          <!-- Last successful upload: -->
           <td>
-            <% if last_successful_upload_date = provider.uploads.where(status: 'processed', marc_records_count: 1..).maximum(:created_at) %>
-              <%= helpers.local_time(last_successful_upload_date, format: helpers.datetime_display_format()) %>
+            <% if last_successful_upload = provider.uploads.where(status: 'processed', metadata_status: 'success', marc_records_count: 1..).order(created_at: :desc).first %>
+              <%= render StatusIcons::MetadataStatusIconComponent.new(status: last_successful_upload.metadata_status) %>
+              <%= link_to helpers.local_time(last_successful_upload.created_at, format: helpers.datetime_display_format()), organization_upload_path(provider, last_successful_upload)  %>
             <% else %>
               <p>No prior successful uploads</p>
             <% end %>
