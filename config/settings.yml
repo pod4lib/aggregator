@@ -37,7 +37,7 @@ job_status_group:
     badge_class: 'bg-success'
 
 # refer to https://icons.getbootstrap.com/ for icon class names
-metadata_status:
+file_status:
   success:
     icon_class: 'bi bi-file-earmark-fill text-success'
     label: 'Valid MARC (adds, updates, or deletes)'
@@ -52,6 +52,20 @@ metadata_status:
     label: 'Neither MARC nor Deletes'
   unknown:
     icon_class: 'bi bi-question-circle-fill text-info'
+    label: 'Unknown'
+
+upload_status:
+  success:
+    icon_class: 'bi bi-file-earmark-fill text-success'
+    label: 'Upload success'
+  invalid:
+    icon_class: 'bi bi-exclamation-circle-fill text-danger'
+    label: 'Invalid Data'
+  needs_attention:
+    icon_class: 'bi bi-exclamation-triangle-fill text-warning'
+    label: 'Needs attention'
+  unknown:
+    icon_class: 'bi bi-question-circle-fill align-middle text-info'
     label: 'Unknown'
 
 # max. MARC records per OAI-XML file; also max. size of one page in ListRecords

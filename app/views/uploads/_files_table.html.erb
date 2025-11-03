@@ -1,7 +1,7 @@
 <ul class="table-key list-unstyled list-inline pt-3" aria-hidden="true">
-  <% Settings.metadata_status.keys.each do |status| %>
+  <% Settings.file_status.keys.each do |status| %>
     <li class="list-inline-item">
-      <%= render(StatusIcons::MetadataStatusIconComponent.new(status: status, show_label: true)) %>
+      <%= render(StatusIcons::FileStatusIconComponent.new(status: status, show_label: true)) %>
     </li>
   <% end %>
 </ul>

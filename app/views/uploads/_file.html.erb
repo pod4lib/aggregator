@@ -1,6 +1,6 @@
 <tr>
   <td class="align-middle text-center">
-    <%= render(StatusIcons::MetadataStatusIconComponent.new(status: file.pod_metadata_status)) %>
+    <%= render(StatusIcons::FileStatusIconComponent.new(status: file.pod_metadata_status)) %>
   </td>
   <td class="align-middle">
     <%= link_to_if can?(:read, upload), file.filename, download_url(file), title: "Download #{file.filename}" %>

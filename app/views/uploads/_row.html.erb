@@ -14,7 +14,7 @@
 <% if upload.status == 'compacted' %>
   <tr>
     <td class="align-middle text-center">
-      <i class="<%= Settings.metadata_status.unknown.icon_class %> pod-metadata-status" aria-label=""></i>
+      <i class="<%= Settings.upload_status.unknown.icon_class %> pod-metadata-status" aria-label=""></i>
     </td>
     <td class="align-middle"><strong>Compacted uploads:</strong></td>
     <td class="align-middle"><%= local_time(upload.created_at, format: datetime_display_format()) %></td>
@@ -34,7 +34,7 @@
 
 <tr>
   <td class="align-middle text-center">
-    <%= render(StatusIcons::MetadataStatusIconComponent.new(status: upload.metadata_status)) %>
+    <%= render(StatusIcons::UploadStatusIconComponent.new(status: upload.metadata_status)) %>
   </td>
   <td class="align-middle">
     <% if upload.files.one? %>
