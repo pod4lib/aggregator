@@ -29,7 +29,9 @@ class ApplicationJob < ActiveJob::Base
   private
 
   def find_or_initialize_job_tracker
-    @job_tracker = JobTracker.find_or_create_by!(job_id: job_id) do |tracker|
+    # NOTE: Using create_or_find_by! (which is atomic) to avoid creating duplicate JobTracker records
+    # for the same job_id.
+    @job_tracker = JobTracker.create_or_find_by!(job_id: job_id) do |tracker|
       tracker.status = 'enqueued'
       tracker.job_class = self.class.name
       tracker.resource = arguments.first
