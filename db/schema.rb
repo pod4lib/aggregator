@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_10_29_182836) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_03_172808) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -187,7 +187,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_10_29_182836) do
     t.string "resource_type", null: false
     t.string "status"
     t.datetime "updated_at", null: false
-    t.index ["job_id"], name: "index_job_trackers_on_job_id"
+    t.index ["job_id"], name: "index_job_trackers_on_job_id", unique: true
     t.index ["provider_job_id"], name: "index_job_trackers_on_provider_job_id"
     t.index ["reports_on_type", "reports_on_id"], name: "index_job_trackers_on_reports_on_type_and_reports_on_id"
     t.index ["resource_type", "resource_id"], name: "index_job_trackers_on_resource_type_and_resource_id"
