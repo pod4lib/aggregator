@@ -14,7 +14,7 @@
         <% if @organization.groups.any? %>
           <span class="lead">
             <% @organization.groups.each do |group| %>
-              <span class="me-2">
+              <span class="me-4">
                 <% if group.icon.attached? %>
                   <%= image_tag(group.icon, alt: '', class: '', height: 25) %>
                 <% end %>
