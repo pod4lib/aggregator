@@ -1,9 +1,9 @@
   <!-- Upload activity table -->
   <h2 class="mt-5"><%= t('dashboard.summary.upload_title') %></h2>
   <ul class="table-key list-unstyled list-inline pt-3" aria-hidden="true">
-    <% Settings.metadata_status.each do |status, values| %>
+    <% Settings.upload_status.each do |status, values| %>
     <li class="list-inline-item">
-      <%= render(StatusIcons::MetadataStatusIconComponent.new(status: status, show_label: true)) %>
+      <%= render(StatusIcons::UploadStatusIconComponent.new(status: status, show_label: true)) %>
     </li>
     <% end %>
   </ul>
@@ -25,7 +25,7 @@
       <% upload.files.each do |file| %>
       <tr>
         <td class="text-center">
-          <%= render(StatusIcons::MetadataStatusIconComponent.new(status: file.pod_metadata_status)) %>
+          <%= render(StatusIcons::UploadStatusIconComponent.new(status: upload.metadata_status)) %>
         </td>
         <td>
           <%= link_to_if helpers.can?(:read, upload), upload.name, organization_upload_path(upload.organization, upload), title: t('dashboard.summary.table.upload_title', name: upload.name) %>
