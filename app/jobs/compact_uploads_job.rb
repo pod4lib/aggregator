@@ -13,7 +13,7 @@ class CompactUploadsJob < ApplicationJob
     end
 
     selected_streams = streams.sort_by do |s|
-      s.upload.where(status: 'compacted').maximum(:updated_at) || Time.zone.at(0)
+      s.uploads.where(status: 'compacted').maximum(:updated_at) || Time.zone.at(0)
     end.first(maximum)
 
     selected_streams.each do |stream|
