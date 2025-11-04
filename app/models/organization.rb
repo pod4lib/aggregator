@@ -50,8 +50,4 @@ class Organization < ApplicationRecord
   def latest_upload
     uploads.recent.first
   end
-
-  def latest_successful_upload
-    uploads.recent.successful.first
-  end
 end
