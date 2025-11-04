@@ -17,9 +17,9 @@ module Dashboard
           # Show the worst status of the day
           worst_upload = daily_uploads.min_by do |upload|
             case upload.metadata_status
-            when 'success' then 0
-            when 'invalid' then 1
-            else 2
+            when 'invalid' then 0
+            when 'success' then 2
+            else 1
             end
           end
 
