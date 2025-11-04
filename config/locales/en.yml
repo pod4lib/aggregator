@@ -13,7 +13,6 @@ en:
         last_active_job: Last active job started
         last_delta: Last delta
         last_full_dump: Last full dump
-        last_successful_upload: Last successful upload
         last_upload: Last upload
         members: Members
         owners: Owners

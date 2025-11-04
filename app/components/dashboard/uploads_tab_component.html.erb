@@ -5,7 +5,6 @@
           <th><%= t('dashboard.summary.table.provider') %></th>
           <th><%= t('dashboard.summary.table.history') %></th>
           <th><%= t('dashboard.summary.table.last_upload') %></th>
-          <th><%= t('dashboard.summary.table.last_successful_upload') %></th>
         </tr>
       </thead>
       <tbody>
@@ -29,15 +28,6 @@
               <%= link_to helpers.local_time(upload.created_at, format: helpers.datetime_display_format()), organization_upload_path(provider, upload) %>
             <% else %>
               <i class="bi bi-exclamation-triangle-fill text-warning"></i>
-            <% end %>
-          </td>
-          <!-- Last successful upload: -->
-          <td>
-            <% if last_successful_upload = provider.latest_successful_upload %>
-              <%= render StatusIcons::UploadStatusIconComponent.new(status: last_successful_upload.metadata_status) %>
-              <%= link_to helpers.local_time(last_successful_upload.created_at, format: helpers.datetime_display_format()), organization_upload_path(provider, last_successful_upload)  %>
-            <% else %>
-              <p class="mb-0">No prior successful uploads</p>
             <% end %>
           </td>
         </tr>
