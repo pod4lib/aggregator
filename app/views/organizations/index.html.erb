@@ -9,8 +9,9 @@
           <th colspan="2">Consumer</th>
           <th class="text-end">Users</th>
           <th>POD contact</th>
-          <th>Actions</th>
-          <th colspan="2">Actions</th>
+          <% if can? :manage, Organization %>
+            <th colspan="2">Actions</th>
+          <% end %>
         </tr>
       </thead>
       <tbody>
@@ -54,7 +55,9 @@
         <th class="text-end">Unique records</th>
         <th class="text-end">Total records</th>
         <th>Last update</th>
-        <th colspan="2">Actions</th>
+        <% if can? :manage, Organization %>
+          <th colspan="2">Actions</th>
+        <% end %>
       </tr>
     </thead>
 
