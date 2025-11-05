@@ -11,6 +11,12 @@
     </div>
   </div>
 
+  <% if @blob.metadata&.dig('error').present? %>
+    <div class="alert alert-warning">
+      <%= @blob.metadata['error'] %>
+    </div>
+  <% end %>
+
   <%= render 'uploads/summary_card', upload: @upload %>
 
   <%= turbo_frame_tag 'marc-records', src: organization_upload_attachment_marc_records_path(@upload.organization, @upload, @attachment) %>
