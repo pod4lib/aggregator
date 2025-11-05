@@ -22,26 +22,6 @@ job_type :runner,  "cd :path && RAILS_LOG_LEVEL=warn :environment_variable=:envi
 
 # Learn more: http://github.com/javan/whenever
 
-# every :tuesday do
-#   runner 'CompactUploadsJob.enqueue_some'
-# end
-
-# every :wednesday do
-#   runner 'CleanupAndRemoveDataJob.enqueue_all'
-# end
-
-# every 2.days do
-#   runner 'GenerateFullDumpJob.enqueue_some'
-# end
-
-# every :day do
-#   runner 'GenerateDeltaDumpJob.enqueue_all'
-# end
-
-# every :day do
-#   runner 'UpdateOrganizationStatisticsJob.perform_all'
-# end
-
 every :day, at: '3:00 am' do
   rake 'agg:prune_ahoy_visits[180]'
 end
