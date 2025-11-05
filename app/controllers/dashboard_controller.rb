@@ -10,8 +10,6 @@ class DashboardController < ApplicationController
 
   def tab
     case params[:tab]
-    when 'job_status'
-      render Dashboard::JobStatusTabComponent.new
     when 'normalized_data'
       render Dashboard::NormalizedDataTabComponent.new
     when 'users'
