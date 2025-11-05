@@ -5,7 +5,7 @@ class DashboardController < ApplicationController
   authorize_resource class: :controller
 
   def summary
-    render Dashboard::SummaryComponent.new(uploads: uploads)
+    render Dashboard::SummaryComponent.new
   end
 
   def tab
@@ -19,11 +19,5 @@ class DashboardController < ApplicationController
     else
       head :not_found
     end
-  end
-
-  private
-
-  def uploads
-    @uploads ||= Upload.recent.page(params[:page])
   end
 end
