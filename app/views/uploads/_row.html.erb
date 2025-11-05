@@ -36,6 +36,10 @@
   <td class="align-middle text-center">
     <%= render(StatusIcons::UploadStatusIconComponent.new(status: upload.metadata_status)) %>
   </td>
+  <td class="align-middle text-start">
+    <%= link_to upload.name, organization_upload_path(upload.organization, upload),
+            title: 'Upload', name: upload.name %>
+  </td>
   <td class="align-middle">
     <% if upload.files.one? %>
       <% file = upload.files.first %>
