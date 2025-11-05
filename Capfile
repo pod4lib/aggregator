@@ -27,7 +27,6 @@ require 'capistrano/rails'
 require 'capistrano/passenger'
 require 'dlss/capistrano'
 require 'capistrano/shared_configs'
-require 'whenever/capistrano'
 
 # Loads custom tasks from `lib/capistrano/tasks' if you have any defined.
 Dir.glob('lib/capistrano/tasks/*.cap').each { |r| import r }
