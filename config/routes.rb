@@ -101,6 +101,6 @@ Rails.application.routes.draw do
   resources :site_users, only: [:index, :update]
 
   authenticate :user, lambda { |u| u.has_role? :admin } do
-    mount MissionControl::Jobs::Engine, at: "/jobs"
+    mount MissionControl::Jobs::Engine, at: "/jobs", as: 'jobs'
   end
 end
