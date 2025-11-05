@@ -4,10 +4,9 @@
 class ExtractMarcRecordMetadataJob < ApplicationJob
   queue_as :default
   with_job_tracking
+  limits_concurrency key: ->(upload) { upload }, duration: 30.minutes
 
   def perform(upload) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-    return unless upload.active? && upload.files.any?
-
     upload.with_lock do
       upload.update(status: 'active')
 
