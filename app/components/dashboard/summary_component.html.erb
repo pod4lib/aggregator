@@ -12,10 +12,6 @@
           role="tab" aria-controls="uploads-pane" aria-selected="true">Uploads</button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="job-status-tab" data-bs-toggle="tab" data-bs-target="#job-status-pane" type="button"
-          role="tab" aria-controls="job-status-pane" aria-selected="false">Job status</button>
-      </li>
-      <li class="nav-item" role="presentation">
         <button class="nav-link" id="normalized-data-tab" data-bs-toggle="tab" data-bs-target="#normalized-data-pane"
           type="button" role="tab" aria-controls="normalized-data-pane" aria-selected="false">Normalized data</button>
       </li>
@@ -36,13 +32,6 @@
       <!-- Uploads tab - rendered by default, not lazy-loaded -->
       <div id="uploads-pane" class="tab-pane fade show active" role="tabpanel">
         <%= render Dashboard::UploadsTabComponent.new %>
-      </div>
-
-      <!-- Job Status tab -->
-      <div id="job-status-pane" class="tab-pane fade" role="tabpanel">
-        <%= helpers.turbo_frame_tag "job_status_tab", src: dashboard_tab_path(:job_status), loading: "lazy" do %>
-          <div class="text-muted">Loading Job Status…</div>
-        <% end %>
       </div>
 
       <!-- Normalized Data tab -->
