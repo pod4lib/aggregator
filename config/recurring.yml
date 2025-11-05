@@ -32,5 +32,5 @@ production:
     command: "CompactUploadsJob.enqueue_some"
     schedule: every tuesday
   prune_ahoy:
-    command: "PruneAhoyVisitsJob.perform_all"
+    class: "PruneAhoyVisitsJob"
     schedule: every day at 03:00
