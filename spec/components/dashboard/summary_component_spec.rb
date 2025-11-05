@@ -23,9 +23,8 @@ RSpec.describe Dashboard::SummaryComponent, type: :component do
 
     # rubocop:disable RSpec/MultipleExpectations
     it 'renders all summary tabs' do
-      expect(rendered).to have_css('ul#summary-tabs > li', count: 4)
+      expect(rendered).to have_css('ul#summary-tabs > li', count: 3)
       expect(rendered).to have_css('div#summary-tabs-content > div#uploads-pane')
-      expect(rendered).to have_css('div#summary-tabs-content > div#job-status-pane')
       expect(rendered).to have_css('div#summary-tabs-content > div#normalized-data-pane')
       expect(rendered).to have_css('div#summary-tabs-content > div#users-pane')
     end

@@ -4,13 +4,10 @@ en:
     summary:
       summary_title: Activity summary
       table:
-        active_jobs: Active jobs
         date_created: Date created
         download_title: Download %{filename}
         filename: File
         history: 30-day history
-        jobs_attention: Jobs needing attention
-        last_active_job: Last active job started
         last_delta: Last delta
         last_full_dump: Last full dump
         last_upload: Last upload
