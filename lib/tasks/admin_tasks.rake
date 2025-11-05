@@ -40,15 +40,6 @@ namespace :agg do
     password
   end
 
-  desc 'Prune old ahoy visits data'
-  task :prune_ahoy_visits, %i[days_old] => :environment do |_, args|
-    started_at = Ahoy::Visit.arel_table[:started_at]
-    Ahoy::Visit.where(started_at.lt(args[:days_old].to_i.days.ago)).where.missing(:events).in_batches do |visits|
-      visits.delete_all
-      sleep(5) # Throttle the delete queries
-    end
-  end
-
   desc 'Seed data from Aggregator API'
   task seed_from_api: :environment do
     puts "Seeding data from Aggregator @ #{Settings.marc_fixture_seeds.host} (this may take a several minutes)"

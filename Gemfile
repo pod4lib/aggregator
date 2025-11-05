@@ -110,7 +110,6 @@ gem 'paper_trail'
 gem 'rolify'
 gem 'inline_svg'
 gem 'marc'
-gem 'whenever'
 gem "view_component"
 
 gem 'rack-attack'
