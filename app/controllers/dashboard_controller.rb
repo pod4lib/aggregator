@@ -4,7 +4,7 @@
 class DashboardController < ApplicationController
   authorize_resource class: :controller
 
-  def summary
+  def index
     render Dashboard::SummaryComponent.new
   end
 

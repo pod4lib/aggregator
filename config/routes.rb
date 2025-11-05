@@ -35,8 +35,8 @@ Rails.application.routes.draw do
   get '/.well-known/resourcesync/capabilitylist', to: 'resourcesync#capabilitylist', as: :resourcesync_capabilitylist, defaults: { format: :xml }
   get '/.well-known/resourcesync/normalized-capabilitylist/:flavor', to: 'resourcesync#normalized_capabilitylist', as: :resourcesync_normalized_dump_capabilitylist, defaults: { format: :xml }
 
-  get 'dashboard/summary', to: 'dashboard#summary', as: :activity
-  get 'dashboard/tabs/:tab', to: 'dashboard#tab', as: :dashboard_tab
+  get 'dashboard', to: 'dashboard#index', as: :activity
+  get 'dashboard/:tab', to: 'dashboard#tab', as: :dashboard_tab
 
   get '/data', to: 'pages#data'
 
