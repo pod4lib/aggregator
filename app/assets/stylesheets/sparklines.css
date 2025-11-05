@@ -5,3 +5,13 @@
   grid-template-columns: repeat(auto-fit, minmax(1px, 1fr));
   grid-template-rows: 100%;
 }
+
+.bg-striped-success-danger {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--bs-success),
+    var(--bs-success) 10px,
+    var(--bs-danger) 10px,
+    var(--bs-danger) 20px
+  );
+}

@@ -8,22 +8,13 @@ module Dashboard
       super()
     end
 
-    def sparklines # rubocop:disable Metrics/AbcSize
+    def sparklines
       safe_join((30.days.ago.to_date..Time.zone.today).map do |date|
         daily_uploads = uploads_by_date[date] || []
         if daily_uploads.empty?
           tag.span('', class: 'sparkline-bar', aria: { hidden: true })
         else
-          # Show the worst status of the day
-          worst_upload = daily_uploads.min_by do |upload|
-            case upload.metadata_status
-            when 'invalid' then 0
-            when 'success' then 2
-            else 1
-            end
-          end
-
-          upload_sparkline_tag(worst_upload)
+          upload_sparkline_tag(daily_uploads)
         end
       end)
     end
@@ -32,12 +23,21 @@ module Dashboard
       @uploads.group_by { |upload| upload.created_at.to_date }
     end
 
-    def upload_sparkline_tag(upload)
-      case upload.metadata_status
-      when 'success'
-        tag.span('', class: 'border sparkline-bar bg-success', title: "Success on #{upload.created_at.strftime('%Y-%m-%d')}")
-      when 'invalid'
-        tag.span('', class: 'border sparkline-bar bg-danger', title: "Failed on #{upload.created_at.strftime('%Y-%m-%d')}")
+    def upload_sparkline_tag(daily_uploads)
+      # Show the worst status of the day
+      statuses = daily_uploads.index_by(&:metadata_status)
+
+      timestamp = daily_uploads.first.created_at.strftime('%Y-%m-%d')
+
+      if statuses.key?('invalid') && statuses.key?('success')
+        tag.span('', class: 'border sparkline-bar bg-striped-success-danger',
+                     title: "Mixed results on #{timestamp}")
+      elsif statuses.key?('invalid')
+        tag.span('', class: 'border sparkline-bar bg-danger',
+                     title: "Failed on #{timestamp}")
+      elsif statuses.key?('success')
+        tag.span('', class: 'border sparkline-bar bg-success',
+                     title: "Success on #{timestamp}")
       end
     end
   end
