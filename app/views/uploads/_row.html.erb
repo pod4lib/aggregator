@@ -59,11 +59,11 @@
     <% if can? :read, upload %>
       <% if upload.files.one? %>
         <% file = upload.files.first %>
-        <%= link_to file_info_organization_upload_path(@organization, upload, file), class: 'btn btn-sm btn-secondary' do %>
+        <%= link_to file_info_organization_upload_path(@organization, upload, file), class: 'btn btn-sm btn-secondary', data: { turbo: false } do %>
           <i class="bi bi-file-earmark pod-icon" title="MARC records"></i>
         <% end %>
       <% else %>
-        <%= link_to organization_upload_path(@organization, upload), class: 'btn btn-sm btn-secondary' do %>
+        <%= link_to organization_upload_path(@organization, upload), class: 'btn btn-sm btn-secondary', data: { turbo: false } do %>
           <i class="bi bi-folder2-open pod-icon" title="Files"></i>
         <% end %>
       <% end %>
