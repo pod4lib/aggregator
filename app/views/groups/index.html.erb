@@ -10,7 +10,9 @@
           <th>Short name</th>
           <th>Slug</th>
           <th>Description</th>
-          <th colspan="2">Actions</th>
+          <% if can? :manage, Organization %>
+            <th colspan="2">Actions</th>
+          <% end %>
         </tr>
       </thead>
 
