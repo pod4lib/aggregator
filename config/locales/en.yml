@@ -4,9 +4,6 @@ en:
     summary:
       summary_title: Activity summary
       table:
-        date_created: Date created
-        download_title: Download %{filename}
-        filename: File
         history: 30-day history
         last_delta: Last delta
         last_full_dump: Last full dump
@@ -15,14 +12,8 @@ en:
         owners: Owners
         pod_admins: POD admins
         provider: Provider
-        record_count: Records
-        size: Size
-        status: Status
         total_records: Total records
-        upload: Upload
-        upload_title: View upload %{name}
       title: Recent activity
-      upload_title: Upload activity
   groups:
     create:
       success: Group was successfully created.
