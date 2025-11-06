@@ -6,36 +6,48 @@
           <th><%= t('dashboard.summary.table.last_full_dump') %></th>
           <th class="text-end pe-4"><%= t('dashboard.summary.table.total_records') %></th>
           <th><%= t('dashboard.summary.table.last_delta') %></th>
+          <th class="text-end pe-4"><%= t('dashboard.summary.table.delta_records') %></th>
         </tr>
       </thead>
       <tbody>
         <% normalized_data_by_provider.each do |provider, dump| %>
         <tr>
           <th class="fw-normal align-middle"><%= link_to provider.name, normalized_data_organization_stream_path(provider, provider.default_stream), data: { turbo: false } %></th>
-          <!-- Last full dump: -->
-          <td>
-              <% if dump && dump.created_at %>
-                <%= local_time(dump.created_at, format: datetime_display_format()) %>
-              <% else %>
-                <i class="bi bi-exclamation-triangle-fill text-warning pod-icon"></i>
-              <% end %>
-          </td>
-          <!-- Dump records: -->
-          <td class="text-end pe-4">
-            <% if dump %>
+          <% if dump %>
+            <!-- Last full dump: -->
+            <td>
+              <%= local_time(dump.created_at, format: datetime_display_format()) if dump.created_at %>
+            </td>
+            <!-- Dump records: -->
+            <td class="text-end pe-4">
               <%= number_with_delimiter(dump.record_count) %>
+            </td>
+
+            <% if dump.last_delta_dump %>
+              <!-- Last delta: -->
+              <td>
+                <%= local_time(dump.last_delta_dump.effective_date, format: datetime_display_format()) %>
+              </td>
+              <!-- Last delta records: -->
+              <td>
+                <%= number_with_delimiter(dump.last_delta_dump.record_count) %>
+              </td>
             <% else %>
-              0
+              <td>
+                <i class="bi bi-exclamation-triangle-fill text-warning pod-icon"></i>
+              </td>
+              <td class="text-end pe-4">0</td>
             <% end %>
-          </td>
-          <!-- Last delta: -->
-          <td>
-            <% if dump && dump.deltas.any? %>
-              <%= local_time(dump.deltas.maximum(:effective_date), format: datetime_display_format()) %>
-            <% else %>
+          <% else %>
+            <td>
               <i class="bi bi-exclamation-triangle-fill text-warning pod-icon"></i>
-            <% end %>
-          </td>
+            </td>
+            <td class="text-end pe-4">0</td>
+            <td>
+              <i class="bi bi-exclamation-triangle-fill text-warning pod-icon"></i>
+            </td>
+            <td></td>
+          <% end %>
         </tr>
         <% end %>
       </tbody>
