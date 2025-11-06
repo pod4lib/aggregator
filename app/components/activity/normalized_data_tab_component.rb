@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Dashboard
+module Activity
   # Normalized data tab showing latest normalized dumps by provider
   class NormalizedDataTabComponent < ViewComponent::Base
     delegate :local_time, :datetime_display_format, to: :helpers

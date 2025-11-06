@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Dashboard
+module Activity
   # Uploads activity table showing recent upload statuses
   class UploadStatusSparklineComponent < ViewComponent::Base
     def initialize(uploads:)

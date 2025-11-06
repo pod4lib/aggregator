@@ -1,7 +1,7 @@
 <div class="container index-page">
-  <h1 class="visually-hidden"><%= t('dashboard.summary.title') %></h1>
+  <h1 class="visually-hidden"><%= t('activity.title') %></h1>
 
-  <h2><%= t('dashboard.summary.summary_title') %></h2>
+  <h2><%= t('activity.summary_title') %></h2>
 
   <!-- Activity summary tabs -->
   <ul class="nav nav-tabs mt-3" id="summary-tabs" role="tablist">
@@ -29,19 +29,19 @@
   <div class="tab-content pt-3" id="summary-tabs-content">
     <!-- Uploads tab - rendered by default, not lazy-loaded -->
     <div id="uploads-pane" class="tab-pane fade show active" role="tabpanel">
-      <%= render Dashboard::UploadsTabComponent.new %>
+      <%= render Activity::UploadsTabComponent.new %>
     </div>
 
     <!-- Normalized Data tab -->
     <div id="normalized-data-pane" class="tab-pane fade" role="tabpanel">
-      <%= helpers.turbo_frame_tag "normalized_data_tab", src: dashboard_tab_path(:normalized_data), loading: "lazy" do %>
+      <%= helpers.turbo_frame_tag "normalized_data_tab", src: activity_tab_path(:normalized_data), loading: "lazy" do %>
         <div class="text-muted">Loading Normalized Data…</div>
       <% end %>
     </div>
 
     <!-- Users tab -->
     <div id="users-pane" class="tab-pane fade" role="tabpanel">
-      <%= helpers.turbo_frame_tag "users_tab", src: dashboard_tab_path(:users), loading: "lazy" do %>
+      <%= helpers.turbo_frame_tag "users_tab", src: activity_tab_path(:users), loading: "lazy" do %>
         <div class="text-muted">Loading Users…</div>
       <% end %>
     </div>

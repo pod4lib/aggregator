@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
 # Some site-wide dashboards
-class DashboardController < ApplicationController
+class ActivityController < ApplicationController
   authorize_resource class: :controller
 
   def index
-    render Dashboard::SummaryComponent.new
+    render Activity::SummaryComponent.new
   end
 
   def tab
     case params[:tab]
     when 'normalized_data'
-      render Dashboard::NormalizedDataTabComponent.new
+      render Activity::NormalizedDataTabComponent.new
     when 'users'
-      render Dashboard::UsersTabComponent.new
+      render Activity::UsersTabComponent.new
     else
       head :not_found
     end

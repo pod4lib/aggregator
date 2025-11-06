@@ -1,26 +1,24 @@
 <div class="tab-pane fade show active" id="uploads-pane" role="tabpanel" aria-labelledby="uploads-tab">
-    <table class="table table-striped mb-3" id="uploads-table">
-      <thead>
-        <tr>
-          <th><%= t('dashboard.summary.table.provider') %></th>
-          <th><%= t('dashboard.summary.table.history') %></th>
-          <th><%= t('dashboard.summary.table.last_upload') %></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% recent_uploads_by_provider.each do |provider, uploads| %>
+  <table class="table table-striped mb-3" id="uploads-table">
+    <thead>
+      <tr>
+        <th><%= t('activity.table.provider') %></th>
+        <th><%= t('activity.table.history') %></th>
+        <th><%= t('activity.table.last_upload') %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% recent_uploads_by_provider.each do |provider, uploads| %>
         <tr>
           <th class="fw-normal align-middle"><%= link_to provider.name, organization_path(provider) %></th>
-          
           <!-- Did any uploads succeed in past 30 days? -->
           <td>
             <% if uploads.any? %>
-              <%= render Dashboard::UploadStatusSparklineComponent.new(uploads: uploads) %>
+              <%= render Activity::UploadStatusSparklineComponent.new(uploads: uploads) %>
             <% else %>
               <p class="mb-0"><i class="bi bi-exclamation-triangle-fill text-warning me-1"></i> No uploads in last 30 days</p>
             <% end %>
           </td>
-
           <!-- Most recent upload: -->
           <td>
             <% if upload = uploads.first || provider.latest_upload %>
@@ -31,7 +29,7 @@
             <% end %>
           </td>
         </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
+      <% end %>
+    </tbody>
+  </table>
+</div>
