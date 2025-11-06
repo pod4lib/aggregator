@@ -11,7 +11,7 @@
       <tbody>
         <% normalized_data_by_provider.each do |provider, dump| %>
         <tr>
-          <td><%= link_to provider.name, normalized_data_organization_stream_path(provider, provider.default_stream), data: { turbo: false } %></td>
+          <th class="fw-normal align-middle"><%= link_to provider.name, normalized_data_organization_stream_path(provider, provider.default_stream), data: { turbo: false } %></th>
           <!-- Last full dump: -->
           <td>
               <% if dump && dump.created_at %>
