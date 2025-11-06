@@ -29,7 +29,7 @@
                 <%= local_time(dump.last_delta_dump.effective_date, format: datetime_display_format()) %>
               </td>
               <!-- Last delta records: -->
-              <td>
+              <td  class="text-end pe-4">
                 <%= number_with_delimiter(dump.last_delta_dump.record_count) %>
               </td>
             <% else %>
