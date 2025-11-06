@@ -48,6 +48,7 @@ en:
       actions: Action
       add_owner: Add owner role
       confirm_action: Are you sure?
+      created_at: Created
       email: Email address
       invite_user: Invite new user to organization
       is_owner: Organization owner?

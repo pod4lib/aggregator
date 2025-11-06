@@ -5,6 +5,7 @@
       <tr>
         <th scope="col"><%= t('organization_users.index.email') %></th>
         <th scope="col"><%= t('organization_users.index.name') %></th>
+        <th scope="col"><%= t('organization_users.index.created_at') %></th>
         <th scope="col"><%= t('.organization') %></th>
         <th scope="col" class="text-center"><%= t('.is_admin') %></th>
       </tr>
@@ -14,6 +15,7 @@
       <tr>
         <td class="align-middle"><%= mail_to user.email %></td>
         <td class="align-middle"><%= user.name %></td>
+        <td class="align-middle"><%= local_time(user.created_at, format: datetime_display_format) %></td>
         <td class="align-middle">
           <% if user.organizations.present? %>
           <%= link_to user.organizations.first.name, organization_users_path(user.organizations.first) %>
