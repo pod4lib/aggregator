@@ -24,22 +24,30 @@
     <table class="table table-striped organizations mt-4">
       <thead>
         <tr>
-          <th>marc001</th>
-          <th>File</th>
+          <th style="width: 2rem">Type</th>
+          <th>MARC 001</th>
+          <th>Index</th>
+          <th>Checksum</th>
           <th>Download</th>
+          <% if params[:attachment_id].blank? %><th>File</th><% end %>
         </tr>
       </thead>
 
       <tbody>
         <% @marc_records.each do |marc_record| %>
           <tr data-turbo="false">
+            <td><%= marc_record.delete? ? tag.i(class: "bi bi-minus text-danger", title: 'Delete') : tag.i(class: "bi bi-plus text-success", title: 'Add/update') %></td>
             <td><%= marc_record.marc001 %></td>
-            <td><%= link_to marc_record.file.filename, file_info_organization_upload_path(@organization, marc_record.upload, marc_record.file) %></td>
+            <td><%= marc_record.index %></td>
+            <td class="small"><%= (marc_record.checksum || '')[-8..] %></td>
             <td>
-              <% unless marc_record.status == 'delete' %>
+              <% if marc_record.json %>
                 <%= link_to('marc21', marc21_organization_marc_record_url(@organization, marc_record)) %>, <%= link_to('marcxml', marcxml_organization_marc_record_url(@organization, marc_record)) %>
               <% end %>
             </td>
+            <% if params[:attachment_id].blank? %>
+              <td><%= link_to marc_record.file.filename, file_info_organization_upload_path(@organization, marc_record.upload, marc_record.file) %></td>
+            <% end %>
           </tr>
         <% end %>
       </tbody>

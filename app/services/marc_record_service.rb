@@ -228,6 +228,7 @@ class MarcRecordService
         yield record, {
           **records_to_combine.first.except(:marc, :marc_bytes),
           index: index,
+          bytecount: bytes.length,
           length: bytes.length,
           checksum: Digest::MD5.hexdigest(bytes)
         }

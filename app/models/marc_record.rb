@@ -27,6 +27,10 @@ class MarcRecord < ApplicationRecord
     @augmented_marc ||= organization.augmented_marc_record_service.execute(marc)
   end
 
+  def delete?
+    status == 'delete'
+  end
+
   private
 
   def service
