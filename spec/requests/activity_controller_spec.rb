@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe '/dashboard' do
+RSpec.describe '/activity' do
   let(:user) { create(:user) }
   let(:organization) { create(:organization) }
   let(:stream) { create(:stream, organization: organization, default: true) }

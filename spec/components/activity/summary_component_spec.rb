@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Dashboard::SummaryComponent, type: :component do
+RSpec.describe Activity::SummaryComponent, type: :component do
   subject(:rendered) { Capybara::Node::Simple.new(render_inline(described_class.new).to_html) }
 
   let(:user) { create(:user) }

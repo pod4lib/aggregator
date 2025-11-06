@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Dashboard
+module Activity
   # Uploads tab showing recent uploads by provider
   class UploadsTabComponent < ViewComponent::Base
     attr_reader :uploads

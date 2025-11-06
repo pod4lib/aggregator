@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Dashboard
+module Activity
   # Users tab showing users by organization
   class UsersTabComponent < ViewComponent::Base
     def users_by_organization

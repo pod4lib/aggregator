@@ -1,16 +1,16 @@
 <turbo-frame id="normalized_data_tab">
-    <table class="table table-striped mb-3" id="normalized-data-table">
-      <thead>
-        <tr>
-          <th><%= t('dashboard.summary.table.provider') %></th>
-          <th><%= t('dashboard.summary.table.last_full_dump') %></th>
-          <th class="text-end pe-4"><%= t('dashboard.summary.table.total_records') %></th>
-          <th><%= t('dashboard.summary.table.last_delta') %></th>
-          <th class="text-end pe-4"><%= t('dashboard.summary.table.delta_records') %></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% normalized_data_by_provider.each do |provider, dump| %>
+  <table class="table table-striped mb-3" id="normalized-data-table">
+    <thead>
+      <tr>
+        <th><%= t('activity.table.provider') %></th>
+        <th><%= t('activity.table.last_full_dump') %></th>
+        <th class="text-end pe-4"><%= t('activity.table.total_records') %></th>
+        <th><%= t('activity.table.last_delta') %></th>
+        <th class="text-end pe-4"><%= t('activity.table.delta_records') %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% normalized_data_by_provider.each do |provider, dump| %>
         <tr>
           <th class="fw-normal align-middle"><%= link_to provider.name, normalized_data_organization_stream_path(provider, provider.default_stream), data: { turbo: false } %></th>
           <% if dump %>
@@ -22,7 +22,6 @@
             <td class="text-end pe-4">
               <%= number_with_delimiter(dump.record_count) %>
             </td>
-
             <% if dump.last_delta_dump %>
               <!-- Last delta: -->
               <td>
@@ -49,7 +48,7 @@
             <td></td>
           <% end %>
         </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </turbo-frame>
+      <% end %>
+    </tbody>
+  </table>
+</turbo-frame>

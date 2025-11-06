@@ -1,20 +1,19 @@
 ---
 en:
-  dashboard:
-    summary:
-      summary_title: Activity summary
-      table:
-        delta_records: Delta records
-        history: 30-day history
-        last_delta: Last delta
-        last_full_dump: Last full dump
-        last_upload: Last upload
-        members: Members
-        owners: Owners
-        pod_admins: POD admins
-        provider: Provider
-        total_records: Total records
-      title: Recent activity
+  activity:
+    summary_title: Activity summary
+    table:
+      delta_records: Delta records
+      history: 30-day history
+      last_delta: Last delta
+      last_full_dump: Last full dump
+      last_upload: Last upload
+      members: Members
+      owners: Owners
+      pod_admins: POD admins
+      provider: Provider
+      total_records: Total records
+    title: Recent activity
   groups:
     create:
       success: Group was successfully created.
