@@ -27,7 +27,7 @@
               <%= render StatusIcons::UploadStatusIconComponent.new(status: upload.metadata_status) %>
               <%= link_to helpers.local_time(upload.created_at, format: helpers.datetime_display_format()), organization_upload_path(provider, upload) %>
             <% else %>
-              <i class="bi bi-exclamation-triangle-fill text-warning"></i>
+              <i class="bi bi-exclamation-triangle-fill text-warning pod-icon"></i>
             <% end %>
           </td>
         </tr>
