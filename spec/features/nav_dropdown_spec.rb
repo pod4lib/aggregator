@@ -14,8 +14,8 @@ RSpec.describe 'Using the dropdown menu in the navbar' do
       visit '/'
     end
 
-    it 'Shows affiliated organization manage link' do
-      expect(page).to have_link 'Manage Best University'
+    it 'does not have the affiliated organization manage link' do
+      expect(page).to have_no_link 'Manage Best University'
     end
 
     it 'Shows affiliated organization home link' do
@@ -28,6 +28,28 @@ RSpec.describe 'Using the dropdown menu in the navbar' do
 
     it 'Shows the logout link' do
       expect(page).to have_link 'Logout'
+    end
+
+    it 'shows a button to become a superadmin' do
+      expect(page).to have_button 'Become superadmin'
+    end
+
+    describe 'after becoming superadmin' do
+      before do
+        click_on 'Become superadmin'
+      end
+
+      it 'Shows affiliated organization manage link' do
+        expect(page).to have_link 'Manage Best University'
+      end
+
+      it 'shows a button to drop the superadmin privileges' do
+        expect(page).to have_button 'Drop superadmin'
+
+        click_on 'Drop superadmin'
+
+        expect(page).to have_button 'Become superadmin'
+      end
     end
   end
 

@@ -45,7 +45,11 @@ class Ability
   end
 
   def site_admin_user_abilities
-    return unless user.has_role?(:admin)
+    return unless user.has_role?(:admin) || user.has_role?(:superadmin)
+
+    can :become, :superadmin
+
+    return unless user.acting_as_superadmin?
 
     can :manage, :all
     can :manage, :dashboard_controller
@@ -80,8 +84,8 @@ class Ability
   end
 
   def final_ability_restrictions
-    cannot :destroy, Organization unless user.has_role?(:admin)
-    cannot :destroy, Stream, status: %w[previous-default] unless user.has_role?(:admin)
+    cannot :destroy, Organization unless user.has_role?(:admin) || user.has_role?(:superadmin)
+    cannot :destroy, Stream, status: %w[previous-default] unless user.has_role?(:admin) || user.has_role?(:superadmin)
     cannot :destroy, Stream, status: %w[default]
   end
 end

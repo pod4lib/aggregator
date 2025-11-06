@@ -13,6 +13,7 @@ FactoryBot.define do
     before(:create, &:skip_confirmation!)
     after(:create) do |user|
       user.add_role(:admin)
+      user.add_role(:superadmin)
       user.confirm
     end
   end

@@ -158,12 +158,18 @@ en:
       logout: Logout
       manage_org_page: Manage %{org}
       providers: Providers
+      superadmin:
+        become: Become superadmin
+        disclaim: Drop superadmin
       users: Users
       view_org_page: "%{org} home"
     organization_header:
       contact: POD contact
       marc_code: 'MARC code: %{code}'
       provider_home: Provider home
+  site_admin:
+    became_superadmin: You are now a superadmin.
+    disclaimed_superadmin: You are no longer a superadmin.
   site_users:
     index:
       add_admin: Add admin role

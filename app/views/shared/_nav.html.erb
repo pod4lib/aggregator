@@ -48,8 +48,8 @@
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
               aria-expanded="false">
               <%= current_user.email %>
-              <% if current_user.has_role? :admin %>
-                <span class="badge bg-warning text-dark h-100 my-auto ms-1"><%= t('.is_admin') %></span>
+              <% if current_user.has_role?(:admin) || current_user.has_role?(:superadmin) %>
+                <span class="badge <%= current_user&.acting_as_superadmin? ? 'text-bg-warning' : 'border border-warning' %> h-100 my-auto ms-1"><%= t('.is_admin') %></span>
               <% end %>
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
@@ -64,6 +64,27 @@
               <li>
                 <hr class="dropdown-divider">
               </li>
+
+              <% if can? :become, :superadmin %>
+                <% if can? :disclaim, :superadmin %>
+                  <li>
+                    <%= form_with url: disclaim_superadmin_path, method: 'POST' do %>
+                      <%= submit_tag t('.superadmin.disclaim'), class: 'dropdown-item btn-text' %>
+                    <% end %>
+                  </li>
+                <% else %>
+                  <li>
+                    <%= form_with url: become_superadmin_path, method: 'POST' do %>
+                      <%= submit_tag t('.superadmin.become'), class: 'dropdown-item btn-text' %>
+                    <% end %>
+                  </li>
+                <% end %>
+
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+              <% end %>
+
               <li>
                 <%= link_to t('.logout'), destroy_user_session_path, class: 'dropdown-item', data: { turbo_method: :delete } %>
               </li>

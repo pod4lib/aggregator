@@ -22,9 +22,17 @@ class User < ApplicationRecord
   def highest_role
     roles = self.roles.map(&:name).uniq
 
-    return :admin if roles.include? 'admin'
+    return :admin if roles.include?('admin') || roles.include?('superadmin')
     return :owner if roles.include? 'owner'
 
     :member if roles.include? 'member'
+  end
+
+  def acting_as_superadmin?
+    return @acting_as_superadmin unless @acting_as_superadmin.nil?
+
+    @acting_as_superadmin = has_role?(:superadmin) || ActiveModel::Type::Boolean.new.cast(
+      Thread.current[:acting_as_superadmin]
+    )
   end
 end
