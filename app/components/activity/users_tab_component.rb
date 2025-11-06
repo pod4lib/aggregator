@@ -3,8 +3,12 @@
 module Activity
   # Users tab showing users by organization
   class UsersTabComponent < ViewComponent::Base
+    delegate :can?, :current_ability, to: :helpers
+
     def users_by_organization
-      @users_by_organization ||= Organization.all.index_with(&:users)
+      return [] unless can?(:read, User)
+
+      @users_by_organization ||= Organization.accessible_by(current_ability).index_with(&:users)
     end
 
     def count_roles(users)

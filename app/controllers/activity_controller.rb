@@ -2,7 +2,9 @@
 
 # Some site-wide dashboards
 class ActivityController < ApplicationController
-  authorize_resource class: :controller
+  before_action do
+    authorize! :read, :dashboard
+  end
 
   def index
     render Activity::SummaryComponent.new
