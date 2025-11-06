@@ -4,6 +4,7 @@ en:
     summary:
       summary_title: Activity summary
       table:
+        delta_records: Delta records
         history: 30-day history
         last_delta: Last delta
         last_full_dump: Last full dump

@@ -12,6 +12,10 @@ class FullDump < ApplicationRecord
     stream.delta_dumps.published.where(previous_stream_id: nil, effective_date: effective_date..)
   end
 
+  def last_delta_dump
+    @last_delta_dump ||= deltas.order(effective_date: :desc).first
+  end
+
   def interstream_deltas
     stream.interstream_delta_dumps
   end
