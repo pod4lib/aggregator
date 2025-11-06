@@ -29,19 +29,21 @@
   <div class="tab-content pt-3" id="summary-tabs-content">
     <!-- Uploads tab - rendered by default, not lazy-loaded -->
     <div id="uploads-pane" class="tab-pane fade show active" role="tabpanel">
-      <%= render Activity::UploadsTabComponent.new %>
+      <%= helpers.turbo_frame_tag "uploads_tab", src: activity_uploads_path, loading: "lazy" do %>
+        <div class="text-muted">Loading Uploads…</div>
+      <% end %>
     </div>
 
     <!-- Normalized Data tab -->
     <div id="normalized-data-pane" class="tab-pane fade" role="tabpanel">
-      <%= helpers.turbo_frame_tag "normalized_data_tab", src: activity_tab_path(:normalized_data), loading: "lazy" do %>
+      <%= helpers.turbo_frame_tag "normalized_data_tab", src: activity_normalized_data_path, loading: "lazy" do %>
         <div class="text-muted">Loading Normalized Data…</div>
       <% end %>
     </div>
 
     <!-- Users tab -->
     <div id="users-pane" class="tab-pane fade" role="tabpanel">
-      <%= helpers.turbo_frame_tag "users_tab", src: activity_tab_path(:users), loading: "lazy" do %>
+      <%= helpers.turbo_frame_tag "users_tab", src: activity_users_path, loading: "lazy" do %>
         <div class="text-muted">Loading Users…</div>
       <% end %>
     </div>

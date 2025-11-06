@@ -38,8 +38,10 @@ Rails.application.routes.draw do
   get '/.well-known/resourcesync/capabilitylist', to: 'resourcesync#capabilitylist', as: :resourcesync_capabilitylist, defaults: { format: :xml }
   get '/.well-known/resourcesync/normalized-capabilitylist/:flavor', to: 'resourcesync#normalized_capabilitylist', as: :resourcesync_normalized_dump_capabilitylist, defaults: { format: :xml }
 
-  get 'activity', to: 'activity#index'
-  get 'activity/:tab', to: 'activity#tab', as: :activity_tab
+  get 'activity', to: 'activity#index', as: :activity
+  get 'activity/normalized_data', to: 'activity#normalized_data'
+  get 'activity/uploads', to: 'activity#uploads'
+  get 'activity/users', to: 'activity#users'
 
   get '/data', to: 'pages#data'
 
