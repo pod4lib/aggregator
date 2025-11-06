@@ -1,7 +1,7 @@
 <div class="container index-page">
   <h1 class="visually-hidden">Providers</h1>
   <!-- Only show consumer-only table to admins -->
-  <% if current_user && current_user.has_role?(:admin) && @consumers.any? %>
+  <% if can?(:view, :consumers) && @consumers.any? %>
     <h2>Consumer-only organizations</h2>
     <table class="table table-striped organizations mb-5 mt-4" id="consumers">
       <thead>

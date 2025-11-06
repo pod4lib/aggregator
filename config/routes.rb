@@ -12,6 +12,9 @@ Rails.application.routes.draw do
 
   root to: 'pages#home'
 
+  post '/site_admin/become_superadmin', to: 'site_admin#become_superadmin', as: :become_superadmin
+  post '/site_admin/disclaim_superadmin', to: 'site_admin#disclaim_superadmin', as: :disclaim_superadmin
+
   get '/api', to: 'pages#api'
   class OaiConstraint
     def initialize(verb:)

@@ -32,14 +32,14 @@ RSpec.describe 'Viewing provider information' do
 
   describe 'Providers overview page as an admin' do
     it 'allows admin to see organizations list' do
-      user.add_role :admin
+      user.add_role :superadmin
       visit organizations_url
 
       expect(page).to have_link 'Best org'
     end
 
     it 'allows admin to edit, create, or destroy organizations' do
-      user.add_role :admin
+      user.add_role :superadmin
       visit organizations_url
 
       # don't confuse "Edit" with "Edit Profile" in header nav
@@ -64,7 +64,7 @@ RSpec.describe 'Viewing provider information' do
 
   describe 'Provider detail page as an admin' do
     it 'lists some limited information about the org' do
-      user.add_role :admin
+      user.add_role :superadmin
       visit organization_url(organization)
 
       expect(page).to have_content '1297245.marc'

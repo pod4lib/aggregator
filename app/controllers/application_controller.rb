@@ -9,6 +9,7 @@ class ApplicationController < ActionController::Base
   check_authorization unless: :devise_controller?
   before_action :set_paper_trail_whodunnit
   before_action :configure_permitted_parameters, if: :devise_controller?
+  prepend_before_action :set_flag_if_acting_as_superadmin
 
   rescue_from CanCan::AccessDenied do |exception|
     respond_to do |format|
@@ -26,5 +27,9 @@ class ApplicationController < ActionController::Base
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:account_update, keys: %i[title name])
+  end
+
+  def set_flag_if_acting_as_superadmin
+    Thread.current[:acting_as_superadmin] = cookies[:acting_as_superadmin] == 'true' && current_user&.has_role?(:admin)
   end
 end
