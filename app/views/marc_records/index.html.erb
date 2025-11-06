@@ -25,8 +25,8 @@
       <thead>
         <tr>
           <th>marc001</th>
-          <th>File</th>
           <th>Download</th>
+          <% if params[:attachment_id].blank? %><th>File</th><% end %>
         </tr>
       </thead>
 
@@ -34,12 +34,14 @@
         <% @marc_records.each do |marc_record| %>
           <tr data-turbo="false">
             <td><%= marc_record.marc001 %></td>
-            <td><%= link_to marc_record.file.filename, file_info_organization_upload_path(@organization, marc_record.upload, marc_record.file) %></td>
             <td>
               <% unless marc_record.status == 'delete' %>
                 <%= link_to('marc21', marc21_organization_marc_record_url(@organization, marc_record)) %>, <%= link_to('marcxml', marcxml_organization_marc_record_url(@organization, marc_record)) %>
               <% end %>
             </td>
+            <% if params[:attachment_id].blank? %>
+              <td><%= link_to marc_record.file.filename, file_info_organization_upload_path(@organization, marc_record.upload, marc_record.file) %></td>
+            <% end %>
           </tr>
         <% end %>
       </tbody>
