@@ -34,7 +34,7 @@
               <%= link_to t('.groups'), groups_url, class: class_names('nav-link', { active: current_page?(groups_url) }) %>
             </li>
           <% end %>
-          <% if current_user.has_role? :admin %>
+          <% if can? :manage, :jobs %>
             <li class="nav-item">
               <%= link_to 'Jobs', jobs_url, class: class_names('nav-link') %>
             </li>
