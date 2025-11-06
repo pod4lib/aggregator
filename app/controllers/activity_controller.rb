@@ -8,14 +8,15 @@ class ActivityController < ApplicationController
     render Activity::SummaryComponent.new
   end
 
-  def tab
-    case params[:tab]
-    when 'normalized_data'
-      render Activity::NormalizedDataTabComponent.new
-    when 'users'
-      render Activity::UsersTabComponent.new
-    else
-      head :not_found
-    end
+  def normalized_data
+    render Activity::NormalizedDataTabComponent.new
+  end
+
+  def uploads
+    render Activity::UploadsTabComponent.new
+  end
+
+  def users
+    render Activity::UsersTabComponent.new
   end
 end
