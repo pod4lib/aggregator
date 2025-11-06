@@ -68,13 +68,13 @@
               <% if can? :become, :superadmin %>
                 <% if can? :disclaim, :superadmin %>
                   <li>
-                    <%= form_with url: disclaim_superadmin_path, method: 'POST' do %>
+                    <%= form_with url: disclaim_superadmin_path, method: 'POST', data: { turbo: false } do %>
                       <%= submit_tag t('.superadmin.disclaim'), class: 'dropdown-item btn-text' %>
                     <% end %>
                   </li>
                 <% else %>
                   <li>
-                    <%= form_with url: become_superadmin_path, method: 'POST' do %>
+                    <%= form_with url: become_superadmin_path, method: 'POST', data: { turbo: false } do %>
                       <%= submit_tag t('.superadmin.become'), class: 'dropdown-item btn-text' %>
                     <% end %>
                   </li>
