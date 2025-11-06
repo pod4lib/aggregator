@@ -14,8 +14,9 @@
 
     <thead>
       <tr>
-        <th>Name</th>
         <th>Status</th>
+        <th>Name</th>
+        <th>Lifecycle</th>
         <th>Date</th>
         <th>Stream</th>
         <th>Actions</th>
@@ -25,6 +26,7 @@
     <tbody>
       <% @uploads.each do |upload| %>
         <tr>
+          <td><%= render StatusIcons::UploadStatusIconComponent.new(status: upload.metadata_status) %></td>
           <td><%= link_to upload.name, [@organization, upload] %></td>
           <td><%= upload.status.humanize %></td>
           <td><%= local_time(upload.created_at, format: datetime_display_format()) %></td>
