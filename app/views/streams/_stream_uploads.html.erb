@@ -1,7 +1,9 @@
-<%= render 'uploads/table' do %>
-    <% uploads.each do |upload| %>
-      <%= render 'uploads/row', upload: upload %>
-    <% end %>
-<% end %>
+<turbo-frame id="stream-upload-files">
+  <%= render 'uploads/table' do %>
+      <% uploads.each do |upload| %>
+        <%= render 'uploads/row', upload: upload %>
+      <% end %>
+  <% end %>
 
-<%= paginate uploads %>
+  <%= paginate uploads %>
+</turbo-frame>
