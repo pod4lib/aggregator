@@ -45,19 +45,5 @@
         <div class="text-muted">Loading Users…</div>
       <% end %>
     </div>
-
-    <!-- Normalized Data tab -->
-    <div id="normalized-data-pane" class="tab-pane fade" role="tabpanel">
-      <%= helpers.turbo_frame_tag "normalized_data_tab", src: dashboard_tab_path(:normalized_data), loading: "lazy" do %>
-        <div class="text-muted">Loading Normalized Data…</div>
-      <% end %>
-    </div>
-
-    <!-- Users tab -->
-    <div id="users-pane" class="tab-pane fade" role="tabpanel">
-      <%= helpers.turbo_frame_tag "users_tab", src: dashboard_tab_path(:users), loading: "lazy" do %>
-        <div class="text-muted">Loading Users…</div>
-      <% end %>
-    </div>
   </div>
 </div>
