@@ -5,7 +5,9 @@
 class SiteUsersController < ApplicationController
   load_and_authorize_resource :user, parent: false
 
-  def index; end
+  def index
+    @users = @users.includes(:organizations).order('organizations.name', :email)
+  end
 
   # rubocop:disable Metrics/AbcSize
   def update
