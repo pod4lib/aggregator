@@ -3,6 +3,7 @@
 # :nodoc:
 class OrganizationsController < ApplicationController
   load_and_authorize_resource
+  skip_authorize_resource only: %i[provider_details organization_details]
 
   # GET /organizations
   # GET /organizations.json
@@ -32,12 +33,16 @@ class OrganizationsController < ApplicationController
 
   # GET /organizations/1/provider_details
   def provider_details
+    authorize! :read, @organization
+
     # consumer orgs don't have provider details; redirect to org details instead
     redirect_to organization_details_organization_path(@organization), status: :see_other unless @organization.provider?
   end
 
   # GET /organizations/1/organization_details
-  def organization_details; end
+  def organization_details
+    authorize! :read, @organization
+  end
 
   # POST /organizations
   # POST /organizations.json

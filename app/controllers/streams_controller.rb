@@ -4,7 +4,7 @@
 class StreamsController < ApplicationController
   load_and_authorize_resource :organization
   load_and_authorize_resource through: :organization, except: %i[make_pending_default]
-  skip_authorize_resource only: %i[normalized_dump resourcelist]
+  skip_authorize_resource only: %i[normalized_dump resourcelist normalized_data processing_status]
   protect_from_forgery with: :null_session, if: :jwt_token
 
   def show
@@ -29,10 +29,14 @@ class StreamsController < ApplicationController
   def new; end
 
   # GET /organizations/1/streams/2/normalized_data
-  def normalized_data; end
+  def normalized_data
+    authorize! :read, @stream
+  end
 
   # GET /organizations/1/streams/2/processing_status
-  def processing_status; end
+  def processing_status
+    authorize! :read, @stream
+  end
 
   # POST /streams
   # POST /streams.json

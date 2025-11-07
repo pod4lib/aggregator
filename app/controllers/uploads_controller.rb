@@ -5,6 +5,7 @@ class UploadsController < ApplicationController
   load_and_authorize_resource :organization
   load_and_authorize_resource through: :organization, except: %i[new create]
   load_and_authorize_resource through: :current_stream, only: %i[new create]
+  skip_authorize_resource only: %i[info]
   protect_from_forgery with: :null_session, if: :jwt_token
   helper_method :current_stream
 
@@ -52,6 +53,8 @@ class UploadsController < ApplicationController
   end
 
   def info
+    authorize! :read, @upload
+
     @attachment = @upload.files.find(params[:attachment_id])
     @blob = @attachment.blob
   end
