@@ -56,8 +56,8 @@ RSpec.describe 'Viewing provider information' do
 
       expect(page).to have_no_selector 'h2', text: 'Access Tokens'
       expect(page).to have_no_selector 'h2', text: 'Users'
+      expect(page).to have_no_selector 'h3', text: 'Uploads'
 
-      expect(page).to have_content '1297245.marc'
       expect(page).to have_no_link 'Download'
     end
   end
