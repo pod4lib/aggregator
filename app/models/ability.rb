@@ -54,7 +54,6 @@ class Ability
 
     can :manage, :all
     can :manage, :dashboard_controller
-    can :manage, :organization_slug
   end
 
   def organization_owner_abilities
