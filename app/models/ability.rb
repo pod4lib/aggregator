@@ -78,7 +78,6 @@ class Ability
     can %i[create], [Upload], organization: { id: member_organization_ids }
     can :read, MarcRecord, upload: { organization: { id: member_organization_ids } }
     can :read, AllowlistedJwt, resource_type: 'Organization', resource_id: member_organization_ids
-    can :read, ActiveStorage::Attachment, { record: { organization: { id: member_organization_ids } } }
   end
 
   def member_organization_ids
