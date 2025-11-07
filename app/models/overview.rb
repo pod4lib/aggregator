@@ -17,7 +17,7 @@ class Overview
   def last_upload
     @last_upload ||=
       Upload.includes(:organization, :stream)
-            .where(organization: { provider: true, public: true })
+            .where(organization: { provider: true })
             .where(stream: { status: 'default' })
             .order(created_at: :desc)
             .first
@@ -53,8 +53,8 @@ class Overview
 
   private
 
-  # public organizations that provide data to the aggregator
+  # provider organizations that provide data to the aggregator
   def providers
-    @providers ||= Organization.where(provider: true, public: true)
+    @providers ||= Organization.where(provider: true)
   end
 end

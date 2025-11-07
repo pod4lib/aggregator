@@ -43,9 +43,9 @@ class TokenAbility < Ability
   end
 
   def token_download_abilities
-    can :read, Organization, public: true
-    can :read, [Stream, Upload], organization: { public: true }
-    can :read, ActiveStorage::Attachment, { record: { organization: { public: true } } }
+    can :read, Organization
+    can :read, [Stream, Upload]
+    can :read, ActiveStorage::Attachment
   end
 
   def token_jti
