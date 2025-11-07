@@ -38,58 +38,58 @@ RSpec.describe 'OAI-PMH' do
   end
 
   it 'renders responses with a utf-8 xml content type' do
-    visit oai_url
+    visit oai_path
     expect(page.response_headers['Content-Type']).to eq('application/xml; charset=utf-8')
   end
 
   it 'renders an error if no verb is supplied' do
-    visit oai_url
+    visit oai_path
     expect(page).to have_css('error[code="badVerb"]')
   end
 
   it 'renders an error if an unknown verb is supplied' do
-    visit oai_url(verb: 'Oops')
+    visit oai_path(verb: 'Oops')
     expect(page).to have_css('error[code="badVerb"]')
   end
 
   it 'renders the time the request was submitted in iso8601 format' do
-    visit oai_url
+    visit oai_path
     doc = Nokogiri::XML(page.body)
     expect(doc.at_css('responseDate').content).to match(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/)
   end
 
   it 'renders the request params and root url as an element' do
-    visit oai_url(verb: 'ListSets')
+    visit oai_path(verb: 'ListSets')
     expect(page).to have_css('request[verb="ListSets"]', text: oai_url)
   end
 
   context 'when the verb is ListSets' do
     it 'renders a name for each set' do
-      visit oai_url(verb: 'ListSets')
+      visit oai_path(verb: 'ListSets')
       doc = Nokogiri::XML(page.body)
       expect(doc.at_css('ListSets > set > setName').text).to eq('2020-05-06 - ')
     end
 
     it 'renders an identifier (setSpec) for each set' do
-      visit oai_url(verb: 'ListSets')
+      visit oai_path(verb: 'ListSets')
       doc = Nokogiri::XML(page.body)
       expect(doc.at_css('ListSets > set > setSpec').text).to eq(organization.default_stream.id.to_s)
     end
 
     it 'renders a description for each set' do
-      visit oai_url(verb: 'ListSets')
+      visit oai_path(verb: 'ListSets')
       expect(page).to have_text('Default stream for My Org, 2020-05-06/')
     end
 
     it 'renders an error if unknown params are supplied' do
-      visit oai_url(verb: 'ListSets', foo: 'bar')
+      visit oai_path(verb: 'ListSets', foo: 'bar')
       expect(page).to have_css('error[code="badArgument"]')
     end
   end
 
   context 'when the verb is Identify' do
     before do
-      visit oai_url(verb: 'Identify')
+      visit oai_path(verb: 'Identify')
     end
 
     it 'renders the repository name' do
@@ -128,14 +128,14 @@ RSpec.describe 'OAI-PMH' do
     end
 
     it 'renders an error if unknown params are supplied' do
-      visit oai_url(verb: 'Identify', foo: 'bar')
+      visit oai_path(verb: 'Identify', foo: 'bar')
       expect(page).to have_css('error[code="badArgument"]')
     end
   end
 
   context 'when the verb is ListMetadataFormats' do
     it 'renders all metadata formats supported by the repository' do
-      visit oai_url(verb: 'ListMetadataFormats')
+      visit oai_path(verb: 'ListMetadataFormats')
       doc = Nokogiri::XML(page.body)
       expect(doc.at_css('ListMetadataFormats > metadataFormat > metadataPrefix').text).to eq('marc21')
       expect(doc.at_css('ListMetadataFormats > metadataFormat > schema').text).to eq('http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd')
@@ -143,26 +143,26 @@ RSpec.describe 'OAI-PMH' do
     end
 
     it 'renders the metadata formats available for a single item' do
-      visit oai_url(verb: 'ListMetadataFormats', identifier: 'oai:pod.stanford.edu:my-org:1:a12345')
+      visit oai_path(verb: 'ListMetadataFormats', identifier: 'oai:pod.stanford.edu:my-org:1:a12345')
       doc = Nokogiri::XML(page.body)
       expect(doc.at_css('ListMetadataFormats > metadataFormat > metadataPrefix').text).to eq('marc21')
     end
 
     it 'renders an error if an unknown identifier is supplied' do
       pending 'single item requests are not yet implemented'
-      visit oai_url(verb: 'ListMetadataFormats', identifier: 'fake')
+      visit oai_path(verb: 'ListMetadataFormats', identifier: 'fake')
       expect(page).to have_css('error[code="idDoesNotExist"]')
     end
 
     it 'renders an error if unknown params are supplied' do
-      visit oai_url(verb: 'ListMetadataFormats', foo: 'bar')
+      visit oai_path(verb: 'ListMetadataFormats', foo: 'bar')
       expect(page).to have_css('error[code="badArgument"]')
     end
   end
 
   context 'when the verb is ListRecords' do
     it 'renders the identifier of each item' do
-      visit oai_url(verb: 'ListRecords', metadataPrefix: 'marc21')
+      visit oai_path(verb: 'ListRecords', metadataPrefix: 'marc21')
       doc = Nokogiri::XML(page.body)
       expect(doc.at_css('ListRecords > record > header > identifier').text).to(
         eq("oai:pod.stanford.edu:my-org:#{organization.default_stream.id}:a12345")
@@ -170,25 +170,25 @@ RSpec.describe 'OAI-PMH' do
     end
 
     it 'renders the datestamp of each item' do
-      visit oai_url(verb: 'ListRecords', metadataPrefix: 'marc21')
+      visit oai_path(verb: 'ListRecords', metadataPrefix: 'marc21')
       doc = Nokogiri::XML(page.body)
       expect(doc.at_css('ListRecords > record > header > datestamp').text).to eq('2020-05-06')
     end
 
     it 'renders a header indicating records are deleted' do
       token = OaiConcern::ResumptionToken.new(set: organization.default_stream.id.to_s, page: '2')
-      visit oai_url(verb: 'ListRecords', resumptionToken: token.encode)
+      visit oai_path(verb: 'ListRecords', resumptionToken: token.encode)
       expect(page).to have_css('header[status="deleted"]')
     end
 
     it 'renders the set membership of each item' do
-      visit oai_url(verb: 'ListRecords', metadataPrefix: 'marc21')
+      visit oai_path(verb: 'ListRecords', metadataPrefix: 'marc21')
       doc = Nokogiri::XML(page.body)
       expect(doc.at_css('ListRecords > record > header > setSpec').text).to eq(organization.default_stream.id.to_s)
     end
 
     it 'renders records in the requested set' do
-      visit oai_url(verb: 'ListRecords', metadataPrefix: 'marc21', set: organization.default_stream.id.to_s)
+      visit oai_path(verb: 'ListRecords', metadataPrefix: 'marc21', set: organization.default_stream.id.to_s)
       doc = Nokogiri::XML(page.body)
       doc.css('ListRecords > record > header > setSpec').each do |record_set|
         expect(record_set.text).to eq(organization.default_stream.id.to_s)
@@ -196,7 +196,7 @@ RSpec.describe 'OAI-PMH' do
     end
 
     it 'renders a resumption token to continue requesting records if needed' do
-      visit oai_url(verb: 'ListRecords', metadataPrefix: 'marc21', set: organization.default_stream.id.to_s)
+      visit oai_path(verb: 'ListRecords', metadataPrefix: 'marc21', set: organization.default_stream.id.to_s)
       doc = Nokogiri::XML(page.body)
       token = OaiConcern::ResumptionToken.decode(doc.at_css('ListRecords > resumptionToken').text)
       expect(token.set.to_i).to be(organization.default_stream.id)
@@ -204,13 +204,13 @@ RSpec.describe 'OAI-PMH' do
     end
 
     it 'does not render a resumption token if there is only one page of results' do
-      visit oai_url(verb: 'ListRecords', metadataPrefix: 'marc21', from: '2020-05-07')
+      visit oai_path(verb: 'ListRecords', metadataPrefix: 'marc21', from: '2020-05-07')
       doc = Nokogiri::XML(page.body)
       expect(doc.at_css('ListRecords > resumptionToken')).to be_nil
     end
 
     it 'renders records after a supplied lower bound datestamp' do
-      visit oai_url(verb: 'ListRecords', metadataPrefix: 'marc21', from: '2020-05-07')
+      visit oai_path(verb: 'ListRecords', metadataPrefix: 'marc21', from: '2020-05-07')
       doc = Nokogiri::XML(page.body)
       doc.css('ListRecords > record > header > datestamp').each do |record_ds|
         expect(record_ds.text).to be >= '2020-05-07'
@@ -218,7 +218,7 @@ RSpec.describe 'OAI-PMH' do
     end
 
     it 'renders records before a supplied upper bound datestamp' do
-      visit oai_url(verb: 'ListRecords', metadataPrefix: 'marc21', until: '2020-05-06')
+      visit oai_path(verb: 'ListRecords', metadataPrefix: 'marc21', until: '2020-05-06')
       doc = Nokogiri::XML(page.body)
       doc.css('ListRecords > record > header > datestamp').each do |record_ds|
         expect(record_ds.text).to be <= '2020-05-06'
@@ -226,43 +226,43 @@ RSpec.describe 'OAI-PMH' do
     end
 
     it 'renders an error if unknown params are supplied' do
-      visit oai_url(verb: 'ListRecords', metadataPrefix: 'marc21', foo: 'bar')
+      visit oai_path(verb: 'ListRecords', metadataPrefix: 'marc21', foo: 'bar')
       expect(page).to have_css('error[code="badArgument"]')
     end
 
     it 'renders an error if no metadata prefix is supplied' do
-      visit oai_url(verb: 'ListRecords')
+      visit oai_path(verb: 'ListRecords')
       expect(page).to have_css('error[code="badArgument"]')
     end
 
     it 'renders an error if an unsupported metadata prefix is supplied' do
-      visit oai_url(verb: 'ListRecords', metadataPrefix: 'foo')
+      visit oai_path(verb: 'ListRecords', metadataPrefix: 'foo')
       expect(page).to have_css('error[code="cannotDisseminateFormat"]')
     end
 
     it 'renders an error if the request results in an empty result set' do
-      visit oai_url(verb: 'ListRecords', metadataPrefix: 'marc21', set: '392487')
+      visit oai_path(verb: 'ListRecords', metadataPrefix: 'marc21', set: '392487')
       expect(page).to have_css('error[code="noRecordsMatch"]')
     end
 
     context 'when a resumption token is supplied' do
       it 'renders the indicated page of records' do
-        visit oai_url(verb: 'ListRecords', resumptionToken: OaiConcern::ResumptionToken.new(page: '2').encode)
+        visit oai_path(verb: 'ListRecords', resumptionToken: OaiConcern::ResumptionToken.new(page: '2').encode)
         expect(page).to have_text("oai:pod.stanford.edu:my-org:#{organization.default_stream.id}:DUKE000075163")
       end
 
       it 'renders an error if any other argument is also supplied' do
-        visit oai_url(verb: 'ListRecords', resumptionToken: OaiConcern::ResumptionToken.new(set: '1').encode, from: '2020-01-01')
+        visit oai_path(verb: 'ListRecords', resumptionToken: OaiConcern::ResumptionToken.new(set: '1').encode, from: '2020-01-01')
         expect(page).to have_css('error[code="badArgument"]')
       end
 
       it 'renders an error if the resumption token is not valid' do
-        visit oai_url(verb: 'ListRecords', resumptionToken: 'foo')
+        visit oai_path(verb: 'ListRecords', resumptionToken: 'foo')
         expect(page).to have_css('error[code="badResumptionToken"]')
       end
 
       it 'renders an error if the requested page of records does not exist' do
-        visit oai_url(verb: 'ListRecords', resumptionToken: OaiConcern::ResumptionToken.new(page: '999').encode)
+        visit oai_path(verb: 'ListRecords', resumptionToken: OaiConcern::ResumptionToken.new(page: '999').encode)
         expect(page).to have_css('error[code="badResumptionToken"]')
       end
     end
