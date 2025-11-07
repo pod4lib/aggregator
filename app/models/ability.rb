@@ -39,10 +39,9 @@ class Ability
 
     can :read, ActiveStorage::Attachment
     can :read, MarcRecord
-    can %i[read profile normalized_data processing_status], Stream
-    can %i[read info], Upload
+    can :read, Stream
+    can :read, Upload
     can :read, :pages_data
-    can %i[read users organization_details provider_details], Organization
   end
 
   def site_admin_user_abilities
