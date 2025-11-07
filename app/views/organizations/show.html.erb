@@ -4,6 +4,8 @@
 <% end %>
 
 <%= render 'shared/layout_stream_page' do %>
-  <h3>Uploads</h3>
-  <%= render 'streams/stream_uploads', stream: @organization.default_stream, uploads: @uploads %>
+  <% if @uploads.any? %>
+    <h3>Uploads</h3>
+    <%= render 'streams/stream_uploads', stream: @organization.default_stream, uploads: @uploads %>
+  <% end %>
 <% end %>

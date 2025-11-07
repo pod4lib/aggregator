@@ -19,7 +19,10 @@ class OrganizationsController < ApplicationController
     redirect_to organization_users_path(@organization), status: :see_other unless @organization.provider?
 
     @stream = @organization.default_stream if @organization.provider?
-    @uploads = @organization.default_stream.uploads.active.order(created_at: :desc).page(params[:page])
+    @uploads = @organization.default_stream.uploads
+                            .active
+                            .accessible_by(current_ability)
+                            .order(created_at: :desc).page(params[:page])
   end
 
   # GET /organizations/new

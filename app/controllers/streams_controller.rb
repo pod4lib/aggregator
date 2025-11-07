@@ -12,7 +12,12 @@ class StreamsController < ApplicationController
 
     filters = {}
     filters[:metadata_status] = @current_filter if @current_filter.present?
-    @uploads = @stream.uploads.active.where(filters).order(created_at: :desc).page(params[:page])
+
+    @uploads = @stream.uploads
+                      .where(filters)
+                      .active
+                      .accessible_by(current_ability)
+                      .order(created_at: :desc).page(params[:page])
   end
 
   def resourcelist
