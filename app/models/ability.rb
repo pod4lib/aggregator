@@ -52,14 +52,12 @@ class Ability
     return unless user.acting_as_superadmin?
 
     can :manage, :all
-    can :manage, :dashboard_controller
     can :manage, :organization_slug
   end
 
   def organization_owner_abilities
     return if owned_organization_ids.empty?
 
-    can :read, :dashboard
     can :manage, Organization, id: owned_organization_ids
     can :crud, Stream, organization: { id: owned_organization_ids }
     can :crud, Upload, organization: { id: owned_organization_ids }
