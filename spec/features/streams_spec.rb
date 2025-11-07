@@ -25,7 +25,7 @@ RSpec.describe 'uploading files to POD' do
 
     describe 'MARC records' do
       it 'lists the MARC records for a stream' do
-        visit organization_stream_url(organization, stream)
+        visit organization_stream_path(organization, stream)
 
         click_on 'MARC records'
 

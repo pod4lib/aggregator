@@ -13,13 +13,13 @@ RSpec.describe 'Downloading normalized files from POD' do
   end
 
   it 'lists organizations' do
-    visit organizations_url
+    visit organizations_path
 
     expect(page).to have_link 'Best org'
   end
 
   it 'lists some limited information about the org' do
-    visit organization_url(organization)
+    visit organization_path(organization)
 
     expect(page).to have_content('Best org')
 

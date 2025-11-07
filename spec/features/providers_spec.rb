@@ -13,13 +13,13 @@ RSpec.describe 'Viewing provider information' do
 
   describe 'Providers overview page as an unprivileged user' do
     it 'allows unprivileged user to see organizations list' do
-      visit organizations_url
+      visit organizations_path
 
       expect(page).to have_link 'Best org'
     end
 
     it 'does not allow unprivileged user to edit, create, or destroy organizations' do
-      visit organizations_url
+      visit organizations_path
 
       expect(page).to have_content('Aggregator')
 
@@ -33,14 +33,14 @@ RSpec.describe 'Viewing provider information' do
   describe 'Providers overview page as an admin' do
     it 'allows admin to see organizations list' do
       user.add_role :superadmin
-      visit organizations_url
+      visit organizations_path
 
       expect(page).to have_link 'Best org'
     end
 
     it 'allows admin to edit, create, or destroy organizations' do
       user.add_role :superadmin
-      visit organizations_url
+      visit organizations_path
 
       # don't confuse "Edit" with "Edit Profile" in header nav
       expect(page).to have_link('Edit', exact: true)
@@ -51,7 +51,7 @@ RSpec.describe 'Viewing provider information' do
 
   describe 'Provider detail page as an unprivileged user' do
     it 'lists some limited information about the org' do
-      visit organization_url(organization)
+      visit organization_path(organization)
       expect(page).to have_content('Aggregator')
 
       expect(page).to have_no_selector 'h2', text: 'Access Tokens'
@@ -65,7 +65,7 @@ RSpec.describe 'Viewing provider information' do
   describe 'Provider detail page as an admin' do
     it 'lists some limited information about the org' do
       user.add_role :superadmin
-      visit organization_url(organization)
+      visit organization_path(organization)
 
       expect(page).to have_content '1297245.marc'
       expect(page).to have_link 'Download'
