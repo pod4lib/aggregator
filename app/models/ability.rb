@@ -39,10 +39,9 @@ class Ability
 
     can :read, ActiveStorage::Attachment
     can :read, MarcRecord
-    can %i[read profile normalized_data processing_status], Stream
-    can %i[read info], Upload
+    can :read, Stream
+    can :read, Upload
     can :read, :pages_data
-    can %i[read users organization_details provider_details], Organization
   end
 
   def site_admin_user_abilities
@@ -53,13 +52,11 @@ class Ability
     return unless user.acting_as_superadmin?
 
     can :manage, :all
-    can :manage, :dashboard_controller
   end
 
   def organization_owner_abilities
     return if owned_organization_ids.empty?
 
-    can :read, :dashboard
     can :manage, Organization, id: owned_organization_ids
     can :crud, Stream, organization: { id: owned_organization_ids }
     can :crud, Upload, organization: { id: owned_organization_ids }
@@ -76,9 +73,7 @@ class Ability
     can :read, :dashboard
     can %i[invite], Organization, id: member_organization_ids
     can %i[create], [Upload], organization: { id: member_organization_ids }
-    can :read, MarcRecord, upload: { organization: { id: member_organization_ids } }
     can :read, AllowlistedJwt, resource_type: 'Organization', resource_id: member_organization_ids
-    can :read, ActiveStorage::Attachment, { record: { organization: { id: member_organization_ids } } }
   end
 
   def member_organization_ids

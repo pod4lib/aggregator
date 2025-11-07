@@ -50,17 +50,9 @@ RSpec.describe Ability do
       it { is_expected.to be_able_to(:manage, organization) }
       it { is_expected.not_to be_able_to(:destroy, organization) }
 
-      it { is_expected.to be_able_to(:users, organization) }
-      it { is_expected.to be_able_to(:organization_details, organization) }
-      it { is_expected.to be_able_to(:provider_details, organization) }
-
       it { is_expected.to be_able_to(:crud, Upload.new(organization: organization)) }
-      it { is_expected.to be_able_to(:info, Upload.new(organization: organization)) }
 
       it { is_expected.to be_able_to(:crud, Stream.new(organization: organization)) }
-      it { is_expected.to be_able_to(:normalized_data, Stream.new(organization: organization)) }
-      it { is_expected.to be_able_to(:processing_status, Stream.new(organization: organization)) }
-      it { is_expected.to be_able_to(:profile, Stream.new(organization: organization)) }
       it { is_expected.not_to be_able_to(:reanalyze, Stream.new(organization: organization)) }
 
       it { is_expected.to be_able_to(:crud, AllowlistedJwt.new(resource: organization)) }
@@ -68,19 +60,12 @@ RSpec.describe Ability do
       # Non-member organization
       it { is_expected.not_to be_able_to(:manage, not_my_org) }
       it { is_expected.to be_able_to(:read, not_my_org) }
-      it { is_expected.to be_able_to(:users, not_my_org) }
-      it { is_expected.to be_able_to(:organization_details, not_my_org) }
-      it { is_expected.to be_able_to(:provider_details, not_my_org) }
 
       it { is_expected.to be_able_to(:read, Upload.new(organization: not_my_org)) }
-      it { is_expected.to be_able_to(:info, Upload.new(organization: not_my_org)) }
       it { is_expected.not_to be_able_to(:create, Upload.new(organization: not_my_org)) }
       it { is_expected.not_to be_able_to(:destroy, Upload.new(organization: not_my_org)) }
 
       it { is_expected.to be_able_to(:read, Stream.new(organization: not_my_org)) }
-      it { is_expected.to be_able_to(:normalized_data, Stream.new(organization: not_my_org)) }
-      it { is_expected.to be_able_to(:processing_status, Stream.new(organization: not_my_org)) }
-      it { is_expected.to be_able_to(:profile, Stream.new(organization: not_my_org)) }
       it { is_expected.not_to be_able_to(:create, Stream.new(organization: not_my_org)) }
       it { is_expected.not_to be_able_to(:reanalyze, Stream.new(organization: not_my_org)) }
 
@@ -99,19 +84,12 @@ RSpec.describe Ability do
       # Member organization
       it { is_expected.not_to be_able_to(:manage, organization) }
       it { is_expected.to be_able_to(:read, organization) }
-      it { is_expected.to be_able_to(:users, organization) }
-      it { is_expected.to be_able_to(:organization_details, organization) }
-      it { is_expected.to be_able_to(:provider_details, organization) }
 
       it { is_expected.to be_able_to(:read, Upload.new(organization: organization)) }
-      it { is_expected.to be_able_to(:info, Upload.new(organization: organization)) }
       it { is_expected.to be_able_to(:create, Upload.new(organization: organization)) }
       it { is_expected.not_to be_able_to(:destroy, Upload.new(organization: organization)) }
 
       it { is_expected.to be_able_to(:read, Stream.new(organization: organization)) }
-      it { is_expected.to be_able_to(:normalized_data, Stream.new(organization: organization)) }
-      it { is_expected.to be_able_to(:processing_status, Stream.new(organization: organization)) }
-      it { is_expected.to be_able_to(:profile, Stream.new(organization: organization)) }
       it { is_expected.not_to be_able_to(:create, Stream.new(organization: organization)) }
       it { is_expected.not_to be_able_to(:reanalyze, Stream.new(organization: organization)) }
 
@@ -123,19 +101,12 @@ RSpec.describe Ability do
       # Non-member organization
       it { is_expected.not_to be_able_to(:manage, not_my_org) }
       it { is_expected.to be_able_to(:read, not_my_org) }
-      it { is_expected.to be_able_to(:users, not_my_org) }
-      it { is_expected.to be_able_to(:organization_details, not_my_org) }
-      it { is_expected.to be_able_to(:provider_details, not_my_org) }
 
       it { is_expected.to be_able_to(:read, Upload.new(organization: not_my_org)) }
-      it { is_expected.to be_able_to(:info, Upload.new(organization: not_my_org)) }
       it { is_expected.not_to be_able_to(:create, Upload.new(organization: not_my_org)) }
       it { is_expected.not_to be_able_to(:destroy, Upload.new(organization: not_my_org)) }
 
       it { is_expected.to be_able_to(:read, Stream.new(organization: not_my_org)) }
-      it { is_expected.to be_able_to(:normalized_data, Stream.new(organization: not_my_org)) }
-      it { is_expected.to be_able_to(:processing_status, Stream.new(organization: not_my_org)) }
-      it { is_expected.to be_able_to(:profile, Stream.new(organization: not_my_org)) }
       it { is_expected.not_to be_able_to(:create, Stream.new(organization: not_my_org)) }
 
       it { is_expected.not_to be_able_to(:crud, AllowlistedJwt.new(resource: not_my_org)) }
