@@ -52,7 +52,6 @@ class Ability
     return unless user.acting_as_superadmin?
 
     can :manage, :all
-    can :manage, :organization_slug
   end
 
   def organization_owner_abilities
