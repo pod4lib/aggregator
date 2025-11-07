@@ -30,19 +30,19 @@ class Ability
   end
 
   def all_user_abilities
-    can :read, Organization, public: true
-    can :read, :dashboard if Organization.exists?(public: true)
+    can :read, Organization
+    can :read, :dashboard
   end
 
   def user_with_roles_abilities
     return if user.roles.empty?
 
-    can :read, ActiveStorage::Attachment, { record: { organization: { public: true } } }
-    can :read, MarcRecord, upload: { organization: { public: true } }
-    can %i[read profile normalized_data processing_status], Stream, organization: { public: true }
-    can %i[read info], Upload, organization: { public: true }
+    can :read, ActiveStorage::Attachment
+    can :read, MarcRecord
+    can %i[read profile normalized_data processing_status], Stream
+    can %i[read info], Upload
     can :read, :pages_data
-    can %i[read users organization_details provider_details], Organization, public: true
+    can %i[read users organization_details provider_details], Organization
   end
 
   def site_admin_user_abilities
