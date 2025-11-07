@@ -13,10 +13,12 @@
       <button class="nav-link" id="normalized-data-tab" data-bs-toggle="tab" data-bs-target="#normalized-data-pane"
         type="button" role="tab" aria-controls="normalized-data-pane" aria-selected="false">Normalized data</button>
     </li>
-    <li class="nav-item" role="presentation">
-      <button class="nav-link" id="users-tab" data-bs-toggle="tab" data-bs-target="#users-pane" type="button" role="tab"
-        aria-controls="users-pane" aria-selected="false">Users</button>
-    </li>
+    <% if can? :read, User %>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="users-tab" data-bs-toggle="tab" data-bs-target="#users-pane" type="button" role="tab"
+          aria-controls="users-pane" aria-selected="false">Users</button>
+      </li>
+    <% end %>
   </ul>
 
   <!-- Activity summary panes (tab content) -->
@@ -35,11 +37,13 @@
       <% end %>
     </div>
 
-    <!-- Users tab -->
-    <div id="users-pane" class="tab-pane fade" role="tabpanel">
-      <%= helpers.turbo_frame_tag "users_tab", src: activity_users_path, loading: "lazy" do %>
-        <div class="text-muted">Loading Users…</div>
-      <% end %>
-    </div>
+    <% if can? :read, User %>
+      <!-- Users tab -->
+      <div id="users-pane" class="tab-pane fade" role="tabpanel">
+        <%= helpers.turbo_frame_tag "users_tab", src: activity_users_path, loading: "lazy" do %>
+          <div class="text-muted">Loading Users…</div>
+        <% end %>
+      </div>
+    <% end %>
   </div>
 </div>

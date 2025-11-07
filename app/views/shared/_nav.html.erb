@@ -19,7 +19,7 @@
             <%= link_to t('.data'), data_url, class: class_names('nav-link', { active: current_page?(data_url) }), data: { turbo: false } %>
           </li>
           <% end %>
-          <% if can? :manage, :dashboard_controller %>
+          <% if can? :read, :dashboard %>
           <li class="nav-item">
             <%= link_to t('.activity'), activity_url, class: class_names('nav-link', { active: current_page?(activity_url) }), data: { turbo: false } %>
           </li>

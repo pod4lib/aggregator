@@ -31,6 +31,7 @@ class Ability
 
   def all_user_abilities
     can :read, Organization, public: true
+    can :read, :dashboard if Organization.exists?(public: true)
   end
 
   def user_with_roles_abilities
@@ -59,6 +60,7 @@ class Ability
   def organization_owner_abilities
     return if owned_organization_ids.empty?
 
+    can :read, :dashboard
     can :manage, Organization, id: owned_organization_ids
     can :crud, Stream, organization: { id: owned_organization_ids }
     can :crud, Upload, organization: { id: owned_organization_ids }
@@ -72,6 +74,7 @@ class Ability
   def organization_member_abilities
     return if member_organization_ids.empty?
 
+    can :read, :dashboard
     can %i[invite], Organization, id: member_organization_ids
     can %i[create], [Upload], organization: { id: member_organization_ids }
     can :read, MarcRecord, upload: { organization: { id: member_organization_ids } }
