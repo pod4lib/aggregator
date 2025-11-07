@@ -2,8 +2,9 @@
 
 <div class="d-flex flex-row justify-content-center">
     <div class="btn-group manage-organization-tabs" role="group" aria-label="Manage organization tabs">
-        <% if content_for? :uploaded_files_link %>
-          <%= content_for :uploaded_files_link %>
+        <% if @stream.default? %>
+            <!-- Use the organization_path aka "Provider home" for the Uploads tab on organization/show -->
+            <%= link_to "Uploads", organization_path(@organization), class: "btn btn-outline-primary #{current_page_class(organization_path(@organization))}" %>
         <% else %>
             <%= link_to "Uploads", organization_stream_path(@organization, @stream), class: "btn btn-outline-primary #{current_page_class(organization_stream_path(@organization, @stream))}" %>
         <% end %>
