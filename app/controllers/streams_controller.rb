@@ -7,18 +7,7 @@ class StreamsController < ApplicationController
   skip_authorize_resource only: %i[normalized_dump resourcelist normalized_data processing_status]
   protect_from_forgery with: :null_session, if: :jwt_token
 
-  def show
-    @current_filter = params[:filter]
-
-    filters = {}
-    filters[:metadata_status] = @current_filter if @current_filter.present?
-
-    @uploads = @stream.uploads
-                      .where(filters)
-                      .active
-                      .accessible_by(current_ability)
-                      .order(created_at: :desc).page(params[:page])
-  end
+  def show; end
 
   def resourcelist
     authorize! :read, @stream

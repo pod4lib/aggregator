@@ -1,6 +1,4 @@
 <%= render 'shared/layout_stream_page' do %>
-  <% if @uploads.any? %>
-    <h3>Uploads</h3>
-    <%= render 'streams/stream_uploads', stream: @stream, uploads: @uploads %>
-  <% end %>
+  <h3>Uploads</h3>
+  <%= turbo_frame_tag @stream, 'uploads', loading: 'lazy', src: organization_uploads_path(@stream.organization, stream: @stream) %>
 <% end %>
