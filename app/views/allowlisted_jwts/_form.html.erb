@@ -2,9 +2,13 @@
   <%= form.text_field :label %>
 
   <%= form.form_group :scope, label: { text: 'Scope' } do %>
-    <%= form.radio_button :scope, 'all', label: 'all', checked: true %>
-    <%= form.radio_button :scope, 'download', label: 'download-only' %>
-    <%= form.radio_button :scope, 'upload', label: 'upload-only' %>
+    <% if @organization.provider? %>
+      <%= form.radio_button :scope, 'all', label: 'all', checked: true %>
+      <%= form.radio_button :scope, 'download', label: 'download-only' %>
+      <%= form.radio_button :scope, 'upload', label: 'upload-only' %>
+    <% else %>
+      <%= form.radio_button :scope, 'download', label: 'download-only', checked: true %>
+    <% end %>
   <% end %>
 
   <div class="actions mt-3">
