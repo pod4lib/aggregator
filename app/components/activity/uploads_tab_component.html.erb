@@ -10,7 +10,7 @@
     </thead>
     <tbody>
       <% recent_uploads_by_provider.each do |provider, uploads| %>
-        <tr>
+        <tr data-turbo="false">
           <th class="fw-normal align-middle"><%= link_to provider.name, organization_path(provider) %></th>
           <!-- Did any uploads succeed in past 30 days? -->
           <td>
