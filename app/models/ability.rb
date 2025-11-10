@@ -70,7 +70,6 @@ class Ability
   def organization_member_abilities
     return if member_organization_ids.empty?
 
-    can :read, :dashboard
     can %i[invite], Organization, id: member_organization_ids
     can %i[create], [Upload], organization: { id: member_organization_ids }
     can :read, AllowlistedJwt, resource_type: 'Organization', resource_id: member_organization_ids
