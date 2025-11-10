@@ -4,5 +4,9 @@ FactoryBot.define do
   factory :organization do
     sequence(:name) { |n| "Organization #{n}" }
     sequence(:slug) { |n| "org-#{n}" }
+
+    trait :consumer do
+      provider { false }
+    end
   end
 end
