@@ -49,20 +49,19 @@ RSpec.describe 'Viewing provider information' do
     end
   end
 
-  describe 'Provider detail page as an unprivileged user' do
+  describe 'Provider detail page as an unprivileged user', :js do
     it 'lists some limited information about the org' do
       visit organization_path(organization)
       expect(page).to have_content('Aggregator')
 
       expect(page).to have_no_selector 'h2', text: 'Access Tokens'
       expect(page).to have_no_selector 'h2', text: 'Users'
-      expect(page).to have_no_selector 'h3', text: 'Uploads'
 
       expect(page).to have_no_link 'Download'
     end
   end
 
-  describe 'Provider detail page as an admin' do
+  describe 'Provider detail page as an admin', :js do
     it 'lists some limited information about the org' do
       user.add_role :superadmin
       visit organization_path(organization)

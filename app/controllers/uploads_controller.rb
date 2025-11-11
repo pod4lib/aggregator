@@ -11,7 +11,15 @@ class UploadsController < ApplicationController
 
   # GET /uploads
   # GET /uploads.json
-  def index
+  def index # rubocop:disable Metrics/AbcSize
+    @current_filter = params[:filter]
+
+    filters = {}
+    filters[:metadata_status] = @current_filter if @current_filter.present?
+    filters[:stream] = current_stream if params[:stream]
+    @stream = current_stream
+    @uploads = @uploads.active.where(filters).order(created_at: :desc).page(params[:page])
+
     respond_to do |format|
       format.html { @uploads = @uploads.with_attached_files.order(created_at: :desc).page(index_params[:page]) }
       format.json

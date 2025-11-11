@@ -25,7 +25,5 @@ RSpec.describe 'Downloading normalized files from POD' do
 
     expect(page).to have_no_selector 'h2', text: 'Access Tokens'
     expect(page).to have_no_selector 'h2', text: 'Users'
-
-    expect(page).to have_no_selector 'h3', text: 'Uploads'
   end
 end

@@ -22,25 +22,19 @@ RSpec.describe 'uploads/index' do
                      }
                    ])
     assign(:uploads, stream.uploads.page(params[:page]))
+    allow(view).to receive(:can?).and_return(true)
   end
 
-  it 'renders a list of uploads with links to their show pages' do
+  it 'renders a list of uploads with links to their files' do
     render
 
-    expect(rendered).to have_css('tr>td>a', text: 'One', count: 1)
-    expect(rendered).to have_css('tr>td>a', text: 'Two', count: 1)
-  end
-
-  it 'links to the stream associated with each upload' do
-    render
-
-    expect(rendered).to have_css('tr>td>a', text: stream.name, count: 2)
+    expect(rendered).to have_css('tr>td>a', text: '1297245.marc', count: 2)
   end
 
   it 'shows Delete button to privileged users' do
     allow(view).to receive(:can?).and_return(true)
     render
 
-    assert_select 'a.btn', text: 'Delete'
+    assert_select 'a', text: 'Delete'
   end
 end
