@@ -86,7 +86,7 @@
               <td class="align-middle text-end"><%= organization.users.count %></td>
               <td class="align-middle">
                 <% if organization.contact_email.present? %>
-                  <span class="lead"><%= mail_to organization.contact_email.email %></span>
+                  <%= mail_to organization.contact_email.email %>
                 <% end %>
               </td>
               <% if can? :manage, Organization %>
