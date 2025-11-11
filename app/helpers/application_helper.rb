@@ -9,4 +9,8 @@ module ApplicationHelper
   def datetime_display_format
     '%B %e, %Y %l:%M%P %Z'
   end
+
+  def upload_filter_params
+    params.permit(:status, :created_at)
+  end
 end

@@ -1,5 +1,5 @@
 <%= render 'shared/layout_stream_page' do %>
   <h3>Uploads</h3>
 
-  <%= turbo_frame_tag @organization.default_stream, 'uploads', loading: 'lazy', src: organization_uploads_path(@organization, stream: @organization.default_stream) %>
+  <%= turbo_frame_tag @organization.default_stream, 'uploads', loading: 'lazy', src: organization_uploads_path(@organization, stream: @organization.default_stream, **upload_filter_params) %>
 <% end %>
