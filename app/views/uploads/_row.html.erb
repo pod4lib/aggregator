@@ -1,5 +1,5 @@
 <% if can?(:read, upload) && upload.url.present? && upload.files.none? %>
-  <tr>
+  <tr data-turbo="false">
     <td class="text-center"><i class="bi bi-arrow-repeat pod-icon"></i></td>
     <td>
       <i>Downloading...</i>
@@ -12,7 +12,7 @@
   </tr>
 <% end %>
 <% if upload.status == 'compacted' %>
-  <tr>
+  <tr data-turbo="false">
     <td class="align-middle text-center">
       <i class="<%= Settings.upload_status.unknown.icon_class %> pod-metadata-status" aria-label=""></i>
     </td>
