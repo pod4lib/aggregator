@@ -9,7 +9,7 @@ module Activity
 
     def recent_uploads_by_provider
       @recent_uploads_by_provider ||= Organization.accessible_by(current_ability).providers.index_with do |org|
-        org.uploads.recent.where(created_at: 30.days.ago..)
+        org.default_stream.uploads.recent.where(created_at: 30.days.ago..)
       end
     end
   end

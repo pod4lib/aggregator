@@ -15,7 +15,7 @@
           <!-- Did any uploads succeed in past 30 days? -->
           <td>
             <% if uploads.any? %>
-              <%= render Activity::UploadStatusSparklineComponent.new(uploads: uploads) %>
+              <%= render Activity::UploadStatusSparklineComponent.new(organization: provider, uploads: uploads) %>
             <% else %>
               <p class="mb-0"><i class="bi bi-exclamation-triangle-fill text-warning me-1"></i> No uploads in last 30 days</p>
             <% end %>
