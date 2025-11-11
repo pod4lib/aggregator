@@ -8,7 +8,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
-         :invitable, :confirmable
+         :invitable, :confirmable, :trackable
 
   has_many :uploads # rubocop:disable Rails/HasManyOrHasOneDependent
   has_many :organizations, through: :roles, source: :resource, source_type: :Organization
