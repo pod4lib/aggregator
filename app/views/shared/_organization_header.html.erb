@@ -30,6 +30,9 @@
           <span class="lead"><%= mail_to @organization.contact_email.email, t('.contact') %></span>
         <% end %>
       </div>
+      <% unless @organization.provider? %>
+        <span class="badge text-bg-info h-100 my-auto ms-4">Consumer-only</span>
+      <% end %>
       <div class="ms-auto">
         <% if content_for? :org_header_section_link %>
           <%= content_for :org_header_section_link %>
