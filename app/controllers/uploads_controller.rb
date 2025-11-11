@@ -12,9 +12,10 @@ class UploadsController < ApplicationController
   # GET /uploads
   # GET /uploads.json
   def index # rubocop:disable Metrics/AbcSize
-    @current_filter = params[:filter]
+    @current_filter = params[:metadata_status]
 
     filters = {}
+    filters[:created_at] = Time.zone.parse(params[:created_at]).all_day if params[:created_at].present?
     filters[:metadata_status] = @current_filter if @current_filter.present?
     filters[:stream] = current_stream if params[:stream]
     @stream = current_stream
