@@ -1,47 +1,47 @@
 <%= render 'shared/layout_manage_organization' do %>
-    <h3><%= t('organization_users.index.title') %></h3>
-    <%= link_to t('organization_users.index.invite_user'), organization_invite_new_path(@organization), class: 'btn btn-sm btn-primary mt-3' if can? :manage, @organization %>
-    <table class="table table-striped organizations mt-4">
-        <thead>
-            <tr>
-                <th scope="col"><%= t('organization_users.index.email') %></th>
-                <th scope="col"><%= t('organization_users.index.name') %></th>
-                <th scope="col"><%= t('organization_users.index.job_title') %></th>
-                <% if can? :manage, @organization %>
-                <th scope="col" class="text-center"><%= t('organization_users.index.is_owner') %></th>
-                <th scope="col" class="text-center"><%= t('organization_users.index.actions') %></th>
+  <h3><%= t('organization_users.index.title') %></h3>
+  <%= link_to t('organization_users.index.invite_user'), organization_invite_new_path(@organization), class: 'btn btn-sm btn-primary mt-3' if can? :manage, @organization %>
+  <table class="table table-striped organizations mt-4">
+    <thead>
+      <tr>
+        <th scope="col"><%= t('organization_users.index.email') %></th>
+        <th scope="col"><%= t('organization_users.index.name') %></th>
+        <th scope="col"><%= t('organization_users.index.job_title') %></th>
+        <% if can? :manage, @organization %>
+          <th scope="col" class="text-center"><%= t('organization_users.index.is_owner') %></th>
+          <th scope="col" class="text-center"><%= t('organization_users.index.actions') %></th>
+        <% else %>
+          <th scope="col"><%= t('organization_users.index.role') %></th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+        <% @organization.users.each do |user| %>
+          <tr>
+            <td class="align-middle"><%= mail_to user.email %></td>
+            <td class="align-middle"><%= user.name %></td>
+            <td class="align-middle"><%= user.title %></td>
+            <% if can? :manage, @organization %>
+              <td class="text-center align-middle">
+                <div class="form-check align-middle d-inline-block">
+                <% if user.roles.map{|r| r['name']}.include? "owner" %>
+                  <%= link_to '', organization_user_path(@organization, user, remove_role: 'owner'), data: { turbo_method: :patch, turbo_confirm: t('organization_users.index.confirm_action') }, class: 'form-check-input checked', title: t('organization_users.index.remove_owner') %>
+                  <input class="form-check-input pe-none" type="checkbox" aria-label="Organization owner?" checked>
                 <% else %>
-                <th scope="col"><%= t('organization_users.index.role') %></th>
+                  <%= link_to '', organization_user_path(@organization, user, add_role: 'owner'), data: { turbo_method: :patch, turbo_confirm: t('organization_users.index.confirm_action') }, class: 'form-check-input', title: t('organization_users.index.add_owner') %>
                 <% end %>
-            </tr>
-        </thead>
-        <tbody>
-            <% @organization.users.each do |user| %>
-            <tr>
-                <td class="align-middle"><%= mail_to user.email %></td>
-                <td class="align-middle"><%= user.name %></td>
-                <td class="align-middle"><%= user.title %></td>
-                <% if can? :manage, @organization %>
-                    <td class="text-center align-middle">
-                        <div class="form-check align-middle d-inline-block">
-                        <% if user.roles.map{|r| r['name']}.include? "owner" %>
-                            <%= link_to '', organization_user_path(@organization, user, remove_role: 'owner'), data: { turbo_method: :patch, turbo_confirm: t('organization_users.index.confirm_action') }, class: 'form-check-input checked', title: t('organization_users.index.remove_owner') %>
-                            <input class="form-check-input pe-none" type="checkbox" aria-label="Organization owner?" checked>
-                        <% else %>
-                            <%= link_to '', organization_user_path(@organization, user, add_role: 'owner'), data: { turbo_method: :patch, turbo_confirm: t('organization_users.index.confirm_action') }, class: 'form-check-input', title: t('organization_users.index.add_owner') %>
-                        <% end %>
-                        </div>
-                    </td>
-                    <td class="align-middle text-center">
-                        <%= link_to t('organization_users.index.remove_user'), organization_user_path(@organization, user), data: { turbo_method: :delete, turbo_confirm: t('organization_users.index.confirm_action') }, class: 'btn btn-danger btn-sm' %>
-                    </td>
-                <% else %>
-                    <td class="align-middle">
-                        <%= if user.roles.map{|r| r['name']}.include? "owner" then "Owner" else "Member" end %>
-                    </td>
-                <% end %>
-            </tr>
+                </div>
+              </td>
+              <td class="align-middle text-center">
+                <%= link_to t('organization_users.index.remove_user'), organization_user_path(@organization, user), data: { turbo_method: :delete, turbo_confirm: t('organization_users.index.confirm_action') }, class: 'btn btn-danger btn-sm' %>
+              </td>
+            <% else %>
+              <td class="align-middle">
+                <%= if user.roles.map{ |r| r['name'] }.include? "owner" then "Owner" else "Member" end %>
+              </td>
             <% end %>
-        </tbody>
-    </table>
+          </tr>
+        <% end %>
+    </tbody>
+  </table>
 <% end %>
