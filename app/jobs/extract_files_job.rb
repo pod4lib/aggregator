@@ -23,6 +23,8 @@ class ExtractFilesJob < ApplicationJob
       end
     end
 
+    ExtractMarcRecordMetadataJob.perform_later(non_multifile_upload) if non_multifile_upload
+
     upload.update(status: 'archived')
   end
 

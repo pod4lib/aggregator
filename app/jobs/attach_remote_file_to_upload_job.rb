@@ -10,6 +10,8 @@ class AttachRemoteFileToUploadJob < ApplicationJob
     io = URI.parse(upload.url).open
     upload.files.attach(io: io, filename: filename_from_io(io) || filename_from_url(upload.url) || upload.name)
     upload.update(status: 'active')
+
+    ExtractMarcRecordMetadataJob.perform_later(upload)
   rescue SocketError, OpenURI::HTTPError => e
     error = "Error opening #{upload.url}: #{e}"
     Rails.logger.info(error)

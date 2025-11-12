@@ -23,13 +23,5 @@ RSpec.describe UploadCreatorService do
     it 'enqueues a job to attach the remote file' do
       expect { service }.to enqueue_job(AttachRemoteFileToUploadJob).exactly(1).times.with(upload)
     end
-
-    it 'enqueues a job to extract metadata' do
-      expect { service }.to enqueue_job(ExtractMarcRecordMetadataJob).exactly(1).times.with(upload)
-    end
-
-    it 'enqueues a job to extract files' do
-      expect { service }.to enqueue_job(ExtractFilesJob).exactly(1).times.with(upload)
-    end
   end
 end

@@ -21,12 +21,14 @@ class UploadCreatorService
   end
 
   def extract_marc_record_metadata
+    return if @upload.url.present?
     return unless @upload.active?
 
     ExtractMarcRecordMetadataJob.perform_later(@upload)
   end
 
   def extract_files
+    return if @upload.url.present?
     return unless @upload.active?
 
     ExtractFilesJob.perform_later(@upload)
