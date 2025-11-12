@@ -175,6 +175,8 @@ en:
     index:
       add_admin: Add admin role
       is_admin: POD admin?
+      last_login: Last login
+      login_count: Login count
       organization: Organization
       remove_admin: Remove admin role
       title: Manage users
