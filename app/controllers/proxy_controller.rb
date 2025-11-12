@@ -15,6 +15,10 @@ class ProxyController < ActiveStorage::BaseController
     render json: { error: exception.message }, status: :not_found
   end
 
+  rescue_from CanCan::AccessDenied do |exception|
+    render json: { error: exception.message }, status: :forbidden
+  end
+
   # rubocop:disable Metrics/AbcSize
   def show
     attachment = ActiveStorage::Attachment.find(params[:id])
