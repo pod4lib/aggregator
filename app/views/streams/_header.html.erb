@@ -3,8 +3,10 @@
 
   <div class="p-2">
     <%= render StreamBadgeComponent.new(stream: stream) %>
-    <%= link_to can?(:edit, stream) ? t('.manage_streams') : t('.view_streams'), organization_streams_path(stream.organization) %>
-    <span class="badge bg-secondary"><%= stream.organization.streams.active.count %></span>
+    <% if can? :read, stream %>
+      <%= link_to can?(:edit, stream) ? t('.manage_streams') : t('.view_streams'), organization_streams_path(stream.organization) %>
+      <span class="badge bg-secondary"><%= stream.organization.streams.active.count %></span>
+    <% end %>
   </div>
 
   <div class="ms-auto p-2">

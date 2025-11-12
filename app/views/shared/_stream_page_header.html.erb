@@ -1,18 +1,20 @@
 <%= render 'streams/summary_card', stream: @stream %>
 
-<div class="d-flex flex-row justify-content-center">
-  <div class="btn-group manage-organization-tabs" role="group" aria-label="Manage organization tabs">
-    <% if @stream.default? %>
-      <!-- Use the organization_path aka "Provider home" for the Uploads tab on organization/show -->
-      <%= link_to "Uploads", organization_path(@organization), class: "btn btn-outline-primary #{current_page_class(organization_path(@organization))}" %>
-    <% else %>
-      <%= link_to "Uploads", organization_stream_path(@organization, @stream), class: "btn btn-outline-primary #{current_page_class(organization_stream_path(@organization, @stream))}" %>
-    <% end %>
+<% if can? :read, @stream %>
+  <div class="d-flex flex-row justify-content-center">
+    <div class="btn-group manage-organization-tabs" role="group" aria-label="Manage organization tabs">
+      <% if @stream.default? %>
+        <!-- Use the organization_path aka "Provider home" for the Uploads tab on organization/show -->
+        <%= link_to "Uploads", organization_path(@organization), class: "btn btn-outline-primary #{current_page_class(organization_path(@organization))}" %>
+      <% else %>
+        <%= link_to "Uploads", organization_stream_path(@organization, @stream), class: "btn btn-outline-primary #{current_page_class(organization_stream_path(@organization, @stream))}" %>
+      <% end %>
 
-    <%= link_to "Normalized data", normalized_data_organization_stream_path(@organization, @stream), class: "btn btn-outline-primary #{current_page_class(normalized_data_organization_stream_path(@organization, @stream))}" %>
+      <%= link_to "Normalized data", normalized_data_organization_stream_path(@organization, @stream), class: "btn btn-outline-primary #{current_page_class(normalized_data_organization_stream_path(@organization, @stream))}" %>
 
-    <%= link_to "Processing status", processing_status_organization_stream_path(@organization, @stream), class: "btn btn-outline-primary #{current_page_class(processing_status_organization_stream_path(@organization, @stream))}" %>
+      <%= link_to "Processing status", processing_status_organization_stream_path(@organization, @stream), class: "btn btn-outline-primary #{current_page_class(processing_status_organization_stream_path(@organization, @stream))}" %>
 
-    <%= link_to "MARC records", organization_stream_marc_records_path(@organization, @stream), class: "btn btn-outline-primary #{current_page_class(organization_stream_marc_records_path(@organization, @stream))}" %>
+      <%= link_to "MARC records", organization_stream_marc_records_path(@organization, @stream), class: "btn btn-outline-primary #{current_page_class(organization_stream_marc_records_path(@organization, @stream))}" %>
+    </div>
   </div>
-</div>
+<% end %>
