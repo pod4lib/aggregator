@@ -10,6 +10,7 @@
         <th scope="col"><%= t('.login_count') %></th>
         <th scope="col"><%= t('.last_login') %></th>
         <th scope="col" class="text-center"><%= t('.is_admin') %></th>
+        <th scope="col" class="text-center"><%= t('.actions') %></th>
       </tr>
     </thead>
     <tbody>
@@ -36,12 +37,17 @@
         <td class="text-center align-middle">
           <div class="form-check align-middle d-inline-block">
             <% if user.has_role? :admin %>
-            <%= link_to '', site_user_path(user, remove_role: 'admin'), data: { turbo_method: :patch, turbo_confirm: t('organization_users.index.confirm_action') }, class: 'form-check-input checked', title: t('.remove_admin') %>
-            <input class="form-check-input pe-none" type="checkbox" aria-label="Pod admin?" checked>
+              <%= link_to '', site_user_path(user, remove_role: 'admin'), data: { turbo_method: :patch, turbo_confirm: t('organization_users.index.confirm_action') }, class: 'form-check-input checked', title: t('.remove_admin') %>
+              <input class="form-check-input pe-none" type="checkbox" aria-label="Pod admin?" checked>
             <% else %>
-            <%= link_to '', site_user_path(user, add_role: 'admin'), data: { turbo_method: :patch, turbo_confirm: t('organization_users.index.confirm_action') }, class: 'form-check-input', title: t('.add_admin') %>
+              <%= link_to '', site_user_path(user, add_role: 'admin'), data: { turbo_method: :patch, turbo_confirm: t('organization_users.index.confirm_action') }, class: 'form-check-input', title: t('.add_admin') %>
             <% end %>
           </div>
+        </td>
+        <td class="text-center align-middle">
+          <% if can? :delete, user %>
+            <%= link_to '', site_user_path(user), data: { turbo_method: :delete, turbo_confirm: t('organization_users.index.confirm_delete') }, class: 'text-danger bi bi-trash', title: t('.delete_user') %>
+          <% end %>
         </td>
       </tr>
       <% end %>

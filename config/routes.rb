@@ -103,7 +103,7 @@ Rails.application.routes.draw do
   end
 
   resources :groups
-  resources :site_users, only: [:index, :update]
+  resources :site_users, only: [:index, :update, :destroy]
 
   authenticate :user, lambda { |u| u.has_role? :admin } do
     mount MissionControl::Jobs::Engine, at: "/jobs", as: 'jobs'
