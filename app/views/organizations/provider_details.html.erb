@@ -1,46 +1,47 @@
 <%= render 'shared/layout_manage_organization' do %>
 
-    <h3>Provider details</h3>
+  <h3>Provider details</h3>
 
-    <!-- Admin/owner view: -->
-    <% if can? :manage, @organization %>
-        <%= bootstrap_form_with(model: @organization, local: true) do |form| %>
-            <%= render 'provider_details_form', organization: @organization, form: form %>
-            <div class="actions">
-                <%= form.primary 'Update provider details' %>
-            </div>
-        <% end %>
-
-    <!-- Member view: -->
-    <% else %>
-        <dl class="organization-details mt-4">
-            <dt>Local MARC profile documentation</dt>
-            <dd>
-              <p class="<%= @organization.marc_docs_url.blank? ? 'fst-italic' : '' %>">
-                <%= @organization.marc_docs_url.blank? ? 'no value provided' : link_to(@organization.marc_docs_url, @organization.marc_docs_url) %>
-              </p>
-            </dd>
-            <dt>What MARC field contains item-level information?</dt>
-            <dd>
-                <p class="<%= @organization.normalization_steps.values.dig(0, 'source_tag').blank? ? 'fst-italic' : '' %>">
-                <%= @organization.normalization_steps.values.dig(0, 'source_tag').blank? ? 'no value provided' : @organization.normalization_steps.values.dig(0, 'source_tag') %>
-                </p>
-            </dd>
-
-            <dt>Local identifier subfield</dt>
-            <dd>
-                <p class="<%= @organization.normalization_steps.values.dig(0, 'subfields', 'i').blank? ? 'fst-italic' : '' %>"><%= @organization.normalization_steps.values.dig(0, 'subfields', 'i').blank? ? 'no value provided' : @organization.normalization_steps.values.dig(0, 'subfields', 'i') %></p>
-            </dd>
-
-            <dt>Call number subfield</dt>
-            <dd>
-                <p class="<%= @organization.normalization_steps.values.dig(0, 'subfields', 'a').blank? ? 'fst-italic' : '' %>"><%= @organization.normalization_steps.values.dig(0, 'subfields', 'a').blank? ? 'no value provided' : @organization.normalization_steps.values.dig(0, 'subfields', 'a') %></p>
-            </dd>
-
-            <dt>Local library</dt>
-            <dd>
-            <p class="<%= @organization.normalization_steps.values.dig(0, 'subfields', 'm').blank? ? 'fst-italic' : '' %>"><%= @organization.normalization_steps.values.dig(0, 'subfields', 'm').blank? ? 'no value provided' : @organization.normalization_steps.values.dig(0, 'subfields', 'm') %></p>
-            </dd>
-        </dl>
+  <!-- Admin/owner view: -->
+  <% if can? :manage, @organization %>
+    <%= bootstrap_form_with(model: @organization, local: true) do |form| %>
+      <%= render 'provider_details_form', organization: @organization, form: form %>
+      <div class="actions">
+        <%= form.primary 'Update provider details' %>
+      </div>
     <% end %>
+
+  <!-- Member view: -->
+  <% else %>
+    <dl class="organization-details mt-4">
+      <dt>Local MARC profile documentation</dt>
+      <dd>
+        <p class="<%= @organization.marc_docs_url.blank? ? 'fst-italic' : '' %>">
+          <%= @organization.marc_docs_url.blank? ? 'no value provided' : link_to(@organization.marc_docs_url, @organization.marc_docs_url) %>
+        </p>
+      </dd>
+
+      <dt>What MARC field contains item-level information?</dt>
+      <dd>
+        <p class="<%= @organization.normalization_steps.values.dig(0, 'source_tag').blank? ? 'fst-italic' : '' %>">
+        <%= @organization.normalization_steps.values.dig(0, 'source_tag').blank? ? 'no value provided' : @organization.normalization_steps.values.dig(0, 'source_tag') %>
+        </p>
+      </dd>
+
+      <dt>Local identifier subfield</dt>
+      <dd>
+        <p class="<%= @organization.normalization_steps.values.dig(0, 'subfields', 'i').blank? ? 'fst-italic' : '' %>"><%= @organization.normalization_steps.values.dig(0, 'subfields', 'i').blank? ? 'no value provided' : @organization.normalization_steps.values.dig(0, 'subfields', 'i') %></p>
+      </dd>
+
+      <dt>Call number subfield</dt>
+      <dd>
+        <p class="<%= @organization.normalization_steps.values.dig(0, 'subfields', 'a').blank? ? 'fst-italic' : '' %>"><%= @organization.normalization_steps.values.dig(0, 'subfields', 'a').blank? ? 'no value provided' : @organization.normalization_steps.values.dig(0, 'subfields', 'a') %></p>
+      </dd>
+
+      <dt>Local library</dt>
+      <dd>
+        <p class="<%= @organization.normalization_steps.values.dig(0, 'subfields', 'm').blank? ? 'fst-italic' : '' %>"><%= @organization.normalization_steps.values.dig(0, 'subfields', 'm').blank? ? 'no value provided' : @organization.normalization_steps.values.dig(0, 'subfields', 'm') %></p>
+      </dd>
+    </dl>
+  <% end %>
 <% end %>
