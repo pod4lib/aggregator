@@ -7,6 +7,8 @@
         <th scope="col"><%= t('organization_users.index.name') %></th>
         <th scope="col"><%= t('organization_users.index.created_at') %></th>
         <th scope="col"><%= t('.organization') %></th>
+        <th scope="col"><%= t('.login_count') %></th>
+        <th scope="col"><%= t('.last_login') %></th>
         <th scope="col" class="text-center"><%= t('.is_admin') %></th>
       </tr>
     </thead>
@@ -19,6 +21,16 @@
         <td class="align-middle">
           <% if user.organizations.present? %>
           <%= link_to user.organizations.first.name, organization_users_path(user.organizations.first) %>
+          <% end %>
+        </td>
+        <td class="align-middle">
+          <%= user.sign_in_count %>
+        </td>
+        <td class="align-middle">
+          <% if user.last_sign_in_at %>
+            <%= local_time(user.last_sign_in_at, format: datetime_display_format) %>
+          <% else %>
+            Never
           <% end %>
         </td>
         <td class="text-center align-middle">
