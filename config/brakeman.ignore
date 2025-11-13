@@ -1,0 +1,49 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 4,
+      "fingerprint": "e430bb7fac3566eea1ddcbac61c9dbc4bcd19063dde4fde692ac5fa6992e54b9",
+      "check_name": "LinkToHref",
+      "message": "Potentially unsafe model attribute in `link_to` href",
+      "file": "app/views/organizations/_provider_details_form.html.erb",
+      "line": 5,
+      "link": "https://brakemanscanner.org/docs/warning_types/link_to_href",
+      "code": "link_to(Organization.new(organization_params).marc_docs_url)",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "OrganizationsController",
+          "method": "create",
+          "line": 57,
+          "file": "app/controllers/organizations_controller.rb",
+          "rendered": {
+            "name": "organizations/new",
+            "file": "app/views/organizations/new.html.erb"
+          }
+        },
+        {
+          "type": "template",
+          "name": "organizations/new",
+          "line": 5,
+          "file": "app/views/organizations/new.html.erb",
+          "rendered": {
+            "name": "organizations/_provider_details_form",
+            "file": "app/views/organizations/_provider_details_form.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "organizations/_provider_details_form"
+      },
+      "user_input": "Organization.new(organization_params).marc_docs_url",
+      "confidence": "Weak",
+      "cwe_id": [
+        79
+      ],
+      "note": ""
+    }
+  ],
+  "brakeman_version": "7.1.1"
+}

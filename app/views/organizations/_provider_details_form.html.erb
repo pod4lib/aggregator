@@ -1,5 +1,12 @@
 <% if organization.persisted? %>
-  <h4 class="mt-4">MARC documentation</h4>
+  <h4 class="mt-4">
+    MARC documentation
+    <% if @organization.marc_docs_url %>
+     <%= link_to(@organization.marc_docs_url) do %> 
+        <i class="p-2 bi bi-link-45deg"></i>
+      <% end %>
+    <% end %>
+  </h4>
   <%= form.url_field :marc_docs_url, label: 'Local MARC profile documentation', help: 'A public URL linking to MARC profile documentation for your organization (optional).' %>
 
   <h4 class="mt-4">Item information</h4>
