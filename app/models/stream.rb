@@ -44,11 +44,7 @@ class Stream < ApplicationRecord
   def make_pending
     return if pending?
 
-    Stream.transaction do
-      organization.streams.default.each { |stream| stream.update(status: 'active') }
-      update(status: 'pending')
-    end
-
+    update(status: 'pending')
     PromoteStreamToDefaultJob.perform_later(self)
   end
 
