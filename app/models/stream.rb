@@ -16,6 +16,8 @@ class Stream < ApplicationRecord
   has_many :delta_dumps, dependent: :destroy_async
   belongs_to :previous_stream, class_name: 'Stream', optional: true
 
+  STATUSES = %w[active pending default previous-default archived].freeze
+
   scope :default, -> { where(status: 'default') }
   scope :active, -> { where(status: %w[active pending default previous-default]) }
   scope :pending, -> { where(status: 'pending') }
