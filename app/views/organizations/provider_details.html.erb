@@ -3,7 +3,7 @@
   <h3>Provider details</h3>
 
   <!-- Admin/owner view: -->
-  <% if can? :manage, @organization %>
+  <% if can? :edit, @organization %>
     <%= bootstrap_form_with(model: @organization, local: true) do |form| %>
       <%= render 'provider_details_form', organization: @organization, form: form %>
       <div class="actions">

@@ -7,7 +7,7 @@
         <th scope="col"><%= t('organization_users.index.email') %></th>
         <th scope="col"><%= t('organization_users.index.name') %></th>
         <th scope="col"><%= t('organization_users.index.job_title') %></th>
-        <% if can? :manage, @organization %>
+        <% if can? :administer, @organization %>
           <th scope="col" class="text-center"><%= t('organization_users.index.is_owner') %></th>
           <th scope="col" class="text-center"><%= t('organization_users.index.actions') %></th>
         <% else %>
@@ -21,7 +21,7 @@
             <td class="align-middle"><%= mail_to user.email %></td>
             <td class="align-middle"><%= user.name %></td>
             <td class="align-middle"><%= user.title %></td>
-            <% if can? :manage, @organization %>
+            <% if can? :administer, @organization %>
               <td class="text-center align-middle">
                 <div class="form-check align-middle d-inline-block">
                 <% if user.roles.map{|r| r['name']}.include? "owner" %>

@@ -3,7 +3,7 @@
   <h3>Organization details</h3>
 
   <!-- Admin/owner view: -->
-  <% if can? :manage, @organization %>
+  <% if can? :edit, @organization %>
   <div class="mb-3">
     <%= bootstrap_form_with(model: @organization, local: true) do |form| %>
     <%= render 'form', organization: @organization, form: form %>

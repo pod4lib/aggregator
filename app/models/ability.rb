@@ -55,7 +55,7 @@ class Ability
   def organization_owner_abilities
     return if owned_organization_ids.empty?
 
-    can :manage, Organization, id: owned_organization_ids
+    can %i[edit administer invite], Organization, id: owned_organization_ids
     can %i[create edit destroy], Stream, organization: { id: owned_organization_ids }
     can %i[create edit destroy], Upload, organization: { id: owned_organization_ids }
     can :manage, AllowlistedJwt, resource_type: 'Organization', resource_id: owned_organization_ids
@@ -77,7 +77,6 @@ class Ability
   end
 
   def final_ability_restrictions
-    cannot :destroy, Organization unless user.has_role?(:admin) || user.has_role?(:superadmin)
     cannot :destroy, Stream, status: %w[previous-default] unless user.has_role?(:admin) || user.has_role?(:superadmin)
     cannot :destroy, Stream, status: %w[default]
   end

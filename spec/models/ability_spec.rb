@@ -47,7 +47,8 @@ RSpec.describe Ability do
       it { is_expected.not_to be_able_to(:destroy, previous_default_stream) }
 
       # Owner organization
-      it { is_expected.to be_able_to(:manage, organization) }
+      it { is_expected.to be_able_to(%i[edit administer], organization) }
+
       it { is_expected.not_to be_able_to(:destroy, organization) }
 
       it { is_expected.to be_able_to(%i[read create edit destroy], Upload.new(organization: organization)) }
