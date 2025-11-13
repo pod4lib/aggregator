@@ -20,4 +20,13 @@ class SiteUsersController < ApplicationController
     end
   end
   # rubocop:enable Metrics/AbcSize
+
+  def destroy
+    @user.destroy
+
+    respond_to do |format|
+      format.html { redirect_to site_users_url, notice: 'User was successfully deleted.', status: :see_other }
+      format.json { head :no_content }
+    end
+  end
 end
