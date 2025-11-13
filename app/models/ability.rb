@@ -18,7 +18,6 @@ class Ability
     site_admin_user_abilities
     organization_owner_abilities
     organization_member_abilities
-    final_ability_restrictions
   end
 
   private
@@ -50,14 +49,16 @@ class Ability
     return unless user.acting_as_superadmin?
 
     can :manage, :all
+    cannot :destroy, Stream, status: %w[default]
   end
 
   def organization_owner_abilities
     return if owned_organization_ids.empty?
 
     can %i[edit administer invite], Organization, id: owned_organization_ids
-    can %i[create edit destroy], Stream, organization: { id: owned_organization_ids }
-    can %i[create edit destroy], Upload, organization: { id: owned_organization_ids }
+    can %i[create update], Stream, organization: { id: owned_organization_ids }
+    can :destroy, Stream, organization: { id: owned_organization_ids }, status: Stream::STATUSES - %w[default previous-default]
+    can %i[create update destroy], Upload, organization: { id: owned_organization_ids }
     can :manage, AllowlistedJwt, resource_type: 'Organization', resource_id: owned_organization_ids
   end
 
@@ -74,10 +75,5 @@ class Ability
 
   def member_organization_ids
     @member_organization_ids ||= Organization.with_role(:member, user).pluck(:id)
-  end
-
-  def final_ability_restrictions
-    cannot :destroy, Stream, status: %w[previous-default] unless user.has_role?(:admin) || user.has_role?(:superadmin)
-    cannot :destroy, Stream, status: %w[default]
   end
 end
