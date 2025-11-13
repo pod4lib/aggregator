@@ -31,11 +31,12 @@ module Activity
       timestamp = daily_uploads.first.created_at.strftime('%Y-%m-%d')
 
       if statuses.key?('invalid') && statuses.key?('success')
-        link_to '', href, class: 'border sparkline-bar bg-striped-success-danger', title: "Mixed results on #{timestamp}"
+        link_to '', href, class: 'border-start border-end sparkline-bar bg-striped-success-danger',
+                          title: "Mixed results on #{timestamp}"
       elsif statuses.key?('invalid')
-        link_to '', href, class: 'border sparkline-bar bg-danger', title: "Failed on #{timestamp}"
+        link_to '', href, class: 'border-start border-end sparkline-bar bg-danger', title: "Failed on #{timestamp}"
       elsif statuses.key?('success')
-        link_to '', href, class: 'border sparkline-bar bg-success', title: "Success on #{timestamp}"
+        link_to '', href, class: 'border-start border-end sparkline-bar bg-success', title: "Success on #{timestamp}"
       end
     end
   end
