@@ -38,8 +38,8 @@
     </table>
   <% end %>
 
-  <% if can? :manage, Group %>
-    <%= link_to 'New group', new_group_path, class: 'btn btn-primary' if can? :create, Group.new %>
+  <% if can? :create, Group %>
+    <%= link_to 'New group', new_group_path, class: 'btn btn-primary' %>
   <% end %>
 
   <% if @groups.any? %>
