@@ -7,8 +7,6 @@ class Ability
   attr_reader :allowlisted_jwt, :user
 
   def initialize(user)
-    alias_action :create, :read, :update, :destroy, to: :crud
-
     @user = user
 
     public_abilities
@@ -58,8 +56,8 @@ class Ability
     return if owned_organization_ids.empty?
 
     can :manage, Organization, id: owned_organization_ids
-    can :crud, Stream, organization: { id: owned_organization_ids }
-    can :crud, Upload, organization: { id: owned_organization_ids }
+    can %i[create edit destroy], Stream, organization: { id: owned_organization_ids }
+    can %i[create edit destroy], Upload, organization: { id: owned_organization_ids }
     can :manage, AllowlistedJwt, resource_type: 'Organization', resource_id: owned_organization_ids
   end
 

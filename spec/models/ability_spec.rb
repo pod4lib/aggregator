@@ -50,12 +50,12 @@ RSpec.describe Ability do
       it { is_expected.to be_able_to(:manage, organization) }
       it { is_expected.not_to be_able_to(:destroy, organization) }
 
-      it { is_expected.to be_able_to(:crud, Upload.new(organization: organization)) }
+      it { is_expected.to be_able_to(%i[read create edit destroy], Upload.new(organization: organization)) }
 
-      it { is_expected.to be_able_to(:crud, Stream.new(organization: organization)) }
+      it { is_expected.to be_able_to(%i[read create edit destroy], Stream.new(organization: organization)) }
       it { is_expected.not_to be_able_to(:reanalyze, Stream.new(organization: organization)) }
 
-      it { is_expected.to be_able_to(:crud, AllowlistedJwt.new(resource: organization)) }
+      it { is_expected.to be_able_to(%i[read create edit destroy], AllowlistedJwt.new(resource: organization)) }
 
       # Non-member organization
       it { is_expected.not_to be_able_to(:manage, not_my_org) }
@@ -69,7 +69,7 @@ RSpec.describe Ability do
       it { is_expected.not_to be_able_to(:create, Stream.new(organization: not_my_org)) }
       it { is_expected.not_to be_able_to(:reanalyze, Stream.new(organization: not_my_org)) }
 
-      it { is_expected.not_to be_able_to(:crud, AllowlistedJwt.new(resource: not_my_org)) }
+      it { is_expected.not_to be_able_to(:manage, AllowlistedJwt.new(resource: not_my_org)) }
     end
 
     context 'with a member of an org' do
@@ -109,7 +109,7 @@ RSpec.describe Ability do
       it { is_expected.to be_able_to(:read, Stream.new(organization: not_my_org)) }
       it { is_expected.not_to be_able_to(:create, Stream.new(organization: not_my_org)) }
 
-      it { is_expected.not_to be_able_to(:crud, AllowlistedJwt.new(resource: not_my_org)) }
+      it { is_expected.not_to be_able_to(:manage, AllowlistedJwt.new(resource: not_my_org)) }
     end
   end
 end
