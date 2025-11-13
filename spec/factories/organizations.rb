@@ -8,5 +8,9 @@ FactoryBot.define do
     trait :consumer do
       provider { false }
     end
+
+    trait :unrestricted do
+      restrict_downloads { false }
+    end
   end
 end

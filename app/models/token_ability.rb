@@ -46,8 +46,14 @@ class TokenAbility
 
   def token_download_abilities
     can :read, Organization
-    can :read, [Stream, Upload]
-    can :read, ActiveStorage::Attachment
+
+    organization_ability_restrictions
+    organization_ability_restrictions({ allowlisted_jwts: { jti: token_jti } })
+  end
+
+  def organization_ability_restrictions(restrictions = { restrict_downloads: false })
+    can :read, [Stream, Upload], organization: restrictions
+    can :read, ActiveStorage::Attachment, { record: { organization: restrictions } }
   end
 
   def token_jti

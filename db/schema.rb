@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_11_200425) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_13_152232) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -242,6 +242,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_11_200425) do
     t.string "name"
     t.json "normalization_steps"
     t.boolean "provider", default: true
+    t.boolean "restrict_downloads", default: true, null: false
     t.string "slug"
     t.datetime "updated_at", null: false
     t.index ["slug"], name: "index_organizations_on_slug", unique: true

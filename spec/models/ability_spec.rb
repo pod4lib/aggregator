@@ -14,7 +14,8 @@ RSpec.describe Ability do
 
   describe 'with a user' do
     let(:organization) { create(:organization) }
-    let(:not_my_org) { create(:organization) }
+    let(:unrestricted_other_org) { create(:organization, :unrestricted) }
+    let(:restricted_other_org) { create(:organization) }
     let(:default_stream) { create(:stream, :default, organization: organization) }
     let(:previous_default_stream) { create(:stream, status: 'previous-default', organization: organization) }
 
@@ -40,6 +41,7 @@ RSpec.describe Ability do
       let(:user) { create(:user) }
 
       before do
+        user.add_role :member, organization # Owners are also members
         user.add_role :owner, organization
       end
 
@@ -58,19 +60,24 @@ RSpec.describe Ability do
 
       it { is_expected.to be_able_to(%i[read create edit destroy], AllowlistedJwt.new(resource: organization)) }
 
-      # Non-member organization
-      it { is_expected.not_to be_able_to(:manage, not_my_org) }
-      it { is_expected.to be_able_to(:read, not_my_org) }
+      # Non-member organization (unrestricted)
+      it { is_expected.not_to be_able_to(:manage, unrestricted_other_org) }
+      it { is_expected.to be_able_to(:read, unrestricted_other_org) }
 
-      it { is_expected.to be_able_to(:read, Upload.new(organization: not_my_org)) }
-      it { is_expected.not_to be_able_to(:create, Upload.new(organization: not_my_org)) }
-      it { is_expected.not_to be_able_to(:destroy, Upload.new(organization: not_my_org)) }
+      it { is_expected.to be_able_to(:read, Upload.new(organization: unrestricted_other_org)) }
+      it { is_expected.not_to be_able_to(:create, Upload.new(organization: unrestricted_other_org)) }
+      it { is_expected.not_to be_able_to(:destroy, Upload.new(organization: unrestricted_other_org)) }
 
-      it { is_expected.to be_able_to(:read, Stream.new(organization: not_my_org)) }
-      it { is_expected.not_to be_able_to(:create, Stream.new(organization: not_my_org)) }
-      it { is_expected.not_to be_able_to(:reanalyze, Stream.new(organization: not_my_org)) }
+      it { is_expected.to be_able_to(:read, Stream.new(organization: unrestricted_other_org)) }
+      it { is_expected.not_to be_able_to(:create, Stream.new(organization: unrestricted_other_org)) }
+      it { is_expected.not_to be_able_to(:reanalyze, Stream.new(organization: unrestricted_other_org)) }
 
-      it { is_expected.not_to be_able_to(:manage, AllowlistedJwt.new(resource: not_my_org)) }
+      it { is_expected.not_to be_able_to(:manage, AllowlistedJwt.new(resource: unrestricted_other_org)) }
+
+      # Non-member organization (restricted)
+      it { is_expected.to be_able_to(:read, restricted_other_org) }
+      it { is_expected.not_to be_able_to(:read, Upload.new(organization: restricted_other_org)) }
+      it { is_expected.not_to be_able_to(:read, Stream.new(organization: restricted_other_org)) }
     end
 
     context 'with a member of an org' do
@@ -100,17 +107,22 @@ RSpec.describe Ability do
       it { is_expected.not_to be_able_to(:destroy, AllowlistedJwt.new(resource: organization)) }
 
       # Non-member organization
-      it { is_expected.not_to be_able_to(:manage, not_my_org) }
-      it { is_expected.to be_able_to(:read, not_my_org) }
+      it { is_expected.not_to be_able_to(:manage, unrestricted_other_org) }
+      it { is_expected.to be_able_to(:read, unrestricted_other_org) }
 
-      it { is_expected.to be_able_to(:read, Upload.new(organization: not_my_org)) }
-      it { is_expected.not_to be_able_to(:create, Upload.new(organization: not_my_org)) }
-      it { is_expected.not_to be_able_to(:destroy, Upload.new(organization: not_my_org)) }
+      it { is_expected.to be_able_to(:read, Upload.new(organization: unrestricted_other_org)) }
+      it { is_expected.not_to be_able_to(:create, Upload.new(organization: unrestricted_other_org)) }
+      it { is_expected.not_to be_able_to(:destroy, Upload.new(organization: unrestricted_other_org)) }
 
-      it { is_expected.to be_able_to(:read, Stream.new(organization: not_my_org)) }
-      it { is_expected.not_to be_able_to(:create, Stream.new(organization: not_my_org)) }
+      it { is_expected.to be_able_to(:read, Stream.new(organization: unrestricted_other_org)) }
+      it { is_expected.not_to be_able_to(:create, Stream.new(organization: unrestricted_other_org)) }
 
-      it { is_expected.not_to be_able_to(:manage, AllowlistedJwt.new(resource: not_my_org)) }
+      it { is_expected.not_to be_able_to(:manage, AllowlistedJwt.new(resource: unrestricted_other_org)) }
+
+      # Non-member organization (restricted)
+      it { is_expected.to be_able_to(:read, restricted_other_org) }
+      it { is_expected.not_to be_able_to(:read, Upload.new(organization: restricted_other_org)) }
+      it { is_expected.not_to be_able_to(:read, Stream.new(organization: restricted_other_org)) }
     end
   end
 end

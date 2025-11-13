@@ -34,11 +34,15 @@ class Ability
   def user_with_roles_abilities
     return if user.roles.empty?
 
-    can :read, ActiveStorage::Attachment
-    can :read, MarcRecord
-    can :read, Stream
-    can :read, Upload
     can :read, :pages_data
+    organization_ability_restrictions
+  end
+
+  def organization_ability_restrictions(restrictions = { restrict_downloads: false })
+    can :read, ActiveStorage::Attachment, { record: { organization: restrictions } }
+    can :read, MarcRecord, upload: { organization: restrictions }
+    can :read, Stream, organization: restrictions
+    can :read, Upload, organization: restrictions
   end
 
   def site_admin_user_abilities
@@ -71,6 +75,7 @@ class Ability
 
     can %i[create], [Upload], organization: { id: member_organization_ids }
     can :read, AllowlistedJwt, resource_type: 'Organization', resource_id: member_organization_ids
+    organization_ability_restrictions({ id: member_organization_ids })
   end
 
   def member_organization_ids

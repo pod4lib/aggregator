@@ -1,5 +1,10 @@
 <div class="d-flex align-items-center">
-  <h2 class="font-weight-normal mb-0">Stream: <%= stream.display_name %></h2>
+  <h2 class="font-weight-normal mb-0">
+    <% if stream.organization.restrict_downloads %>
+      <i class="bi bi-lock-fill text-warning" title="Downloads are restricted to organization members only"></i>
+    <% end %>
+    Stream: <%= stream.display_name %>
+  </h2>
 
   <div class="p-2">
     <%= render StreamBadgeComponent.new(stream: stream) %>

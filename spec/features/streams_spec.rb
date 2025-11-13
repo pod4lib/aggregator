@@ -19,6 +19,7 @@ RSpec.describe 'uploading files to POD' do
         GenerateFullDumpJob.perform_now(organization.default_stream)
       end
 
+      user.add_role :member, organization
       user.add_role :owner, organization
       login_as(user, scope: :user)
     end
