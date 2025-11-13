@@ -109,7 +109,7 @@
           <li class="my-3"><%= link_to t('.organization.actions.harvest_data'), organization_path(@overview.organization) %></li>
           <li class="my-3"><%= link_to t('.organization.actions.data_docs'), 'https://github.com/pod4lib/aggregator/wiki/Harvesting-using-ResourceSync' %></li>
           <% end %>
-          <% if can? :manage, @overview.organization %>
+          <% if can? :administer, @overview.organization %>
           <li class="my-3"><%= link_to t('.organization.actions.edit_org'), organization_users_path(@overview.organization) %></li>
           <% else %>
           <li class="my-3"><%= link_to t('.organization.actions.view_org_details'), organization_users_path(@overview.organization) %></li>

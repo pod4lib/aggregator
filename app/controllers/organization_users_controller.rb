@@ -10,7 +10,7 @@ class OrganizationUsersController < ApplicationController
 
   # rubocop:disable Metrics/AbcSize
   def update
-    authorize! :manage, @organization
+    authorize! :administer, @organization
     @user.remove_role(params[:remove_role], @organization) if params[:remove_role].present?
     @user.add_role(params[:add_role], @organization) if params[:add_role].present?
 
@@ -24,7 +24,7 @@ class OrganizationUsersController < ApplicationController
   # rubocop:enable Metrics/AbcSize
 
   def destroy
-    authorize! :manage, @organization
+    authorize! :administer, @organization
     @user.destroy
 
     respond_to do |format|

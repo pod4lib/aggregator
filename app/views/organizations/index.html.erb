@@ -14,7 +14,7 @@
         <th class="text-end">Unique records</th>
         <th class="text-end">Total records</th>
         <th>Last update</th>
-        <% if can? :manage, Organization %>
+        <% if can?(:edit, Organization) || can?(:destroy, Organization) %>
           <th colspan="2">Actions</th>
         <% end %>
       </tr>
@@ -42,7 +42,7 @@
             <% end %>
           </td>
 
-          <% if can? :manage, Organization %>
+          <% if can?(:edit, Organization) || can?(:destroy, Organization) %>
             <td class="align-middle"><%= link_to 'Edit', organization_details_organization_path(organization), class: 'btn btn-secondary btn-sm' if can? :edit, organization %></td>
             <td class="align-middle"><%= link_to 'Delete', organization, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' if can? :destroy, organization %></td>
           <% end %>
@@ -67,7 +67,7 @@
             <th colspan="2">Consumer</th>
             <th class="text-end">Users</th>
             <th>POD contact</th>
-            <% if can? :manage, Organization %>
+            <% if can?(:edit, Organization) || can?(:destroy, Organization) %>
               <th colspan="2">Actions</th>
             <% end %>
           </tr>
@@ -89,7 +89,7 @@
                   <%= mail_to organization.contact_email.email %>
                 <% end %>
               </td>
-              <% if can? :manage, Organization %>
+              <% if can?(:edit, Organization) || can?(:destroy, Organization) %>
                 <td class="align-middle"><%= link_to 'Edit', organization_details_organization_path(organization), class: 'btn btn-secondary btn-sm' if can? :edit, organization %></td>
                 <td class="align-middle"><%= link_to 'Delete', organization, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' if can? :destroy, organization %></td>
               <% end %>
