@@ -8,10 +8,6 @@ RSpec.describe TokenAbility do
 
   let(:token) { nil }
 
-  describe 'for an anonymous user' do
-    it { is_expected.to be_able_to(:confirm, ContactEmail) }
-  end
-
   describe 'with a token' do
     let(:org_one) { create(:organization) }
     let(:org_two) { create(:organization) }

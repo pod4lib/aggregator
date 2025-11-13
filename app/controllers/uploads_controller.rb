@@ -85,8 +85,8 @@ class UploadsController < ApplicationController
 
   def create_params
     upload_params.merge(
-      user_id: current_ability&.user&.id,
-      allowlisted_jwts_id: current_ability&.allowlisted_jwt&.id,
+      user_id: current_ability&.try(:user)&.id,
+      allowlisted_jwts_id: current_ability&.try(:allowlisted_jwt)&.id,
       ip_address: request.env['HTTP_X_FORWARDED_FOR'] || request.remote_ip
     )
   end
