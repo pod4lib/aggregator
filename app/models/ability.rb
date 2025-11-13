@@ -4,7 +4,7 @@
 class Ability
   include CanCan::Ability
 
-  attr_reader :allowlisted_jwt, :user
+  attr_reader :user
 
   def initialize(user)
     @user = user

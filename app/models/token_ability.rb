@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 # Ability class that defines token-based abilities
-class TokenAbility < Ability
-  def initialize(token)
-    super(nil)
+class TokenAbility
+  include CanCan::Ability
 
+  attr_reader :allowlisted_jwt
+
+  def initialize(token)
     @token = token
     @allowlisted_jwt = AllowlistedJwt.find_by(jti: token_jti)
 
