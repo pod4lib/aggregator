@@ -1,6 +1,6 @@
 <%= render 'shared/layout_manage_organization' do %>
   <h3><%= t('organization_users.index.title') %></h3>
-  <%= link_to t('organization_users.index.invite_user'), organization_invite_new_path(@organization), class: 'btn btn-sm btn-primary mt-3' if can? :manage, @organization %>
+  <%= link_to t('organization_users.index.invite_user'), organization_invite_new_path(@organization), class: 'btn btn-sm btn-primary mt-3' if can? :invite, @organization %>
   <table class="table table-striped organizations mt-4">
     <thead>
       <tr>
