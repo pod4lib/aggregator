@@ -123,6 +123,22 @@ RSpec.describe Ability do
       it { is_expected.to be_able_to(:read, restricted_other_org) }
       it { is_expected.not_to be_able_to(:read, Upload.new(organization: restricted_other_org)) }
       it { is_expected.not_to be_able_to(:read, Stream.new(organization: restricted_other_org)) }
+      it { is_expected.not_to be_able_to(:read, MarcRecord.new(upload: Upload.new(organization: restricted_other_org))) }
+      it { is_expected.not_to be_able_to(:read, ActiveStorage::Attachment.new(record: Upload.new(organization: restricted_other_org))) }
+    end
+
+    context 'when an organization is restricted but the user belongs to an organization granted access' do
+      let(:user) { create(:user) }
+
+      before do
+        user.add_role :member, organization
+        Downloader.create!(organization: restricted_other_org, resource: organization)
+      end
+
+      it { is_expected.to be_able_to(:read, Upload.new(organization: restricted_other_org)) }
+      it { is_expected.to be_able_to(:read, Stream.new(organization: restricted_other_org)) }
+      it { is_expected.to be_able_to(:read, MarcRecord.new(upload: Upload.new(organization: restricted_other_org))) }
+      it { is_expected.to be_able_to(:read, ActiveStorage::Attachment.new(record: Upload.new(organization: restricted_other_org))) }
     end
   end
 end

@@ -101,4 +101,19 @@ RSpec.describe Organization do
       expect(organization.downloadable_organizations).to include(other_organization)
     end
   end
+
+  describe '#effective_downloadable_organizations' do
+    let(:group) { create(:group) }
+    let(:group_org) { create(:organization) }
+
+    before do
+      GroupMembership.create!(group: group, organization: organization)
+      Downloader.create!(resource: organization, organization: other_organization)
+      Downloader.create!(resource: group, organization: group_org)
+    end
+
+    it 'returns all organizations that can be downloaded by this organization via direct access or group membership' do
+      expect(organization.effective_downloadable_organizations).to contain_exactly(other_organization, group_org)
+    end
+  end
 end

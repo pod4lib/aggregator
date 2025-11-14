@@ -35,14 +35,22 @@ class Ability
     return if user.roles.empty?
 
     can :read, :pages_data
-    organization_ability_restrictions
+
+    # record/download access for unrestricted organizations
+    can :read, ActiveStorage::Attachment, { record: { organization: { restrict_downloads: false } } }
+    can :read, MarcRecord, upload: { organization: { restrict_downloads: false } }
+    can :read, Stream, organization: { restrict_downloads: false }
+    can :read, Upload, organization: { restrict_downloads: false }
+
+    # record/download access for restricted organizations where access has been granted
+    can :read, ActiveStorage::Attachment, { record: { organization: { id: permitted_organization_ids } } }
+    can :read, MarcRecord, upload: { organization: { id: permitted_organization_ids } }
+    can :read, Stream, organization: { id: permitted_organization_ids }
+    can :read, Upload, organization: { id: permitted_organization_ids }
   end
 
-  def organization_ability_restrictions(restrictions = { restrict_downloads: false })
-    can :read, ActiveStorage::Attachment, { record: { organization: restrictions } }
-    can :read, MarcRecord, upload: { organization: restrictions }
-    can :read, Stream, organization: restrictions
-    can :read, Upload, organization: restrictions
+  def permitted_organization_ids
+    @permitted_organization_ids ||= user.organizations.flat_map(&:effective_downloadable_organizations).pluck(:id).uniq
   end
 
   def site_admin_user_abilities
@@ -75,7 +83,11 @@ class Ability
 
     can %i[create], [Upload], organization: { id: member_organization_ids }
     can :read, AllowlistedJwt, resource_type: 'Organization', resource_id: member_organization_ids
-    organization_ability_restrictions({ id: member_organization_ids })
+    # record/download access for organizations where the user is a member
+    can :read, ActiveStorage::Attachment, { record: { organization: { id: member_organization_ids } } }
+    can :read, MarcRecord, upload: { organization: { id: member_organization_ids } }
+    can :read, Stream, organization: { id: member_organization_ids }
+    can :read, Upload, organization: { id: member_organization_ids }
   end
 
   def member_organization_ids
