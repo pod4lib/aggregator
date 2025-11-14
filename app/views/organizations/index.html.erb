@@ -27,7 +27,7 @@
         <tr>
           <td class="align-middle text-center icon-column">
             <% if organization.icon.attached? %>
-              <%= image_tag(organization.icon, alt: '', class: 'icon-sm') %>
+              <%= link_to image_tag(organization.icon, alt: '', class: 'icon-sm'), organization, aria: { hidden: true } %>
             <% end %>
           </td>
           <td class="align-middle">
