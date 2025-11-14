@@ -81,6 +81,16 @@ module OaiConcern
       'v1.0'
     end
 
+    def to_h
+      {
+        set: @set,
+        page: @page,
+        from_date: @from_date,
+        until_date: @until_date,
+        version: @version
+      }
+    end
+
     def encode
       Base64.urlsafe_encode64([@set, @page, @from_date, @until_date, @version].join(';'))
     end

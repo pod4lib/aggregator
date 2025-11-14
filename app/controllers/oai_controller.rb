@@ -39,6 +39,7 @@ class OaiController < ApplicationController
       )
     end
 
+    ahoy.track 'OAI ListRecords', token.to_h
     render xml: build_list_records_response(*next_record_page(token))
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
