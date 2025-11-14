@@ -3,6 +3,7 @@
   <table class="table table-striped mb-3" id="uploads-table">
     <thead>
       <tr>
+        <th><span class="visually-hidden">Icon</span></th>
         <th><%= t('activity.table.provider') %></th>
         <th><%= t('activity.table.history') %></th>
         <th><%= t('activity.table.last_upload') %></th>
@@ -11,6 +12,11 @@
     <tbody>
       <% recent_uploads_by_provider.each do |provider, uploads| %>
         <tr data-turbo="false">
+          <td class="align-middle text-center icon-column">
+            <% if provider.icon.attached? %>
+              <%= link_to image_tag(provider.icon, alt: '', class: 'icon-sm'), provider, aria: { hidden: true } %>
+            <% end %>
+          </td>
           <th class="fw-normal align-middle"><%= link_to provider.name, organization_path(provider) %></th>
           <!-- Did any uploads succeed in past 30 days? -->
           <td>

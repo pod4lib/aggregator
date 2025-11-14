@@ -2,6 +2,7 @@
   <table class="table table-striped mb-3" id="normalized-data-table">
     <thead>
       <tr>
+        <th><span class="visually-hidden">Icon</span></th>
         <th><%= t('activity.table.provider') %></th>
         <th><%= t('activity.table.last_full_dump') %></th>
         <th class="text-end pe-4"><%= t('activity.table.total_records') %></th>
@@ -12,6 +13,11 @@
     <tbody>
       <% normalized_data_by_provider.each do |provider, dump| %>
         <tr>
+          <td class="align-middle text-center icon-column">
+            <% if provider.icon.attached? %>
+              <%= link_to image_tag(provider.icon, alt: '', class: 'icon-sm'), provider, aria: { hidden: true } %>
+            <% end %>
+          </td>
           <th class="fw-normal align-middle"><%= link_to provider.name, normalized_data_organization_stream_path(provider, provider.default_stream), data: { turbo: false } %></th>
           <% if dump %>
             <!-- Last full dump: -->
