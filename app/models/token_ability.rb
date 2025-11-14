@@ -47,13 +47,21 @@ class TokenAbility
   def token_download_abilities
     can :read, Organization
 
+    # download access for any unrestricted organizations
     organization_ability_restrictions
+    # download access for organization linked to the token
     organization_ability_restrictions({ allowlisted_jwts: { jti: token_jti } })
+    # download access for organizations that have been explicitly permitted
+    organization_ability_restrictions({ id: permitted_organization_ids })
   end
 
   def organization_ability_restrictions(restrictions = { restrict_downloads: false })
     can :read, [Stream, Upload], organization: restrictions
     can :read, ActiveStorage::Attachment, { record: { organization: restrictions } }
+  end
+
+  def permitted_organization_ids
+    @permitted_organization_ids ||= @allowlisted_jwt&.resource&.effective_downloadable_organizations&.pluck(:id)
   end
 
   def token_jti

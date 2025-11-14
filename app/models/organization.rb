@@ -55,4 +55,9 @@ class Organization < ApplicationRecord
   def latest_upload
     uploads.recent.first
   end
+
+  def effective_downloadable_organizations
+    @effective_downloadable_organizations ||=
+      (downloadable_organizations + groups.flat_map(&:downloadable_organizations)).uniq
+  end
 end

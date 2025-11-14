@@ -35,7 +35,10 @@ class Ability
     return if user.roles.empty?
 
     can :read, :pages_data
+    # download access for unrestricted organizations
     organization_ability_restrictions
+    # download access for organizations that have been explicitly permitted
+    organization_ability_restrictions({ id: permitted_organization_ids })
   end
 
   def organization_ability_restrictions(restrictions = { restrict_downloads: false })
@@ -43,6 +46,10 @@ class Ability
     can :read, MarcRecord, upload: { organization: restrictions }
     can :read, Stream, organization: restrictions
     can :read, Upload, organization: restrictions
+  end
+
+  def permitted_organization_ids
+    @permitted_organization_ids ||= user.organizations.flat_map(&:effective_downloadable_organizations).pluck(:id).uniq
   end
 
   def site_admin_user_abilities
@@ -75,6 +82,7 @@ class Ability
 
     can %i[create], [Upload], organization: { id: member_organization_ids }
     can :read, AllowlistedJwt, resource_type: 'Organization', resource_id: member_organization_ids
+    # download access for organizations that the user is a member of
     organization_ability_restrictions({ id: member_organization_ids })
   end
 
