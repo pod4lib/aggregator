@@ -5,10 +5,12 @@ require 'rails_helper'
 RSpec.describe 'organizations/organization_details' do
   let(:organization) { create(:organization, name: 'Best University') }
   let(:contact_email) { create(:contact_email, organization: organization) }
+  let(:current_user) { create(:user) }
 
   before do
     assign(:organization, organization)
     assign(:contact_email, contact_email)
+    allow(view).to receive(:current_user).and_return(current_user)
   end
 
   # rubocop:disable RSpec/ExampleLength

@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'OAI-PMH' do
-  let(:organization) { create(:organization, name: 'My Org', slug: 'my-org') }
+  let(:organization) { create(:organization, :unrestricted, name: 'My Org', slug: 'my-org') }
   let(:user) { create(:user) }
 
   # NOTE: capybara matchers don't always seem to work on returned XML documents;

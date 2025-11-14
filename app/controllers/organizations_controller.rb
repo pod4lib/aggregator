@@ -90,7 +90,7 @@ class OrganizationsController < ApplicationController
   def organization_params
     params
       .expect(
-        organization: [:name, :slug, :icon, :code, :provider, :marc_docs_url,
+        organization: [:name, :slug, :icon, :code, :provider, :marc_docs_url, :restrict_downloads,
                        { contact_email_attributes: %i[email],
                          normalization_steps: [[:destination_tag, :source_tag, { subfields: %i[i a m] }]] }]
       )

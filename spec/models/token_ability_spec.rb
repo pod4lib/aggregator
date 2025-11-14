@@ -9,38 +9,43 @@ RSpec.describe TokenAbility do
   let(:token) { nil }
 
   describe 'with a token' do
-    let(:org_one) { create(:organization) }
-    let(:org_two) { create(:organization) }
+    let(:organization) { create(:organization) }
+    let(:unrestricted_other_org) { create(:organization, :unrestricted) }
+    let(:restricted_other_org) { create(:organization) }
     let(:default_stream) { create(:stream, :default) }
     let(:token) { { 'jti' => 'anything' } }
     let(:token_attributes) { {} }
 
     before do
-      AllowlistedJwt.create(resource: org_one, jti: 'anything', **token_attributes)
+      AllowlistedJwt.create(resource: organization, jti: 'anything', **token_attributes)
     end
 
-    it { is_expected.to be_able_to(:read, org_one) }
-    it { is_expected.to be_able_to(:read, org_two) }
+    it { is_expected.to be_able_to(:read, organization) }
+    it { is_expected.to be_able_to(:read, unrestricted_other_org) }
+    it { is_expected.to be_able_to(:read, restricted_other_org) }
 
-    it { is_expected.to be_able_to(:create, Upload.new(organization: org_one)) }
-    it { is_expected.not_to be_able_to(:create, Upload.new(organization: org_two)) }
+    it { is_expected.to be_able_to(:create, Upload.new(organization: organization)) }
+    it { is_expected.not_to be_able_to(:create, Upload.new(organization: unrestricted_other_org)) }
 
     context 'with a token scoped to reads' do
       let(:token_attributes) { { scope: 'download' } }
 
-      it { is_expected.to be_able_to(:read, org_one) }
-      it { is_expected.to be_able_to(:read, org_two) }
-      it { is_expected.to be_able_to(:read, create(:upload, :binary_marc, organization: org_one)) }
-      it { is_expected.to be_able_to(:read, create(:upload, :binary_marc, organization: org_two)) }
-      it { is_expected.not_to be_able_to(:create, Upload.new(organization: org_one)) }
+      it { is_expected.to be_able_to(:read, organization) }
+      it { is_expected.to be_able_to(:read, unrestricted_other_org) }
+      it { is_expected.to be_able_to(:read, restricted_other_org) }
+      it { is_expected.to be_able_to(:read, create(:upload, :binary_marc, organization: organization)) }
+      it { is_expected.to be_able_to(:read, create(:upload, :binary_marc, organization: unrestricted_other_org)) }
+      it { is_expected.not_to be_able_to(:read, create(:upload, :binary_marc, organization: restricted_other_org)) }
+      it { is_expected.not_to be_able_to(:create, Upload.new(organization: organization)) }
     end
 
     context 'with a token scoped to upload' do
       let(:token_attributes) { { scope: 'upload' } }
 
-      it { is_expected.to be_able_to(:read, org_one) }
-      it { is_expected.not_to be_able_to(:read, org_two) }
-      it { is_expected.to be_able_to(:create, Upload.new(organization: org_one)) }
+      it { is_expected.to be_able_to(:read, organization) }
+      it { is_expected.not_to be_able_to(:read, unrestricted_other_org) }
+      it { is_expected.not_to be_able_to(:read, restricted_other_org) }
+      it { is_expected.to be_able_to(:create, Upload.new(organization: organization)) }
     end
   end
 end

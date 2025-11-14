@@ -9,6 +9,7 @@ RSpec.describe 'uploading files to POD' do
     let(:user) { create(:user) }
 
     before do
+      user.add_role :member, organization
       user.add_role :owner, organization
       login_as(user, scope: :user)
     end
