@@ -15,4 +15,11 @@ class Role < ApplicationRecord
             allow_nil: true
 
   scopify
+
+  # Current roles:
+  # - member (resource = organization): can read shared data, see dashboards, but only create new
+  #                                     uploads in their own organization
+  # - owner (resource = organization): can manage the organization, its streams, and its members, etc
+  # - admin: application-wide administrator
+  # - superadmin: like admin, but gets the admin privileges without needing to opt-in. used for testing + local development
 end
