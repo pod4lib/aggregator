@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_13_152232) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_14_131915) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -130,6 +130,17 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_13_152232) do
     t.index ["previous_stream_id"], name: "index_delta_dumps_on_previous_stream_id"
     t.index ["published_at"], name: "index_delta_dumps_on_published_at"
     t.index ["stream_id"], name: "index_delta_dumps_on_stream_id"
+  end
+
+  create_table "downloaders", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "organization_id", null: false
+    t.bigint "resource_id", null: false
+    t.string "resource_type", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organization_id", "resource_type", "resource_id"], name: "idx_on_organization_id_resource_type_resource_id_56d4db8e73", unique: true
+    t.index ["organization_id"], name: "index_downloaders_on_organization_id"
+    t.index ["resource_type", "resource_id"], name: "index_downloaders_on_resource"
   end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
@@ -486,6 +497,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_13_152232) do
   add_foreign_key "contact_emails", "organizations"
   add_foreign_key "default_stream_histories", "streams"
   add_foreign_key "delta_dumps", "normalized_dumps"
+  add_foreign_key "downloaders", "organizations"
   add_foreign_key "full_dumps", "normalized_dumps"
   add_foreign_key "group_memberships", "groups"
   add_foreign_key "group_memberships", "organizations"

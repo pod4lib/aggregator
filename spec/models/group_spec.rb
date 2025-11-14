@@ -22,4 +22,14 @@ RSpec.describe Group do
       end
     end
   end
+
+  describe '#downloadable_organizations' do
+    before do
+      Downloader.create!(resource: group, organization: organization)
+    end
+
+    it 'returns organizations that members of this group are allowed to download from' do
+      expect(group.downloadable_organizations).to include(organization)
+    end
+  end
 end

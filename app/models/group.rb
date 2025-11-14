@@ -10,6 +10,8 @@ class Group < ApplicationRecord
 
   has_many :group_memberships, dependent: :destroy
   has_many :organizations, through: :group_memberships
+  has_many :downloadables, class_name: 'Downloader', as: :resource, dependent: :destroy
+  has_many :downloadable_organizations, through: :downloadables, source: :organization
   has_one_attached :icon
 
   default_scope { order(name: :asc) }
