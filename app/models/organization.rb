@@ -19,6 +19,11 @@ class Organization < ApplicationRecord
   has_many :statistics, dependent: :delete_all, as: :resource
   accepts_nested_attributes_for :contact_email, update_only: true, reject_if: proc { |att| att['email'].blank? }
   has_many :users, -> { distinct }, through: :roles, class_name: 'User', source: :users
+  has_many :downloaders, dependent: :destroy
+  has_many :downloader_organizations, through: :downloaders, source: :resource, source_type: 'Organization'
+  has_many :downloader_groups, through: :downloaders, source: :resource, source_type: 'Group'
+  has_many :downloadables, class_name: 'Downloader', as: :resource, dependent: :destroy
+  has_many :downloadable_organizations, through: :downloadables, source: :organization
   scope :providers, -> { where(provider: true) }
   scope :consumers, -> { where(provider: false) }
   validates :marc_docs_url, format: { with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), allow_blank: true }

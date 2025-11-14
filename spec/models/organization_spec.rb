@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Organization do
   let(:organization) { create(:organization) }
+  let(:other_organization) { create(:organization) }
 
   describe '#jwt_token' do
     context 'when a jwt already exists' do
@@ -66,6 +67,38 @@ RSpec.describe Organization do
       organization.update(name: 'some org title', slug: '')
 
       expect(organization.slug).to eq 'some-org-title'
+    end
+  end
+
+  describe '#downloader_organizations' do
+    before do
+      Downloader.create!(resource: other_organization, organization: organization)
+    end
+
+    it 'returns organizations that are allowed to download from this organization' do
+      expect(organization.downloader_organizations).to include(other_organization)
+    end
+  end
+
+  describe '#downloader_groups' do
+    let(:group) { create(:group) }
+
+    before do
+      Downloader.create!(resource: group, organization: organization)
+    end
+
+    it 'returns groups that are allowed to download from this organization' do
+      expect(organization.downloader_groups).to include(group)
+    end
+  end
+
+  describe '#downloadable_organizations' do
+    before do
+      Downloader.create!(resource: organization, organization: other_organization)
+    end
+
+    it 'returns organizations that members of this group are allowed to download from' do
+      expect(organization.downloadable_organizations).to include(other_organization)
     end
   end
 end
