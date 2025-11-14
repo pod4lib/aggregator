@@ -5,10 +5,15 @@
 class OaiController < ApplicationController
   include OaiConcern
 
-  # NOTE: While we're skipping the controller-wide auth check, we are verifying
+  skip_authorization_check only: [:bad_verb]
+
+  # NOTE: This ensures the user can access any resources, and we are also verifying
   # current_ability before loading Stream resources so OAI requests are
   # protected by authorization checks.
-  skip_authorization_check
+  before_action except: [:bad_verb] do
+    authorize! :read, Stream
+  end
+
   rescue_from OaiConcern::OaiError, with: :render_error
 
   def bad_verb
