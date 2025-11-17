@@ -1,0 +1,37 @@
+<div class="col-12 col-lg-6">
+  <%= heading %>
+  <%= description %>
+  <table class="table table-striped mb-3">
+    <thead>
+      <tr>
+        <th><span class="visually-hidden">Icon</span></th>
+        <th><%= resource_type %></th>
+        <th><%= t('downloaders.access_form_component.table_header.grant_access') %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @resources.each do |resource| %>
+        <tr>
+          <td class="align-middle text-center icon-column">
+            <% if resource.icon.attached? %>
+              <%= link_to image_tag(resource.icon, alt: '', class: 'icon-sm'), resource, aria: { hidden: true } %>
+            <% end %>
+          </td>
+          <td><%= link_to resource_name(resource), resource %></td>
+          <td class="align-middle text-center">
+            <turbo-frame id="<%= dom_id(resource, :access) %>">
+              <div class="form-check align-middle d-inline-block">
+                <% if access_granted?(resource) %>
+                  <%= revoke_download_access_link(resource) %>
+                  <input class="form-check-input pe-none" type="checkbox" aria-label="Access granted?" checked>
+                <% else %>
+                  <%= grant_download_access_link(resource) %>
+                <% end %>
+              </div>
+            </turbo-frame>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

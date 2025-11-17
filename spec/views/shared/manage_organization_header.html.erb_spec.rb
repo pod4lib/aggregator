@@ -20,10 +20,18 @@ RSpec.describe 'shared/_manage_organization_header' do
   end
   # rubocop:enable RSpec/MultipleExpectations
 
-  it 'displays the Access tokens link for priveleged users' do
-    allow(view).to receive(:can?).and_return(true)
-    render
+  context 'when user has priveleges' do
+    before do
+      allow(view).to receive(:can?).and_return(true)
+      render
+    end
 
-    expect(rendered).to have_link('Access tokens')
+    it 'displays the Access tokens link' do
+      expect(rendered).to have_link('Access tokens')
+    end
+
+    it 'displays the access restrictions link' do
+      expect(rendered).to have_link('Access restrictions')
+    end
   end
 end

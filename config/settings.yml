@@ -9,6 +9,8 @@ action_mailer:
 contact_email: 'pod-support@lists.stanford.edu'
 accessibility_email: 'library-accessibility-contact@lists.stanford.edu'
 
+allow_organization_owners_to_manage_access: false
+
 marc_fixture_seeds:
   host: https://pod.stanford.edu
   token: ''

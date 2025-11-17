@@ -1,0 +1,16 @@
+<h4 class="mt-4"><%= t('downloaders.administer_access_component.heading') %></h4>
+<% unless @organization.restrict_downloads %>
+  <div class="alert alert-warning" role="alert">
+    <%= t('downloaders.administer_access_component.unrestricted_alert') %>
+  </div>
+<% end %>
+<div class="container mt-4">
+  <div class="row">
+    <%= render Downloaders::AccessFormComponent.new(organization: @organization,
+                                                    resources: @groups,
+                                                    resource_type: 'Group') %>
+    <%= render Downloaders::AccessFormComponent.new(organization: @organization,
+                                                    resources: @other_organizations,
+                                                    resource_type: 'Organization') %>
+  </div>
+</div>

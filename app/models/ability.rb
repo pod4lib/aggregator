@@ -28,6 +28,8 @@ class Ability
 
   def all_user_abilities
     can :read, Organization
+    can :read, Downloader
+    can :read, Group
     can :read, :dashboard
   end
 
@@ -67,6 +69,7 @@ class Ability
   def organization_owner_abilities
     return if owned_organization_ids.empty?
 
+    can :control_access, Organization, id: owned_organization_ids if Settings.allow_organization_owners_to_manage_access
     can %i[edit administer invite], Organization, id: owned_organization_ids
     can %i[create update], Stream, organization: { id: owned_organization_ids }
     can :destroy, Stream, organization: { id: owned_organization_ids }, status: Stream::STATUSES - %w[default previous-default]

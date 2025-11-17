@@ -31,10 +31,13 @@ RSpec.describe Ability do
       let(:user) { User.new }
 
       it { is_expected.to be_able_to(:read, create(:organization)) }
+      it { is_expected.to be_able_to(:read, Downloader.new) }
+      it { is_expected.to be_able_to(:read, Group.new) }
       it { is_expected.not_to be_able_to(:read, Upload.new) }
       it { is_expected.not_to be_able_to(:read, Stream.new) }
       it { is_expected.not_to be_able_to(:read, AllowlistedJwt.new) }
       it { is_expected.not_to be_able_to(:destroy, default_stream) }
+      it { is_expected.not_to be_able_to(:control_access, organization) }
     end
 
     context 'with an owner of an org' do
@@ -43,6 +46,7 @@ RSpec.describe Ability do
       before do
         user.add_role :member, organization # Owners are also members
         user.add_role :owner, organization
+        allow(Settings).to receive(:allow_organization_owners_to_manage_access).and_return(true)
       end
 
       it { is_expected.not_to be_able_to(:destroy, default_stream) }
@@ -50,6 +54,7 @@ RSpec.describe Ability do
 
       # Owner organization
       it { is_expected.to be_able_to(%i[edit administer], organization) }
+      it { is_expected.to be_able_to(:control_access, organization) }
 
       it { is_expected.not_to be_able_to(:destroy, organization) }
 
@@ -92,6 +97,7 @@ RSpec.describe Ability do
       # Member organization
       it { is_expected.not_to be_able_to(:manage, organization) }
       it { is_expected.to be_able_to(:read, organization) }
+      it { is_expected.not_to be_able_to(:control_access, organization) }
 
       it { is_expected.to be_able_to(:read, Upload.new(organization: organization)) }
       it { is_expected.to be_able_to(:create, Upload.new(organization: organization)) }
