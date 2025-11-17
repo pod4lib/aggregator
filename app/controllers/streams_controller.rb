@@ -22,6 +22,26 @@ class StreamsController < ApplicationController
     authorize! :read, @stream
   end
 
+  def enqueue_full_dump
+    authorize! :manage, @stream
+
+    GenerateFullDumpJob.perform_later(@stream)
+
+    respond_to do |format|
+      format.html { redirect_back_or_to([@organization, @stream], notice: 'Full dump job was successfully enqueued.') }
+      format.json { render :show, status: :ok, location: [@organization, @stream] }
+    end
+  end
+
+  def enqueue_delta_dump
+    authorize! :manage, @stream
+    GenerateDeltaDumpJob.perform_later(@stream)
+    respond_to do |format|
+      format.html { redirect_back_or_to([@organization, @stream], notice: 'Delta dump job was successfully enqueued.') }
+      format.json { render :show, status: :ok, location: [@organization, @stream] }
+    end
+  end
+
   # GET /organizations/1/streams/2/processing_status
   def processing_status
     authorize! :read, @stream

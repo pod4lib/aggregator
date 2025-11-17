@@ -1,5 +1,11 @@
 <%= render 'shared/layout_stream_page' do %>
-  <h3>Normalized data</h3>
+  <div class="d-flex justify-content-between align-items-center">
+    <h3 class="mb-0">Normalized data</h3>
+    <div>
+      <%= link_to 'Generate full dump', enqueue_full_dump_organization_stream_path(@organization, @stream), data: { 'turbo-method': 'post '}, class: 'btn btn-primary' if can? :manage, @stream %>
+      <%= link_to 'Generate delta dump', enqueue_delta_dump_organization_stream_path(@organization, @stream), data: { 'turbo-method': 'post '}, class: 'btn btn-primary' if can? :manage, @stream %>
+    </div>
+  </div>
 
   <div class="card my-3">
     <div class="card-header">
