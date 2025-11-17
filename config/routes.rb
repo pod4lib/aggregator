@@ -88,6 +88,8 @@ Rails.application.routes.draw do
         get 'processing_status', to: 'streams#processing_status'
         get 'profile', to: 'streams#profile'
         post 'reanalyze', to: 'streams#reanalyze'
+        post 'enqueue_full_dump', to: 'streams#enqueue_full_dump'
+        post 'enqueue_delta_dump', to: 'streams#enqueue_delta_dump'
         get 'resourcelist', to: 'streams#resourcelist', defaults: { format: :xml }
         get 'normalized_resourcelist/:flavor', to: 'streams#normalized_dump', defaults: { format: :xml }, as: :normalized_resourcelist
       end
