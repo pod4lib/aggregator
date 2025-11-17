@@ -1,0 +1,13 @@
+<turbo-frame id="<%= dom_id %>">
+  <div class="form-check align-middle d-inline-block">
+    <%= access_entry %>
+  </div>
+  <%= helpers.turbo_stream.replace "access_summary_alert" do %>
+    <% render Downloaders::AccessSummaryAlertComponent.new(organization: @organization) %>
+  <% end %>
+  <% impacted_organizations.each do |org| %>
+    <%= helpers.turbo_stream.replace "access_summary_table_row_#{helpers.dom_id org}" do %>
+      <% render Downloaders::AccessSummaryTableRowComponent.new(organization: @organization, other_org: org) %>
+    <% end %>
+  <% end %>
+</turbo-frame>

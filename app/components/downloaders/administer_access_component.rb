@@ -10,9 +10,5 @@ module Downloaders
       @groups = groups
       @other_organizations = other_organizations
     end
-
-    def render?
-      helpers.can?(:control_access, @organization)
-    end
   end
 end

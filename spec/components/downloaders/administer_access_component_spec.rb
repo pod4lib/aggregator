@@ -20,8 +20,8 @@ RSpec.describe Downloaders::AdministerAccessComponent, type: :component do
   end
 
   it 'renders the administer access controls' do # rubocop:disable RSpec/MultipleExpectations
-    expect(rendered).to have_css('h4', text: 'Manage access')
-    expect(rendered).to have_css('h5', text: 'Manage group access')
+    expect(rendered).to have_css('h4', text: 'Access settings')
+    expect(rendered).to have_css('h5', text: 'Group access')
     expect(rendered).to have_css('.form-check-input', count: 2)
   end
 end
