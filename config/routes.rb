@@ -71,6 +71,7 @@ Rails.application.routes.draw do
 
     # Route in the Manage Organization / View Organization Details tabs
     resources :organization_users, as: 'users', only: [:index, :destroy, :update], path: 'users'
+    resources :downloaders, only: [:index, :create, :destroy]
     resources :allowlisted_jwts, only: [:index, :new, :create, :destroy]
 
     resource :organization_contact_email, as: 'contact_email', only: [:new, :create, :destroy]

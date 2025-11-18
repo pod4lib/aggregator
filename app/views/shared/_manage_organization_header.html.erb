@@ -17,5 +17,8 @@
     <% if @organization.provider? %>
       <%= link_to "Provider details", provider_details_organization_path(@organization), class: "btn btn-outline-primary #{current_page_class(provider_details_organization_path(@organization))}" %>
     <% end %>
+    <% if @organization.provider? && can?(:control_access, @organization) %>
+      <%= link_to "Access restrictions", organization_downloaders_path(@organization), class: "btn btn-outline-primary #{current_page_class(organization_downloaders_path(@organization))}" %>
+    <% end %>
   </div>
 </div>
