@@ -5,6 +5,12 @@ class Ahoy::Store < Ahoy::DatabaseStore
     super(data)
   end
 
+  def track_event(data)
+    track_visit({ started_at: data[:time] }) unless visit.present?
+
+    super(data)
+  end
+
   def organization_context_id
     return Organization.with_roles([:member, :owner], controller.current_user).first&.friendly_id if controller.current_user
     return controller.current_allowlisted_token&.organization&.friendly_id if controller.respond_to? :current_allowlisted_token
