@@ -15,7 +15,7 @@ RSpec.describe Downloaders::AccessSummaryAlertComponent, type: :component do
     end
 
     it 'displays unrestricted access message' do
-      expect(rendered.text).to include('Test Org is currently unrestricted. Any POD organization can harvest its data')
+      expect(rendered.text).to include('Test Org is currently unrestricted. Any POD organization can access its data')
     end
   end
 
