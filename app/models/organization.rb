@@ -28,6 +28,9 @@ class Organization < ApplicationRecord
   scope :consumers, -> { where(provider: false) }
   validates :marc_docs_url, format: { with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), allow_blank: true }
 
+  # So that Organization.display_name works like other models, such as Group
+  alias_attribute :display_name, :name
+
   def default_stream
     @default_stream ||= streams.find_or_create_by(status: 'default')
   end

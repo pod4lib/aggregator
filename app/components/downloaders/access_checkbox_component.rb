@@ -46,7 +46,7 @@ module Downloaders
             href: helpers.organization_downloader_path(@organization, downloader),
             data: { turbo_method: :delete,
                     turbo_confirm: I18n.t('downloaders.access_form_component.confirm_remove',
-                                          consumer: resource_name, provider: @organization.name) },
+                                          consumer: @resource.display_name, provider: @organization.name) },
             class: 'form-check-input checked',
             title: I18n.t('downloaders.access_form_component.revoke_access')
     end
@@ -57,13 +57,9 @@ module Downloaders
                                                                        resource_id: @resource.id),
             data: { turbo_method: :post,
                     turbo_confirm: I18n.t('downloaders.access_form_component.confirm_add',
-                                          consumer: resource_name, provider: @organization.name) },
+                                          consumer: @resource.display_name, provider: @organization.name) },
             class: 'form-check-input',
             title: I18n.t('downloaders.access_form_component.grant_access')
-    end
-
-    def resource_name
-      @resource.respond_to?(:display_name) ? @resource.display_name : @resource.name
     end
   end
 end
