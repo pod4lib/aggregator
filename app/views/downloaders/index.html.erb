@@ -1,5 +1,7 @@
+<%= turbo_stream_from @organization %>
 <%= render 'shared/layout_manage_organization' do %>
   <h3><%= t('downloaders.index.heading') %></h3>
+  <%= render Downloaders::AccessSummaryAlertComponent.new(organization: @organization) %>
   <%= render Downloaders::RestrictDownloadsFormComponent.new(organization: @organization) %>
   <%= render Downloaders::AdministerAccessComponent.new(organization: @organization) %>
 <% end %>
