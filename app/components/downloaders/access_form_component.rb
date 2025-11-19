@@ -24,9 +24,5 @@ module Downloaders
       tag.p I18n.t("downloaders.access_form_component.#{resource_type.downcase}.description_html",
                    org_name: @organization.name), safe: true
     end
-
-    def resource_name(resource)
-      resource.respond_to?(:display_name) ? resource.display_name : resource.name
-    end
   end
 end
