@@ -30,11 +30,11 @@ RSpec.describe 'downloaders/index' do
     end
 
     it 'renders a component to manage group access' do
-      expect(rendered).to have_css('h5', text: 'Manage group access')
+      expect(rendered).to have_css('h5', text: 'Group access')
     end
 
     it 'renders a component to manage organization access' do
-      expect(rendered).to have_css('h5', text: 'Manage organization access')
+      expect(rendered).to have_css('h5', text: 'Organization access')
     end
   end
 end
