@@ -4,15 +4,17 @@ module Downloaders
   # Component for rendering controls related to administering download access
   # for organizations and groups
   class AdministerAccessComponent < ViewComponent::Base
-    def initialize(organization:, groups:, other_organizations:)
+    def initialize(organization:)
       super()
       @organization = organization
-      @groups = groups
-      @other_organizations = other_organizations
     end
 
-    def render?
-      helpers.can?(:control_access, @organization)
+    def groups
+      @groups ||= Group.accessible_by(helpers.current_ability)
+    end
+
+    def other_organizations
+      @other_organizations ||= Organization.accessible_by(helpers.current_ability).where.not(id: @organization.id)
     end
   end
 end

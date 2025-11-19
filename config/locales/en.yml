@@ -21,16 +21,15 @@ en:
       grant_access: Grant access
       group:
         description_html: Granting group access allows all member organizations of the group to download records from %{org_name}, regardless of their individual access settings.
-        heading: Manage group access
+        heading: Group access
       organization:
         description_html: Granting organization access allows that specific organization to download records from %{org_name}. Group access takes precedence.
-        heading: Manage organization access
+        heading: Organization access
       revoke_access: Revoke access
       table_header:
-        grant_access: Grant access?
+        grant_access: Access granted?
     administer_access_component:
-      heading: Manage access
-      unrestricted_alert: Access is currently unrestricted. Enable download restrictions to enforce access settings.
+      heading: Access settings
     create:
       success: Access was successfully granted.
     destroy:

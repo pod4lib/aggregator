@@ -5,10 +5,7 @@ class DownloadersController < ApplicationController
   load_and_authorize_resource :organization
   load_and_authorize_resource through: :organization
 
-  def index
-    @other_organizations = Organization.accessible_by(current_ability).where.not(id: @organization.id)
-    @groups = Group.accessible_by(current_ability)
-  end
+  def index; end
 
   def create
     authorize! :control_access, @organization
