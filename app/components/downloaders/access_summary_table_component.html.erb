@@ -1,13 +1,19 @@
 <div id="access-summary-table">
   <h4 class="mt-4"><%= t('downloaders.access_summary_table_component.heading_html') %></h4>
-  <p><%= t('downloaders.access_summary_table_component.description_html', org_name: @organization.name).html_safe %></p>
+  <% if @organization.provider? %>
+    <p><%= t('downloaders.access_summary_table_component.provider.description_html', org_name: @organization.name).html_safe %></p>
+  <% else %>
+    <p><%= t('downloaders.access_summary_table_component.consumer.description_html', org_name: @organization.name).html_safe %></p>
+  <% end %>
   <table class="table table-striped mb-3">
     <thead>
       <tr>
         <th class="visually-hidden">Icon</th>
         <th><%= t('downloaders.access_summary_table_component.table_heading.organization') %></th>
-        <th class="text-end"><%= t('downloaders.access_summary_table_component.table_heading.access', org_name: @organization.name) %></th>
-        <th><%= t('downloaders.access_summary_table_component.table_heading.grantor_reason', org_name: @organization.name) %></th>
+        <% if @organization.provider? %>
+          <th class="text-end"><%= t('downloaders.access_summary_table_component.table_heading.access', org_name: @organization.name) %></th>
+          <th><%= t('downloaders.access_summary_table_component.table_heading.grantor_reason', org_name: @organization.name) %></th>
+        <% end %>
         <th class="text-end"><%= t('downloaders.access_summary_table_component.table_heading.accessible', org_name: @organization.name) %></th>
         <th><%= t('downloaders.access_summary_table_component.table_heading.grantee_reason', org_name: @organization.name) %></th>
       </tr>

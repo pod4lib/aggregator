@@ -24,4 +24,16 @@ RSpec.describe Downloaders::AccessSummaryTableComponent, type: :component do
     expect(rendered).to have_css('th', text: 'Test Org can access records?')
     expect(rendered).to have_css('th', text: 'Summary of access granted to Test Org')
   end
+
+  context 'with a consumer-only organization' do
+    let(:organization) { create(:organization, name: 'Consumer Org', provider: false) }
+
+    it 'does not render provider-specific columns' do # rubocop:disable RSpec/MultipleExpectations
+      expect(rendered).to have_no_css('th', text: 'Can access records from Consumer Org?')
+      expect(rendered).to have_no_css('th', text: 'Summary of access granted by Consumer Org')
+
+      expect(rendered).to have_css('th', text: 'Consumer Org can access records?')
+      expect(rendered).to have_css('th', text: 'Summary of access granted to Consumer Org')
+    end
+  end
 end

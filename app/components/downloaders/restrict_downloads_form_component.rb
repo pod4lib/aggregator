@@ -10,7 +10,7 @@ module Downloaders
     end
 
     def render?
-      helpers.can?(:control_access, @organization)
+      helpers.can?(:control_access, @organization) && @organization.provider?
     end
   end
 end

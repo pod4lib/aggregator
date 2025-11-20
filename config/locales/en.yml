@@ -35,8 +35,11 @@ en:
       restricted_org_access: "%{org_name} has restrictions set, allowing access to specific organizations."
       unrestricted_access: "%{org_name} is currently unrestricted. Any POD organization can access its data."
     access_summary_table_component:
-      description_html: The table below shows which organizations have access to records from %{org_name} and which organizations have granted %{org_name} access to their records.
+      consumer:
+        description_html: The table below shows which organizations have granted %{org_name} access to their records.
       heading_html: Access summary
+      provider:
+        description_html: The table below shows which organizations have access to records from %{org_name} and which organizations have granted %{org_name} access to their records.
       table_heading:
         access: Can access records from %{org_name}?
         accessible: "%{org_name} can access records?"
