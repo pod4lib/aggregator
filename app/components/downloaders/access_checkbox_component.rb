@@ -10,7 +10,7 @@ module Downloaders
     end
 
     def access_display
-      helpers.can?(:control_access, @organization) && @organization.restrict_downloads ? access_link : icon
+      helpers.can?(:control_access, @organization) && @organization.restrict_downloads? ? access_link : icon
     end
 
     private
@@ -20,7 +20,7 @@ module Downloaders
     end
 
     def icon_status
-      !@organization.restrict_downloads || access_granted? ? 'can_access' : 'cannot_access'
+      !@organization.restrict_downloads? || access_granted? ? 'can_access' : 'cannot_access'
     end
 
     def access_link

@@ -50,7 +50,7 @@ module Downloaders
     end
 
     def unrestricted_access?
-      !@organization.restrict_downloads
+      !@organization.restrict_downloads?
     end
 
     def access_granted_via_group_membership?
