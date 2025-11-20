@@ -5,9 +5,6 @@
 <%= contact_form.email_field :email, label: 'POD contact for this organization', help: 'An email address other POD users can use to contact this organization.' %>
 <% end %>
 <%= form.check_box :provider if organization.new_record? %>
-<% if current_user.has_role?(:admin) || current_user.has_role?(:superadmin) %>
-  <%= form.check_box :restrict_downloads, label: 'Restrict downloads to organization members only', checked: organization.restrict_downloads %>
-<% end %>
 <div class="mb-3">
   <%= render IconLabelComponent.new(icon: organization&.icon) %>
   <%= form.file_field_without_bootstrap :icon, type: :file, direct_upload: true, id: 'customFile', class: 'form-control', accept: '.svg, .png, .jpg, .jpeg' %>
