@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Downloaders::AccessSummaryTableDataComponent, type: :component do
   subject(:rendered) do
-    Capybara::Node::Simple.new(render_inline(described_class.new(organization: organization, other_org: other_org)).to_html)
+    Capybara::Node::Simple.new(render_inline(described_class.new(grantor_org: organization, grantee_org: other_org)).to_html)
   end
 
   let(:organization) { create(:organization, name: 'Test Org') }

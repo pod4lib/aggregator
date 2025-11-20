@@ -49,10 +49,8 @@ en:
         granted_to_org_and_group: Access granted directly to %{grantee_name} and through its %{groups} membership
         granted_to_organization: Access granted directly to %{grantee_name}
         no_access_granted: No access granted to %{grantee_name}
-        unrestricted_access: "%{grantor_name} has no restrictions set"
-    accessible_summary_table_data_component:
-      explanation:
         not_a_provider: "%{grantor_name} is not a data provider"
+        unrestricted_access: "%{grantor_name} has no restrictions set"
     administer_access_component:
       heading: Access settings
     create:

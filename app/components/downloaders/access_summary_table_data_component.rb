@@ -3,14 +3,17 @@
 module Downloaders
   # Table data component for downloader access
   class AccessSummaryTableDataComponent < ViewComponent::Base
-    def initialize(organization:, other_org:)
+    def initialize(grantor_org:, grantee_org:)
       super()
-      @organization = organization
-      @other_org = other_org
+      @grantor_org = grantor_org
+      @grantee_org = grantee_org
     end
 
-    def explanation_text # rubocop:disable Metrics/AbcSize
-      if unrestricted_access?
+    def explanation_text # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+      if !@grantor_org.provider?
+        I18n.t('downloaders.access_summary_table_data_component.explanation.not_a_provider',
+               grantor_name: grantor_name)
+      elsif unrestricted_access?
         I18n.t('downloaders.access_summary_table_data_component.explanation.unrestricted_access', grantor_name: grantor_name)
       elsif access_granted_via_group_membership? && access_granted_directly?
         I18n.t('downloaders.access_summary_table_data_component.explanation.granted_to_org_and_group',
@@ -34,31 +37,31 @@ module Downloaders
     private
 
     def grantee_name
-      @other_org.name
+      @grantee_org.name
     end
 
     def grantor_name
-      @organization.name
+      @grantor_org.name
     end
 
     def group_memberships_text
-      (@organization.downloader_groups & @other_org.groups).map(&:display_name).to_sentence
+      (@grantor_org.downloader_groups & @grantee_org.groups).map(&:display_name).to_sentence
     end
 
     def can_download?
-      unrestricted_access? || @other_org.effective_downloadable_organizations.include?(@organization)
+      unrestricted_access? || @grantee_org.effective_downloadable_organizations.include?(@grantor_org)
     end
 
     def unrestricted_access?
-      !@organization.restrict_downloads?
+      !@grantor_org.restrict_downloads?
     end
 
     def access_granted_via_group_membership?
-      @organization.downloader_groups.intersect?(@other_org.groups)
+      @grantor_org.downloader_groups.intersect?(@grantee_org.groups)
     end
 
     def access_granted_directly?
-      @organization.downloader_organizations.include?(@other_org)
+      @grantor_org.downloader_organizations.include?(@grantee_org)
     end
   end
 end

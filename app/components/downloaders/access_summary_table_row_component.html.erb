@@ -5,6 +5,6 @@
     <% end %>
   </td>
   <td class="align-middle"><%= link_to @other_org.name, @other_org %></td>
-  <%= render Downloaders::AccessSummaryTableDataComponent.new(organization: @organization, other_org: @other_org) %>
-  <%= render Downloaders::AccessibleSummaryTableDataComponent.new(organization: @organization, other_org: @other_org) %>
+  <%= render Downloaders::AccessSummaryTableDataComponent.new(grantor_org: @organization, grantee_org: @other_org) %>
+  <%= render Downloaders::AccessSummaryTableDataComponent.new(grantor_org: @other_org, grantee_org: @organization) %>
 </tr>
