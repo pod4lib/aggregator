@@ -10,17 +10,22 @@ class DownloadersController < ApplicationController
   def create
     authorize! :control_access, @organization
 
-    Downloader.find_or_create_by(create_downloader_params)
-    redirect_to organization_downloaders_path(@organization),
-                notice: I18n.t('downloaders.create.success')
+    downloader = Downloader.find_or_create_by(create_downloader_params)
+    respond_to do |format|
+      format.turbo_stream { render 'success', locals: { resource: downloader.resource } }
+      format.html { redirect_to organization_downloaders_path(@organization), notice: I18n.t('downloaders.create.success') }
+    end
   end
 
   def destroy
     authorize! :control_access, @organization
 
+    resource = @downloader.resource
     @downloader.destroy
-    redirect_to organization_downloaders_path(@organization),
-                notice: I18n.t('downloaders.destroy.success')
+    respond_to do |format|
+      format.turbo_stream { render 'success', locals: { resource: resource } }
+      format.html { redirect_to organization_downloaders_path(@organization), notice: I18n.t('downloaders.destroy.success') }
+    end
   end
 
   private
