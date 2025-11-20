@@ -6,7 +6,7 @@
 <% end %>
 <%= form.check_box :provider if organization.new_record? %>
 <% if current_user.has_role?(:admin) || current_user.has_role?(:superadmin) %>
-  <%= form.check_box :restrict_downloads, label: 'Restrict downloads to organization members only', checked: organization.restrict_downloads %>
+  <%= form.check_box :restrict_downloads, label: 'Restrict downloads to organization members only', checked: organization.restrict_downloads? %>
 <% end %>
 <div class="mb-3">
   <%= render IconLabelComponent.new(icon: organization&.icon) %>

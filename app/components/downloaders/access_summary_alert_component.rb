@@ -9,7 +9,7 @@ module Downloaders
     end
 
     def alert_text # rubocop:disable Metrics/AbcSize
-      if @organization.restrict_downloads == false
+      if !@organization.restrict_downloads?
         t('downloaders.access_summary_alert_component.unrestricted_access', org_name: @organization.name)
       elsif @organization.downloader_groups.any? && @organization.downloader_organizations.any?
         t('downloaders.access_summary_alert_component.restricted_group_and_org_access', org_name: @organization.name)

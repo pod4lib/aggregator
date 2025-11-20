@@ -2,7 +2,7 @@
   <div class="mb-3">
     <%= f.select :restrict_downloads, options_for_select([[t('downloaders.restrict_downloads_form_component.unrestricted_option'), false],
                                                           [t('downloaders.restrict_downloads_form_component.restricted_option'), true]],
-                                                          @organization.restrict_downloads), class: 'form-select' %>
+                                                          @organization.restrict_downloads?), class: 'form-select' %>
     <div class="form-text">
       <%= t('downloaders.restrict_downloads_form_component.form_text') %>
     </div>
