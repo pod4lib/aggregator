@@ -18,6 +18,11 @@ RSpec.describe 'downloaders/index' do
     expect(rendered).to have_css('h3', text: 'Access restrictions')
   end
 
+  it 'renders a tab to view access summary information' do
+    render
+    expect(rendered).to have_button('Access summary')
+  end
+
   context 'when the user is an owner' do
     before do
       allow(Settings).to receive(:allow_organization_owners_to_manage_access).and_return(true)

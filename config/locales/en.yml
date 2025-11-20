@@ -33,7 +33,26 @@ en:
       restricted_group_access: "%{org_name} has restrictions set, allowing access to specific groups."
       restricted_group_and_org_access: "%{org_name} has restrictions set, allowing access to specific organizations and groups."
       restricted_org_access: "%{org_name} has restrictions set, allowing access to specific organizations."
-      unrestricted_access: "%{org_name} is currently unrestricted. Any POD organization can harvest its data."
+      unrestricted_access: "%{org_name} is currently unrestricted. Any POD organization can access its data."
+    access_summary_table_component:
+      description_html: The table below shows which organizations have access to records from %{org_name} and which organizations have granted %{org_name} access to their records.
+      heading_html: Access summary
+      table_heading:
+        access: Can access records from %{org_name}?
+        accessible: "%{org_name} can access records?"
+        grantee_reason: Summary of access granted to %{org_name}
+        grantor_reason: Summary of access granted by %{org_name}
+        organization: Organization
+    access_summary_table_data_component:
+      explanation:
+        granted_through_groups: Access granted to %{grantee_name} through its %{groups} membership
+        granted_to_org_and_group: Access granted directly to %{grantee_name} and through its %{groups} membership
+        granted_to_organization: Access granted directly to %{grantee_name}
+        no_access_granted: No access granted to %{grantee_name}
+        unrestricted_access: "%{grantor_name} has no restrictions set"
+    accessible_summary_table_data_component:
+      explanation:
+        not_a_provider: "%{grantor_name} is not a data provider"
     administer_access_component:
       heading: Access settings
     create:
@@ -42,6 +61,8 @@ en:
       success: Access was successfully revoked.
     index:
       heading: Access restrictions
+      manage_tab_label: Access settings
+      summary_tab_label: Access summary
     restrict_downloads_form_component:
       form_text: Choose whether to allow any POD organization to download records from your organization, or restrict access to specific organizations and groups.
       restricted_option: Restricted - Only allow specific organizations and groups to download records
