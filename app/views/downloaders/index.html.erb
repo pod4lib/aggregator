@@ -1,4 +1,3 @@
-<%= turbo_stream_from @organization %>
 <%= render 'shared/layout_manage_organization' do %>
   <h3><%= t('downloaders.index.heading') %></h3>
   <%= render Downloaders::AccessSummaryAlertComponent.new(organization: @organization) %>
@@ -18,17 +17,15 @@
     </li>
   </ul>
 
-  <turbo-frame id="access-frame">
-    <div class="tab-content" id="downloaders-tabs-content">
-      <%# Manage access tab %>
-      <div class="tab-pane fade show active" id="manage-pane" role="tabpanel" aria-labelledby="manage-tab">
-        <%= render Downloaders::AdministerAccessComponent.new(organization: @organization) %>
-      </div>
-
-      <%# Summary of access tab %>
-      <div class="tab-pane fade" id="access-pane" role="tabpanel" aria-labelledby="access-tab">
-        <%= render Downloaders::AccessSummaryTableComponent.new(organization: @organization) %>
-      </div>
+  <div class="tab-content" id="downloaders-tabs-content">
+    <%# Manage access tab %>
+    <div class="tab-pane fade show active" id="manage-pane" role="tabpanel" aria-labelledby="manage-tab">
+      <%= render Downloaders::AdministerAccessComponent.new(organization: @organization) %>
     </div>
-  </turbo-frame>
+
+    <%# Summary of access tab %>
+    <div class="tab-pane fade" id="access-pane" role="tabpanel" aria-labelledby="access-tab">
+      <%= render Downloaders::AccessSummaryTableComponent.new(organization: @organization) %>
+    </div>
+  </div>
 <% end %>

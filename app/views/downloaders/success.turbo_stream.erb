@@ -1,0 +1,11 @@
+<%= turbo_stream.replace "access-summary-alert", method: :morph do %>
+  <%= render Downloaders::AccessSummaryAlertComponent.new(organization: @organization) %>
+<% end %>
+
+<%= turbo_stream.replace dom_id(resource, :access_checkbox), method: :morph do %>
+  <%= render Downloaders::AccessCheckboxComponent.new(organization: @organization, resource: resource) %>
+<% end %>
+
+<%= turbo_stream.replace "access-summary-table", method: :morph do %>
+  <%= render Downloaders::AccessSummaryTableComponent.new(organization: @organization) %>
+<% end %>
