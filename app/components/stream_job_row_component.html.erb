@@ -5,5 +5,6 @@
   <td><%= resource_label %></td>
   <td><%= link_to_if helpers.can?(:admin, JobTracker), job_tracker.job_class.titleize, helpers.jobs.application_job_path(Rails.application.name, job_tracker.job_id) %></td>
   <td class="text-end"><%= progress_label %></td>
+  <td><%= duration_label || '-' %></td>
   <td><%= local_time(job_tracker.created_at, format: datetime_display_format()) %></td>
 </tr>
