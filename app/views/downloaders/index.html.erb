@@ -1,12 +1,7 @@
 <%= render 'shared/layout_manage_organization' do %>
   <h3><%= t('downloaders.index.heading') %></h3>
-  <div class="pt-4">
     <%= render Downloaders::AccessSummaryAlertComponent.new(organization: @organization) %>
-  </div>
-
-  <div class="pt-4 pb-3">
     <%= render Downloaders::RestrictDownloadsFormComponent.new(organization: @organization) %>
-  </div>
 
   <% if @organization.provider? %>
     <ul class="nav nav-tabs pt-4" id="downloaders-tabs" role="tablist">

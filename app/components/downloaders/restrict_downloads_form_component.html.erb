@@ -1,4 +1,4 @@
-<%= helpers.bootstrap_form_with(model: @organization, url: organization_path(@organization), html: { method: :patch }) do |f| %>
+<%= helpers.bootstrap_form_with(model: @organization, url: organization_path(@organization), html: { method: :patch, class: 'pt-4 pb-3' }) do |f| %>
   <div class="mb-3">
     <%= f.select :restrict_downloads, options_for_select([[t('downloaders.restrict_downloads_form_component.unrestricted_option'), false],
                                                           [t('downloaders.restrict_downloads_form_component.restricted_option'), true]],
