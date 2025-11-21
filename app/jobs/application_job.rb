@@ -14,9 +14,11 @@ class ApplicationJob < ActiveJob::Base
     around_perform do |job, block|
       job.job_tracker&.update(status: 'in progress') if job.job_tracker.status == 'enqueued'
 
+      t = Time.current
+
       block.call
 
-      job.job_tracker&.update(status: 'complete') if job.job_tracker.status == 'in progress'
+      job.job_tracker&.update(status: 'complete', duration: Time.current - t) if job.job_tracker.status == 'in progress'
     end
 
     after_discard do |job, exception|

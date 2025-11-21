@@ -26,4 +26,12 @@ class StreamJobRowComponent < ViewComponent::Base
 
     "#{number_with_delimiter(job_tracker.progress)} of #{number_with_delimiter(job_tracker.total)}"
   end
+
+  def duration_label
+    if job_tracker.duration
+      distance_of_time_in_words(job_tracker.duration)
+    elsif job_tracker.status == 'in progress'
+      distance_of_time_in_words_to_now(job_tracker.created_at)
+    end
+  end
 end

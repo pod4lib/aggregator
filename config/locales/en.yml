@@ -90,6 +90,7 @@ en:
         label: Recent
     table_heading:
       created_at: Created at
+      duration: Duration
       job_type: Job type
       progress: Completed records
       resource: Resource
