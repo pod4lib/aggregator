@@ -78,6 +78,14 @@ download_access_status:
     icon_class: 'bi bi-dash'
     label: 'Cannot download records'
 
+download_access_lock_status:
+  can_access:
+    icon_class: 'bi bi-unlock2-fill text-success'
+    label: 'Can download records'
+  cannot_access:
+    icon_class: 'bi bi-lock-fill text-danger'
+    label: 'Cannot download records'
+
 # max. MARC records per OAI-XML file; also max. size of one page in ListRecords
 oai_max_page_size: 5000
 

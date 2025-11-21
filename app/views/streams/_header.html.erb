@@ -1,8 +1,8 @@
 <div class="d-flex align-items-center">
+  <%= link_to organization_downloaders_path(stream.organization) do %>
+    <%= StatusIcons::DownloadAccessLockIconComponent.new(status: can?(:read, stream) ? 'can_access' : 'cannot_access', classes:'h2 pe-2').call %>
+  <% end %>
   <h2 class="font-weight-normal mb-0">
-    <% if stream.organization.restrict_downloads? %>
-      <i class="bi bi-lock-fill text-warning" title="Downloads are restricted to organization members only"></i>
-    <% end %>
     Stream: <%= stream.display_name %>
   </h2>
 

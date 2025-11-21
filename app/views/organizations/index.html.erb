@@ -8,6 +8,7 @@
   <table class="table table-striped organizations mt-4" id="providers">
     <thead>
       <tr>
+        <th><span class="visually-hidden">Download access</span></th>
         <th><span class="visually-hidden">Icon</span></th>
         <th>Provider</th>
         <th class="text-end files-column">Files</th>
@@ -25,6 +26,11 @@
       <% @providers.each do |organization| %>
         <% next unless can? :read, organization %>
         <tr>
+          <td class="align-middle text-center icon-column">
+            <%= link_to organization_downloaders_path(organization) do %>
+              <%= StatusIcons::DownloadAccessLockIconComponent.new(status: can?(:read, organization.default_stream) ? 'can_access' : 'cannot_access', classes:'').call %>
+            <% end %>
+          </td>
           <td class="align-middle text-center icon-column">
             <% if organization.icon.attached? %>
               <%= link_to image_tag(organization.icon, alt: '', class: 'icon-sm'), organization, aria: { hidden: true } %>
