@@ -3,29 +3,33 @@
   <%= render Downloaders::AccessSummaryAlertComponent.new(organization: @organization) %>
   <%= render Downloaders::RestrictDownloadsFormComponent.new(organization: @organization) %>
 
-  <ul class="nav nav-tabs pt-4" id="downloaders-tabs" role="tablist">
-    <%# Manage access tab %>
-    <li class="nav-item" role="presentation">
-      <button class="nav-link active" id="manage-tab" data-bs-toggle="tab" data-bs-target="#manage-pane" type="button"
-        role="tab" aria-controls="manage-pane" aria-selected="true"><%= t('downloaders.index.manage_tab_label') %></button>
-    </li>
+  <% if @organization.provider? %>
+    <ul class="nav nav-tabs pt-4" id="downloaders-tabs" role="tablist">
+      <%# Manage access tab %>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="manage-tab" data-bs-toggle="tab" data-bs-target="#manage-pane" type="button"
+          role="tab" aria-controls="manage-pane" aria-selected="true"><%= t('downloaders.index.manage_tab_label') %></button>
+      </li>
 
-    <%# Summary of access tab %>
-    <li class="nav-item" role="presentation">
-      <button class="nav-link" id="access-tab" data-bs-toggle="tab" data-bs-target="#access-pane" type="button"
-        role="tab" aria-controls="access-pane" aria-selected="false"><%= t('downloaders.index.summary_tab_label') %></button>
-    </li>
-  </ul>
+      <%# Summary of access tab %>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="access-tab" data-bs-toggle="tab" data-bs-target="#access-pane" type="button"
+          role="tab" aria-controls="access-pane" aria-selected="false"><%= t('downloaders.index.summary_tab_label') %></button>
+      </li>
+    </ul>
 
-  <div class="tab-content" id="downloaders-tabs-content">
-    <%# Manage access tab %>
-    <div class="tab-pane fade show active" id="manage-pane" role="tabpanel" aria-labelledby="manage-tab">
-      <%= render Downloaders::AdministerAccessComponent.new(organization: @organization) %>
+    <div class="tab-content" id="downloaders-tabs-content">
+      <%# Manage access tab %>
+      <div class="tab-pane fade show active" id="manage-pane" role="tabpanel" aria-labelledby="manage-tab">
+        <%= render Downloaders::AdministerAccessComponent.new(organization: @organization) %>
+      </div>
+
+      <%# Summary of access tab %>
+      <div class="tab-pane fade" id="access-pane" role="tabpanel" aria-labelledby="access-tab">
+        <%= render Downloaders::AccessSummaryTableComponent.new(organization: @organization) %>
+      </div>
     </div>
-
-    <%# Summary of access tab %>
-    <div class="tab-pane fade" id="access-pane" role="tabpanel" aria-labelledby="access-tab">
-      <%= render Downloaders::AccessSummaryTableComponent.new(organization: @organization) %>
-    </div>
-  </div>
+  <% else %>
+    <%= render Downloaders::AccessSummaryTableComponent.new(organization: @organization) %>
+  <% end %>
 <% end %>

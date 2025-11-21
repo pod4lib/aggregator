@@ -21,5 +21,9 @@ module Downloaders
         t('downloaders.access_summary_alert_component.no_access', org_name: @organization.name)
       end
     end
+
+    def render?
+      @organization.provider?
+    end
   end
 end

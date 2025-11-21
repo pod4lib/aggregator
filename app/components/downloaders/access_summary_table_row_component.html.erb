@@ -1,10 +1,12 @@
 <tr id="access_summary_table_row_<%= dom_id @other_org %>">
-  <td class="align-middle text-center icon-column">
+  <td class="align-middle text-center icon-column" data-turbo="false">
     <% if @other_org.icon.attached? %>
       <%= link_to image_tag(@other_org.icon, alt: '', class: 'icon-sm'), @other_org, aria: { hidden: true } %>
     <% end %>
   </td>
-  <td class="align-middle"><%= link_to @other_org.name, @other_org %></td>
-  <%= render Downloaders::AccessSummaryTableDataComponent.new(grantor_org: @organization, grantee_org: @other_org) %>
+  <td class="align-middle" data-turbo="false"><%= link_to @other_org.name, @other_org %></td>
+  <% if @organization.provider? %>
+    <%= render Downloaders::AccessSummaryTableDataComponent.new(grantor_org: @organization, grantee_org: @other_org) %>
+  <% end %>
   <%= render Downloaders::AccessSummaryTableDataComponent.new(grantor_org: @other_org, grantee_org: @organization) %>
 </tr>

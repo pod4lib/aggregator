@@ -12,12 +12,12 @@
     <tbody>
       <% @resources.each do |resource| %>
         <tr>
-          <td class="align-middle text-center icon-column">
+          <td class="align-middle text-center icon-column" data-turbo="false">
             <% if resource.icon.attached? %>
               <%= link_to image_tag(resource.icon, alt: '', class: 'icon-sm'), resource, aria: { hidden: true } %>
             <% end %>
           </td>
-          <td><%= link_to resource.display_name, resource %></td>
+          <td data-turbo="false"><%= link_to resource.display_name, resource %></td>
           <td class="align-middle text-start">
             <%= render Downloaders::AccessCheckboxComponent.new(organization: @organization, resource: resource) %>
           </td>
