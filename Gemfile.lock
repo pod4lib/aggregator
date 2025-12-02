@@ -121,10 +121,6 @@ GEM
       i18n
       rake (>= 10.0.0)
       sshkit (>= 1.9.0)
-    capistrano-bundle_audit (0.4.0)
-      bundler-audit (~> 0.5)
-      capistrano (~> 3.0)
-      capistrano-bundler (>= 1.4)
     capistrano-bundler (2.2.0)
       capistrano (~> 3.1)
     capistrano-one_time_key (0.2.0)
@@ -174,10 +170,9 @@ GEM
       actionmailer (>= 5.0)
       devise (>= 4.6)
     diff-lcs (1.6.2)
-    dlss-capistrano (5.3.0)
+    dlss-capistrano (6.0.0)
       bcrypt_pbkdf
       capistrano (~> 3.0)
-      capistrano-bundle_audit (>= 0.3.0)
       capistrano-one_time_key (>= 0.2.0)
       capistrano-shared_configs
       ed25519
@@ -669,4 +664,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   2.7.2
+  4.0.0.beta2
