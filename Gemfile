@@ -132,3 +132,5 @@ gem "ox"
 
 gem "solid_queue", "~> 1.2"
 gem "mission_control-jobs"
+
+gem 'connection_pool', '~> 2.5' # pinned until fix for https://github.com/rails/rails/issues/56291 is released
