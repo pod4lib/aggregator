@@ -215,24 +215,23 @@ class MarcRecordService
   def each_with_metadata_for_marc21
     return to_enum(:each_with_metadata_for_marc21) unless block_given?
 
-    each_raw_record_with_metadata_for_marc21
-      .slice_when { |i, j| !same_record?(i[:marc], j[:marc]) }
-      .with_index do |records_to_combine, index|
-        if records_to_combine.length == 1
-          yield(records_to_combine.first[:marc], records_to_combine.first.except(:marc))
-        else
-          bytes = records_to_combine.pluck(:marc_bytes).join
+    each_raw_record_with_metadata_for_marc21.slice_when { |i, j| !same_record?(i[:marc], j[:marc]) }
+                                            .with_index do |records_to_combine, index|
+      if records_to_combine.length == 1
+        yield(records_to_combine.first[:marc], records_to_combine.first.except(:marc))
+      else
+        bytes = records_to_combine.pluck(:marc_bytes).join
 
-          record = merge_records(*records_to_combine.pluck(:marc))
+        record = merge_records(*records_to_combine.pluck(:marc))
 
-          yield record, {
-            **records_to_combine.first.except(:marc, :marc_bytes),
-            index: index,
-            bytecount: bytes.length,
-            length: bytes.length,
-            checksum: Digest::MD5.hexdigest(bytes)
-          }
-        end
+        yield record, {
+          **records_to_combine.first.except(:marc, :marc_bytes),
+          index: index,
+          bytecount: bytes.length,
+          length: bytes.length,
+          checksum: Digest::MD5.hexdigest(bytes)
+        }
+      end
     end
   end
 
