@@ -39,7 +39,7 @@ class GenerateFullDumpJob < ApplicationJob
 
     GenerateDeltaDumpJob.perform_now(stream, publish: publish) if stream.current_full_dump
 
-    uploads.where.not(status: 'processed').find_each do |upload|
+    uploads.where.not(status: %w[processed compacted]).find_each do |upload|
       ExtractMarcRecordMetadataJob.perform_now(upload)
     end
 

@@ -77,6 +77,15 @@ RSpec.describe GenerateFullDumpJob do
   end
   # rubocop:enable RSpec/ExampleLength
 
+  it 'does not attempt to extract records from compacted uploads' do
+    described_class.perform_now(organization.default_stream)
+    CompactUploadsJob.perform_now(organization.default_stream, age: 0.seconds, min_uploads: 0)
+
+    expect do
+      described_class.perform_now(organization.default_stream)
+    end.not_to change(MarcRecord, :count)
+  end
+
   it 'has a content type of application/gzip for compressed marcxml' do
     described_class.perform_now(organization.default_stream)
 
