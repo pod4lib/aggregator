@@ -79,7 +79,7 @@ class StreamsController < ApplicationController
   end
 
   def make_pending_default
-    @stream = @organization.streams.find(params[:stream])
+    @stream = @organization.streams.find(params.expect(:stream))
     authorize!(:update, @stream)
 
     @stream.make_pending

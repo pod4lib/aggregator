@@ -64,7 +64,7 @@ class UploadsController < ApplicationController
   def info
     authorize! :read, @upload
 
-    @attachment = @upload.files.find(params[:attachment_id])
+    @attachment = @upload.files.find(params.expect(:attachment_id))
     @blob = @attachment.blob
   end
 

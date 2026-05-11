@@ -21,7 +21,7 @@ class ProxyController < ActiveStorage::BaseController
 
   # rubocop:disable Metrics/AbcSize
   def show
-    attachment = ActiveStorage::Attachment.find(params[:id])
+    attachment = ActiveStorage::Attachment.find(params.expect(:id))
     authorize!(:read, attachment)
     add_analytics_event(attachment)
 

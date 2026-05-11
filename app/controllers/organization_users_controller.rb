@@ -36,6 +36,6 @@ class OrganizationUsersController < ApplicationController
   end
 
   def load_user
-    @user = User.find(params[:id]) || User.new
+    @user = User.find(params.expect(:id)) || User.new
   end
 end
