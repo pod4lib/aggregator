@@ -15,7 +15,7 @@ RSpec.describe 'downloaders', :js do
 
   it 'displays an alert about the current access settings' do
     expect(page).to have_link('Grant access')
-    expect(page).to have_content 'My Org has restrictions set and has not granted access to any organizations or groups.'
+    expect(page).to have_text 'My Org has restrictions set and has not granted access to any organizations or groups.'
   end
 
   context 'when adding a downloader' do
@@ -25,7 +25,7 @@ RSpec.describe 'downloaders', :js do
       end
 
       expect(page).to have_link('Revoke access')
-      expect(page).to have_content 'My Org has restrictions set, allowing access to specific organizations.'
+      expect(page).to have_text 'My Org has restrictions set, allowing access to specific organizations.'
     end
   end
 end

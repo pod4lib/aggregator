@@ -22,8 +22,8 @@ RSpec.describe 'uploading files to POD' do
       attach_file('file', Rails.root.join('spec/fixtures/stanford-50.mrc.gz'))
       click_on 'Create upload'
 
-      expect(page).to have_content 'stanford-50.mrc.gz'
-      expect(page).to have_content '17.8 KB application/gzip'
+      expect(page).to have_text 'stanford-50.mrc.gz'
+      expect(page).to have_text '17.8 KB application/gzip'
     end
   end
 end

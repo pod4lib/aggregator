@@ -22,15 +22,15 @@ RSpec.describe 'homepage summary' do
   end
 
   it 'displays the total number of data providers' do
-    expect(page).to have_content 'There is currently 1 data provider'
+    expect(page).to have_text 'There is currently 1 data provider'
   end
 
   it 'displays the most recent provider that uploaded data' do
-    expect(page).to have_content 'The most recent upload was made by Provider less than a minute ago'
+    expect(page).to have_text 'The most recent upload was made by Provider less than a minute ago'
   end
 
   it 'displays the total number of records and unique records in the aggregator' do
-    expect(page).to have_content 'POD Aggregator currently holds a total of 3 records, of which 2 are unique'
+    expect(page).to have_text 'POD Aggregator currently holds a total of 3 records, of which 2 are unique'
   end
 
   context 'when logged in' do
@@ -43,16 +43,16 @@ RSpec.describe 'homepage summary' do
     end
 
     it 'displays the most recent time at which the org uploaded data' do
-      expect(page).to have_content 'Most recent upload was less than a minute ago'
+      expect(page).to have_text 'Most recent upload was less than a minute ago'
     end
 
     it 'displays the most recent files that the org uploaded' do
-      expect(page).to have_content '12345.marcxml'
-      expect(page).to have_content '9953670.marc'
+      expect(page).to have_text '12345.marcxml'
+      expect(page).to have_text '9953670.marc'
     end
 
     it 'displays the processing status' do
-      expect(page).to have_content 'No active jobs'
+      expect(page).to have_text 'No active jobs'
     end
 
     it 'displays the Provider home link' do
@@ -66,12 +66,12 @@ RSpec.describe 'homepage summary' do
     end
 
     it 'displays info for logging in' do
-      expect(page).to have_content 'Already a POD user?'
+      expect(page).to have_text 'Already a POD user?'
       expect(page).to have_link 'Login'
     end
 
     it 'displays links to docs' do
-      expect(page).to have_content 'Check out the POD wiki or contact pod-support@lists.stanford.edu'
+      expect(page).to have_text 'Check out the POD wiki or contact pod-support@lists.stanford.edu'
     end
   end
 end
