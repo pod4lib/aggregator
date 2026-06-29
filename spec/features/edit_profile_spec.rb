@@ -14,7 +14,7 @@ RSpec.describe 'editing your user profile' do
       visit '/users/edit'
       fill_in 'user_password', with: '123'
       click_on 'Change password'
-      expect(page).to have_content "Current password can't be blank"
+      expect(page).to have_text "Current password can't be blank"
     end
 
     it 'allows non-password changes without passwords' do
@@ -22,7 +22,7 @@ RSpec.describe 'editing your user profile' do
       fill_in 'user_name', with: 'Nice Name'
       click_on 'Update'
       # successful update redirects to root page
-      expect(page).to have_content 'Your account has been updated successfully'
+      expect(page).to have_text 'Your account has been updated successfully'
     end
   end
 end
