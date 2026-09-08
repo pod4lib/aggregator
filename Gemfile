@@ -104,6 +104,8 @@ gem 'devise_invitable', '~> 2.0.0'
 gem 'friendly_id'
 gem 'honeybadger'
 gem 'http'
+# Pinned until Rails 8.1.4 is released https://github.com/rails/rails/issues/58685
+gem 'json', '~> 2.21'
 gem 'kaminari'
 gem 'okcomputer'
 gem 'paper_trail'

@@ -234,7 +234,7 @@ GEM
     jbuilder (2.15.1)
       actionview (>= 7.0.0)
       activesupport (>= 7.0.0)
-    json (3.0.0)
+    json (2.21.2)
     jwt (3.2.0)
       base64
     kaminari (1.2.2)
@@ -593,6 +593,7 @@ DEPENDENCIES
   importmap-rails (~> 2.0)
   inline_svg
   jbuilder (~> 2.7)
+  json (~> 2.21)
   jwt
   kaminari
   local_time (~> 3.0)
