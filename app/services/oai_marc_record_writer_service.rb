@@ -9,7 +9,8 @@ class OaiMarcRecordWriterService
   end
 
   def write_marc_record(record, dump_created_at)
-    oai_writer.write(record.augmented_marc, oai_id(record), record.stream.id, dump_created_at)
+    oai_writer.write(record.augmented_marc, oai_id(record), sets: ["organization/#{record.organization.slug}", record.stream.id],
+                                                            datestamp: dump_created_at)
   rescue StandardError => e
     error = "Error writing MARC OAI file #{base_name} id #{record.id}: #{e}"
     Rails.logger.info(error)
@@ -17,7 +18,8 @@ class OaiMarcRecordWriterService
   end
 
   def write_delete(record, dump_created_at)
-    oai_writer.write_delete(oai_id(record), record.stream.id, dump_created_at)
+    oai_writer.write_delete(oai_id(record), sets: ["organization/#{record.organization.slug}", record.stream.id],
+                                            datestamp: dump_created_at)
   end
 
   def finalize
@@ -60,13 +62,13 @@ class OaiMarcRecordWriterService
       @bytes_written = 0
     end
 
-    def write(record, identifier, set, datestamp = Time.zone.now)
+    def write(record, identifier, sets: [], datestamp: Time.zone.now)
       @bytes_written += @io.write <<-EOXML
         <record>
           <header>
             <identifier>#{identifier}</identifier>
             <datestamp>#{datestamp.strftime('%F')}</datestamp>
-            <setSpec>#{set}</setSpec>
+            #{sets.map { |s| "<setSpec>#{s}</setSpec>" }.join("\n")}
           </header>
           <metadata>
             #{Ox.dump(OxMarcXmlWriter.encode(record, include_namespace: true))}
@@ -75,13 +77,13 @@ class OaiMarcRecordWriterService
       EOXML
     end
 
-    def write_delete(identifier, set, datestamp = Time.zone.now)
+    def write_delete(identifier, sets: [], datestamp: Time.zone.now)
       @bytes_written += @io.write <<-EOXML
         <record>
           <header status="deleted">
             <identifier>#{identifier}</identifier>
             <datestamp>#{datestamp.strftime('%F')}</datestamp>
-            <setSpec>#{set}</setSpec>
+            #{sets.map { |s| "<setSpec>#{s}</setSpec>" }.join("\n")}
           </header>
         </record>
       EOXML
