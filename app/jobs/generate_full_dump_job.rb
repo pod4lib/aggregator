@@ -33,7 +33,7 @@ class GenerateFullDumpJob < ApplicationJob
   end
   # rubocop:enable Metrics/AbcSize,Metrics/CyclomaticComplexity
 
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
   def perform(stream, effective_date: Time.zone.now, publish: true)
     uploads = stream.uploads.active
 
@@ -49,8 +49,7 @@ class GenerateFullDumpJob < ApplicationJob
     normalized_dump = full_dump.build_normalized_dump(stream: stream)
 
     base_name = "#{stream.organization.slug}#{"-#{stream.slug}" unless stream.default?}-#{Time.zone.today}-full"
-    writer = MarcRecordWriterService.new(base_name)
-    oai_writer = ChunkedOaiMarcRecordWriterService.new(base_name, dump: normalized_dump, now: effective_date)
+    writer = MarcRecordWriterService.new(base_name, dump: normalized_dump, now: effective_date)
 
     begin
       NormalizedMarcRecordReader.new(uploads).each_slice(1000) do |records|
@@ -63,18 +62,12 @@ class GenerateFullDumpJob < ApplicationJob
           next if record.status == 'delete'
 
           writer.write_marc_record(record)
-          oai_writer.write_marc_record(record)
         end
 
         job_tracker.increment(records.size)
       end
 
-      oai_writer.finalize
       writer.finalize
-
-      writer.files.each do |as, file|
-        normalized_dump.public_send(as).attach(io: File.open(file), filename: human_readable_filename(base_name, as))
-      end
 
       normalized_dump.update(published_at: effective_date)
       full_dump.published_at = Time.zone.now if publish
@@ -85,25 +78,7 @@ class GenerateFullDumpJob < ApplicationJob
     ensure
       writer.close
       writer.unlink
-
-      oai_writer.close
-      oai_writer.unlink
     end
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-
-  def human_readable_filename(base_name, file_type)
-    as = case file_type
-         when :deletes
-           'deletes.del.txt'
-         when :marc21
-           'marc21.mrc.gz'
-         when :marcxml
-           'marcxml.xml.gz'
-         else
-           "#{file_type}.gz"
-         end
-
-    "#{base_name}-#{as}"
-  end
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
 end

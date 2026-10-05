@@ -29,8 +29,7 @@ class GenerateDeltaDumpJob < ApplicationJob
     normalized_dump = delta_dump.build_normalized_dump(stream: stream)
 
     base_name = "#{stream.organization.slug}#{"-#{stream.slug}" unless stream.default?}-#{effective_date.strftime('%FT%T')}-delta"
-    writer = MarcRecordWriterService.new(base_name)
-    oai_writer = ChunkedOaiMarcRecordWriterService.new(base_name, dump: normalized_dump, now: effective_date)
+    writer = MarcRecordWriterService.new(base_name, dump: normalized_dump, now: effective_date)
 
     job_tracker.update(total: uploads.sum(&:marc_records_count))
 
@@ -43,10 +42,8 @@ class GenerateDeltaDumpJob < ApplicationJob
         records.each do |record|
           if record.status == 'delete'
             writer.write_delete(record)
-            oai_writer.write_delete(record)
           else
             writer.write_marc_record(record)
-            oai_writer.write_marc_record(record)
           end
         end
 
@@ -54,12 +51,6 @@ class GenerateDeltaDumpJob < ApplicationJob
       end
 
       writer.finalize
-      oai_writer.finalize
-
-      writer.files.each do |as, file|
-        normalized_dump.public_send(as).attach(io: File.open(file),
-                                               filename: human_readable_filename(base_name, as))
-      end
 
       normalized_dump.update(published_at: effective_date)
       delta_dump.published_at = Time.zone.now if publish
@@ -68,29 +59,7 @@ class GenerateDeltaDumpJob < ApplicationJob
     ensure
       writer.close
       writer.unlink
-
-      oai_writer.close
-      oai_writer.unlink
     end
   end
   # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
-
-  private
-
-  def human_readable_filename(base_name, file_type, counter = nil)
-    as = case file_type
-         when :deletes
-           'deletes.del.txt'
-         when :marc21
-           'marc21.mrc.gz'
-         when :marcxml
-           'marcxml.xml.gz'
-         when :oai_xml
-           "oai-#{format('%010d', counter)}.xml.gz"
-         else
-           "#{file_type}.gz"
-         end
-
-    "#{base_name}-#{as}"
-  end
 end
