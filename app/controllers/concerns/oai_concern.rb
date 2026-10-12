@@ -104,13 +104,24 @@ module OaiConcern
     # rubocop:disable Metrics/AbcSize
     # valid iff all values can be parsed and set/page are nonnegative integers
     def valid?
-      Integer(set) if @set.present?
+      assert_set_valid!
+
       Integer(page) if @page.present?
       Date.parse(from_date) if @from_date.present?
       Date.parse(until_date) if @until_date.present?
       !set.to_i.negative? && !page.to_i.negative?
-    rescue ArgumentError
+    rescue ArgumentError, ActiveRecord::RecordNotFound
       false
+    end
+
+    def assert_set_valid!
+      return if @set.blank?
+
+      if @set.start_with?('organization/')
+        Organization.find(@set.sub('organization/', ''))
+      else
+        Integer(set)
+      end
     end
     # rubocop:enable Metrics/AbcSize
   end
