@@ -54,8 +54,8 @@ RSpec.describe 'Viewing provider information' do
       visit organization_path(organization)
       expect(page).to have_text('Aggregator')
 
-      expect(page).to have_no_selector 'h2', text: 'Access Tokens'
-      expect(page).to have_no_selector 'h2', text: 'Users'
+      expect(page).to have_no_css 'h2', text: 'Access Tokens'
+      expect(page).to have_no_css 'h2', text: 'Users'
 
       expect(page).to have_no_link 'Download'
     end
