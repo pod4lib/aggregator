@@ -110,8 +110,16 @@ class OaiController < ApplicationController
   end
 
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
-  def next_record_page(token, use_interstream_deltas: false)
-    streams = if token.set.present?
+  def next_record_page(token, use_interstream_deltas: nil)
+    streams = if token.set&.start_with?('organization/')
+                org_slug = token.set.split('/').last
+                stream = Organization.find_by!(slug: org_slug).default_stream
+                use_interstream_deltas = true if use_interstream_deltas.nil?
+
+                authorize! :read, stream
+
+                [stream]
+              elsif token.set.present?
                 Stream.accessible_by(current_ability).where(id: token.set)
               else
                 Stream.accessible_by(current_ability).where(status: 'default')
@@ -205,31 +213,57 @@ class OaiController < ApplicationController
   end
 
   # See https://www.openarchives.org/OAI/openarchivesprotocol.html#ListSets
-  # rubocop:disable Metrics/AbcSize
-  # rubocop:disable Metrics/MethodLength
   def build_list_sets_response(streams)
     Nokogiri::XML::Builder.new do |xml|
       build_oai_response xml, list_sets_params do
         xml.ListSets do
-          streams.each do |stream|
-            xml.set do
-              xml.setSpec stream.id
-              xml.setName stream.display_name
-              xml.setDescription do
-                xml[:oai_dc].dc(oai_dc_xmlns) do
-                  xml[:dc].description oai_dc_description(stream)
-                  xml[:dc].contributor stream.organization.slug
-                  xml[:dc].type oai_dc_type(stream)
-                  oai_dc_dates(stream).each do |date|
-                    xml[:dc].date date
-                  end
-                end
-              end
+          build_organizations_list_sets_response(xml, streams.map(&:organization).uniq)
+          build_streams_list_sets_response(xml, streams)
+        end
+      end
+    end.to_xml
+  end
+
+  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/MethodLength
+  def build_streams_list_sets_response(xml, streams)
+    streams.each do |stream|
+      xml.set do
+        xml.setSpec stream.id
+        xml.setName stream.display_name
+        xml.setDescription do
+          xml[:oai_dc].dc(oai_dc_xmlns) do
+            xml[:dc].description oai_dc_description(stream)
+            xml[:dc].contributor stream.organization.slug
+            xml[:dc].type oai_dc_type(stream)
+            oai_dc_dates(stream).each do |date|
+              xml[:dc].date date
             end
           end
         end
       end
-    end.to_xml
+    end
+  end
+
+  def build_organizations_list_sets_response(xml, organizations)
+    organizations.each do |organization|
+      xml.set do
+        xml.setSpec "organization/#{organization.slug}"
+        xml.setName organization.name
+        xml.setDescription do
+          xml[:oai_dc].dc(oai_dc_xmlns) do
+            xml[:dc].description "Seamless harvesting for #{organization.name}"
+            xml[:dc].contributor organization.slug
+            xml[:dc].type 'organization'
+            xml[:dc].source "stream #{organization.default_stream.id}"
+
+            oai_dc_dates(organization.default_stream).each do |date|
+              xml[:dc].date date
+            end
+          end
+        end
+      end
+    end
   end
   # rubocop:enable Metrics/AbcSize
   # rubocop:enable Metrics/MethodLength
