@@ -25,8 +25,7 @@ class GenerateInterstreamDeltaDumpJob < ApplicationJob
     normalized_dump = interstream_delta.build_normalized_dump(stream: stream)
 
     base_name = "#{stream.organization.slug}-#{stream.slug}-#{Time.zone.today}-interstream-delta-#{previous_stream.slug}"
-    writer = MarcRecordWriterService.new(base_name)
-    oai_writer = ChunkedOaiMarcRecordWriterService.new(base_name, dump: normalized_dump, now: effective_date)
+    writer = MarcRecordWriterService.new(base_name, dump: normalized_dump, now: effective_date)
 
     job_tracker.update(total: previous_uploads.sum(&:marc_records_count))
 
@@ -39,7 +38,6 @@ class GenerateInterstreamDeltaDumpJob < ApplicationJob
 
       deleted_records.each do |marc001|
         writer.write_delete(previous_records_by_marc001[marc001])
-        oai_writer.write_delete(previous_records_by_marc001[marc001])
       end
 
       new_records = current_records.reject do |record|
@@ -51,20 +49,12 @@ class GenerateInterstreamDeltaDumpJob < ApplicationJob
         next if new_record.status == 'delete'
 
         writer.write_marc_record(new_record)
-        oai_writer.write_marc_record(new_record)
       end
 
       job_tracker.increment(previous_records.size)
     end
 
     writer.finalize
-    oai_writer.finalize
-
-    writer.files.each do |as, file|
-      normalized_dump.public_send(as).attach(io: File.open(file),
-                                             filename: human_readable_filename(base_name, as))
-    end
-
     normalized_dump.update(published_at: effective_date)
     interstream_delta.published_at = Time.zone.now if publish
 
@@ -72,9 +62,6 @@ class GenerateInterstreamDeltaDumpJob < ApplicationJob
   ensure
     writer.close
     writer.unlink
-
-    oai_writer.close
-    oai_writer.unlink
   end
 
   private
