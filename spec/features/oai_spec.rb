@@ -67,13 +67,14 @@ RSpec.describe 'OAI-PMH' do
     it 'renders a name for each set' do
       visit oai_path(verb: 'ListSets')
       doc = Nokogiri::XML(page.body)
-      expect(doc.at_css('ListSets > set > setName').text).to eq('2020-05-06 - ')
+      expect(doc.at_css('ListSets > set[1] > setName').text).to eq('My Org')
+      expect(doc.at_css('ListSets > set[2] > setName').text).to eq('2020-05-06 - ')
     end
 
     it 'renders an identifier (setSpec) for each set' do
       visit oai_path(verb: 'ListSets')
       doc = Nokogiri::XML(page.body)
-      expect(doc.at_css('ListSets > set > setSpec').text).to eq(organization.default_stream.id.to_s)
+      expect(doc.at_css('ListSets > set[2] > setSpec').text).to eq(organization.default_stream.id.to_s)
     end
 
     it 'renders a description for each set' do
@@ -184,14 +185,17 @@ RSpec.describe 'OAI-PMH' do
     it 'renders the set membership of each item' do
       visit oai_path(verb: 'ListRecords', metadataPrefix: 'marc21')
       doc = Nokogiri::XML(page.body)
-      expect(doc.at_css('ListRecords > record > header > setSpec').text).to eq(organization.default_stream.id.to_s)
+      record_set = doc.css('ListRecords > record > header').first
+      expect(record_set.css('setSpec').map(&:text)).to contain_exactly("organization/#{organization.slug}",
+                                                                       organization.default_stream.id.to_s)
     end
 
     it 'renders records in the requested set' do
       visit oai_path(verb: 'ListRecords', metadataPrefix: 'marc21', set: organization.default_stream.id.to_s)
       doc = Nokogiri::XML(page.body)
-      doc.css('ListRecords > record > header > setSpec').each do |record_set|
-        expect(record_set.text).to eq(organization.default_stream.id.to_s)
+      doc.css('ListRecords > record > header') do |record_set|
+        expect(record_set.css('setSpec').map(&:text)).to contain_exactly("organization/#{organization.slug}",
+                                                                         organization.default_stream.id.to_s)
       end
     end
 
